@@ -27,7 +27,7 @@ export default function InfoStatsSection() {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-gray-900 mb-6 font-heading leading-tight">
               Your financial freedom journey starts here
             </h2>
-            <p className="text-lg text-[#7685e9] leading-relaxed font-sans">
+            <p className="text-lg text-[#656565] leading-relaxed font-sans">
               Ut ornare rhoncus urna vestibulum dictumst cras ornare lorem blandit. At pellentesque habitant ipsum pharetra.
             </p>
           </div>

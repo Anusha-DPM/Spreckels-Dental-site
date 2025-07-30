@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function AboutHeroSection() {
   return (
-    <section className="pt-[140px] lg:pt-[140px] pb-12 lg:pb-16 bg-gradient-to-br from-blue-600 to-blue-800">
+    <section className="pt-[140px] lg:pt-[140px] pb-12 lg:pb-16" style={{ backgroundColor: '#441018' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Side - Text Content */}
@@ -22,7 +22,7 @@ export default function AboutHeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-lg lg:text-xl text-blue-100 mb-20 pr-0 lg:pr-20 leading-relaxed"
+              className="text-lg lg:text-xl text-red-100 mb-20 pr-0 lg:pr-20 leading-relaxed"
             >
               We are a leading financial consulting firm dedicated to helping individuals and businesses unlock their financial potential through strategic planning, personalized guidance, and innovative solutions.
             </motion.p>
@@ -32,10 +32,10 @@ export default function AboutHeroSection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <button className="px-8 py-3 bg-white text-blue-600 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium">
+              <button className="px-8 py-3 bg-white text-gray-900 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium">
                 Get Started
               </button>
-              <button className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-blue-600 transition-colors duration-200 font-medium">
+              <button className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-medium">
                 Let's Talk
               </button>
             </motion.div>

@@ -5,8 +5,6 @@ import {
   TrustedBySection,
   TestimonialSection,
   ValuesSection,
-  TeamSection,
-  JoinTeamSection,
   CTASection
 } from '../../components'
 
@@ -18,8 +16,6 @@ export default function AboutUs() {
       <TrustedBySection />
       <TestimonialSection />
       <ValuesSection />
-      <TeamSection />
-      <JoinTeamSection />
       <CTASection />
     </Layout>
   )

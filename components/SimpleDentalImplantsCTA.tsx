@@ -1,0 +1,64 @@
+'use client'
+
+import { motion } from 'framer-motion'
+
+export default function SimpleDentalImplantsCTA() {
+  return (
+    <section className="py-16 lg:py-20" style={{ backgroundColor: '#441018' }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-3xl lg:text-4xl font-normal text-white mb-6 leading-tight"
+          >
+            Ready to Restore Your Smile?
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="text-xl text-red-100 mb-8 max-w-3xl mx-auto leading-relaxed"
+          >
+            Schedule your consultation today and take the first step toward a confident, 
+            beautiful smile with dental implants.
+          </motion.p>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
+          >
+            <button className="px-8 py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold">
+              Schedule Consultation
+            </button>
+            <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold">
+              Call Us Today
+            </button>
+          </motion.div>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            viewport={{ once: true }}
+            className="text-red-100 text-lg"
+          >
+            Call (555) 123-4567 or fill out our online form
+          </motion.p>
+        </motion.div>
+      </div>
+    </section>
+  )
+} 

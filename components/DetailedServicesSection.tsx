@@ -15,74 +15,87 @@ export default function DetailedServicesSection() {
   const services: Service[] = [
     {
       icon: "💰",
-      title: "Financial Planning",
+      title: "Restorative Dentistry",
       description: "Comprehensive financial planning tailored to your unique goals and circumstances. We help you create a roadmap for financial success.",
       image: "/financial-consulting-feature-1.webp",
       features: [
-        "Retirement planning",
-        "Investment strategy",
-        "Tax optimization",
-        "Estate planning"
+        "Fillings",
+        "Crowns & Bridgework",
+        "Dentures",
+        "All-on-4 Implant Supported Dentures",
+        "Dental Implants",
+        "Root Canal Treatment ",
+        "Bone Grafts"
       ]
     },
     {
       icon: "📈",
-      title: "Investment Management",
-      description: "Professional investment management services designed to maximize returns while managing risk according to your tolerance level.",
+      title: "Cosmetic Dentistry",
+      description: "To improve the overall aesthetic appearance of your smile",
       image: "/mission.webp",
       features: [
-        "Portfolio diversification",
-        "Risk assessment",
-        "Market analysis",
-        "Performance tracking"
+        "Bonding",
+        "Cosmetic Dentistry",
+        "Porcelain Veneers ",
+        "Teeth Whitening"
       ]
     },
     {
       icon: "🏢",
-      title: "Business Consulting",
+      title: "Preventive Dentistry",
       description: "Strategic business consulting to help your company grow, optimize operations, and achieve sustainable financial success.",
       image: "/financial-consulting-testimonial.webp",
       features: [
-        "Business strategy",
-        "Financial modeling",
-        "Growth planning",
-        "Operational efficiency"
+        "General Dentistry",
+        "Professional Teeth Cleanings",
+        "Sealants",
+        "Oral Cancer Screenings"
       ]
     },
     {
       icon: "🛡️",
-      title: "Risk Management",
+      title: "Orthodontic Treatment",
       description: "Comprehensive risk management solutions to protect your assets and ensure financial security for you and your family.",
       image: "/financial-consulting-feature-1.webp",
       features: [
-        "Insurance planning",
-        "Asset protection",
-        "Liability management",
-        "Emergency funds"
+       
+      
       ]
     },
     {
       icon: "📊",
-      title: "Tax Advisory",
+      title: "Periodontal (Gum) Disease Therapy",
       description: "Expert tax advisory services to minimize your tax burden and ensure compliance with all applicable regulations.",
       image: "/mission.webp",
       features: [
-        "Tax planning",
-        "Compliance review",
-        "Deduction optimization",
-        "Tax-efficient investing"
+        
       ]
     },
     {
       icon: "🎯",
-      title: "Wealth Management",
-      description: "Holistic wealth management services that integrate all aspects of your financial life for optimal results.",
+      title: "Sedation Dentistry",
+      description: " Nitrous oxide offered to children and adults to ease dental phobia and anxiety",
       image: "/financial-consulting-testimonial.webp",
       features: [
-        "Asset allocation",
-        "Wealth preservation",
-        "Legacy planning",
-        "Philanthropic giving"
+        
+      ]
+    },
+    {
+      icon: "🎯",
+      title: "TMJ/TMD Treatment",
+      description: " Nitrous oxide offered to children and adults to ease dental phobia and anxiety",
+      image: "/financial-consulting-testimonial.webp",
+      features: [
+        
+      ]
+    },
+    {
+      icon: "🎯",
+      title: "Tooth Extractions",
+      description: " Nitrous oxide offered to children and adults to ease dental phobia and anxiety",
+      image: "/financial-consulting-testimonial.webp",
+      features: [
+        
       ]
     }
   ]
@@ -102,12 +115,14 @@ export default function DetailedServicesSection() {
             OUR SERVICES
           </h3>
           <h2 className="text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
-            Comprehensive Financial Solutions
+          Emergency Dental Care Manteca, CA
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            We offer a wide range of financial services designed to help you achieve your goals and secure your financial future.
+          If you have a life-threatening or severe injury, call 911 or go directly to the nearest hospital emergency room. We can treat a variety of traumatic dental injuries, including teeth that have been chipped, moved, or knocked out entirely. Please call our office for assistance.
           </p>
         </motion.div>
+
+
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -160,7 +175,8 @@ export default function DetailedServicesSection() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                  className="w-full text-white py-3 px-6 rounded-lg transition-colors duration-200 font-medium"
+                  style={{ backgroundColor: '#441018' }}
                 >
                   Read More
                 </motion.button>

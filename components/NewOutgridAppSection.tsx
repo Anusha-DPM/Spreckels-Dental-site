@@ -7,26 +7,28 @@ export default function NewOutgridAppSection() {
           {/* Left Column - Text Content */}
           <div className="text-left">
             {/* Small Heading */}
-            <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-4">
-              New Outgrid App
+            <div className="text-xs font-semibold uppercase tracking-wide mb-4" style={{ color: 'rgb(37 99 235)' }}>
+            We Offer Free Consultations!
             </div>
             
             {/* Large Heading */}
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 leading-tight mb-4 sm:mb-6">
-              Financial consulting at your fingertips
+            Dental implants at spreckels park dental
+        
             </h2>
             
             {/* Horizontal Divider */}
             <div className="border-t border-gray-300 my-4 sm:my-6"></div>
             
             {/* Supporting Paragraph */}
-            <p className="text-indigo-500 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            <p className="text-base sm:text-lg leading-relaxed mb-6 sm:mb-8" style={{ color: '#656565' }}>
+              Achieving quality dental care shouldn't be difficult, so at Spreckels Park Dental we make it simple to achieve your healthiest, most beautiful smile. Whether you are looking for information on Dental Implants, Dentures, Root Canals, or Preventive Care, you can learn more about all of your options on our Services Page. 
+              
             </p>
             
             {/* Download App Button */}
-            <button className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#7685e9] hover:text-white transition-colors duration-200">
-              Download App
+            <button className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200">
+             Book Appointment
             </button>
           </div>
           
@@ -34,8 +36,8 @@ export default function NewOutgridAppSection() {
           <div className="flex justify-center">
             <div className="relative w-full max-w-lg">
               <img
-                src="/New.webp"
-                alt="Outgrid mobile app interface"
+                src="/New.jpeg"
+                alt="Professional dental care and modern dental technology"
                 className="w-full h-auto rounded-xl object-cover"
               />
             </div>

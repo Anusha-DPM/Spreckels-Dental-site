@@ -7,27 +7,27 @@ export default function TestimonialSection() {
   const testimonials = [
     {
       id: 1,
-      author: "Jackma Kalin",
-      position: "CEO of Penta",
-      quote: "Outgrid's transformative services revolutionized our financial strategy. Their personalized approach and expert guidance instilled newfound confidence, empowering us to make informed decisions and shape a secure financial future."
+      author: "Sarah Johnson",
+      position: "Patient",
+      quote: "Dr. Parikh and his team at Spreckels Park Dental are absolutely amazing! They made my dental implant procedure comfortable and stress-free. The results are incredible - I can smile with confidence again."
     },
     {
       id: 2,
-      author: "Sarah Johnson",
-      position: "CFO of TechCorp",
-      quote: "Working with Outgrid has been a game-changer for our company's financial planning. Their expertise and dedication to our success have exceeded all expectations."
+      author: "Michael Chen",
+      position: "Patient",
+      quote: "After years of dental anxiety, I finally found a dentist I trust. Dr. Arora's gentle approach and modern technology made my treatment experience exceptional. Highly recommend!"
     },
     {
       id: 3,
-      author: "Michael Chen",
-      position: "Director of Finance",
-      quote: "The level of personalized service and strategic insight that Outgrid provides is unmatched. They've helped us navigate complex financial decisions with confidence."
+      author: "Emily Rodriguez",
+      position: "Patient",
+      quote: "The entire team at Spreckels Park Dental is professional and caring. They took the time to explain my treatment options and made sure I was comfortable throughout the process."
     },
     {
       id: 4,
-      author: "Emily Rodriguez",
-      position: "VP of Operations",
-      quote: "Outgrid's comprehensive approach to financial management has transformed how we think about our business strategy. Their guidance has been invaluable."
+      author: "David Thompson",
+      position: "Patient",
+      quote: "I've been a patient here for over 5 years and couldn't be happier. The quality of care is outstanding, and they truly care about their patients' comfort and satisfaction."
     }
   ]
 
@@ -59,13 +59,13 @@ export default function TestimonialSection() {
   return (
     <section className="py-10 sm:py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-indigo-400 rounded-2xl p-4 sm:p-6 md:p-8 relative">
+        <div className="rounded-2xl p-4 sm:p-6 md:p-8 relative" style={{ backgroundColor: '#441018' }}>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6 sm:gap-8 md:gap-10 items-center">
             
             {/* Left Column - Testimonial Content (3 columns - 60%) */}
             <div className="text-white md:col-span-3">
               {/* Author Label */}
-              <div className="text-sm text-indigo-100 font-medium mb-4 sm:mb-6 transition-opacity duration-300">
+              <div className="text-sm text-red-100 font-medium mb-4 sm:mb-6 transition-opacity duration-300">
                 – {currentTestimonial.author}, {currentTestimonial.position}
               </div>
               
@@ -80,7 +80,7 @@ export default function TestimonialSection() {
               <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-xl overflow-hidden border-2 border-white/20 p-2">
                 <Image
                   src="/financial-consulting-testimonial.webp"
-                  alt="Testimonial"
+                  alt="Happy dental patient"
                   fill
                   className="object-cover rounded-lg"
                 />
@@ -107,7 +107,7 @@ export default function TestimonialSection() {
                   key={index}
                   onClick={() => goToTestimonial(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? 'bg-white' : 'bg-indigo-300'
+                    index === currentIndex ? 'bg-white' : 'bg-red-300'
                   }`}
                 />
               ))}

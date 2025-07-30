@@ -18,12 +18,12 @@ export default function Home() {
     <Layout>
       <HeroSection />
       <TrustedBySection />
-      <InfoStatsSection />
       <AboutUsSection />
-      <TestimonialSection />
-      <ServicesSection />
       <MissionSection />
       <FeaturesSection />
+      <TestimonialSection />
+      <ServicesSection />
+      <InfoStatsSection />
       <FAQSection />
       <NewOutgridAppSection />
       <CTASection />

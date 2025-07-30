@@ -27,7 +27,7 @@ export default function ContactHeroSection() {
   }
 
   return (
-    <section className="pt-[140px] lg:pt-[140px] pb-20 lg:pb-24 bg-gradient-to-b from-indigo-900 via-indigo-800 to-indigo-700">
+    <section className="pt-[140px] lg:pt-[140px] pb-20 lg:pb-24" style={{ backgroundColor: '#441018' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <motion.div 

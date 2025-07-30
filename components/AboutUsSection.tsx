@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function AboutUsSection() {
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-gray-200">
@@ -5,12 +7,15 @@ export default function AboutUsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
           
           {/* Left Column - Image with Overlay Card */}
-          <div className="relative">
-            <div className="relative rounded-xl overflow-hidden">
-              <img
-                src="/financial-consulting-feature-1.webp"
-                alt="Woman presenting to team in office"
-                className="w-full h-auto object-cover"
+          <div className="relative w-full h-full">
+            <div className="relative rounded-xl overflow-hidden w-full h-full">
+              <Image
+                src="/doctor-1.webp"
+                alt="Dr. Rujul G Parikh DDS - Professional dental care"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
               />
               
               {/* Floating Financial Summary Card */}
@@ -45,24 +50,24 @@ export default function AboutUsSection() {
             <div className="space-y-4 sm:space-y-6">
               {/* About Us Label */}
               <div className="text-blue-500 text-sm font-semibold uppercase tracking-wide">
-                About Us
+              General & implant dentist in manteca, ca
               </div>
               
               {/* Main Heading */}
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 leading-tight">
-                Master your financial destiny with us
+              Dr. Rujul G Parikh DDS
               </h2>
               
               {/* Horizontal Divider */}
               <div className="border-t border-gray-300 my-6"></div>
               
               {/* Description Paragraph */}
-              <p className="text-base sm:text-lg text-[#7685e9] leading-relaxed mb-4 sm:mb-5">
-                Sapien nunc augue lacus vel blandit hac aliquam. Metus feugiat id morbi a in commodo. Aliquet consectetur ac risus sed amet dolor elit sem fermentum. Proin.
+              <p className="text-base sm:text-lg leading-relaxed mb-4 sm:mb-5" style={{ color: '#656565' }}>
+              For more than 23 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. His main priorities are oral health and patient care. As a General Dentist, he has invested many hours in continuing education and constantly updated and educated in dentistry. His continual pursuit of better methods, depth of understanding, and range of experience make him skilled in numerous dental procedures including Dental Implants, Root Canals and Crowns, Dentures and many more.
               </p>
               
               {/* Learn More Button */}
-              <button className="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-[#6f82ea] hover:text-white transition-colors duration-200">
+              <button className="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200">
                 Learn More
               </button>
             </div>
