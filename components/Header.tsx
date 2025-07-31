@@ -9,14 +9,20 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
   const [isGeneralCosmeticOpen, setIsGeneralCosmeticOpen] = useState(false)
+  const [isAboutOpen, setIsAboutOpen] = useState(false)
+  const [isMoreOpen, setIsMoreOpen] = useState(false)
+  const [isPatientEducationOpen, setIsPatientEducationOpen] = useState(false)
 
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
-    { name: 'Office', href: '/office' },
-    { name: 'Dental Staff', href: '/dental-staff' },
     { name: 'Insurance & Billing', href: '/insurance-billing' },
     { name: 'Contact Us', href: '/contact' },
+  ]
+
+  const aboutItems = [
+    { name: 'Office', href: '/office' },
+    { name: 'Dental Staff', href: '/dental-staff' },
   ]
 
   const servicesItems = [
@@ -33,6 +39,26 @@ export default function Header() {
     { name: 'All-on-4® Implant Dentures', href: '/all-on-4-implant-dentures' },
     { name: 'Platelet Rich Fibrin Therapy', href: '/services/platelet-rich-fibrin-therapy' },
     { name: 'Orthodontics', href: '/services/orthodontics' },
+  ]
+
+  const moreItems = [
+    { 
+      name: 'Patient Education', 
+      href: '/patient-education',
+      hasSubmenu: true,
+                                                                           subItems: [
+                { name: 'Educational Videos', href: '/patient-education/educational-videos' },
+                { name: 'Cosmetic & General Dentistry', href: '/patient-education/cosmetic-general-dentistry' },
+                { name: 'Emergency Care', href: '/patient-education/emergency-care' },
+                { name: 'Endodontics', href: '/patient-education/endodontics' },
+                { name: 'Implant Dentistry', href: '/patient-education/implant-dentistry' },
+                { name: 'Oral Health', href: '/patient-education/oral-health' },
+                { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
+                { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
+                { name: 'Orthodontics', href: '/patient-education/orthodontics' },
+                { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' }
+              ]
+    }
   ]
 
   return (
@@ -89,18 +115,45 @@ export default function Header() {
               </Link>
             </motion.div>
             
-            {/* About Us */}
+            {/* About Us Dropdown */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+              onMouseEnter={() => setIsAboutOpen(true)}
+              onMouseLeave={() => setIsAboutOpen(false)}
             >
               <Link
                 href="/about"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1 flex items-center py-2"
               >
                 About Us
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </Link>
+              
+              {isAboutOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  onMouseEnter={() => setIsAboutOpen(true)}
+                  onMouseLeave={() => setIsAboutOpen(false)}
+                >
+                  {aboutItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
             </motion.div>
             
             {/* Services Dropdown */}
@@ -175,39 +228,13 @@ export default function Header() {
               )}
             </motion.div>
             
-            {/* Office */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <Link
-                href="/office"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1"
-              >
-                Office
-              </Link>
-            </motion.div>
-            
-            {/* Dental Staff */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
-              <Link
-                href="/dental-staff"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1"
-              >
-                Dental Staff
-              </Link>
-            </motion.div>
+
             
             {/* Insurance & Billing */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
               <Link
                 href="/insurance-billing"
@@ -217,11 +244,88 @@ export default function Header() {
               </Link>
             </motion.div>
             
+            {/* More Dropdown */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="relative"
+              onMouseEnter={() => setIsMoreOpen(true)}
+              onMouseLeave={() => setIsMoreOpen(false)}
+            >
+              <Link
+                href="#"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1 flex items-center py-2"
+              >
+                More
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </Link>
+              
+              {isMoreOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  onMouseEnter={() => setIsMoreOpen(true)}
+                  onMouseLeave={() => setIsMoreOpen(false)}
+                >
+                  {moreItems.map((item) => (
+                    <div key={item.name} className="relative">
+                      {item.hasSubmenu ? (
+                        <div
+                          className="relative block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium cursor-pointer"
+                          onMouseEnter={() => setIsPatientEducationOpen(true)}
+                          onMouseLeave={() => setIsPatientEducationOpen(false)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span>{item.name}</span>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                          {isPatientEducationOpen && item.subItems && (
+                            <motion.div
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 10 }}
+                              className="absolute left-full top-0 ml-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                              onMouseEnter={() => setIsPatientEducationOpen(true)}
+                              onMouseLeave={() => setIsPatientEducationOpen(false)}
+                            >
+                              {item.subItems.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  href={subItem.href}
+                                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-sm"
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </div>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium"
+                        >
+                          {item.name}
+                        </Link>
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </motion.div>
+            
             {/* Contact Us */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
             >
               <Link
                 href="/contact"
@@ -248,18 +352,45 @@ export default function Header() {
               </Link>
             </motion.div>
             
-            {/* About Us */}
+            {/* About Us Dropdown for Tablet */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+              onMouseEnter={() => setIsAboutOpen(true)}
+              onMouseLeave={() => setIsAboutOpen(false)}
             >
               <Link
                 href="/about"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap flex items-center"
               >
                 About Us
+                <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </Link>
+              
+              {isAboutOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full left-0 mt-0 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  onMouseEnter={() => setIsAboutOpen(true)}
+                  onMouseLeave={() => setIsAboutOpen(false)}
+                >
+                  {aboutItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
             </motion.div>
             
             {/* Services Dropdown for Tablet */}
@@ -334,39 +465,13 @@ export default function Header() {
               )}
             </motion.div>
             
-            {/* Office */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <Link
-                href="/office"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap"
-              >
-                Office
-              </Link>
-            </motion.div>
-            
-            {/* Dental Staff */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
-              <Link
-                href="/dental-staff"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap"
-              >
-                Dental Staff
-              </Link>
-            </motion.div>
+
             
             {/* Insurance & Billing */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
               <Link
                 href="/insurance-billing"
@@ -376,11 +481,88 @@ export default function Header() {
               </Link>
             </motion.div>
             
+            {/* More Dropdown for Tablet */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="relative"
+              onMouseEnter={() => setIsMoreOpen(true)}
+              onMouseLeave={() => setIsMoreOpen(false)}
+            >
+              <Link
+                href="#"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap flex items-center"
+              >
+                More
+                <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </Link>
+              
+              {isMoreOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full left-0 mt-0 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  onMouseEnter={() => setIsMoreOpen(true)}
+                  onMouseLeave={() => setIsMoreOpen(false)}
+                >
+                  {moreItems.map((item) => (
+                    <div key={item.name} className="relative">
+                      {item.hasSubmenu ? (
+                        <div
+                          className="relative block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs cursor-pointer"
+                          onMouseEnter={() => setIsPatientEducationOpen(true)}
+                          onMouseLeave={() => setIsPatientEducationOpen(false)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span>{item.name}</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                          {isPatientEducationOpen && item.subItems && (
+                            <motion.div
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 10 }}
+                              className="absolute left-full top-0 ml-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                              onMouseEnter={() => setIsPatientEducationOpen(true)}
+                              onMouseLeave={() => setIsPatientEducationOpen(false)}
+                            >
+                              {item.subItems.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  href={subItem.href}
+                                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </div>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
+                        >
+                          {item.name}
+                        </Link>
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </motion.div>
+            
             {/* Contact Us */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
             >
               <Link
                 href="/contact"
@@ -442,23 +624,17 @@ export default function Header() {
                 About Us
               </Link>
               
-              {/* Office */}
-              <Link
-                href="/office"
-                className="block px-3 py-2 text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Office
-              </Link>
-              
-              {/* Dental Staff */}
-              <Link
-                href="/dental-staff"
-                className="block px-3 py-2 text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Dental Staff
-              </Link>
+              {/* About Us Sub-items */}
+              {aboutItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="block px-6 py-2 text-gray-600 hover:text-[#656565] transition-colors duration-200 font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
               
               {/* Insurance & Billing */}
               <Link
@@ -496,6 +672,46 @@ export default function Header() {
                   >
                     {item.name}
                   </Link>
+                ))}
+              </div>
+              
+              {/* More in Mobile Menu */}
+              <div className="border-t border-gray-100 pt-2 mt-2">
+                <div className="px-3 py-2 text-gray-700 font-medium">
+                  More
+                </div>
+                {moreItems.map((item) => (
+                  <div key={item.name}>
+                    {item.hasSubmenu ? (
+                      <>
+                        <Link
+                          href={item.href}
+                          className="block px-6 py-2 text-gray-600 hover:text-[#656565] transition-colors duration-200 font-medium"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                        {item.subItems?.map((subItem) => (
+                          <Link
+                            key={subItem.name}
+                            href={subItem.href}
+                            className="block px-9 py-2 text-gray-500 hover:text-[#656565] transition-colors duration-200 font-medium text-sm"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
+                      </>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="block px-6 py-2 text-gray-600 hover:text-[#656565] transition-colors duration-200 font-medium"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
