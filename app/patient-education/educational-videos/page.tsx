@@ -7,17 +7,18 @@ import Link from 'next/link'
 
 export default function EducationalVideos() {
   const categories = [
-    'Cosmetic & General Dentistry',
-    'Emergency Care',
-    'Endodontics',
-    'Implant Dentistry',
-    'Oral Health',
-    'Oral Hygiene',
-    'Oral Surgery',
-    'Orthodontics',
-    'Pediatric Dentistry',
-    'Periodontal Therapy',
-    'Technology'
+    { name: 'Educational Videos', href: '/patient-education/educational-videos' },
+    { name: 'Cosmetic & General Dentistry', href: '/patient-education/cosmetic-general-dentistry' },
+    { name: 'Emergency Care', href: '/patient-education/emergency-care' },
+    { name: 'Endodontics', href: '/patient-education/endodontics' },
+    { name: 'Implant Dentistry', href: '/patient-education/implant-dentistry' },
+    { name: 'Oral Health', href: '/patient-education/oral-health' },
+    { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
+    { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
+    { name: 'Orthodontics', href: '/patient-education/orthodontics' },
+    { name: 'Pediatric Dentistry', href: '/patient-education/pediatric-dentistry' },
+    { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
+    { name: 'Technology', href: '/patient-education/technology' }
   ]
 
   const videoTopics = {
@@ -279,10 +280,12 @@ export default function EducationalVideos() {
                 <h3 className="text-sm text-gray-600 mb-6">Educational Videos</h3>
                 <ul className="space-y-3">
                   {categories.map((category, index) => (
-                    <li key={category}>
-                      <button className="text-left text-blue-600 hover:text-blue-700 hover:underline text-sm transition-colors duration-200">
-                        {category}
-                      </button>
+                    <li key={category.name}>
+                      <Link href={category.href}>
+                        <button className="text-left text-blue-600 hover:text-blue-700 hover:underline text-sm transition-colors duration-200">
+                          {category.name}
+                        </button>
+                      </Link>
                     </li>
                   ))}
                 </ul>

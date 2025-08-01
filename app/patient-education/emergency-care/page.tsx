@@ -37,7 +37,20 @@ export default function EmergencyCare() {
     }
   ]
 
-  const categories = Array.from(new Set(articles.map(article => article.category)))
+  const categories = [
+    { name: 'Educational Videos', href: '/patient-education/educational-videos' },
+    { name: 'Cosmetic & General Dentistry', href: '/patient-education/cosmetic-general-dentistry' },
+    { name: 'Emergency Care', href: '/patient-education/emergency-care' },
+    { name: 'Endodontics', href: '/patient-education/endodontics' },
+    { name: 'Implant Dentistry', href: '/patient-education/implant-dentistry' },
+    { name: 'Oral Health', href: '/patient-education/oral-health' },
+    { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
+    { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
+    { name: 'Orthodontics', href: '/patient-education/orthodontics' },
+    { name: 'Pediatric Dentistry', href: '/patient-education/pediatric-dentistry' },
+    { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
+    { name: 'Technology', href: '/patient-education/technology' }
+  ]
 
   return (
     <main className="min-h-screen bg-white">
@@ -82,16 +95,19 @@ export default function EmergencyCare() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               {categories.map((category, index) => (
-                <motion.button
-                  key={category}
+                <motion.div
+                  key={category.name}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="px-6 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-700 hover:border-red-500 hover:text-red-600 transition-all duration-200 font-semibold"
                 >
-                  {category}
-                </motion.button>
+                  <Link href={category.href}>
+                    <button className="px-6 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-700 hover:border-red-500 hover:text-red-600 transition-all duration-200 font-semibold">
+                      {category.name}
+                    </button>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </motion.div>
@@ -136,34 +152,7 @@ export default function EmergencyCare() {
         </div>
       </section>
 
-      {/* Emergency Contact Section */}
-      <section className="py-16 bg-red-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <h2 className="text-3xl sm:text-4xl font-normal text-gray-900 font-heading mb-6">
-              Need Immediate Help?
-            </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto font-sans">
-              If you're experiencing a dental emergency, don't wait. Contact us immediately 
-              for prompt, professional care.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-red-600 text-white border-2 border-red-600 rounded-lg hover:bg-red-700 transition-colors duration-200 font-semibold">
-                Emergency: (209) 804-2016
-              </button>
-              <button className="px-8 py-4 bg-white text-red-600 border-2 border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-200 font-semibold">
-                Schedule Emergency Visit
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+
 
       {/* CTA Section */}
       <section className="py-16" style={{ backgroundColor: '#441018' }}>

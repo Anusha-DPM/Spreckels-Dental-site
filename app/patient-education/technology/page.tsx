@@ -1,71 +1,47 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 
-export default function PatientEducation() {
+export default function Technology() {
   const articles = [
-    {
-      id: 'pediatric-dentistry',
-      title: 'About Pediatric Dentistry',
-      description: 'Learn about specialized dental care for children and adolescents.',
-      category: 'Children\'s Dental Care'
-    },
-    {
-      id: 'adult-orthodontic-treatment',
-      title: 'Adult Orthodontic Treatment',
-      description: 'Discover orthodontic options available for adults seeking to improve their smile.',
-      category: 'Orthodontics'
-    },
-    {
-      id: 'aging-and-oral-health',
-      title: 'Aging and Oral Health',
-      description: 'Understanding how aging affects oral health and what you can do about it.',
-      category: 'Senior Dental Care'
-    },
     {
       id: 'air-abrasion',
       title: 'Air Abrasion',
-      description: 'A modern, minimally invasive alternative to traditional dental drilling.',
-      category: 'Modern Dentistry'
+      description: 'Learn about air abrasion technology, a minimally invasive alternative to traditional drilling for cavity preparation.',
+      category: 'Minimally Invasive Technology'
     },
     {
       id: 'anesthesia-wand',
       title: 'Anesthesia Wand',
-      description: 'Learn about this innovative pain-free injection technology.',
-      category: 'Pain Management'
+      description: 'Discover how the anesthesia wand provides more comfortable and precise local anesthesia delivery.',
+      category: 'Comfort Technology'
     },
     {
-      id: 'antibiotic-premedication',
-      title: 'Antibiotic Premedication',
-      description: 'Understanding when and why antibiotics are needed before dental procedures.',
-      category: 'Dental Procedures'
+      id: 'cone-beam-ct-imaging',
+      title: 'Cone Beam CT Imaging',
+      description: 'Understanding cone beam CT technology for advanced 3D imaging and precise treatment planning.',
+      category: 'Advanced Imaging'
     },
     {
-      id: 'apicoectomy',
-      title: 'Apicoectomy',
-      description: 'A surgical procedure to treat persistent root canal infections.',
-      category: 'Endodontics'
+      id: 'digital-dental-impressions',
+      title: 'Digital Dental Impressions',
+      description: 'Learn about digital impression technology that eliminates the need for traditional messy impression materials.',
+      category: 'Digital Technology'
     },
     {
-      id: 'bad-breath',
-      title: 'Bad Breath',
-      description: 'Causes, prevention, and treatment of halitosis.',
-      category: 'Oral Health'
+      id: 'digital-x-rays',
+      title: 'Digital X-Rays',
+      description: 'Discover the benefits of digital X-ray technology for safer, faster, and more detailed imaging.',
+      category: 'Digital Imaging'
     },
     {
-      id: 'bite-problems',
-      title: 'Bite Problems',
-      description: 'Understanding malocclusion and its impact on oral health.',
-      category: 'Orthodontics'
-    },
-    {
-      id: 'blood-pressure-medications',
-      title: 'Blood Pressure Medications and Your Oral Health',
-      description: 'How blood pressure medications can affect your dental health.',
-      category: 'Medication & Health'
+      id: 'intraoral-camera',
+      title: 'Intraoral Camera',
+      description: 'Understanding how intraoral cameras provide detailed views of your mouth for better diagnosis and treatment.',
+      category: 'Diagnostic Technology'
     }
   ]
 
@@ -97,12 +73,16 @@ export default function PatientEducation() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
+            <div className="mb-4">
+              <Link href="/patient-education" className="text-gray-300 hover:text-white font-semibold">
+                ← Back to Patient Education
+              </Link>
+            </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
-              Patient Education
+              Technology
             </h1>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-sans">
-              Empowering you with knowledge about dental health, procedures, and oral care.
-              Explore our comprehensive library of educational articles to make informed decisions about your dental care.
+              Advanced dental technology that enhances patient comfort, improves treatment precision, and provides better diagnostic capabilities. Learn about the cutting-edge tools and techniques used in modern dentistry.
             </p>
           </motion.div>
         </div>
@@ -151,7 +131,7 @@ export default function PatientEducation() {
                 whileHover={{ y: -5 }}
                 className="group"
               >
-                <Link href={`/patient-education/${article.id}`}>
+                <Link href={`/patient-education/technology/${article.id}`}>
                   <div className="bg-white border border-gray-200 rounded-xl p-6 h-full hover:shadow-lg transition-all duration-300 hover:border-blue-300">
                     <div className="mb-4">
                       <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
@@ -188,16 +168,16 @@ export default function PatientEducation() {
             viewport={{ once: true }}
             className="text-center"
           >
-                         <h2 className="text-3xl sm:text-4xl font-normal text-white font-heading mb-6">
-               Have Questions About Your Dental Health?
-             </h2>
-             <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto font-sans">
-               Our team is here to help you understand your dental care options and answer any questions you may have.
-             </p>
+            <h2 className="text-3xl sm:text-4xl font-normal text-white font-heading mb-6">
+              Experience Advanced Dental Technology
+            </h2>
+            <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto font-sans">
+              Our practice uses the latest dental technology to provide you with the most comfortable, precise, and effective treatment possible.
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                             <button className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold">
-                 Schedule Consultation
-               </button>
+              <button className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold">
+                Schedule Consultation
+              </button>
               <button className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold">
                 Contact Us
               </button>

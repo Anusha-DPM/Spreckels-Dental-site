@@ -6,6 +6,21 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 
 export default function ImplantDentistryPage() {
+  const categories = [
+    { name: 'Educational Videos', href: '/patient-education/educational-videos' },
+    { name: 'Cosmetic & General Dentistry', href: '/patient-education/cosmetic-general-dentistry' },
+    { name: 'Emergency Care', href: '/patient-education/emergency-care' },
+    { name: 'Endodontics', href: '/patient-education/endodontics' },
+    { name: 'Implant Dentistry', href: '/patient-education/implant-dentistry' },
+    { name: 'Oral Health', href: '/patient-education/oral-health' },
+    { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
+    { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
+    { name: 'Orthodontics', href: '/patient-education/orthodontics' },
+    { name: 'Pediatric Dentistry', href: '/patient-education/pediatric-dentistry' },
+    { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
+    { name: 'Technology', href: '/patient-education/technology' }
+  ]
+
   const relatedArticles = [
     {
       title: 'Dental Implants',
@@ -44,6 +59,39 @@ export default function ImplantDentistryPage() {
               Discover how dental implants can restore your smile, confidence, and oral function 
               with the most advanced tooth replacement solution available today.
             </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Category Filter */}
+      <section className="py-16 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mb-12"
+          >
+            <h2 className="text-2xl sm:text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
+              Browse by Category
+            </h2>
+            <div className="flex flex-wrap justify-center gap-4">
+              {categories.map((category, index) => (
+                <motion.div
+                  key={category.name}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Link href={category.href}>
+                    <button className="px-6 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-all duration-200 font-semibold">
+                      {category.name}
+                    </button>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>

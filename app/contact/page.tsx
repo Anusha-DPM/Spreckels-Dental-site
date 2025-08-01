@@ -1,18 +1,14 @@
 import {
   Layout,
   ContactHeroSection,
-  TrustedBySection,
-  FAQSection,
-  CTASection
+  ContactMapSection
 } from '../../components'
 
 export default function Contact() {
   return (
     <Layout>
       <ContactHeroSection />
-      <TrustedBySection />
-      <FAQSection />
-      <CTASection />
+      <ContactMapSection />
     </Layout>
   )
 } 

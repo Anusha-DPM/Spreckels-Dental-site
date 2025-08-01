@@ -56,14 +56,16 @@ export default function Header() {
                 { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
                 { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
                 { name: 'Orthodontics', href: '/patient-education/orthodontics' },
-                { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' }
+                { name: 'Pediatric Dentistry', href: '/patient-education/pediatric-dentistry' },
+                { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
+                { name: 'Technology', href: '/patient-education/technology' }
               ]
     }
   ]
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4 lg:py-5">
           {/* Logo - Left Side */}
           <motion.div
@@ -276,13 +278,15 @@ export default function Header() {
                     <div key={item.name} className="relative">
                       {item.hasSubmenu ? (
                         <div
-                          className="relative block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium cursor-pointer"
+                          className="relative"
                           onMouseEnter={() => setIsPatientEducationOpen(true)}
                           onMouseLeave={() => setIsPatientEducationOpen(false)}
                         >
-                          <div className="flex items-center justify-between">
-                            <span>{item.name}</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium">
+                            <Link href={item.href} className="flex-1">
+                              {item.name}
+                            </Link>
+                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
                           </div>
@@ -575,24 +579,27 @@ export default function Header() {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-3 lg:space-x-4 ml-auto pl-8 lg:pl-12">
-            <motion.button
+            <motion.a
+              href="tel:(209) 804-2016"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="px-3 lg:px-4 py-2 text-gray-800 border-2 border-black rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-medium font-heading text-sm lg:text-base flex items-center"
+              className="px-3 lg:px-4 py-2 text-gray-800 border-2 border-black rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-medium font-heading text-sm lg:text-base flex items-center cursor-pointer"
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
               (209) 804-2016
-            </motion.button>
+            </motion.a>
             <motion.button
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               className="px-3 lg:px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-[#441018] transition-colors duration-200 font-medium font-heading text-sm lg:text-base"
             >
-              Contact
+              <Link href="/appointment-request" className="text-white hover:text-white">
+                Appointment Request
+              </Link>
             </motion.button>
           </div>
         </div>

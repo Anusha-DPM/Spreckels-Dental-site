@@ -6,12 +6,66 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 
 export default function PediatricDentistry() {
+  const articles = [
+    {
+      id: 'about-pediatric-dentistry',
+      title: 'About Pediatric Dentistry',
+      description: 'Learn about specialized dental care for children and adolescents, including what pediatric dentists do and why they are important for your child\'s oral health.',
+      category: 'Children\'s Dental Care'
+    },
+    {
+      id: 'fluoride-and-your-child',
+      title: 'Fluoride and Your Child',
+      description: 'Understanding the importance of fluoride in preventing tooth decay and maintaining your child\'s dental health.',
+      category: 'Preventive Care'
+    },
+    {
+      id: 'nitrous-oxide-for-children',
+      title: 'Nitrous Oxide for Children',
+      description: 'Learn about nitrous oxide sedation and how it can help make dental procedures more comfortable for children.',
+      category: 'Sedation & Comfort'
+    },
+    {
+      id: 'pregnancy-and-your-childs-developing-teeth',
+      title: 'Pregnancy and Your Child\'s Developing Teeth',
+      description: 'How maternal health and nutrition during pregnancy can affect your child\'s dental development.',
+      category: 'Prenatal Care'
+    },
+    {
+      id: 'sealants',
+      title: 'Sealants',
+      description: 'Dental sealants as a preventive measure to protect your child\'s teeth from cavities and decay.',
+      category: 'Preventive Care'
+    },
+    {
+      id: 'sleep-apnea-in-children',
+      title: 'Sleep Apnea in Children',
+      description: 'Understanding sleep apnea in children, its symptoms, and how it can be treated through dental care.',
+      category: 'Sleep Disorders'
+    }
+  ]
+
+  const categories = [
+    { name: 'Educational Videos', href: '/patient-education/educational-videos' },
+    { name: 'Cosmetic & General Dentistry', href: '/patient-education/cosmetic-general-dentistry' },
+    { name: 'Emergency Care', href: '/patient-education/emergency-care' },
+    { name: 'Endodontics', href: '/patient-education/endodontics' },
+    { name: 'Implant Dentistry', href: '/patient-education/implant-dentistry' },
+    { name: 'Oral Health', href: '/patient-education/oral-health' },
+    { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
+    { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
+    { name: 'Orthodontics', href: '/patient-education/orthodontics' },
+    { name: 'Pediatric Dentistry', href: '/patient-education/pediatric-dentistry' },
+    { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
+    { name: 'Technology', href: '/patient-education/technology' }
+  ]
+
   return (
     <main className="min-h-screen bg-white">
       <Header />
       
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-100">
+      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -20,141 +74,113 @@ export default function PediatricDentistry() {
             className="text-center"
           >
             <div className="mb-4">
-              <Link href="/patient-education" className="text-blue-600 hover:text-blue-700 font-semibold">
+              <Link href="/patient-education" className="text-gray-300 hover:text-white font-semibold">
                 ← Back to Patient Education
               </Link>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-gray-900 font-heading leading-tight mb-6">
-              About Pediatric Dentistry
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+              Pediatric Dentistry
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-sans">
-              Specialized dental care designed specifically for children and adolescents
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-sans">
+              Specialized dental care designed specifically for children and adolescents. Learn about the unique needs of young patients and how to ensure their oral health from infancy through adolescence.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Article Content */}
+      {/* Articles Grid */}
       <section className="py-16 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Category Filter */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="prose prose-lg max-w-none"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mb-12"
           >
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6 font-heading">
-                What is Pediatric Dentistry?
-              </h2>
-              
-              <p className="text-gray-700 leading-relaxed mb-6 font-sans">
-                Pediatric dentistry is a specialized branch of dentistry that focuses on the oral health of children from infancy through adolescence. Pediatric dentists are specially trained to care for children's teeth, gums, and mouth throughout the various stages of childhood.
-              </p>
-
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
-                Why Choose a Pediatric Dentist?
-              </h3>
-              
-              <p className="text-gray-700 leading-relaxed mb-6 font-sans">
-                Pediatric dentists have completed additional training beyond dental school to specialize in treating children. They understand the unique needs of young patients and are skilled in making dental visits comfortable and positive experiences.
-              </p>
-
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
-                Services Provided by Pediatric Dentists
-              </h3>
-              
-              <ul className="list-disc list-inside text-gray-700 leading-relaxed mb-6 space-y-2 font-sans">
-                <li>Comprehensive oral health examinations</li>
-                <li>Preventive dental care including cleanings and fluoride treatments</li>
-                <li>Habit counseling (thumb sucking, pacifier use)</li>
-                <li>Early assessment and treatment for straightening teeth</li>
-                <li>Repair of tooth cavities or defects</li>
-                <li>Diagnosis of oral conditions associated with diseases</li>
-                <li>Management of gum diseases and conditions</li>
-                <li>Care for dental injuries</li>
-              </ul>
-
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
-                When Should Your Child First Visit a Dentist?
-              </h3>
-              
-              <p className="text-gray-700 leading-relaxed mb-6 font-sans">
-                The American Academy of Pediatric Dentistry recommends that children should visit a dentist by their first birthday or within six months after their first tooth appears. Early visits help establish good oral hygiene habits and allow the dentist to monitor your child's dental development.
-              </p>
-
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
-                What to Expect During Your Child's First Visit
-              </h3>
-              
-              <p className="text-gray-700 leading-relaxed mb-6 font-sans">
-                The first visit is usually short and involves very little treatment. It gives your child an opportunity to meet the dentist in a non-threatening and friendly way. The dentist will examine your child's teeth, gums, and jaw, and may perform a gentle cleaning.
-              </p>
-
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
-                Tips for a Successful Dental Visit
-              </h3>
-              
-              <ul className="list-disc list-inside text-gray-700 leading-relaxed mb-6 space-y-2 font-sans">
-                <li>Schedule the appointment at a time when your child is well-rested</li>
-                <li>Keep a positive attitude about the visit</li>
-                <li>Explain what will happen in simple terms</li>
-                <li>Bring your child's favorite toy or blanket for comfort</li>
-                <li>Allow the dentist to establish a relationship with your child</li>
-              </ul>
-
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 font-heading">
-                Preventive Care for Children
-              </h3>
-              
-              <p className="text-gray-700 leading-relaxed mb-6 font-sans">
-                Preventive care is crucial for children's oral health. This includes regular dental check-ups, proper brushing and flossing techniques, a balanced diet, and fluoride treatments when necessary. Pediatric dentists work with parents to develop good oral hygiene habits that will last a lifetime.
-              </p>
-
-              <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg mt-8">
-                <h4 className="text-lg font-semibold text-blue-900 mb-2 font-heading">
-                  Remember
-                </h4>
-                <p className="text-blue-800 font-sans">
-                  Good oral health habits established in childhood can lead to a lifetime of healthy smiles. Regular visits to a pediatric dentist help ensure your child's dental health and development are on the right track.
-                </p>
-              </div>
+            <h2 className="text-2xl sm:text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
+              Browse by Category
+            </h2>
+            <div className="flex flex-wrap justify-center gap-4">
+              {categories.map((category, index) => (
+                <motion.div
+                  key={category.name}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Link href={category.href}>
+                    <button className="px-6 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-all duration-200 font-semibold">
+                      {category.name}
+                    </button>
+                  </Link>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
+
+          {/* Articles Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {articles.map((article, index) => (
+              <motion.div
+                key={article.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="group"
+              >
+                <Link href={`/patient-education/pediatric-dentistry/${article.id}`}>
+                  <div className="bg-white border border-gray-200 rounded-xl p-6 h-full hover:shadow-lg transition-all duration-300 hover:border-blue-300">
+                    <div className="mb-4">
+                      <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
+                        {article.category}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 font-heading">
+                      {article.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed font-sans">
+                      {article.description}
+                    </p>
+                    <div className="mt-4 flex items-center text-blue-600 font-semibold group-hover:text-blue-700 transition-colors duration-200">
+                      Read More
+                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Related Articles */}
-      <section className="py-16 bg-gray-50">
+      {/* CTA Section */}
+      <section className="py-16" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="text-center"
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
-              Related Articles
+            <h2 className="text-3xl sm:text-4xl font-normal text-white font-heading mb-6">
+              Have Questions About Your Child's Dental Health?
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Link href="/patient-education/adult-orthodontic-treatment">
-                <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:border-blue-300 border border-gray-200">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 font-heading">Adult Orthodontic Treatment</h3>
-                  <p className="text-gray-600 font-sans">Discover orthodontic options available for adults seeking to improve their smile.</p>
-                </div>
-              </Link>
-              <Link href="/patient-education/bite-problems">
-                <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:border-blue-300 border border-gray-200">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 font-heading">Bite Problems</h3>
-                  <p className="text-gray-600 font-sans">Understanding malocclusion and its impact on oral health.</p>
-                </div>
-              </Link>
-              <Link href="/patient-education/aging-and-oral-health">
-                <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:border-blue-300 border border-gray-200">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 font-heading">Aging and Oral Health</h3>
-                  <p className="text-gray-600 font-sans">Understanding how aging affects oral health and what you can do about it.</p>
-                </div>
-              </Link>
+            <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto font-sans">
+              Our pediatric dental team is here to help you understand your child's dental care options and answer any questions you may have.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold">
+                Schedule Consultation
+              </button>
+              <button className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold">
+                Contact Us
+              </button>
             </div>
           </motion.div>
         </div>

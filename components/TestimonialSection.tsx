@@ -7,27 +7,27 @@ export default function TestimonialSection() {
   const testimonials = [
     {
       id: 1,
-      author: "Sarah Johnson",
+      author: "Patty Espi",
       position: "Patient",
-      quote: "Dr. Parikh and his team at Spreckels Park Dental are absolutely amazing! They made my dental implant procedure comfortable and stress-free. The results are incredible - I can smile with confidence again."
+      quote: "My family and I have been coming here for years, and I love the service. The doctor is attentive and professional, and the front desk staff is always willing to help and schedule appointments based on my schedule. I would recommend this place to my friends and family!."
     },
     {
       id: 2,
-      author: "Michael Chen",
+      author: "Susan Bower",
       position: "Patient",
-      quote: "After years of dental anxiety, I finally found a dentist I trust. Dr. Arora's gentle approach and modern technology made my treatment experience exceptional. Highly recommend!"
+      quote: "Everyone at Speckles’s Park Dental are so nice! I will only trust my pearly whites with them!!! I got the best front tooth crown ever by Dentist Parikh! No one can tell that I have a crown!!! LOVE, LOVE, LOVE their work!!!"
     },
     {
       id: 3,
-      author: "Emily Rodriguez",
+      author: "Evette Hess",
       position: "Patient",
-      quote: "The entire team at Spreckels Park Dental is professional and caring. They took the time to explain my treatment options and made sure I was comfortable throughout the process."
+      quote: "Spreckels dental is amazing! service is great! everyone is very friendly and made me feel comfortable being here! the front desk lady’s are great! very nice and they try their best to work with u as much as possible!."
     },
     {
       id: 4,
-      author: "David Thompson",
+      author: "Navi Tiwari",
       position: "Patient",
-      quote: "I've been a patient here for over 5 years and couldn't be happier. The quality of care is outstanding, and they truly care about their patients' comfort and satisfaction."
+      quote: "Pain free treatment, I was impressed by the attention to detail and the extra steps taken to ensure my comfort during the procedure. The entire staff was friendly, professional, and made me feel at ease. Best in Area"
     }
   ]
 
