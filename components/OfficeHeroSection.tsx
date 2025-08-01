@@ -26,12 +26,18 @@ To ensure your convenience, below is the information you need about our hours, l
 Parking is provided in front of office & parking lot is located in the rear alley on S Washington Ave., on your first right.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
+              <a 
+                href="tel:(209) 825-1030"
+                className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Book Appointment
-              </button>
-              <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200">
+              </a>
+              <a 
+                href="/contact"
+                className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Contact Us
-              </button>
+              </a>
             </div>
           </motion.div>
 

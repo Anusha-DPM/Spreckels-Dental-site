@@ -134,9 +134,12 @@ export default function PaymentFinancingSection() {
             <p className="text-gray-200 mb-6">
               Our team is here to help you understand your payment and financing options. Contact us today for personalized assistance.
             </p>
-            <button className="px-8 py-3 bg-white text-[#441018] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-200">
+            <a 
+              href="/contact"
+              className="px-8 py-3 bg-white text-[#441018] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
+            >
               Contact Our Office
-            </button>
+            </a>
           </div>
         </motion.div>
       </div>

@@ -97,10 +97,10 @@ export default function AppointmentRequest() {
               <h3 className="text-xl font-semibold font-heading text-gray-900 mb-2">Call Us</h3>
               <p className="text-gray-600 mb-2">
                 <a 
-                  href="tel:(209) 804-2016" 
+                  href="tel:(209) 825-1030" 
                   className="hover:text-[#441018] transition-colors duration-200 cursor-pointer"
                 >
-                  (209) 804-2016
+                  (209) 825-1030
                 </a>
               </p>
               <p className="text-sm text-gray-500">Available during business hours</p>

@@ -60,12 +60,18 @@ export default function SimpleSedationHero() {
             transition={{ duration: 0.8, delay: 1.0 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <button className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold">
+            <a 
+                              href="tel:(209) 825-1030"
+              className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+            >
               BOOK A CONSULTATION
-            </button>
-            <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold">
+            </a>
+            <a 
+              href="/contact"
+              className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+            >
               Learn More
-            </button>
+            </a>
           </motion.div>
         </motion.div>
       </div>

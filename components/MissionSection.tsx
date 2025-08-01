@@ -33,13 +33,14 @@ export default function MissionSection() {
             </p>
             
             {/* Learn More Button */}
-            <motion.button 
+            <motion.a 
+              href="/dental-staff"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200"
+              className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block"
             >
               Learn More
-            </motion.button>
+            </motion.a>
           </motion.div>
           
           {/* Right Column - Image */}

@@ -23,12 +23,18 @@ export default function CTASection() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-4 bg-white text-red-800 rounded-lg font-semibold hover:bg-red-800 hover:text-white transition-colors duration-200">
+                <a 
+                  href="tel:(209) 825-1030"
+                  className="px-8 py-4 bg-white text-red-800 rounded-lg font-semibold hover:bg-red-800 hover:text-white transition-colors duration-200 cursor-pointer inline-block text-center"
+                >
                   Book Appointment
-                </button>
-                <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-[#441018] hover:text-white transition-colors duration-200">
-                  Learn More
-                </button>
+                </a>
+                <a 
+                  href="/contact"
+                  className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block text-center"
+                >
+                  Contact Us
+                </a>
               </div>
             </div>
           </div>

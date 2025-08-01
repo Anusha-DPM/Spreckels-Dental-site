@@ -39,12 +39,18 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              <button className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-sm sm:text-base">
+              <a 
+                href="tel:(209) 825-1030"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-sm sm:text-base cursor-pointer inline-block text-center"
+              >
                 Book Appointment
-              </button>
-              <button className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white border border-white rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-sm sm:text-base">
+              </a>
+              <a 
+                href="/contact"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white border border-white rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-sm sm:text-base cursor-pointer inline-block text-center"
+              >
                 Learn More
-              </button>
+              </a>
             </motion.div>
           </motion.div>
         </div>

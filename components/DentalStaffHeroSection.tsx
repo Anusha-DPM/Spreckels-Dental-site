@@ -32,12 +32,18 @@ export default function DentalStaffHeroSection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <button className="px-8 py-3 bg-white text-red-800 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium">
+              <a 
+                href="tel:(209) 825-1030"
+                className="px-8 py-3 bg-white text-red-800 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium cursor-pointer inline-block text-center"
+              >
                 Book Appointment
-              </button>
-              <button className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-medium">
+              </a>
+              <a 
+                href="/contact"
+                className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-medium cursor-pointer inline-block text-center"
+              >
                 Contact Us
-              </button>
+              </a>
             </motion.div>
           </div>
           

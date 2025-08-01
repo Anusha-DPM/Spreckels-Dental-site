@@ -302,9 +302,12 @@ export default function SimpleTeethWhiteningContent() {
             Professional teeth whitening from our dentist in Manteca, CA may be the solution for you! 
             Call Spreckels Park Dental at <strong>(209) 825-1030</strong> to learn more about our teeth whitening treatment or to schedule an appointment!
           </p>
-          <button className="px-10 py-4 bg-white text-blue-600 border border-white rounded-xl hover:bg-transparent hover:text-white transition-colors duration-200 font-bold text-lg">
+          <a 
+            href="tel:(209) 825-1030"
+            className="px-10 py-4 bg-white text-blue-600 border border-white rounded-xl hover:bg-transparent hover:text-white transition-colors duration-200 font-bold text-lg cursor-pointer inline-block"
+          >
             BOOK A CONSULTATION
-          </button>
+          </a>
         </motion.div>
       </div>
     </section>

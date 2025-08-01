@@ -38,12 +38,18 @@ export default function DentalCareInsuranceSection() {
               Choosing a dentist doesn't have to be hard! Spreckels Park Dental offers a full range of general dentistry services and cosmetic treatments for all your oral health needs. Call our Manteca, CA office today at (209) 825-1030 to schedule an appointment!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-3 bg-white text-[#441018] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-200">
+              <a 
+                href="tel:(209) 825-1030"
+                className="px-8 py-3 bg-white text-[#441018] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Book Appointment
-              </button>
-              <button className="px-8 py-3 bg-transparent text-white border border-white rounded-lg font-bold hover:bg-white hover:text-[#441018] transition-colors duration-200">
+              </a>
+              <a 
+                href="/contact"
+                className="px-8 py-3 bg-transparent text-white border border-white rounded-lg font-bold hover:bg-white hover:text-[#441018] transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Learn More
-              </button>
+              </a>
             </div>
           </motion.div>
         </motion.div>

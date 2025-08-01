@@ -67,9 +67,12 @@ export default function AboutUsSection() {
               </p>
               
               {/* Learn More Button */}
-              <button className="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200">
+              <a 
+                href="/dental-staff"
+                className="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block"
+              >
                 Learn More
-              </button>
+              </a>
             </div>
           </div>
         </div>

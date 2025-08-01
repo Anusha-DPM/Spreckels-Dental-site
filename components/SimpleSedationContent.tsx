@@ -170,9 +170,12 @@ export default function SimpleSedationContent() {
             Take advantage of sedation dentistry at Spreckels Park Dental and be calm and relaxed during treatment. 
             Call our Manteca, CA dental office at <strong>(209) 825-1030</strong> to learn more or schedule your next appointment!
           </p>
-          <button className="px-10 py-4 bg-white text-blue-600 border border-white rounded-xl hover:bg-transparent hover:text-white transition-colors duration-200 font-bold text-lg">
+          <a 
+            href="tel:(209) 825-1030"
+            className="px-10 py-4 bg-white text-blue-600 border border-white rounded-xl hover:bg-transparent hover:text-white transition-colors duration-200 font-bold text-lg cursor-pointer inline-block"
+          >
             BOOK A CONSULTATION
-          </button>
+          </a>
         </motion.div>
       </div>
     </section>

@@ -40,23 +40,21 @@ export default function SimpleDentalImplantsCTA() {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
           >
-            <button className="px-8 py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold">
+            <a 
+              href="tel:(209) 825-1030"
+              className="px-8 py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+            >
               Schedule Consultation
-            </button>
-            <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold">
+            </a>
+            <a 
+              href="tel:(209) 825-1030"
+              className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+            >
               Call Us Today
-            </button>
+            </a>
           </motion.div>
           
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            viewport={{ once: true }}
-            className="text-red-100 text-lg"
-          >
-            Call (555) 123-4567 or fill out our online form
-          </motion.p>
+
         </motion.div>
       </div>
     </section>

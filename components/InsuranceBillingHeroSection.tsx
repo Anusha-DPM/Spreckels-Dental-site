@@ -22,12 +22,18 @@ export default function InsuranceBillingHeroSection() {
               We accept PPO - Out of network insurances. contact our office to verify acceptance of your plan. Spreckels Park Dental does NOT participate in Health Management Organizations (HMO)(Medi-cal/Medicare); however, we will be happy to file your insurance claims for you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
+              <a 
+                href="/contact"
+                className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Check Coverage
-              </button>
-              <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200">
+              </a>
+              <a 
+                href="/contact"
+                className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Contact Us
-              </button>
+              </a>
             </div>
           </motion.div>
 

@@ -195,12 +195,18 @@ export default function PatientEducation() {
                Our team is here to help you understand your dental care options and answer any questions you may have.
              </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                             <button className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold">
-                 Schedule Consultation
-               </button>
-              <button className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold">
+              <a 
+                href="tel:(209) 825-1030"
+                className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+              >
+                Schedule Consultation
+              </a>
+              <a 
+                href="/contact"
+                className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+              >
                 Contact Us
-              </button>
+              </a>
             </div>
           </motion.div>
         </div>

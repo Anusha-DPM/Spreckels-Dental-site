@@ -40,34 +40,21 @@ export default function SimpleOrthoCTA() {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
           >
-            <button className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold">
+            <a 
+              href="tel:(209) 825-1030"
+              className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+            >
               BOOK A CONSULTATION
-            </button>
-            <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold">
+            </a>
+            <a 
+              href="tel:(209) 825-1030"
+              className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+            >
               Call Us Today
-            </button>
+            </a>
           </motion.div>
           
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            viewport={{ once: true }}
-            className="bg-white bg-opacity-10 rounded-xl p-6 max-w-2xl mx-auto"
-          >
-            <h3 className="text-xl font-semibold text-white mb-4">
-              Spreckels Park Dental
-            </h3>
-            <p className="text-red-100 text-lg mb-2">
-              Manteca, CA
-            </p>
-            <p className="text-red-100 text-xl font-semibold mb-4">
-              (209) 825-1030
-            </p>
-            <p className="text-red-100">
-              We provide the best experience possible for your orthodontic journey.
-            </p>
-          </motion.div>
+
         </motion.div>
       </div>
     </section>

@@ -22,12 +22,18 @@ export default function GeneralCosmeticHeroSection() {
               Experience comprehensive dental care with our expert team. From routine checkups to advanced cosmetic procedures, we provide the highest quality dental services to help you achieve your healthiest, most beautiful smile.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
+              <a 
+                href="tel:(209) 825-1030"
+                className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Book Appointment
-              </button>
-              <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200">
+              </a>
+              <a 
+                href="/contact"
+                className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200 cursor-pointer inline-block text-center"
+              >
                 Learn More
-              </button>
+              </a>
             </div>
           </motion.div>
 

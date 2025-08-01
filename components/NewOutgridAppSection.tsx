@@ -27,9 +27,12 @@ export default function NewOutgridAppSection() {
             </p>
             
             {/* Download App Button */}
-            <button className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200">
+            <a 
+                              href="tel:(209) 825-1030"
+              className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block"
+            >
              Book Appointment
-            </button>
+            </a>
           </div>
           
           {/* Right Column - Image */}

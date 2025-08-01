@@ -58,8 +58,8 @@ export default function ContactHeroSection() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Call Us</h3>
-                    <a href="tel:(209) 804-2016" className="text-[#441018] hover:text-[#2d0b12] transition-colors duration-200 font-semibold text-lg">
-                      (209) 804-2016
+                                    <a href="tel:(209) 825-1030" className="text-[#441018] hover:text-[#2d0b12] transition-colors duration-200 font-semibold text-lg">
+                  (209) 825-1030
                     </a>
                     <p className="text-sm text-gray-500">Available during business hours</p>
                   </div>
