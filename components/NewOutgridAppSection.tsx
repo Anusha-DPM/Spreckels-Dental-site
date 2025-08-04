@@ -39,8 +39,8 @@ export default function NewOutgridAppSection() {
           <div className="flex justify-center">
             <div className="relative w-full max-w-lg">
               <img
-                src="/New.jpeg"
-                alt="Professional dental care and modern dental technology"
+                src="/AdobeStock_1423904609.jpeg"
+                alt="Dental implants at spreckels park dental"
                 className="w-full h-auto rounded-xl object-cover"
               />
             </div>
