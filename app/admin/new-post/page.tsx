@@ -196,7 +196,7 @@ export default function NewPost() {
                 Content *
               </label>
               <RichTextEditor
-                value={post.content}
+                value={post.content || ''}
                 onChange={(content) => setPost(prev => ({ ...prev, content }))}
                 placeholder="Write your blog post content here..."
               />

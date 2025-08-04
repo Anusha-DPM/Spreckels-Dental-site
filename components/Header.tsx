@@ -522,6 +522,20 @@ export default function Header() {
               </Link>
             </motion.div>
             
+            {/* Blog */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.45 }}
+            >
+              <Link
+                href="/blog"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap"
+              >
+                Blog
+              </Link>
+            </motion.div>
+            
             {/* More Dropdown for Tablet */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -603,7 +617,7 @@ export default function Header() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.55 }}
             >
               <Link
                 href="/contact"

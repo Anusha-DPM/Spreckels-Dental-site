@@ -222,7 +222,7 @@ export default function EditPost() {
                 Content *
               </label>
               <RichTextEditor
-                value={post.content}
+                value={post.content || ''}
                 onChange={(content) => setPost({ ...post, content })}
                 placeholder="Write your blog post content here..."
               />
