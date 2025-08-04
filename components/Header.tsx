@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -12,6 +12,7 @@ export default function Header() {
   const [isAboutOpen, setIsAboutOpen] = useState(false)
   const [isMoreOpen, setIsMoreOpen] = useState(false)
   const [isPatientEducationOpen, setIsPatientEducationOpen] = useState(false)
+  const [expandedItems, setExpandedItems] = useState<string[]>([])
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -46,22 +47,42 @@ export default function Header() {
       name: 'Patient Education', 
       href: '/patient-education',
       hasSubmenu: true,
-                                                                           subItems: [
-                { name: 'Educational Videos', href: '/patient-education/educational-videos' },
-                { name: 'Cosmetic & General Dentistry', href: '/patient-education/cosmetic-general-dentistry' },
-                { name: 'Emergency Care', href: '/patient-education/emergency-care' },
-                { name: 'Endodontics', href: '/patient-education/endodontics' },
-                { name: 'Implant Dentistry', href: '/patient-education/implant-dentistry' },
-                { name: 'Oral Health', href: '/patient-education/oral-health' },
-                { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
-                { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
-                { name: 'Orthodontics', href: '/patient-education/orthodontics' },
-                { name: 'Pediatric Dentistry', href: '/patient-education/pediatric-dentistry' },
-                { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
-                { name: 'Technology', href: '/patient-education/technology' }
-              ]
+      subItems: [
+        { name: 'Educational Videos', href: '/patient-education/educational-videos' },
+        { name: 'Cosmetic & General Dentistry', href: '/patient-education/cosmetic-general-dentistry' },
+        { name: 'Emergency Care', href: '/patient-education/emergency-care' },
+        { name: 'Endodontics', href: '/patient-education/endodontics' },
+        { name: 'Implant Dentistry', href: '/patient-education/implant-dentistry' },
+        { name: 'Oral Health', href: '/patient-education/oral-health' },
+        { name: 'Oral Hygiene', href: '/patient-education/oral-hygiene' },
+        { name: 'Oral Surgery', href: '/patient-education/oral-surgery' },
+        { name: 'Orthodontics', href: '/patient-education/orthodontics' },
+        { name: 'Pediatric Dentistry', href: '/patient-education/pediatric-dentistry' },
+        { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
+        { name: 'Technology', href: '/patient-education/technology' }
+      ]
     }
   ]
+
+  const toggleDropdown = (itemName: string) => {
+    setExpandedItems(prev => 
+      prev.includes(itemName) 
+        ? prev.filter(item => item !== itemName)
+        : [...prev, itemName]
+    )
+  }
+
+  const closeMenu = () => {
+    setIsMenuOpen(false)
+    setExpandedItems([])
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent, action: () => void) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      action()
+    }
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
@@ -90,6 +111,8 @@ export default function Header() {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
+              aria-label="Toggle mobile menu"
+              aria-expanded={isMenuOpen}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMenuOpen ? (
@@ -325,11 +348,25 @@ export default function Header() {
               )}
             </motion.div>
             
-            {/* Contact Us */}
+            {/* Blog */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <Link
+                href="/blog"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1"
+              >
+                Blog
+              </Link>
+            </motion.div>
+            
+            {/* Contact Us */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
             >
               <Link
                 href="/contact"
@@ -580,7 +617,7 @@ export default function Header() {
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-3 lg:space-x-4 ml-auto pl-8 lg:pl-12">
             <motion.a
-                              href="tel:(209) 825-1030"
+              href="tel:(209) 825-1030"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -589,7 +626,7 @@ export default function Header() {
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-                              (209) 825-1030
+              (209) 825-1030
             </motion.a>
             <motion.button
               initial={{ opacity: 0, x: 20 }}
@@ -604,126 +641,288 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-gray-100"
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {/* Home */}
-              <Link
-                href="/"
-                className="block px-3 py-2 text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
+        {/* Mobile Side Menu Overlay */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+                onClick={closeMenu}
+              />
+              
+              {/* Side Menu */}
+              <motion.div
+                initial={{ x: '-100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '-100%' }}
+                transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
+                className="fixed top-0 left-0 w-80 max-w-[85vw] h-full bg-[#441018] z-50 md:hidden shadow-2xl"
               >
-                Home
-              </Link>
-              
-              {/* About Us */}
-              <Link
-                href="/about"
-                className="block px-3 py-2 text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About Us
-              </Link>
-              
-              {/* About Us Sub-items */}
-              {aboutItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block px-6 py-2 text-gray-600 hover:text-[#656565] transition-colors duration-200 font-medium"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              
-              {/* Insurance & Billing */}
-              <Link
-                href="/insurance-billing"
-                className="block px-3 py-2 text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Insurance & Billing
-              </Link>
-              
-              {/* Contact Us */}
-              <Link
-                href="/contact"
-                className="block px-3 py-2 text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contact Us
-              </Link>
-              
-              {/* Services in Mobile Menu */}
-              <div className="border-t border-gray-100 pt-2 mt-2">
-                <Link
-                  href="/services"
-                  className="block px-3 py-2 text-gray-700 font-medium hover:text-[#656565] transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Services
-                </Link>
-                {servicesItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="block px-6 py-2 text-gray-600 hover:text-[#656565] transition-colors duration-200 font-medium"
-                    onClick={() => setIsMenuOpen(false)}
+                {/* Close Button */}
+                <div className="flex justify-end p-4">
+                  <button
+                    onClick={closeMenu}
+                    className="text-white hover:text-gray-300 transition-colors duration-200"
+                    aria-label="Close mobile menu"
                   >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-              
-              {/* More in Mobile Menu */}
-              <div className="border-t border-gray-100 pt-2 mt-2">
-                <div className="px-3 py-2 text-gray-700 font-medium">
-                  More
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
-                {moreItems.map((item) => (
-                  <div key={item.name}>
-                    {item.hasSubmenu ? (
-                      <>
-                        <Link
-                          href={item.href}
-                          className="block px-6 py-2 text-gray-600 hover:text-[#656565] transition-colors duration-200 font-medium"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {item.name}
-                        </Link>
-                        {item.subItems?.map((subItem) => (
-                          <Link
-                            key={subItem.name}
-                            href={subItem.href}
-                            className="block px-9 py-2 text-gray-500 hover:text-[#656565] transition-colors duration-200 font-medium text-sm"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {subItem.name}
-                          </Link>
-                        ))}
-                      </>
-                    ) : (
+
+                {/* Menu Items */}
+                <nav className="px-4 pb-6" role="navigation" aria-label="Mobile navigation">
+                  <ul className="space-y-1">
+                    {/* Home */}
+                    <li>
                       <Link
-                        href={item.href}
-                        className="block px-6 py-2 text-gray-600 hover:text-[#656565] transition-colors duration-200 font-medium"
-                        onClick={() => setIsMenuOpen(false)}
+                        href="/"
+                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                        onClick={closeMenu}
                       >
-                        {item.name}
+                        HOME
                       </Link>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
+                    </li>
+
+                    {/* About Us */}
+                    <li>
+                      <div className="relative">
+                        <button
+                          onClick={() => toggleDropdown('About Us')}
+                          onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('About Us'))}
+                          className="w-full flex items-center justify-between px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                          aria-expanded={expandedItems.includes('About Us')}
+                          aria-controls="about-dropdown"
+                        >
+                          ABOUT US
+                          <motion.svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            animate={{ rotate: expandedItems.includes('About Us') ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </motion.svg>
+                        </button>
+                        <AnimatePresence>
+                          {expandedItems.includes('About Us') && (
+                            <motion.ul
+                              id="about-dropdown"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              {aboutItems.map((item) => (
+                                <li key={item.name}>
+                                  <Link
+                                    href={item.href}
+                                    className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                    onClick={closeMenu}
+                                  >
+                                    {item.name}
+                                  </Link>
+                                </li>
+                              ))}
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </li>
+
+                    {/* Services */}
+                    <li>
+                      <div className="relative">
+                        <button
+                          onClick={() => toggleDropdown('Services')}
+                          onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Services'))}
+                          className="w-full flex items-center justify-between px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                          aria-expanded={expandedItems.includes('Services')}
+                          aria-controls="services-dropdown"
+                        >
+                          SERVICES
+                          <motion.svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            animate={{ rotate: expandedItems.includes('Services') ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </motion.svg>
+                        </button>
+                        <AnimatePresence>
+                          {expandedItems.includes('Services') && (
+                            <motion.ul
+                              id="services-dropdown"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              {servicesItems.map((item) => (
+                                <li key={item.name}>
+                                  {item.hasSubmenu ? (
+                                    <div className="relative">
+                                      <Link
+                                        href={item.href}
+                                        className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                        onClick={closeMenu}
+                                      >
+                                        {item.name}
+                                      </Link>
+                                      {item.subItems && (
+                                        <ul className="ml-4">
+                                          {item.subItems.map((subItem) => (
+                                            <li key={subItem.name}>
+                                              <Link
+                                                href={subItem.href}
+                                                className="block px-6 py-1 text-gray-400 hover:text-white transition-colors duration-200 font-medium text-xs"
+                                                onClick={closeMenu}
+                                              >
+                                                {subItem.name}
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <Link
+                                      href={item.href}
+                                      className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                      onClick={closeMenu}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  )}
+                                </li>
+                              ))}
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </li>
+
+                    {/* Children's Dentistry */}
+                    <li>
+                      <Link
+                        href="/services/orthodontics"
+                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                        onClick={closeMenu}
+                      >
+                        CHILDREN'S DENTISTRY
+                      </Link>
+                    </li>
+
+                    {/* Invisalign */}
+                    <li>
+                      <Link
+                        href="/services/orthodontics"
+                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                        onClick={closeMenu}
+                      >
+                        INVISALIGN®
+                      </Link>
+                    </li>
+
+                    {/* Patient Education */}
+                    <li>
+                      <div className="relative">
+                        <button
+                          onClick={() => toggleDropdown('Patient Education')}
+                          onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Patient Education'))}
+                          className="w-full flex items-center justify-between px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                          aria-expanded={expandedItems.includes('Patient Education')}
+                          aria-controls="patient-education-dropdown"
+                        >
+                          PATIENT EDUCATION
+                          <motion.svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            animate={{ rotate: expandedItems.includes('Patient Education') ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </motion.svg>
+                        </button>
+                        <AnimatePresence>
+                          {expandedItems.includes('Patient Education') && (
+                            <motion.ul
+                              id="patient-education-dropdown"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              {moreItems[0]?.subItems?.map((subItem) => (
+                                <li key={subItem.name}>
+                                  <Link
+                                    href={subItem.href}
+                                    className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                    onClick={closeMenu}
+                                  >
+                                    {subItem.name}
+                                  </Link>
+                                </li>
+                              ))}
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </li>
+
+                    {/* Blog */}
+                    <li>
+                      <Link
+                        href="/blog"
+                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                        onClick={closeMenu}
+                      >
+                        BLOG
+                      </Link>
+                    </li>
+
+                    {/* Insurance & Billing */}
+                    <li>
+                      <Link
+                        href="/insurance-billing"
+                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                        onClick={closeMenu}
+                      >
+                        INSURANCE & BILLING
+                      </Link>
+                    </li>
+
+                    {/* Contact Us */}
+                    <li>
+                      <Link
+                        href="/contact"
+                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                        onClick={closeMenu}
+                      >
+                        CONTACT US
+                      </Link>
+                    </li>
+                  </ul>
+                </nav>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   )
