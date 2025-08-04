@@ -28,7 +28,7 @@ export default function NewOutgridAppSection() {
             
             {/* Download App Button */}
             <a 
-                              href="tel:(209) 825-1030"
+                              href="https://spreckels-dental-site.vercel.app/appointment-request"
               className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block"
             >
              Book Appointment

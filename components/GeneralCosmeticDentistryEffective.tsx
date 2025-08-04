@@ -53,9 +53,12 @@ export default function GeneralCosmeticDentistryEffective() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg font-semibold hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <a 
+                  href="https://spreckels-dental-site.vercel.app/appointment-request"
+                  className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg font-semibold hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer inline-block"
+                >
                   Book Appointment
-                </button>
+                </a>
                 <button className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200">
                   Learn More
                 </button>

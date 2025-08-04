@@ -24,7 +24,7 @@ export default function CTASection() {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <a 
-                  href="tel:(209) 825-1030"
+                  href="https://spreckels-dental-site.vercel.app/appointment-request"
                   className="px-8 py-4 bg-white text-red-800 rounded-lg font-semibold hover:bg-red-800 hover:text-white transition-colors duration-200 cursor-pointer inline-block text-center"
                 >
                   Book Appointment

@@ -171,7 +171,7 @@ export default function SimpleSedationContent() {
             Call our Manteca, CA dental office at <strong>(209) 825-1030</strong> to learn more or schedule your next appointment!
           </p>
           <a 
-            href="tel:(209) 825-1030"
+            href="https://spreckels-dental-site.vercel.app/appointment-request"
             className="px-10 py-4 bg-white text-blue-600 border border-white rounded-xl hover:bg-transparent hover:text-white transition-colors duration-200 font-bold text-lg cursor-pointer inline-block"
           >
             BOOK A CONSULTATION

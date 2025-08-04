@@ -41,7 +41,7 @@ export default function SimpleTeethWhiteningCTA() {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
           >
             <a 
-              href="tel:(209) 825-1030"
+              href="https://spreckels-dental-site.vercel.app/appointment-request"
               className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
             >
               BOOK A CONSULTATION

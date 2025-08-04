@@ -172,16 +172,16 @@ export default function EmergencyCare() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="/contact"
+                href="https://spreckels-dental-site.vercel.app/appointment-request"
                 className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
               >
-                Emergency Contact
+                Schedule Consultation
               </a>
               <a 
                 href="/contact"
                 className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
               >
-                Learn More
+                Contact Us
               </a>
             </div>
           </motion.div>

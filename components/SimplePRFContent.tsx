@@ -60,9 +60,12 @@ export default function SimplePRFContent() {
               <p className="text-gray-600 mb-6" style={{ color: '#656565' }}>
                 Join hundreds of satisfied patients who have benefited from our PRF therapy procedures.
               </p>
-              <button className="w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200">
+              <a 
+                href="https://spreckels-dental-site.vercel.app/appointment-request"
+                className="block w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 text-center"
+              >
                 Schedule Your PRF Consultation
-              </button>
+              </a>
             </div>
           </motion.div>
         </div>

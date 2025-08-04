@@ -39,7 +39,7 @@ export default function DentalCareInsuranceSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="tel:(209) 825-1030"
+                href="https://spreckels-dental-site.vercel.app/appointment-request"
                 className="px-8 py-3 bg-white text-[#441018] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
               >
                 Book Appointment
