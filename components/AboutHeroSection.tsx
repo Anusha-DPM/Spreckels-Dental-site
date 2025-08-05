@@ -16,7 +16,7 @@ export default function AboutHeroSection() {
               transition={{ duration: 0.8 }}
               className="text-4xl lg:text-5xl xl:text-6xl font-normal leading-tight mb-2.5"
             >
-              About Spreckels Park Dental
+              About Us
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 30 }}
@@ -49,8 +49,8 @@ export default function AboutHeroSection() {
             className="relative"
           >
             <Image
-              src="/office1.webp"
-              alt="Spreckels Park Dental Team"
+              src="/About us.jpeg"
+              alt="Spreckels Park Dental - About Our Practice"
               width={600}
               height={400}
               className="rounded-lg shadow-2xl"
