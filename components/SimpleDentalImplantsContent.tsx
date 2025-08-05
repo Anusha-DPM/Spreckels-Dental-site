@@ -82,12 +82,13 @@ export default function SimpleDentalImplantsContent() {
               </div>
 
               {/* Service Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
                 <Image
                   src={service.image}
                   alt={`${service.title} - Spreckels Park Dental`}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
