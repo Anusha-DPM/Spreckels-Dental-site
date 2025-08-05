@@ -16,7 +16,7 @@ export default function DetailedServicesSection() {
     {
       icon: "💰",
       title: "Restorative Dentistry",
-      description: "Restore the health, function, and appearance of your smile with our expert restorative dental treatments. From fillings and crowns to bridges and implants, we offer personalized solutions to repair damaged teeth and help you regain confidence in your smile.",
+      description: "We repair damaged or missing teeth using crowns, bridges, fillings, and more—restoring your smile's health and function.",
       image: "/financial-consulting-feature-1.webp",
       features: [
         "Fillings",
@@ -58,10 +58,7 @@ export default function DetailedServicesSection() {
       description: "Straighten misaligned teeth and improve bite function with braces or clear aligners for a healthier, more confident smile.",
       image: "/financial-consulting-feature-1.webp",
       features: [
-        "Traditional Braces",
-        "Clear Aligners",
-        "Invisalign",
-        "Retainers"
+      
       ]
     },
     {
@@ -70,10 +67,7 @@ export default function DetailedServicesSection() {
       description: "Treat and manage gum disease with deep cleanings and advanced therapies to protect your gums, teeth, and overall oral health.",
       image: "/mission.webp",
       features: [
-        "Deep Cleaning",
-        "Scaling & Root Planing",
-        "Gum Surgery",
-        "Maintenance Therapy"
+        
       ]
     },
     {
@@ -82,10 +76,7 @@ export default function DetailedServicesSection() {
       description: "We offer safe sedation options like nitrous oxide to help children and adults feel relaxed and comfortable during dental procedures.",
       image: "/financial-consulting-testimonial.webp",
       features: [
-        "Nitrous Oxide",
-        "Oral Sedation",
-        "IV Sedation",
-        "Anxiety Management"
+      
       ]
     },
     {
@@ -94,10 +85,7 @@ export default function DetailedServicesSection() {
       description: "Relieve jaw pain, clicking, and tension with personalized therapies that address temporomandibular joint disorders and improve jaw function.",
       image: "/financial-consulting-testimonial.webp",
       features: [
-        "Nitrous Oxide",
-        "Oral Sedation",
-        "IV Sedation",
-        "Anxiety Management"
+       
       ]
     },
     {
@@ -106,10 +94,7 @@ export default function DetailedServicesSection() {
       description: "We perform safe and gentle tooth extractions to remove damaged, decayed, or problematic teeth—promoting better oral health and comfort.",
       image: "/financial-consulting-testimonial.webp",
       features: [
-        "Nitrous Oxide",
-        "Oral Sedation",
-        "IV Sedation",
-        "Anxiety Management"
+        
       ]
     }
   ]
