@@ -8,7 +8,7 @@ export default function FeaturesSection() {
         </svg>
       ),
       title: "Accessibility",
-      description: "Easy access ensures seamless engagement, fostering convenience and user-friendly interactions for everyone involved."
+      description: "We ensure easy access to dental care with flexible scheduling and a welcoming environment for all patients."
     },
     {
       icon: (
@@ -16,8 +16,8 @@ export default function FeaturesSection() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
       ),
-      title: "Client-centered",
-      description: "Prioritizing clients, our approach revolves around personalized solutions and tailored experiences, meeting individual needs."
+      title: "Patient-Centered",
+      description: "Your comfort and needs come first — we tailor every dental treatment to fit your unique smile and preferences."
     },
     {
       icon: (
@@ -26,7 +26,7 @@ export default function FeaturesSection() {
         </svg>
       ),
       title: "Integrity",
-      description: "Upholding honesty and transparency, our commitment to integrity ensures trust and reliability in every interaction."
+      description: "We provide honest diagnoses, transparent pricing, and trustworthy care in every step of your dental journey."
     }
   ]
 

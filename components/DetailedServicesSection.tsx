@@ -16,7 +16,7 @@ export default function DetailedServicesSection() {
     {
       icon: "💰",
       title: "Restorative Dentistry",
-      description: "Comprehensive financial planning tailored to your unique goals and circumstances. We help you create a roadmap for financial success.",
+      description: "Restore the health, function, and appearance of your smile with our expert restorative dental treatments. From fillings and crowns to bridges and implants, we offer personalized solutions to repair damaged teeth and help you regain confidence in your smile.",
       image: "/financial-consulting-feature-1.webp",
       features: [
         "Fillings",
@@ -31,7 +31,7 @@ export default function DetailedServicesSection() {
     {
       icon: "📈",
       title: "Cosmetic Dentistry",
-      description: "To improve the overall aesthetic appearance of your smile",
+      description: "Transform your smile with our advanced cosmetic dental procedures. We specialize in enhancing the appearance of your teeth and gums to create the beautiful, confident smile you've always wanted.",
       image: "/mission.webp",
       features: [
         "Bonding",
@@ -43,7 +43,7 @@ export default function DetailedServicesSection() {
     {
       icon: "🏢",
       title: "Preventive Dentistry",
-      description: "Strategic business consulting to help your company grow, optimize operations, and achieve sustainable financial success.",
+      description: "Protect your oral health with regular cleanings, exams, and early interventions to prevent cavities, gum disease, and other issues.",
       image: "/financial-consulting-testimonial.webp",
       features: [
         "General Dentistry",
@@ -55,47 +55,37 @@ export default function DetailedServicesSection() {
     {
       icon: "🛡️",
       title: "Orthodontic Treatment",
-      description: "Comprehensive risk management solutions to protect your assets and ensure financial security for you and your family.",
+      description: "Straighten misaligned teeth and improve bite function with braces or clear aligners for a healthier, more confident smile.",
       image: "/financial-consulting-feature-1.webp",
       features: [
-       
-      
+        "Traditional Braces",
+        "Clear Aligners",
+        "Invisalign",
+        "Retainers"
       ]
     },
     {
       icon: "📊",
       title: "Periodontal (Gum) Disease Therapy",
-      description: "Expert tax advisory services to minimize your tax burden and ensure compliance with all applicable regulations.",
+      description: "Treat and manage gum disease with deep cleanings and advanced therapies to protect your gums, teeth, and overall oral health.",
       image: "/mission.webp",
       features: [
-        
+        "Deep Cleaning",
+        "Scaling & Root Planing",
+        "Gum Surgery",
+        "Maintenance Therapy"
       ]
     },
     {
       icon: "🎯",
       title: "Sedation Dentistry",
-      description: " Nitrous oxide offered to children and adults to ease dental phobia and anxiety",
+      description: "We offer safe sedation options like nitrous oxide to help children and adults feel relaxed and comfortable during dental procedures.",
       image: "/financial-consulting-testimonial.webp",
       features: [
-        
-      ]
-    },
-    {
-      icon: "🎯",
-      title: "TMJ/TMD Treatment",
-      description: " Nitrous oxide offered to children and adults to ease dental phobia and anxiety",
-      image: "/financial-consulting-testimonial.webp",
-      features: [
-        
-      ]
-    },
-    {
-      icon: "🎯",
-      title: "Tooth Extractions",
-      description: " Nitrous oxide offered to children and adults to ease dental phobia and anxiety",
-      image: "/financial-consulting-testimonial.webp",
-      features: [
-        
+        "Nitrous Oxide",
+        "Oral Sedation",
+        "IV Sedation",
+        "Anxiety Management"
       ]
     }
   ]
@@ -160,7 +150,7 @@ export default function DetailedServicesSection() {
                 </p>
 
                 {/* Features List */}
-                <ul className="mb-6 space-y-2">
+                <ul className="space-y-2">
                   {service.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center text-sm text-gray-600">
                       <svg className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -170,16 +160,6 @@ export default function DetailedServicesSection() {
                     </li>
                   ))}
                 </ul>
-
-                {/* Read More Button */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full text-white py-3 px-6 rounded-lg transition-colors duration-200 font-medium"
-                  style={{ backgroundColor: '#441018' }}
-                >
-                  Read More
-                </motion.button>
               </div>
             </motion.div>
           ))}

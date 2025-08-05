@@ -43,7 +43,7 @@ export default function JoinTeamSection() {
             viewport={{ once: true }}
             className="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-4"
           >
-            Join the Team
+            Join Our Dental Team
           </motion.h3>
 
           {/* Main Heading */}
@@ -65,7 +65,7 @@ export default function JoinTeamSection() {
             viewport={{ once: true }}
             className="text-lg text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed"
           >
-            Ac lorem rhoncus ut erat suspendisse. Integer id tincidunt curabitur sit purus.
+            Join our dedicated team of dental professionals committed to providing exceptional patient care. We offer a supportive environment where you can grow your skills and make a difference in patients' lives.
           </motion.p>
 
           {/* Call-to-Action Button */}
