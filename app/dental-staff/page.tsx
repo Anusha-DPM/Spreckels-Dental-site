@@ -1,6 +1,5 @@
 import {
   Layout,
-  TrustedBySection,
   JoinTeamSection,
   CTASection
 } from '../../components'
@@ -13,7 +12,6 @@ export default function DentalStaff() {
     <Layout>
       <DentalStaffHeroSection />
       <DentalStaffJourneySection />
-      <TrustedBySection />
       <DentalStaffTeamSection />
       <JoinTeamSection />
       <CTASection />

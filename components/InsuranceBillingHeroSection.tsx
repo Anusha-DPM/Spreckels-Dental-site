@@ -46,8 +46,8 @@ export default function InsuranceBillingHeroSection() {
           >
             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/financial-consulting-feature-1.webp"
-                alt="Insurance and billing consultation"
+                src="/Insurance & Billing.jpeg"
+                alt="Spreckels Park Dental Insurance & Billing Services"
                 fill
                 className="object-cover"
                 priority

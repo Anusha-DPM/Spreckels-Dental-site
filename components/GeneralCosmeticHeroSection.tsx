@@ -46,8 +46,8 @@ export default function GeneralCosmeticHeroSection() {
           >
             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/financial-consulting-feature-1.webp"
-                alt="General and cosmetic dentistry services"
+                src="/General & Cosmetic.jpeg"
+                alt="Spreckels Park Dental General & Cosmetic Dentistry Services"
                 fill
                 className="object-cover"
                 priority

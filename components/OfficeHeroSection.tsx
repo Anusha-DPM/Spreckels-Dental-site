@@ -50,8 +50,8 @@ Parking is provided in front of office & parking lot is located in the rear alle
           >
             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/financial-consulting-feature-1.webp"
-                alt="Modern dental office"
+                src="/officehero.jpeg"
+                alt="Spreckels Park Dental Office - Modern dental facility"
                 fill
                 className="object-cover"
                 priority

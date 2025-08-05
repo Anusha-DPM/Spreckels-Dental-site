@@ -17,7 +17,7 @@ export default function DetailedServicesSection() {
       icon: "💰",
       title: "Restorative Dentistry",
       description: "We repair damaged or missing teeth using crowns, bridges, fillings, and more—restoring your smile's health and function.",
-      image: "/financial-consulting-feature-1.webp",
+      image: "/Restorative.jpeg",
       features: [
         "Fillings",
         "Crowns & Bridgework",
@@ -32,7 +32,7 @@ export default function DetailedServicesSection() {
       icon: "📈",
       title: "Cosmetic Dentistry",
       description: "Enhance the beauty of your smile with treatments like teeth whitening, veneers, and bonding for a more confident, radiant look.",
-      image: "/mission.webp",
+      image: "/Cosmetic.jpeg",
       features: [
         "Bonding",
         "Cosmetic Dentistry",
@@ -44,7 +44,7 @@ export default function DetailedServicesSection() {
       icon: "🏢",
       title: "Preventive Dentistry",
       description: "Protect your oral health with regular cleanings, exams, and early interventions to prevent cavities, gum disease, and other issues.",
-      image: "/financial-consulting-testimonial.webp",
+      image: "/Preventive.jpeg",
       features: [
         "General Dentistry",
         "Professional Teeth Cleanings",
@@ -56,7 +56,7 @@ export default function DetailedServicesSection() {
       icon: "🛡️",
       title: "Orthodontic Treatment",
       description: "Straighten misaligned teeth and improve bite function with braces or clear aligners for a healthier, more confident smile.",
-      image: "/financial-consulting-feature-1.webp",
+      image: "/Orthodontic.jpeg",
       features: [
       
       ]
@@ -65,7 +65,7 @@ export default function DetailedServicesSection() {
       icon: "📊",
       title: "Periodontal (Gum) Disease Therapy",
       description: "Treat and manage gum disease with deep cleanings and advanced therapies to protect your gums, teeth, and overall oral health.",
-      image: "/mission.webp",
+      image: "/Periodontal.jpeg",
       features: [
         
       ]
@@ -83,7 +83,7 @@ export default function DetailedServicesSection() {
       icon: "🎯",
       title: "TMJ/TMD Treatment",
       description: "Relieve jaw pain, clicking, and tension with personalized therapies that address temporomandibular joint disorders and improve jaw function.",
-      image: "/financial-consulting-testimonial.webp",
+      image: "/TMJTMD Treatment.jpeg",
       features: [
        
       ]
@@ -92,7 +92,7 @@ export default function DetailedServicesSection() {
       icon: "🎯",
       title: "Tooth Extractions",
       description: "We perform safe and gentle tooth extractions to remove damaged, decayed, or problematic teeth—promoting better oral health and comfort.",
-      image: "/financial-consulting-testimonial.webp",
+      image: "/Tooth Extractions.jpeg",
       features: [
         
       ]

@@ -44,8 +44,8 @@ export default function GeneralDentistrySection() {
           >
             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/financial-consulting-feature-1.webp"
-                alt="Patient receiving dental care"
+                src="/General Dentistry in Manteca.jpeg"
+                alt="Spreckels Park Dental General Dentistry Services in Manteca, CA"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"

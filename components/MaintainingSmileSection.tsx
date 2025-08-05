@@ -36,8 +36,8 @@ export default function MaintainingSmileSection() {
           >
             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/financial-consulting-feature-1.webp"
-                alt="Beautiful white teeth and healthy gums"
+                src="/Maintaining Your New Smile.jpeg"
+                alt="Spreckels Park Dental - Maintaining Your Beautiful New Smile"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"

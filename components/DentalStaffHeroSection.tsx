@@ -55,8 +55,8 @@ export default function DentalStaffHeroSection() {
             className="relative"
           >
             <Image
-              src="/financial-consulting-feature-1.webp"
-              alt="Dental Staff Team"
+              src="/dentalstaff.jpeg"
+              alt="Spreckels Park Dental Staff - Professional Team"
               width={600}
               height={400}
               className="rounded-lg shadow-2xl"

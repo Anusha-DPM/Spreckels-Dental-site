@@ -55,8 +55,8 @@ export default function ServicesHeroSection() {
             className="relative"
           >
             <Image
-              src="/office3.webp"
-              alt="Professional dental services and care"
+              src="/services.jpeg"
+              alt="Spreckels Park Dental Services - Comprehensive Care"
               width={600}
               height={400}
               className="rounded-lg shadow-2xl"
