@@ -24,14 +24,14 @@ export default function SimpleOrthoContent() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* What is Invisalign */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="space-y-6"
+              className="space-y-6 h-full flex flex-col justify-center"
             >
               <h3 className="text-2xl lg:text-3xl font-semibold text-gray-900 mb-4">
                 What is Invisalign®?
@@ -83,7 +83,7 @@ export default function SimpleOrthoContent() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="relative h-96 rounded-xl overflow-hidden shadow-2xl"
+              className="relative h-full min-h-[384px] rounded-xl overflow-hidden shadow-2xl"
             >
               <Image
                 src="/Invisalign Aligners.jpeg"

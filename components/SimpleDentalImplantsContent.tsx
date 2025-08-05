@@ -20,7 +20,7 @@ export default function SimpleDentalImplantsContent() {
     {
       price: "$5,999",
       title: "Implant Denture",
-      image: "/Dental Implants.jpeg",
+      image: "/Implant Denture.jpeg",
       description: [
         "Includes two implants and an implant retained denture"
       ],
