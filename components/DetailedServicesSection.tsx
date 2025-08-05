@@ -74,7 +74,7 @@ export default function DetailedServicesSection() {
       icon: "🎯",
       title: "Sedation Dentistry",
       description: "We offer safe sedation options like nitrous oxide to help children and adults feel relaxed and comfortable during dental procedures.",
-      image: "/financial-consulting-testimonial.webp",
+      image: "/Sedation.jpeg",
       features: [
       
       ]

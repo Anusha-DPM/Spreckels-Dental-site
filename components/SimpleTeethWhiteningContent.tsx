@@ -54,18 +54,16 @@ export default function SimpleTeethWhiteningContent() {
               </div>
             </div>
             
-            {/* Image Placeholder */}
+            {/* Understanding Tooth Discoloration Image */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-6 bg-white rounded-2xl shadow-lg flex items-center justify-center">
-                    <svg className="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-xl font-semibold text-gray-900 mb-2">Before & After</h4>
-                  <p className="text-gray-600">Professional teeth whitening results</p>
-                </div>
+              <div className="relative h-96 rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/Understanding Tooth Discoloration.jpeg"
+                  alt="Spreckels Park Dental - Understanding Tooth Discoloration and Staining"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
             </div>
           </div>

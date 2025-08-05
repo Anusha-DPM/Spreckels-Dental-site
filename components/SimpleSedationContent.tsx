@@ -137,18 +137,16 @@ export default function SimpleSedationContent() {
               </div>
             </div>
             
-            {/* Image Placeholder */}
+            {/* About Our Sedation Services Image */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-6 bg-white rounded-2xl shadow-lg flex items-center justify-center">
-                    <svg className="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-xl font-semibold text-gray-900 mb-2">Comfortable Care</h4>
-                  <p className="text-gray-600">Young patient with nitrous oxide mask</p>
-                </div>
+              <div className="relative h-96 rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/About Our Sedation Services.jpeg"
+                  alt="Spreckels Park Dental Sedation Services - Comfortable Care for Anxious Patients"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
             </div>
           </div>
