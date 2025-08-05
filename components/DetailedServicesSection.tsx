@@ -31,7 +31,7 @@ export default function DetailedServicesSection() {
     {
       icon: "📈",
       title: "Cosmetic Dentistry",
-      description: "Transform your smile with our advanced cosmetic dental procedures. We specialize in enhancing the appearance of your teeth and gums to create the beautiful, confident smile you've always wanted.",
+      description: "Enhance the beauty of your smile with treatments like teeth whitening, veneers, and bonding for a more confident, radiant look.",
       image: "/mission.webp",
       features: [
         "Bonding",
@@ -80,6 +80,30 @@ export default function DetailedServicesSection() {
       icon: "🎯",
       title: "Sedation Dentistry",
       description: "We offer safe sedation options like nitrous oxide to help children and adults feel relaxed and comfortable during dental procedures.",
+      image: "/financial-consulting-testimonial.webp",
+      features: [
+        "Nitrous Oxide",
+        "Oral Sedation",
+        "IV Sedation",
+        "Anxiety Management"
+      ]
+    },
+    {
+      icon: "🎯",
+      title: "TMJ/TMD Treatment",
+      description: "Relieve jaw pain, clicking, and tension with personalized therapies that address temporomandibular joint disorders and improve jaw function.",
+      image: "/financial-consulting-testimonial.webp",
+      features: [
+        "Nitrous Oxide",
+        "Oral Sedation",
+        "IV Sedation",
+        "Anxiety Management"
+      ]
+    },
+    {
+      icon: "🎯",
+      title: "Tooth Extractions",
+      description: "We perform safe and gentle tooth extractions to remove damaged, decayed, or problematic teeth—promoting better oral health and comfort.",
       image: "/financial-consulting-testimonial.webp",
       features: [
         "Nitrous Oxide",
