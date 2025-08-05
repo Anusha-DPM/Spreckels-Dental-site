@@ -2,7 +2,6 @@ import {
   Layout,
   AboutHeroSection,
   JourneySection,
-  TrustedBySection,
   TestimonialSection,
   ValuesSection,
   CTASection
@@ -13,7 +12,6 @@ export default function AboutUs() {
     <Layout>
       <AboutHeroSection />
       <JourneySection />
-      <TrustedBySection />
       <TestimonialSection />
       <ValuesSection />
       <CTASection />

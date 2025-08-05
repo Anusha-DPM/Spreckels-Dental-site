@@ -67,30 +67,6 @@ export default function JoinTeamSection() {
           >
             Join our dedicated team of dental professionals committed to providing exceptional patient care. We offer a supportive environment where you can grow your skills and make a difference in patients' lives.
           </motion.p>
-
-          {/* Call-to-Action Button */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            viewport={{ once: true }}
-            className="flex justify-center"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium text-lg transition-colors duration-200 group"
-            >
-              <span>View open positions</span>
-              <motion.svg 
-                className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" 
-                fill="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-              </motion.svg>
-            </motion.button>
-          </motion.div>
         </motion.div>
       </div>
     </section>
