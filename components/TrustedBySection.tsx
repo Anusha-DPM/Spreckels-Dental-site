@@ -10,12 +10,12 @@ export default function TrustedBySection() {
   const [isTablet, setIsTablet] = useState(false)
 
   const logos = [
-    { name: 'Invisalign', image: '/logo.webp' },
-    { name: 'American Dental Association', image: '/logo.webp' },
-    { name: 'California Dental Association', image: '/logo.webp' },
-    { name: 'American Academy of Implant Dentistry', image: '/logo.webp' },
-    { name: 'International Congress of Oral Implantologists', image: '/logo.webp' },
-    { name: 'Academy of General Dentistry', image: '/logo.webp' }
+    { name: 'Invisalign', image: '/Google-Reviews.png' },
+    { name: 'American Dental Association', image: '/Google-Reviews.png' },
+    { name: 'California Dental Association', image: '/Google-Reviews.png' },
+    { name: 'American Academy of Implant Dentistry', image: '/Google-Reviews.png' },
+    { name: 'International Congress of Oral Implantologists', image: '/Google-Reviews.png' },
+    { name: 'Academy of General Dentistry', image: '/Google-Reviews.png' }
   ]
 
   // Handle responsive breakpoints
