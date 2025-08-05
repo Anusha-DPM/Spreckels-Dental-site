@@ -14,16 +14,16 @@ interface Testimonial {
 export default function JourneySection() {
   const testimonials: Testimonial[] = [
     {
-      name: "Sophie Martinez",
-      text: "Before partnering with Outgrid, I felt lost in a sea of financial jargon and uncertainty. Their team didn't just provide me with guidance; they equipped me with the tools and knowledge.",
-      avatar: "/financial-consulting-testimonial.webp",
+      name: "Dr. Rujul G. Parikh DDS",
+      text: "With over 23 years of experience in dentistry, I've dedicated my career to creating beautiful, healthy smiles. Our commitment to patient care and advanced dental techniques has made Spreckels Park Dental a trusted name in Manteca.",
+      avatar: "/doctor-1.webp",
       nameColor: "text-green-600",
       avatarPosition: 'left'
     },
     {
-      name: "Ethan Park",
-      text: "Their approach is personal, understanding, and incredibly efficient. I've seen impressive returns on my investments and gained a wealth of knowledge in the process.",
-      avatar: "/financial-consulting-feature-1.webp",
+      name: "Dr. Shivli Arora DDS",
+      text: "Our approach combines cutting-edge technology with compassionate care. We believe every patient deserves personalized treatment that addresses their unique needs and concerns.",
+      avatar: "/doctor-2.webp",
       nameColor: "text-blue-600",
       avatarPosition: 'right'
     }
@@ -41,10 +41,10 @@ export default function JourneySection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
-            Our journey to financial expertise
+            Our journey to dental excellence
           </h2>
           <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Over the years, we've grown from a small firm to a trusted name in the financial consulting industry, but our core belief remains the same — everyone deserves the right to a secure financial future.
+            Over the years, we've grown from a small practice to a trusted name in dental care, but our core belief remains the same — everyone deserves the right to a healthy, beautiful smile.
           </p>
         </motion.div>
 
@@ -105,10 +105,11 @@ export default function JourneySection() {
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
                     <svg 
                       className="w-6 h-6 text-white" 
-                      fill="currentColor" 
+                      fill="none" 
+                      stroke="currentColor" 
                       viewBox="0 0 24 24"
                     >
-                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                   </div>
                 </div>
@@ -154,8 +155,8 @@ export default function JourneySection() {
             className="relative h-96 lg:h-[600px] xl:h-[700px] rounded-2xl overflow-hidden shadow-xl"
           >
             <Image
-              src="/mission.webp"
-              alt="Team of financial consultants in office"
+              src="/office2.webp"
+              alt="Dental team providing exceptional care"
               fill
               className="object-cover"
             />

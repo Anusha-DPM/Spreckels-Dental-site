@@ -24,17 +24,17 @@ export default function ValuesSection({
     {
       icon: "👁️",
       title: "Accessibility",
-      description: "Easy access ensures seamless engagement, fostering convenience and user-friendly interactions for everyone involved."
+      description: "We ensure easy access to dental care with flexible scheduling and a welcoming environment for all patients."
     },
     {
       icon: "⭐",
-      title: "Client-centered",
-      description: "Prioritizing clients, our approach revolves around personalized solutions and tailored experiences, meeting individual needs."
+      title: "Patient-Centered",
+      description: "Your comfort and needs come first — we tailor every dental treatment to fit your unique smile and preferences."
     },
     {
       icon: "🤝",
       title: "Integrity",
-      description: "Upholding honesty and transparency, our commitment to integrity ensures trust and reliability in every interaction."
+      description: "We provide honest diagnoses, transparent pricing, and trustworthy care in every step of your dental journey."
     }
   ],
   className = ""

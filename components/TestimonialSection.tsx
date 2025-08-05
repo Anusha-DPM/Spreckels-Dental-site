@@ -64,12 +64,12 @@ export default function TestimonialSection() {
           <div className="flex flex-col items-center justify-center text-center min-h-[400px]">
             
             {/* Author Label */}
-            <div className="text-sm text-red-100 font-medium mb-4 sm:mb-6 transition-opacity duration-300">
+            <div className="text-sm text-yellow-200 font-medium mb-4 sm:mb-6 transition-opacity duration-300">
               – {currentTestimonial.author}, {currentTestimonial.position}
             </div>
             
             {/* Testimonial Quote */}
-            <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-normal leading-relaxed mb-8 sm:mb-10 transition-opacity duration-300 max-w-4xl">
+            <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-normal leading-relaxed mb-8 sm:mb-10 transition-opacity duration-300 max-w-4xl text-gray-100">
               "{currentTestimonial.quote}"
             </blockquote>
             

@@ -18,26 +18,26 @@ export default function AboutUsSection() {
                 priority
               />
               
-              {/* Floating Financial Summary Card */}
+              {/* Floating Dental Summary Card */}
               <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-[280px] sm:max-w-xs">
                 <div className="space-y-3">
-                  {/* Current APY */}
+                  {/* Years of Experience */}
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 text-sm">Current APY</span>
-                    <span className="text-gray-900 font-semibold">4.75%</span>
+                    <span className="text-gray-600 text-sm">Years of Experience</span>
+                    <span className="text-gray-900 font-semibold">23+</span>
                   </div>
                   
-                  {/* Total Interest Earned */}
+                  {/* Patients Served */}
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 text-sm">Total Interest Earned</span>
-                    <span className="text-gray-900 font-semibold">$132.87</span>
+                    <span className="text-gray-600 text-sm">Patients Served</span>
+                    <span className="text-gray-900 font-semibold">10,000+</span>
                   </div>
                   
-                  {/* Cash Reserve Card */}
+                  {/* Specializations */}
                   <div className="bg-gray-50 rounded-lg p-3 mt-4">
-                    <div className="text-gray-600 text-sm mb-2">Your Cash Reserve</div>
-                    <div className="bg-blue-600 text-white px-4 py-2 rounded-full text-center font-semibold">
-                      $14,952.00
+                    <div className="text-gray-600 text-sm mb-2">Specializations</div>
+                    <div className="bg-blue-600 text-white px-4 py-2 rounded-full text-center font-semibold text-sm">
+                      Implants & General
                     </div>
                   </div>
                 </div>

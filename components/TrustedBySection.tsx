@@ -10,12 +10,12 @@ export default function TrustedBySection() {
   const [isTablet, setIsTablet] = useState(false)
 
   const logos = [
-    { name: 'Network', image: '/Financial-Consulting-Logo-1.webp' },
-    { name: 'Penta', image: '/Financial-Consulting-Logo-2.webp' },
-    { name: 'NATUSKA', image: '/Financial-Consulting-Logo-3.webp' },
-    { name: 'EXEO', image: '/Financial-Consulting-Logo-4.webp' },
-    { name: 'un', image: '/Financial-Consulting-Logo-5.webp' },
-    { name: 'SAONA', image: '/Financial-Consulting-Logo-9.webp' }
+    { name: 'Invisalign', image: '/logo.webp' },
+    { name: 'American Dental Association', image: '/logo.webp' },
+    { name: 'California Dental Association', image: '/logo.webp' },
+    { name: 'American Academy of Implant Dentistry', image: '/logo.webp' },
+    { name: 'International Congress of Oral Implantologists', image: '/logo.webp' },
+    { name: 'Academy of General Dentistry', image: '/logo.webp' }
   ]
 
   // Handle responsive breakpoints
@@ -56,7 +56,7 @@ export default function TrustedBySection() {
           className="text-center"
         >
           <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-8">
-            TRUSTED BY COMPANIES ALL OVER THE WORLD
+            TRUSTED BY DENTAL PROFESSIONALS AND PATIENTS
           </h2>
           
           {/* Infinite Scroll Carousel Container */}

@@ -16,7 +16,7 @@ export default function AboutHeroSection() {
               transition={{ duration: 0.8 }}
               className="text-4xl lg:text-5xl xl:text-6xl font-normal leading-tight mb-2.5"
             >
-              About Outgrid
+              About Spreckels Park Dental
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 30 }}
@@ -24,7 +24,7 @@ export default function AboutHeroSection() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-lg lg:text-xl text-red-100 mb-20 pr-0 lg:pr-20 leading-relaxed"
             >
-              We are a leading financial consulting firm dedicated to helping individuals and businesses unlock their financial potential through strategic planning, personalized guidance, and innovative solutions.
+              We are a trusted dental practice dedicated to providing exceptional oral care and creating beautiful smiles through advanced technology, personalized treatment plans, and compassionate care for every patient.
             </motion.p>
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
@@ -33,10 +33,10 @@ export default function AboutHeroSection() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <button className="px-8 py-3 bg-white text-gray-900 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium">
-                Get Started
+                Schedule Consultation
               </button>
               <button className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-medium">
-                Let's Talk
+                Meet Our Team
               </button>
             </motion.div>
           </div>
@@ -49,8 +49,8 @@ export default function AboutHeroSection() {
             className="relative"
           >
             <Image
-              src="/financial-consulting-feature-1.webp"
-              alt="Financial Consulting Team"
+              src="/office1.webp"
+              alt="Spreckels Park Dental Team"
               width={600}
               height={400}
               className="rounded-lg shadow-2xl"
