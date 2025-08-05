@@ -17,24 +17,24 @@ interface ValuesSectionProps {
 }
 
 export default function ValuesSection({
-  title = "Shaping futures, one decision at a time",
+  title = "Building healthy smiles with care and compassion",
   subtitle = "OUR VALUES",
-  description = "Our core values guide everything we do, ensuring we provide the highest quality financial services while maintaining the trust and confidence of our clients.",
+  description = "Our core values guide everything we do, ensuring we provide the highest quality dental care while maintaining the trust and confidence of our patients.",
   values = [
     {
       icon: "👁️",
       title: "Accessibility",
-      description: "We believe in easy access to financial knowledge and user-friendly interaction with our services."
+      description: "Easy access ensures seamless engagement, fostering convenience and user-friendly interactions for everyone involved."
     },
     {
       icon: "⭐",
-      title: "Client-Centered",
-      description: "Our approach prioritizes client needs, ensuring personalized solutions that work for you."
+      title: "Client-centered",
+      description: "Prioritizing clients, our approach revolves around personalized solutions and tailored experiences, meeting individual needs."
     },
     {
       icon: "🤝",
       title: "Integrity",
-      description: "We uphold honesty and transparency in all our dealings, building trust with every interaction."
+      description: "Upholding honesty and transparency, our commitment to integrity ensures trust and reliability in every interaction."
     }
   ],
   className = ""

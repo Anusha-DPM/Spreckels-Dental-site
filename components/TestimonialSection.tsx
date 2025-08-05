@@ -15,13 +15,13 @@ export default function TestimonialSection() {
       id: 2,
       author: "Susan Bower",
       position: "Patient",
-      quote: "Everyone at Speckles’s Park Dental are so nice! I will only trust my pearly whites with them!!! I got the best front tooth crown ever by Dentist Parikh! No one can tell that I have a crown!!! LOVE, LOVE, LOVE their work!!!"
+      quote: "Everyone at Speckles's Park Dental are so nice! I will only trust my pearly whites with them!!! I got the best front tooth crown ever by Dentist Parikh! No one can tell that I have a crown!!! LOVE, LOVE, LOVE their work!!!"
     },
     {
       id: 3,
       author: "Evette Hess",
       position: "Patient",
-      quote: "Spreckels dental is amazing! service is great! everyone is very friendly and made me feel comfortable being here! the front desk lady’s are great! very nice and they try their best to work with u as much as possible!."
+      quote: "Spreckels dental is amazing! service is great! everyone is very friendly and made me feel comfortable being here! the front desk lady's are great! very nice and they try their best to work with u as much as possible!."
     },
     {
       id: 4,
@@ -60,68 +60,59 @@ export default function TestimonialSection() {
     <section className="py-10 sm:py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-2xl p-4 sm:p-6 md:p-8 relative" style={{ backgroundColor: '#441018' }}>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 sm:gap-8 md:gap-10 items-center">
+          {/* Centered Testimonial Content */}
+          <div className="flex flex-col items-center justify-center text-center min-h-[400px]">
             
-            {/* Left Column - Testimonial Content (3 columns - 60%) */}
-            <div className="text-white md:col-span-3">
-              {/* Author Label */}
-              <div className="text-sm text-red-100 font-medium mb-4 sm:mb-6 transition-opacity duration-300">
-                – {currentTestimonial.author}, {currentTestimonial.position}
+            {/* Author Label */}
+            <div className="text-sm text-red-100 font-medium mb-4 sm:mb-6 transition-opacity duration-300">
+              – {currentTestimonial.author}, {currentTestimonial.position}
+            </div>
+            
+            {/* Testimonial Quote */}
+            <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-normal leading-relaxed mb-8 sm:mb-10 transition-opacity duration-300 max-w-4xl">
+              "{currentTestimonial.quote}"
+            </blockquote>
+            
+            {/* Centered Navigation Controls */}
+            <div className="flex items-center justify-center space-x-4 mt-8">
+              {/* Previous Button */}
+              <button
+                onClick={prevTestimonial}
+                className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200 flex items-center justify-center"
+                aria-label="Previous testimonial"
+              >
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              {/* Dots Indicator */}
+              <div className="flex space-x-2">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToTestimonial(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                      index === currentIndex 
+                        ? 'bg-white scale-125' 
+                        : 'bg-white/40 hover:bg-white/60'
+                    }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  />
+                ))}
               </div>
               
-              {/* Testimonial Quote */}
-              <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-normal leading-relaxed mb-6 sm:mb-8 transition-opacity duration-300">
-                "{currentTestimonial.quote}"
-              </blockquote>
+              {/* Next Button */}
+              <button
+                onClick={nextTestimonial}
+                className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200 flex items-center justify-center"
+                aria-label="Next testimonial"
+              >
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
-            
-            {/* Right Column - Fixed Image (2 columns - 40%) */}
-            <div className="flex justify-center md:col-span-2">
-              <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-xl overflow-hidden border-2 border-white/20 p-2">
-                <Image
-                  src="/financial-consulting-testimonial.webp"
-                  alt="Happy dental patient"
-                  fill
-                  className="object-cover rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
-          
-          {/* Fixed Navigation Controls - Positioned at bottom left */}
-          <div className="flex items-center space-x-4 mt-8">
-            {/* Left Arrow */}
-            <button 
-              onClick={prevTestimonial}
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center"
-            >
-              <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            
-            {/* Pagination Dots */}
-            <div className="flex space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToTestimonial(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? 'bg-white' : 'bg-red-300'
-                  }`}
-                />
-              ))}
-            </div>
-            
-            {/* Right Arrow */}
-            <button 
-              onClick={nextTestimonial}
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center"
-            >
-              <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>

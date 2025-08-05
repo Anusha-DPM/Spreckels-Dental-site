@@ -1,20 +1,20 @@
 export default function InfoStatsSection() {
   const stats = [
     {
-      number: "10+",
-      label: "Years in business"
+      number: "25+",
+      label: "Years of experience"
     },
     {
-      number: "$500,000+",
-      label: "Assets managed"
+      number: "10,000+",
+      label: "Smiles transformed"
     },
     {
-      number: "300+",
-      label: "Workshops conducted"
+      number: "500+",
+      label: "Successful procedures"
     },
     {
-      number: "40,000+",
-      label: "Clients served"
+      number: "5,000+",
+      label: "Happy patients"
     }
   ]
 
@@ -25,10 +25,10 @@ export default function InfoStatsSection() {
           {/* Left Column - Informational Content */}
           <div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-gray-900 mb-6 font-heading leading-tight">
-              Your financial freedom journey starts here
+              Your journey to a perfect smile starts here
             </h2>
             <p className="text-lg text-[#656565] leading-relaxed font-sans">
-              Ut ornare rhoncus urna vestibulum dictumst cras ornare lorem blandit. At pellentesque habitant ipsum pharetra.
+              Experience exceptional dental care with our expert team. We provide comprehensive dental services to help you achieve a healthy, beautiful smile that lasts a lifetime.
             </p>
           </div>
 
