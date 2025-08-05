@@ -77,22 +77,21 @@ export default function SimpleOrthoContent() {
               </div>
             </motion.div>
 
-            {/* Invisalign Image Placeholder */}
+            {/* Invisalign Image */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="relative h-96 bg-gray-100 rounded-xl flex items-center justify-center"
+              className="relative h-96 rounded-xl overflow-hidden shadow-2xl"
             >
-              <div className="text-center">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <p className="text-gray-500">Invisalign Aligners Image</p>
-              </div>
+              <Image
+                src="/Invisalign Aligners.jpeg"
+                alt="Spreckels Park Dental Invisalign Aligners - Clear Orthodontic Treatment"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </motion.div>
           </div>
         </div>

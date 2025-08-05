@@ -8,7 +8,7 @@ export default function SimpleAllOn4Content() {
     {
       price: "",
       title: "Dental Implants",
-      image: "/dental-implants.webp",
+      image: "/Dental Implants.jpeg",
       description: [
         "Small titanium posts that replace the roots of missing tooth",
         "Inserted into the jawbone during a minor surgical procedure",
@@ -20,7 +20,7 @@ export default function SimpleAllOn4Content() {
     {
       price: "$5,999",
       title: "Implant Denture",
-      image: "/implant-denture.webp",
+      image: "/Implant Denture.jpeg",
       description: [
         "Includes two implants and an implant retained denture"
       ],
@@ -30,7 +30,7 @@ export default function SimpleAllOn4Content() {
     {
       price: "$14,999",
       title: "all on x per arch",
-      image: "/all-on-x.webp",
+      image: "/all on x per arch1.jpeg",
       description: [
         "Includes all Extraction, Dental Implants & Interim Denture"
       ],
@@ -44,7 +44,7 @@ export default function SimpleAllOn4Content() {
     {
       price: "$19,999",
       title: "all on x per arch",
-      image: "/all-on-x-final.webp",
+      image: "/all on x per arch2.jpeg",
       description: [
         "Includes all Extractions, Dental Implants, Interim Denture & Final Restoration"
       ],
@@ -81,16 +81,15 @@ export default function SimpleAllOn4Content() {
                 </div>
               </div>
 
-              {/* Image Placeholder */}
-              <div className="relative h-48 bg-gray-100 flex items-center justify-center">
-                <div className="text-gray-400 text-center">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-sm">Service Image</p>
-                </div>
+              {/* Service Image */}
+              <div className="relative h-48 overflow-hidden">
+                <Image
+                  src={service.image}
+                  alt={`${service.title} - Spreckels Park Dental`}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
 
               {/* Description */}
