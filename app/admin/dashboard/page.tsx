@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getBlogPosts, deleteBlogPost } from '@/lib/blogDatabase'
 
 interface BlogPost {
   id: string
@@ -35,24 +36,66 @@ export default function AdminDashboard() {
       return
     }
 
-    // Load posts from localStorage (in production, this would be from an API)
-    const savedPosts = localStorage.getItem('blogPosts')
-    if (savedPosts) {
-      setPosts(JSON.parse(savedPosts))
-    }
-    setIsLoading(false)
+    loadPosts()
   }, [router])
+
+  const loadPosts = async () => {
+    try {
+      setIsLoading(true)
+      // Load posts from Firebase
+      const firebasePosts = await getBlogPosts({ published: null }) // Get all posts
+      
+      // Convert Firebase format to dashboard format
+      const dashboardPosts = firebasePosts.map(post => ({
+        id: post.id,
+        title: post.title,
+        slug: post.slug,
+        content: post.content,
+        excerpt: post.excerpt,
+        coverImage: post.coverImage || post.imageUrl || '',
+        tags: post.tags || [],
+        metaTitle: post.metaTitle || '',
+        metaDescription: post.metaDescription || '',
+        publishDate: post.publishDate || post.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        status: (post.published ? 'published' : 'draft') as 'draft' | 'published',
+        createdAt: post.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt: post.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+      }))
+      
+      setPosts(dashboardPosts)
+    } catch (error) {
+      console.error('Error loading posts:', error)
+      // Fallback to localStorage
+      const savedPosts = localStorage.getItem('blogPosts')
+      if (savedPosts) {
+        setPosts(JSON.parse(savedPosts))
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('adminAuthenticated')
     router.push('/admin/login')
   }
 
-  const handleDeletePost = (postId: string) => {
+  const handleDeletePost = async (postId: string) => {
     if (confirm('Are you sure you want to delete this post?')) {
-      const updatedPosts = posts.filter(post => post.id !== postId)
-      setPosts(updatedPosts)
-      localStorage.setItem('blogPosts', JSON.stringify(updatedPosts))
+      try {
+        // Delete from Firebase
+        await deleteBlogPost(postId)
+        
+        // Update local state
+        const updatedPosts = posts.filter(post => post.id !== postId)
+        setPosts(updatedPosts)
+        
+        // Also update localStorage
+        localStorage.setItem('blogPosts', JSON.stringify(updatedPosts))
+      } catch (error) {
+        console.error('Error deleting post:', error)
+        alert('Error deleting post. Please try again.')
+      }
     }
   }
 
@@ -98,6 +141,13 @@ export default function AdminDashboard() {
             </div>
             
             <div className="flex items-center space-x-4">
+              <button
+                onClick={loadPosts}
+                disabled={isLoading}
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
+              >
+                {isLoading ? 'Loading...' : 'Refresh'}
+              </button>
               <Link
                 href="/admin/new-post"
                 className="bg-[#441018] text-white px-4 py-2 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-medium"

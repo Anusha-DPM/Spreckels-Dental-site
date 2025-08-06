@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
+import { createBlogPost } from '@/lib/blogDatabase'
 
 interface BlogPost {
   id: string
@@ -87,33 +88,53 @@ export default function NewPost() {
     setIsLoading(true)
     
     try {
-      const newPost: BlogPost = {
-        id: Date.now().toString(),
+      // Prepare data for Firebase
+      const blogData = {
         title: post.title || '',
-        slug: post.slug || '',
         content: post.content || '',
         excerpt: post.excerpt || '',
         coverImage: post.coverImage || '',
+        imageUrl: post.coverImage || '', // Firebase uses imageUrl
         tags: post.tags || [],
+        category: 'General Dentistry', // Default category
+        author: 'Admin', // Default author
+        published: post.status === 'published', // Convert status to boolean
+        featured: false,
+        slug: post.slug || '',
         metaTitle: post.metaTitle || '',
-        metaDescription: post.metaDescription || '',
-        publishDate: post.publishDate || new Date().toISOString(),
-        status: post.status || 'draft',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        metaDescription: post.metaDescription || ''
       }
 
-      // Get existing posts
+      // Save to Firebase
+      const newPost = await createBlogPost(blogData)
+      
+      // Also save to localStorage as backup
       const existingPosts = localStorage.getItem('blogPosts')
       const posts = existingPosts ? JSON.parse(existingPosts) : []
       
-      // Add new post
-      posts.unshift(newPost)
+      const localStoragePost = {
+        id: newPost.id,
+        title: newPost.title,
+        slug: newPost.slug,
+        content: newPost.content,
+        excerpt: newPost.excerpt,
+        coverImage: newPost.coverImage || newPost.imageUrl,
+        tags: newPost.tags,
+        metaTitle: newPost.metaTitle,
+        metaDescription: newPost.metaDescription,
+        publishDate: post.publishDate || new Date().toISOString(),
+        status: newPost.published ? 'published' : 'draft',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+      
+      posts.unshift(localStoragePost)
       localStorage.setItem('blogPosts', JSON.stringify(posts))
       
       router.push('/admin/dashboard')
     } catch (error) {
       console.error('Error saving post:', error)
+      alert('Error saving post. Please try again.')
     } finally {
       setIsLoading(false)
     }
