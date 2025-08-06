@@ -23,6 +23,22 @@ interface BlogPost {
   updatedAt: string
 }
 
+interface FirebasePost {
+  id: string
+  title: string
+  slug: string
+  content: string
+  excerpt: string
+  coverImage?: string
+  imageUrl?: string
+  tags: string[]
+  metaTitle: string
+  metaDescription: string
+  published: boolean
+  createdAt: any
+  updatedAt: any
+}
+
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -46,7 +62,7 @@ export default function AdminDashboard() {
       const firebasePosts = await getBlogPosts({ published: null }) // Get all posts
       
       // Convert Firebase format to dashboard format
-      const dashboardPosts = firebasePosts.map(post => ({
+      const dashboardPosts = firebasePosts.map((post: FirebasePost) => ({
         id: post.id,
         title: post.title,
         slug: post.slug,
