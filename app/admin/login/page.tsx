@@ -23,12 +23,12 @@ export default function AdminLogin() {
     e.preventDefault()
     setIsLoading(true)
     
-    // Simple authentication for testing
-    if (username === 'admin' && password === 'admin') {
+    // Admin authentication
+    if (username === 'admin' && password === 'dental2024') {
       localStorage.setItem('adminAuthenticated', 'true')
       router.push('/admin/dashboard')
     } else {
-      alert('Invalid credentials. Use admin/admin for testing.')
+      alert('Invalid credentials. Please use admin/dental2024')
     }
     
     setIsLoading(false)
