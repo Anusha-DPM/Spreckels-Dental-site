@@ -14,34 +14,17 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">
-          🏥 Spreckels Dental Website
-        </h1>
-        <p className="text-gray-600 mb-4">
-          Welcome to Spreckels Dental! The website is loading successfully.
-        </p>
-        <div className="space-y-2 text-sm">
-          <div>✅ Server: Running on localhost:3000</div>
-          <div>✅ Next.js: Working</div>
-          <div>✅ Basic Components: Loading</div>
-        </div>
-        <div className="mt-6 space-x-4">
-          <a 
-            href="/debug" 
-            className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Test Firebase Connection
-          </a>
-          <a 
-            href="/simple-test" 
-            className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Simple Test Page
-          </a>
-        </div>
-      </div>
-    </div>
+    <Layout>
+      <HeroSection />
+      <TrustedBySection />
+      <AboutUsSection />
+      <MissionSection />
+      <FeaturesSection />
+      <TestimonialSection />
+      <ServicesSection />
+      <InfoStatsSection />
+      <NewOutgridAppSection />
+      <CTASection />
+    </Layout>
   )
 } 
