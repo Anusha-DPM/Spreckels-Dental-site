@@ -119,10 +119,10 @@ export default function BlogPage() {
 
 
 
-  const formatDate = (dateString: string | undefined) => {
+  const formatDate = (dateString: string | undefined | any) => {
     if (!dateString) return 'Unknown date'
     
-    // Handle Firebase timestamp
+    // Handle Firebase timestamp object
     if (dateString && typeof dateString === 'object' && dateString.toDate) {
       return dateString.toDate().toLocaleDateString('en-US', {
         year: 'numeric',
@@ -131,11 +131,16 @@ export default function BlogPage() {
       })
     }
     
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
+    // Handle string date
+    if (typeof dateString === 'string') {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    }
+    
+    return 'Unknown date'
   }
 
   if (isLoading) {

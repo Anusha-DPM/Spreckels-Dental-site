@@ -36,8 +36,8 @@ interface FirebasePost {
   metaDescription: string
   published: boolean
   publishDate?: string
-  createdAt: string
-  updatedAt: string
+  createdAt: any // Can be string or Firebase Timestamp
+  updatedAt: any // Can be string or Firebase Timestamp
 }
 
 export default function AdminDashboard() {
@@ -73,10 +73,10 @@ export default function AdminDashboard() {
         tags: post.tags || [],
         metaTitle: post.metaTitle || '',
         metaDescription: post.metaDescription || '',
-        publishDate: post.publishDate || post.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        status: (post.published ? 'published' : 'draft') as 'draft' | 'published',
-        createdAt: post.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        updatedAt: post.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+                 publishDate: post.publishDate || (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt?.toDate?.()?.toISOString()) || new Date().toISOString(),
+         status: (post.published ? 'published' : 'draft') as 'draft' | 'published',
+         createdAt: (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt?.toDate?.()?.toISOString()) || new Date().toISOString(),
+         updatedAt: (typeof post.updatedAt === 'string' ? post.updatedAt : post.updatedAt?.toDate?.()?.toISOString()) || new Date().toISOString()
       }))
       
       setPosts(dashboardPosts)
