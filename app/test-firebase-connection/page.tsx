@@ -3,9 +3,29 @@
 import { useState } from 'react'
 import { createBlogPost, getBlogPosts } from '@/lib/blogDatabase'
 
+interface BlogPost {
+  id: string
+  title: string
+  content: string
+  excerpt: string
+  category?: string
+  tags: string[]
+  author?: string
+  published: boolean
+  slug: string
+  createdAt?: any
+  updatedAt?: any
+  imageUrl?: string
+  coverImage?: string
+  metaTitle?: string
+  metaDescription?: string
+  featured?: boolean
+  views?: number
+}
+
 export default function TestFirebaseConnection() {
   const [status, setStatus] = useState('')
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<BlogPost[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const testFirebaseConnection = async () => {

@@ -2,8 +2,23 @@
 
 import { useState } from 'react'
 
+interface BlogPost {
+  id: string
+  title: string
+  content: string
+  excerpt: string
+  slug: string
+  tags: string[]
+  category?: string
+  author?: string
+  published: boolean
+  status?: string
+  createdAt: string
+  updatedAt: string
+}
+
 export default function TestLocalStorage() {
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<BlogPost[]>([])
   const [status, setStatus] = useState('')
 
   const createTestPost = () => {
