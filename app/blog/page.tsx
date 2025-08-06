@@ -27,6 +27,7 @@ interface BlogPost {
   published: boolean
   featured?: boolean
   views?: number
+  status?: 'draft' | 'published' // Add this for localStorage fallback
 }
 
 export default function BlogPage() {
@@ -49,7 +50,15 @@ export default function BlogPage() {
       const savedPosts = localStorage.getItem('blogPosts')
       if (savedPosts) {
         const allPosts = JSON.parse(savedPosts)
-        const publishedPosts = allPosts.filter((post: BlogPost) => post.status === 'published')
+        // Handle both Firebase (published: boolean) and localStorage (status: string) formats
+        const publishedPosts = allPosts.filter((post: BlogPost) => {
+          if (post.published !== undefined) {
+            return post.published === true // Firebase format
+          } else if (post.status !== undefined) {
+            return post.status === 'published' // localStorage format
+          }
+          return false
+        })
         setPosts(publishedPosts)
       }
     } finally {
@@ -57,7 +66,7 @@ export default function BlogPage() {
     }
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: any) => {
     if (!dateString) return 'Unknown date'
     
     // Handle Firebase timestamp
