@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react'
 import { db } from '../lib/firebase'
 import { createDocument, getAllDocuments } from '../lib/database'
+import { createBlogPost, getBlogPosts } from '../lib/blogDatabase'
 
 export default function FirebaseDebug() {
   const [status, setStatus] = useState('')
   const [documents, setDocuments] = useState([])
+  const [blogPosts, setBlogPosts] = useState([])
   const [loading, setLoading] = useState(false)
 
   // Test Firebase connection
@@ -35,8 +37,23 @@ export default function FirebaseDebug() {
       const newDoc = await createDocument('test-collection', testData)
       setStatus(`✅ Document created successfully! ID: ${newDoc.id}`)
       
+      // Test blog post creation
+      setStatus('Creating test blog post...')
+      const testBlogData = {
+        title: "Test Blog Post - " + new Date().toISOString(),
+        content: "<p>This is a test blog post content.</p>",
+        excerpt: "This is a test blog post excerpt.",
+        category: "Test",
+        tags: ["test", "blog"],
+        author: "Test Author",
+        published: true
+      }
+      const newBlogPost = await createBlogPost(testBlogData)
+      setStatus(`✅ Blog post created successfully! ID: ${newBlogPost.id}`)
+      
       // Load documents to verify
       await loadDocuments()
+      await loadBlogPosts()
       
     } catch (error) {
       console.error('Firebase test error:', error)
@@ -51,15 +68,28 @@ export default function FirebaseDebug() {
     try {
       const allDocs = await getAllDocuments('test-collection')
       setDocuments(allDocs)
-      setStatus(`✅ Loaded ${allDocs.length} documents`)
+      setStatus(`✅ Loaded ${allDocs.length} test documents`)
     } catch (error) {
       console.error('Error loading documents:', error)
       setStatus(`❌ Error loading documents: ${error.message}`)
     }
   }
 
+  // Load existing blog posts
+  const loadBlogPosts = async () => {
+    try {
+      const allPosts = await getBlogPosts({ published: null })
+      setBlogPosts(allPosts)
+      setStatus(`✅ Loaded ${allPosts.length} blog posts`)
+    } catch (error) {
+      console.error('Error loading blog posts:', error)
+      setStatus(`❌ Error loading blog posts: ${error.message}`)
+    }
+  }
+
   useEffect(() => {
     loadDocuments()
+    loadBlogPosts()
   }, [])
 
   return (
@@ -105,7 +135,7 @@ export default function FirebaseDebug() {
         </div>
 
         {/* Documents List */}
-        <div>
+        <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Test Documents in Database ({documents.length})
           </h2>
@@ -123,6 +153,42 @@ export default function FirebaseDebug() {
                     <span>Created: {doc.created}</span>
                   </div>
                   <p className="text-gray-600 mt-2">{doc.content}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Blog Posts List */}
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Blog Posts in Database ({blogPosts.length})
+          </h2>
+          
+          {blogPosts.length === 0 ? (
+            <p className="text-gray-500">No blog posts found in database.</p>
+          ) : (
+            <div className="space-y-4">
+              {blogPosts.map((post) => (
+                <div key={post.id} className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">{post.title}</h3>
+                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>ID: {post.id}</span>
+                    <span>Status: {post.published ? 'Published' : 'Draft'}</span>
+                    <span>Category: {post.category}</span>
+                    <span>Author: {post.author}</span>
+                  </div>
+                  <p className="text-gray-600 mt-2">{post.excerpt}</p>
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="mt-2">
+                      <span className="text-sm text-gray-500">Tags: </span>
+                      {post.tags.map((tag, index) => (
+                        <span key={index} className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mr-1">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
