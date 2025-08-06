@@ -33,6 +33,7 @@ interface BlogPost {
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [firebaseStatus, setFirebaseStatus] = useState<'connected' | 'offline' | 'error'>('connected')
 
   useEffect(() => {
     loadPublishedPosts()
@@ -41,6 +42,7 @@ export default function BlogPage() {
   const loadPublishedPosts = async () => {
     try {
       setIsLoading(true)
+      setFirebaseStatus('connected')
       console.log('Loading published posts from Firebase...')
       
       // Load only published posts from Firebase
@@ -70,6 +72,8 @@ export default function BlogPage() {
       }
     } catch (error) {
       console.error('Error loading blog posts:', error)
+      setFirebaseStatus('error')
+      
       // Fallback to localStorage if Firebase fails
       const savedPosts = localStorage.getItem('blogPosts')
       if (savedPosts) {
@@ -126,9 +130,17 @@ export default function BlogPage() {
       <Header />
       
       {/* Debug Section - Remove this after testing */}
-      <div className="bg-yellow-100 p-4 text-center">
-        <p className="text-sm text-yellow-800">
-          Debug: {posts.length} posts loaded. 
+      <div className={`p-4 text-center ${
+        firebaseStatus === 'connected' ? 'bg-green-100' : 
+        firebaseStatus === 'offline' ? 'bg-yellow-100' : 'bg-red-100'
+      }`}>
+        <p className={`text-sm ${
+          firebaseStatus === 'connected' ? 'text-green-800' : 
+          firebaseStatus === 'offline' ? 'text-yellow-800' : 'text-red-800'
+        }`}>
+          Status: {firebaseStatus === 'connected' ? 'Firebase Connected' : 
+                  firebaseStatus === 'offline' ? 'Offline Mode' : 'Firebase Error'} | 
+          Posts: {posts.length} loaded
           <button 
             onClick={loadPublishedPosts}
             className="ml-2 bg-blue-500 text-white px-2 py-1 rounded text-xs"
@@ -185,7 +197,14 @@ export default function BlogPage() {
                 </svg>
               </div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-2">No blog posts yet</h2>
-              <p className="text-gray-600">Check back soon for informative articles about dental health and care.</p>
+              <p className="text-gray-600 mb-4">Check back soon for informative articles about dental health and care.</p>
+              {firebaseStatus === 'error' && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 max-w-md mx-auto">
+                  <p className="text-red-800 text-sm">
+                    ⚠️ Firebase connection issue. Posts may not be loading properly.
+                  </p>
+                </div>
+              )}
             </motion.div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
