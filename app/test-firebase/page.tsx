@@ -4,10 +4,21 @@ import { useState, useEffect } from 'react'
 import { db } from '@/lib/firebase'
 import { collection, addDoc, getDocs } from 'firebase/firestore'
 
+interface BlogPost {
+  id: string
+  title: string
+  content: string
+  author: string
+  published: boolean
+  createdAt: string
+  updatedAt: string
+  [key: string]: any
+}
+
 export default function TestFirebase() {
   const [status, setStatus] = useState('Testing...')
   const [error, setError] = useState('')
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<BlogPost[]>([])
 
   useEffect(() => {
     testFirebase()
@@ -89,17 +100,17 @@ export default function TestFirebase() {
             </button>
           </div>
           
-          {posts.length > 0 ? (
-            <div className="space-y-2">
-              {posts.map((post: any) => (
-                <div key={post.id} className="p-3 border rounded">
-                  <strong>{post.title}</strong>
-                  <p className="text-sm text-gray-600">{post.content}</p>
-                  <p className="text-xs text-gray-500">ID: {post.id}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
+                     {posts.length > 0 ? (
+             <div className="space-y-2">
+               {posts.map((post: BlogPost) => (
+                 <div key={post.id} className="p-3 border rounded">
+                   <strong>{post.title}</strong>
+                   <p className="text-sm text-gray-600">{post.content}</p>
+                   <p className="text-xs text-gray-500">ID: {post.id}</p>
+                 </div>
+               ))}
+             </div>
+           ) : (
             <p className="text-gray-500">No posts found</p>
           )}
         </div>
