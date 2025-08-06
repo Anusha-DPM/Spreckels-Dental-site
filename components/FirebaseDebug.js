@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { db } from '../lib/firebase'
-import { createBlogPost, getBlogPosts } from '../lib/blogDatabase'
+import { createDocument, getAllDocuments } from '../lib/database'
 
 export default function FirebaseDebug() {
   const [status, setStatus] = useState('')
-  const [posts, setPosts] = useState([])
+  const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(false)
 
   // Test Firebase connection
@@ -25,20 +25,18 @@ export default function FirebaseDebug() {
       
       // Test creating a simple document
       const testData = {
-        title: "Test Post - " + new Date().toISOString(),
-        content: "This is a test post",
-        excerpt: "Test excerpt",
-        category: "Test",
-        tags: ["test"],
-        published: true
+        title: "Test Document - " + new Date().toISOString(),
+        content: "This is a test document",
+        type: "test",
+        created: new Date().toISOString()
       }
 
-      setStatus('Creating test blog post...')
-      const newPost = await createBlogPost(testData)
-      setStatus(`✅ Blog post created successfully! ID: ${newPost.id}`)
+      setStatus('Creating test document...')
+      const newDoc = await createDocument('test-collection', testData)
+      setStatus(`✅ Document created successfully! ID: ${newDoc.id}`)
       
-      // Load posts to verify
-      await loadPosts()
+      // Load documents to verify
+      await loadDocuments()
       
     } catch (error) {
       console.error('Firebase test error:', error)
@@ -48,20 +46,20 @@ export default function FirebaseDebug() {
     }
   }
 
-  // Load existing posts
-  const loadPosts = async () => {
+  // Load existing documents
+  const loadDocuments = async () => {
     try {
-      const allPosts = await getBlogPosts({ published: null })
-      setPosts(allPosts)
-      setStatus(`✅ Loaded ${allPosts.length} posts`)
+      const allDocs = await getAllDocuments('test-collection')
+      setDocuments(allDocs)
+      setStatus(`✅ Loaded ${allDocs.length} documents`)
     } catch (error) {
-      console.error('Error loading posts:', error)
-      setStatus(`❌ Error loading posts: ${error.message}`)
+      console.error('Error loading documents:', error)
+      setStatus(`❌ Error loading documents: ${error.message}`)
     }
   }
 
   useEffect(() => {
-    loadPosts()
+    loadDocuments()
   }, [])
 
   return (
@@ -106,25 +104,25 @@ export default function FirebaseDebug() {
           </div>
         </div>
 
-        {/* Posts List */}
+        {/* Documents List */}
         <div>
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Blog Posts in Database ({posts.length})
+            Test Documents in Database ({documents.length})
           </h2>
           
-          {posts.length === 0 ? (
-            <p className="text-gray-500">No blog posts found in database.</p>
+          {documents.length === 0 ? (
+            <p className="text-gray-500">No test documents found in database.</p>
           ) : (
             <div className="space-y-4">
-              {posts.map((post) => (
-                <div key={post.id} className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">{post.title}</h3>
+              {documents.map((doc) => (
+                <div key={doc.id} className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">{doc.title}</h3>
                   <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <span>ID: {post.id}</span>
-                    <span>Status: {post.published ? 'Published' : 'Draft'}</span>
-                    <span>Created: {post.createdAt?.toLocaleDateString()}</span>
+                    <span>ID: {doc.id}</span>
+                    <span>Type: {doc.type}</span>
+                    <span>Created: {doc.created}</span>
                   </div>
-                  <p className="text-gray-600 mt-2">{post.excerpt}</p>
+                  <p className="text-gray-600 mt-2">{doc.content}</p>
                 </div>
               ))}
             </div>

@@ -42,47 +42,37 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 
 ### 5. Set Up Security Rules
 1. In Firebase Console, go to "Firestore Database" > "Rules"
-2. Replace the default rules with the content from `firestore-rules.txt`
+2. Replace the default rules with test mode rules:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+```
+
 3. Click "Publish"
 
 ### 6. Test the Connection
 1. Start your development server: `npm run dev`
-2. Navigate to: `http://localhost:3000/firebase-test`
-3. Click "Create Test Blog Post" to verify the connection
-4. You should see a success message and the post appear in the list
+2. Navigate to: `http://localhost:3000/debug`
+3. Click "Test Firebase Connection" to verify the connection
+4. You should see a success message and test documents appear
 
 ## 📁 Files Created/Modified
 
 ### New Files:
 - `lib/firebase.js` - Firebase initialization
-- `lib/blogDatabase.js` - Blog-specific database functions
 - `lib/database.js` - Generic database functions
-- `components/BlogAdmin.js` - Blog management interface
-- `components/FirebaseTest.js` - Connection test component
-- `app/firebase-test/page.tsx` - Test page
-- `examples/blogUsage.js` - Usage examples
-
-### Template Files:
+- `components/FirebaseDebug.js` - Connection test component
+- `app/debug/page.tsx` - Test page
 - `firebase-config-template.txt` - Environment variables template
-- `firestore-rules.txt` - Security rules template
-- `env.example` - Environment variables example
 
 ## 🔧 Available Functions
-
-### Blog Management:
-```javascript
-import { 
-  createBlogPost, 
-  getBlogPosts, 
-  getBlogPostBySlug,
-  updateBlogPost, 
-  deleteBlogPost,
-  searchBlogPosts,
-  getBlogCategories,
-  getBlogTags,
-  incrementBlogViews
-} from '../lib/blogDatabase';
-```
 
 ### Generic Database:
 ```javascript
@@ -91,57 +81,55 @@ import {
   getDocument, 
   getAllDocuments,
   updateDocument, 
-  deleteDocument 
+  deleteDocument,
+  searchDocuments
 } from '../lib/database';
 ```
 
 ## 🎯 Usage Examples
 
-### Create a Blog Post:
+### Create a Document:
 ```javascript
-const newPost = await createBlogPost({
-  title: "Dental Implants Guide",
-  content: "<p>Your content here...</p>",
-  category: "Dental Implants",
-  tags: ["implants", "manteca"],
-  published: true
+const newDoc = await createDocument('collection-name', {
+  title: "My Document",
+  content: "Document content",
+  type: "article"
 });
 ```
 
-### Get Published Posts:
+### Get All Documents:
 ```javascript
-const posts = await getBlogPosts({ 
-  published: true, 
-  limit: 10 
+const documents = await getAllDocuments('collection-name', {
+  filters: [
+    { field: 'type', operator: '==', value: 'article' }
+  ],
+  orderBy: { field: 'createdAt', direction: 'desc' },
+  limit: 10
 });
 ```
 
-### Get Featured Posts:
+### Get Single Document:
 ```javascript
-const featured = await getBlogPosts({ 
-  published: true, 
-  featured: true 
-});
+const document = await getDocument('collection-name', 'document-id');
 ```
 
 ## 🔒 Security Rules
 
 The security rules allow:
-- **Public read access** to published blog posts
-- **Authenticated write access** for blog posts
-- **Public create access** for contact messages
-- **Authenticated read/write** for appointments and patients
+- **Public read/write access** for development (test mode)
+- **Production rules** should be more restrictive
 
 ## 🚨 Troubleshooting
 
 ### Common Issues:
 
-1. **"Firebase App named '[DEFAULT]' already exists"**
-   - This is normal in development with hot reloading
-   - The error is handled gracefully
+1. **"Firebase not initialized"**
+   - Check `.env.local` file exists
+   - Verify all variables are set
+   - Restart development server
 
 2. **"Permission denied"**
-   - Check your Firestore security rules
+   - Check Firestore security rules
    - Make sure you're in "test mode" for development
 
 3. **"API key not valid"**
@@ -154,9 +142,9 @@ The security rules allow:
 
 ## 📊 Next Steps
 
-1. **Test the connection** using the test page
-2. **Create your first blog post** using the BlogAdmin component
-3. **Integrate blog functionality** into your existing pages
+1. **Test the connection** using the debug page
+2. **Create your first document** using the test function
+3. **Integrate database functionality** into your existing pages
 4. **Set up authentication** for admin access
 5. **Deploy to production** with proper security rules
 
@@ -175,5 +163,5 @@ The security rules allow:
 - [ ] Firestore database enabled
 - [ ] Security rules configured
 - [ ] Connection tested successfully
-- [ ] First blog post created
+- [ ] First document created
 - [ ] Ready for production deployment 
