@@ -41,15 +41,40 @@ export default function BlogPage() {
   const loadPublishedPosts = async () => {
     try {
       setIsLoading(true)
+      console.log('Loading published posts from Firebase...')
+      
       // Load only published posts from Firebase
       const publishedPosts = await getBlogPosts({ published: true })
+      console.log('Firebase posts loaded:', publishedPosts)
       setPosts(publishedPosts)
+      
+      // If no posts from Firebase, try localStorage as fallback
+      if (publishedPosts.length === 0) {
+        console.log('No Firebase posts, checking localStorage...')
+        const savedPosts = localStorage.getItem('blogPosts')
+        if (savedPosts) {
+          const allPosts = JSON.parse(savedPosts)
+          console.log('localStorage posts:', allPosts)
+          // Handle both Firebase (published: boolean) and localStorage (status: string) formats
+          const publishedPosts = allPosts.filter((post: BlogPost) => {
+            if (post.published !== undefined) {
+              return post.published === true // Firebase format
+            } else if (post.status !== undefined) {
+              return post.status === 'published' // localStorage format
+            }
+            return false
+          })
+          console.log('Filtered published posts:', publishedPosts)
+          setPosts(publishedPosts)
+        }
+      }
     } catch (error) {
       console.error('Error loading blog posts:', error)
       // Fallback to localStorage if Firebase fails
       const savedPosts = localStorage.getItem('blogPosts')
       if (savedPosts) {
         const allPosts = JSON.parse(savedPosts)
+        console.log('Fallback to localStorage posts:', allPosts)
         // Handle both Firebase (published: boolean) and localStorage (status: string) formats
         const publishedPosts = allPosts.filter((post: BlogPost) => {
           if (post.published !== undefined) {
@@ -99,6 +124,31 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
+      
+      {/* Debug Section - Remove this after testing */}
+      <div className="bg-yellow-100 p-4 text-center">
+        <p className="text-sm text-yellow-800">
+          Debug: {posts.length} posts loaded. 
+          <button 
+            onClick={loadPublishedPosts}
+            className="ml-2 bg-blue-500 text-white px-2 py-1 rounded text-xs"
+          >
+            Reload
+          </button>
+          <Link 
+            href="/admin/login"
+            className="ml-2 bg-green-500 text-white px-2 py-1 rounded text-xs"
+          >
+            Admin Login
+          </Link>
+          <Link 
+            href="/test-blog"
+            className="ml-2 bg-purple-500 text-white px-2 py-1 rounded text-xs"
+          >
+            Test Blog
+          </Link>
+        </p>
+      </div>
       
              {/* Hero Section */}
        <section className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] pt-[180px] pb-16">
