@@ -102,7 +102,7 @@ export default function AdminLogin() {
           
           <div className="text-center">
             <p className="text-xs text-gray-500">
-              Test credentials: admin / admin
+              Admin credentials: admin / dental2024
             </p>
           </div>
         </form>
