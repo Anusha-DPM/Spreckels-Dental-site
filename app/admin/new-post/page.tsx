@@ -90,11 +90,22 @@ export default function NewPost() {
     setSaveStatus('Preparing to save...')
     
     try {
+      // Validate required fields
+      if (!post.title?.trim()) {
+        setSaveStatus('❌ Post title is required')
+        return
+      }
+      
+      if (!post.content?.trim()) {
+        setSaveStatus('❌ Post content is required')
+        return
+      }
+      
       // Prepare data for Firebase
       const blogData = {
-        title: post.title || '',
-        content: post.content || '',
-        excerpt: post.excerpt || '',
+        title: post.title.trim(),
+        content: post.content.trim(),
+        excerpt: post.excerpt?.trim() || '',
         coverImage: post.coverImage || '',
         imageUrl: post.coverImage || '', // Firebase uses imageUrl
         tags: post.tags || [],
@@ -102,14 +113,16 @@ export default function NewPost() {
         author: 'Admin', // Default author
         published: post.status === 'published', // Convert status to boolean
         featured: false,
-        slug: post.slug || '',
-        metaTitle: post.metaTitle || '',
-        metaDescription: post.metaDescription || ''
+        slug: post.slug || generateSlug(post.title),
+        metaTitle: post.metaTitle?.trim() || post.title.trim(),
+        metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || ''
       }
 
+      console.log('Attempting to save blog post:', blogData)
+      
       // Create post with timeout
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Firebase timeout - saving to localStorage only')), 10000)
+        setTimeout(() => reject(new Error('Firebase timeout - saving to localStorage only')), 15000)
       )
       
       let newPost
@@ -121,10 +134,10 @@ export default function NewPost() {
           timeoutPromise
         ])
         setSaveStatus('✅ Post saved to Firebase successfully')
-        console.log('✅ Post saved to Firebase successfully')
+        console.log('✅ Post saved to Firebase successfully:', newPost)
       } catch (firebaseError: any) {
-        setSaveStatus('⚠️ Firebase failed, saving to localStorage only...')
         console.warn('⚠️ Firebase failed, saving to localStorage only:', firebaseError?.message || 'Unknown error')
+        setSaveStatus('⚠️ Firebase failed, saving to localStorage only...')
         // Create post with localStorage fallback
         newPost = {
           id: Date.now().toString(),
@@ -162,9 +175,9 @@ export default function NewPost() {
       setTimeout(() => {
         router.push('/admin/dashboard')
       }, 1000)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving post:', error)
-      setSaveStatus('❌ Error saving post. Please try again.')
+      setSaveStatus(`❌ Error saving post: ${error?.message || 'Please try again.'}`)
     } finally {
       setIsLoading(false)
     }

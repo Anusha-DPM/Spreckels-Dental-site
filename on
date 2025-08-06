@@ -1,0 +1,5 @@
+[33m1f62e529[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Update Firebase rules to allow public read access to blog posts
+[33mc79c06c7[m Clean up blog system - remove all test pages and debug elements, keep only dynamic Firebase blog data
+[33m0ba63074[m Fix blog page to show posts when logged out - improve localStorage fallback and add sample post creation
+[33m3992a0ad[m Fix Firebase connectivity issues - add timeout protection, better error handling, and connectivity checks
+[33m327a5dc3[m Fix Firebase blog post saving - replace serverTimestamp with regular timestamps and add debug page
