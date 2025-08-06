@@ -35,6 +35,7 @@ interface FirebasePost {
   metaTitle: string
   metaDescription: string
   published: boolean
+  publishDate?: string
   createdAt: any
   updatedAt: any
 }
