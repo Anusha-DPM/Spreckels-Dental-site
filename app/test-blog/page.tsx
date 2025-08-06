@@ -30,9 +30,9 @@ export default function TestBlogPage() {
       // Load all posts to verify
       await loadPosts()
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating blog post:', error)
-      setStatus(`❌ Error: ${error.message}`)
+      setStatus(`❌ Error: ${error?.message || 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -46,9 +46,9 @@ export default function TestBlogPage() {
       const allPosts = await getBlogPosts({ published: null })
       setPosts(allPosts)
       setStatus(`✅ Loaded ${allPosts.length} blog posts`)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading blog posts:', error)
-      setStatus(`❌ Error loading posts: ${error.message}`)
+      setStatus(`❌ Error loading posts: ${error?.message || 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -62,9 +62,9 @@ export default function TestBlogPage() {
       const publishedPosts = await getBlogPosts({ published: true })
       setPosts(publishedPosts)
       setStatus(`✅ Loaded ${publishedPosts.length} published blog posts`)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading published posts:', error)
-      setStatus(`❌ Error loading published posts: ${error.message}`)
+      setStatus(`❌ Error loading published posts: ${error?.message || 'Unknown error'}`)
     } finally {
       setLoading(false)
     }

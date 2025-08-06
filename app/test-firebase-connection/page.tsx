@@ -39,9 +39,9 @@ export default function TestFirebaseConnection() {
       setPosts(allPosts)
       setStatus(`✅ Loaded ${allPosts.length} posts from Firebase`)
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Firebase test error:', error)
-      setStatus(`❌ Firebase test failed: ${error.message}`)
+      setStatus(`❌ Firebase test failed: ${error?.message || 'Unknown error'}`)
     } finally {
       setIsLoading(false)
     }
@@ -55,9 +55,9 @@ export default function TestFirebaseConnection() {
       const allPosts = await getBlogPosts({ published: null })
       setPosts(allPosts)
       setStatus(`✅ Loaded ${allPosts.length} posts from Firebase`)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading posts:', error)
-      setStatus(`❌ Error loading posts: ${error.message}`)
+      setStatus(`❌ Error loading posts: ${error?.message || 'Unknown error'}`)
     } finally {
       setIsLoading(false)
     }

@@ -122,9 +122,9 @@ export default function NewPost() {
         ])
         setSaveStatus('✅ Post saved to Firebase successfully')
         console.log('✅ Post saved to Firebase successfully')
-      } catch (firebaseError) {
+      } catch (firebaseError: any) {
         setSaveStatus('⚠️ Firebase failed, saving to localStorage only...')
-        console.warn('⚠️ Firebase failed, saving to localStorage only:', firebaseError.message)
+        console.warn('⚠️ Firebase failed, saving to localStorage only:', firebaseError?.message || 'Unknown error')
         // Create post with localStorage fallback
         newPost = {
           id: Date.now().toString(),

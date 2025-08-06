@@ -38,9 +38,9 @@ export default function FirebaseTest() {
       const docs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
       setStatus(`✅ Read ${docs.length} documents successfully`)
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Firebase test error:', error)
-      setStatus(`❌ Error: ${error.message}`)
+      setStatus(`❌ Error: ${error?.message || 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
