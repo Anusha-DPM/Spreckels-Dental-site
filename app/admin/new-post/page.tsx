@@ -93,11 +93,13 @@ export default function NewPost() {
       // Validate required fields
       if (!post.title?.trim()) {
         setSaveStatus('❌ Post title is required')
+        setIsLoading(false)
         return
       }
       
       if (!post.content?.trim()) {
         setSaveStatus('❌ Post content is required')
+        setIsLoading(false)
         return
       }
       
@@ -119,59 +121,15 @@ export default function NewPost() {
       }
 
       console.log('Attempting to save blog post:', blogData)
+      setSaveStatus('Saving blog post...')
       
-      // Create post with timeout
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Firebase timeout - saving to localStorage only')), 15000)
-      )
-      
-      let newPost
-      try {
-        setSaveStatus('Trying to save to Firebase...')
-        // Try Firebase first with timeout
-        newPost = await Promise.race([
-          createBlogPost(blogData),
-          timeoutPromise
-        ])
-        setSaveStatus('✅ Post saved to Firebase successfully')
-        console.log('✅ Post saved to Firebase successfully:', newPost)
-      } catch (firebaseError: any) {
-        console.warn('⚠️ Firebase failed, saving to localStorage only:', firebaseError?.message || 'Unknown error')
-        setSaveStatus('⚠️ Firebase failed, saving to localStorage only...')
-        // Create post with localStorage fallback
-        newPost = {
-          id: Date.now().toString(),
-          ...blogData,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-      }
-      
-      // Always save to localStorage as backup
-      setSaveStatus('Saving to localStorage...')
-      const existingPosts = localStorage.getItem('blogPosts')
-      const posts = existingPosts ? JSON.parse(existingPosts) : []
-      
-      const localStoragePost = {
-        id: newPost.id,
-        title: newPost.title,
-        slug: newPost.slug,
-        content: newPost.content,
-        excerpt: newPost.excerpt,
-        coverImage: newPost.coverImage || newPost.imageUrl,
-        tags: newPost.tags,
-        metaTitle: newPost.metaTitle,
-        metaDescription: newPost.metaDescription,
-        publishDate: post.publishDate || new Date().toISOString(),
-        status: newPost.published ? 'published' : 'draft',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-      
-      posts.unshift(localStoragePost)
-      localStorage.setItem('blogPosts', JSON.stringify(posts))
+      // Create the blog post
+      const newPost = await createBlogPost(blogData)
       
       setSaveStatus('✅ Blog post saved successfully!')
+      console.log('✅ Blog post created:', newPost)
+      
+      // Redirect to dashboard after a short delay
       setTimeout(() => {
         router.push('/admin/dashboard')
       }, 1000)
