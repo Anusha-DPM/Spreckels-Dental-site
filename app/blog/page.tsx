@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { getBlogPosts } from '@/lib/blogDatabase'
 
 interface BlogPost {
   id: string
@@ -13,14 +14,19 @@ interface BlogPost {
   slug: string
   content: string
   excerpt: string
-  coverImage: string
+  coverImage?: string
+  imageUrl?: string
   tags: string[]
-  metaTitle: string
-  metaDescription: string
-  publishDate: string
-  status: 'draft' | 'published'
-  createdAt: string
-  updatedAt: string
+  category?: string
+  author?: string
+  metaTitle?: string
+  metaDescription?: string
+  publishDate?: string
+  createdAt?: any
+  updatedAt?: any
+  published: boolean
+  featured?: boolean
+  views?: number
 }
 
 export default function BlogPage() {
@@ -28,17 +34,41 @@ export default function BlogPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Load published posts from localStorage
-    const savedPosts = localStorage.getItem('blogPosts')
-    if (savedPosts) {
-      const allPosts = JSON.parse(savedPosts)
-      const publishedPosts = allPosts.filter((post: BlogPost) => post.status === 'published')
-      setPosts(publishedPosts)
-    }
-    setIsLoading(false)
+    loadPublishedPosts()
   }, [])
 
+  const loadPublishedPosts = async () => {
+    try {
+      setIsLoading(true)
+      // Load only published posts from Firebase
+      const publishedPosts = await getBlogPosts({ published: true })
+      setPosts(publishedPosts)
+    } catch (error) {
+      console.error('Error loading blog posts:', error)
+      // Fallback to localStorage if Firebase fails
+      const savedPosts = localStorage.getItem('blogPosts')
+      if (savedPosts) {
+        const allPosts = JSON.parse(savedPosts)
+        const publishedPosts = allPosts.filter((post: BlogPost) => post.status === 'published')
+        setPosts(publishedPosts)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const formatDate = (dateString: string) => {
+    if (!dateString) return 'Unknown date'
+    
+    // Handle Firebase timestamp
+    if (dateString && typeof dateString === 'object' && dateString.toDate) {
+      return dateString.toDate().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    }
+    
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -108,10 +138,10 @@ export default function BlogPage() {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
-                  {post.coverImage && (
+                  {(post.coverImage || post.imageUrl) && (
                     <div className="relative h-48 overflow-hidden">
                       <Image
-                        src={post.coverImage}
+                        src={post.coverImage || post.imageUrl || ''}
                         alt={post.title}
                         fill
                         className="object-cover hover:scale-105 transition-transform duration-300"
@@ -124,7 +154,7 @@ export default function BlogPage() {
                       <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      {formatDate(post.publishDate)}
+                      {formatDate(post.publishDate || post.createdAt)}
                     </div>
                     
                     <h2 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
