@@ -22,8 +22,8 @@ interface BlogPost {
   metaTitle?: string
   metaDescription?: string
   publishDate?: string
-  createdAt?: any
-  updatedAt?: any
+  createdAt?: string
+  updatedAt?: string
   published: boolean
   featured?: boolean
   views?: number
@@ -119,7 +119,7 @@ export default function BlogPage() {
 
 
 
-  const formatDate = (dateString: any) => {
+  const formatDate = (dateString: string | undefined) => {
     if (!dateString) return 'Unknown date'
     
     // Handle Firebase timestamp

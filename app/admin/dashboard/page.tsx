@@ -36,8 +36,8 @@ interface FirebasePost {
   metaDescription: string
   published: boolean
   publishDate?: string
-  createdAt: any
-  updatedAt: any
+  createdAt: string
+  updatedAt: string
 }
 
 export default function AdminDashboard() {

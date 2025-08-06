@@ -6,12 +6,12 @@ import { collection, addDoc, getDocs } from 'firebase/firestore'
 
 interface BlogPost {
   id: string
-  title: string
-  content: string
-  author: string
-  published: boolean
-  createdAt: string
-  updatedAt: string
+  title?: string
+  content?: string
+  author?: string
+  published?: boolean
+  createdAt?: string
+  updatedAt?: string
   [key: string]: any
 }
 
@@ -36,10 +36,19 @@ export default function TestFirebase() {
       // Test reading from Firebase
       setStatus('Testing read operation...')
       const querySnapshot = await getDocs(collection(db, 'blog-posts'))
-      const existingPosts = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
+      const existingPosts = querySnapshot.docs.map(doc => {
+        const data = doc.data()
+        return {
+          id: doc.id,
+          title: data.title || 'Untitled',
+          content: data.content || '',
+          author: data.author || 'Unknown',
+          published: data.published || false,
+          createdAt: data.createdAt || new Date().toISOString(),
+          updatedAt: data.updatedAt || new Date().toISOString(),
+          ...data
+        } as BlogPost
+      })
       setPosts(existingPosts)
       setStatus(`✅ Read successful - found ${existingPosts.length} posts`)
 
@@ -102,13 +111,13 @@ export default function TestFirebase() {
           
                      {posts.length > 0 ? (
              <div className="space-y-2">
-               {posts.map((post: BlogPost) => (
-                 <div key={post.id} className="p-3 border rounded">
-                   <strong>{post.title}</strong>
-                   <p className="text-sm text-gray-600">{post.content}</p>
-                   <p className="text-xs text-gray-500">ID: {post.id}</p>
-                 </div>
-               ))}
+                               {posts.map((post: BlogPost) => (
+                  <div key={post.id} className="p-3 border rounded">
+                    <strong>{post.title || 'Untitled'}</strong>
+                    <p className="text-sm text-gray-600">{post.content || 'No content'}</p>
+                    <p className="text-xs text-gray-500">ID: {post.id} | Author: {post.author || 'Unknown'}</p>
+                  </div>
+                ))}
              </div>
            ) : (
             <p className="text-gray-500">No posts found</p>
