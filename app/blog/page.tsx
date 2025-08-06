@@ -43,48 +43,78 @@ export default function BlogPage() {
     try {
       setIsLoading(true)
       setFirebaseStatus('connected')
-      console.log('Loading published posts from Firebase...')
+      console.log('Loading published posts...')
       
-      // Load only published posts from Firebase
-      const publishedPosts = await getBlogPosts({ published: true })
-      console.log('Firebase posts loaded:', publishedPosts)
-      setPosts(publishedPosts)
-      
-      // If no posts from Firebase, try localStorage as fallback
-      if (publishedPosts.length === 0) {
-        console.log('No Firebase posts, checking localStorage...')
-        const savedPosts = localStorage.getItem('blogPosts')
-        if (savedPosts) {
-          const allPosts = JSON.parse(savedPosts)
-          console.log('localStorage posts:', allPosts)
-          // Handle both Firebase (published: boolean) and localStorage (status: string) formats
-          const publishedPosts = allPosts.filter((post: BlogPost) => {
-            if (post.published !== undefined) {
-              return post.published === true // Firebase format
-            } else if (post.status !== undefined) {
-              return post.status === 'published' // localStorage format
-            }
-            return false
-          })
-          console.log('Filtered published posts:', publishedPosts)
-          setPosts(publishedPosts)
-        }
-      }
-    } catch (error) {
-      console.error('Error loading blog posts:', error)
-      setFirebaseStatus('error')
-      
-      // Fallback to localStorage if Firebase fails
+      // First, try to load from localStorage immediately for faster display
       const savedPosts = localStorage.getItem('blogPosts')
       if (savedPosts) {
         const allPosts = JSON.parse(savedPosts)
-        console.log('Fallback to localStorage posts:', allPosts)
-        // Handle both Firebase (published: boolean) and localStorage (status: string) formats
+        console.log('localStorage posts found:', allPosts.length)
+        
+        // Filter published posts from localStorage
+        const publishedPosts = allPosts.filter((post: BlogPost) => {
+          // Handle both Firebase format (published: boolean) and localStorage format (status: string)
+          if (post.published !== undefined) {
+            return post.published === true
+          } else if (post.status !== undefined) {
+            return post.status === 'published'
+          }
+          return false
+        })
+        
+        if (publishedPosts.length > 0) {
+          console.log('Setting posts from localStorage:', publishedPosts.length)
+          setPosts(publishedPosts)
+          setIsLoading(false) // Show posts immediately
+        }
+      }
+      
+      // Then try Firebase to get the latest data
+      try {
+        console.log('Attempting to load from Firebase...')
+        const firebasePosts = await getBlogPosts({ published: true })
+        console.log('Firebase posts loaded:', firebasePosts.length)
+        
+        if (firebasePosts.length > 0) {
+          setPosts(firebasePosts)
+          setFirebaseStatus('connected')
+        } else {
+          setFirebaseStatus('offline')
+        }
+      } catch (firebaseError) {
+        console.warn('Firebase failed, using localStorage only:', firebaseError)
+        setFirebaseStatus('error')
+        
+        // If we don't have posts from localStorage yet, try to load them
+        if (posts.length === 0) {
+          const savedPosts = localStorage.getItem('blogPosts')
+          if (savedPosts) {
+            const allPosts = JSON.parse(savedPosts)
+            const publishedPosts = allPosts.filter((post: BlogPost) => {
+              if (post.published !== undefined) {
+                return post.published === true
+              } else if (post.status !== undefined) {
+                return post.status === 'published'
+              }
+              return false
+            })
+            setPosts(publishedPosts)
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error in loadPublishedPosts:', error)
+      setFirebaseStatus('error')
+      
+      // Final fallback to localStorage
+      const savedPosts = localStorage.getItem('blogPosts')
+      if (savedPosts) {
+        const allPosts = JSON.parse(savedPosts)
         const publishedPosts = allPosts.filter((post: BlogPost) => {
           if (post.published !== undefined) {
-            return post.published === true // Firebase format
+            return post.published === true
           } else if (post.status !== undefined) {
-            return post.status === 'published' // localStorage format
+            return post.status === 'published'
           }
           return false
         })
@@ -93,6 +123,37 @@ export default function BlogPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const createSamplePost = () => {
+    const samplePost = {
+      id: Date.now().toString(),
+      title: 'Sample Blog Post - ' + new Date().toLocaleString(),
+      content: '<p>This is a sample blog post to test the blog page functionality.</p>',
+      excerpt: 'This is a sample blog post excerpt for testing purposes.',
+      category: 'Sample',
+      tags: ['sample', 'test', 'blog'],
+      author: 'Sample Author',
+      published: true,
+      slug: 'sample-post-' + Date.now(),
+      imageUrl: '',
+      metaTitle: 'Sample Blog Post',
+      metaDescription: 'Sample blog post for testing',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      views: 0
+    }
+    
+    // Save to localStorage
+    const existingPosts = localStorage.getItem('blogPosts')
+    const posts = existingPosts ? JSON.parse(existingPosts) : []
+    posts.unshift(samplePost)
+    localStorage.setItem('blogPosts', JSON.stringify(posts))
+    
+    // Reload posts
+    loadPublishedPosts()
+    
+    console.log('✅ Sample post created and saved to localStorage')
   }
 
   const formatDate = (dateString: any) => {
@@ -159,6 +220,12 @@ export default function BlogPage() {
           >
             Test Blog
           </Link>
+          <button 
+            onClick={createSamplePost}
+            className="ml-2 bg-orange-500 text-white px-2 py-1 rounded text-xs"
+          >
+            Create Sample Post
+          </button>
         </p>
       </div>
       
