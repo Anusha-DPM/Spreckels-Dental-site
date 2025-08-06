@@ -43,13 +43,10 @@ export default function BlogPage() {
     try {
       setIsLoading(true)
       setFirebaseStatus('connected')
-      console.log('Loading published posts...')
-      
       // First, try to load from localStorage immediately for faster display
       const savedPosts = localStorage.getItem('blogPosts')
       if (savedPosts) {
         const allPosts = JSON.parse(savedPosts)
-        console.log('localStorage posts found:', allPosts.length)
         
         // Filter published posts from localStorage
         const publishedPosts = allPosts.filter((post: BlogPost) => {
@@ -63,7 +60,6 @@ export default function BlogPage() {
         })
         
         if (publishedPosts.length > 0) {
-          console.log('Setting posts from localStorage:', publishedPosts.length)
           setPosts(publishedPosts)
           setIsLoading(false) // Show posts immediately
         }
@@ -71,9 +67,7 @@ export default function BlogPage() {
       
       // Then try Firebase to get the latest data
       try {
-        console.log('Attempting to load from Firebase...')
         const firebasePosts = await getBlogPosts({ published: true })
-        console.log('Firebase posts loaded:', firebasePosts.length)
         
         if (firebasePosts.length > 0) {
           setPosts(firebasePosts)
@@ -82,7 +76,6 @@ export default function BlogPage() {
           setFirebaseStatus('offline')
         }
       } catch (firebaseError) {
-        console.warn('Firebase failed, using localStorage only:', firebaseError)
         setFirebaseStatus('error')
         
         // If we don't have posts from localStorage yet, try to load them
@@ -103,7 +96,6 @@ export default function BlogPage() {
         }
       }
     } catch (error) {
-      console.error('Error in loadPublishedPosts:', error)
       setFirebaseStatus('error')
       
       // Final fallback to localStorage
@@ -125,36 +117,7 @@ export default function BlogPage() {
     }
   }
 
-  const createSamplePost = () => {
-    const samplePost = {
-      id: Date.now().toString(),
-      title: 'Sample Blog Post - ' + new Date().toLocaleString(),
-      content: '<p>This is a sample blog post to test the blog page functionality.</p>',
-      excerpt: 'This is a sample blog post excerpt for testing purposes.',
-      category: 'Sample',
-      tags: ['sample', 'test', 'blog'],
-      author: 'Sample Author',
-      published: true,
-      slug: 'sample-post-' + Date.now(),
-      imageUrl: '',
-      metaTitle: 'Sample Blog Post',
-      metaDescription: 'Sample blog post for testing',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      views: 0
-    }
-    
-    // Save to localStorage
-    const existingPosts = localStorage.getItem('blogPosts')
-    const posts = existingPosts ? JSON.parse(existingPosts) : []
-    posts.unshift(samplePost)
-    localStorage.setItem('blogPosts', JSON.stringify(posts))
-    
-    // Reload posts
-    loadPublishedPosts()
-    
-    console.log('✅ Sample post created and saved to localStorage')
-  }
+
 
   const formatDate = (dateString: any) => {
     if (!dateString) return 'Unknown date'
@@ -190,44 +153,7 @@ export default function BlogPage() {
     <div className="min-h-screen bg-white">
       <Header />
       
-      {/* Debug Section - Remove this after testing */}
-      <div className={`p-4 text-center ${
-        firebaseStatus === 'connected' ? 'bg-green-100' : 
-        firebaseStatus === 'offline' ? 'bg-yellow-100' : 'bg-red-100'
-      }`}>
-        <p className={`text-sm ${
-          firebaseStatus === 'connected' ? 'text-green-800' : 
-          firebaseStatus === 'offline' ? 'text-yellow-800' : 'text-red-800'
-        }`}>
-          Status: {firebaseStatus === 'connected' ? 'Firebase Connected' : 
-                  firebaseStatus === 'offline' ? 'Offline Mode' : 'Firebase Error'} | 
-          Posts: {posts.length} loaded
-          <button 
-            onClick={loadPublishedPosts}
-            className="ml-2 bg-blue-500 text-white px-2 py-1 rounded text-xs"
-          >
-            Reload
-          </button>
-          <Link 
-            href="/admin/login"
-            className="ml-2 bg-green-500 text-white px-2 py-1 rounded text-xs"
-          >
-            Admin Login
-          </Link>
-          <Link 
-            href="/test-blog"
-            className="ml-2 bg-purple-500 text-white px-2 py-1 rounded text-xs"
-          >
-            Test Blog
-          </Link>
-          <button 
-            onClick={createSamplePost}
-            className="ml-2 bg-orange-500 text-white px-2 py-1 rounded text-xs"
-          >
-            Create Sample Post
-          </button>
-        </p>
-      </div>
+
       
              {/* Hero Section */}
        <section className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] pt-[180px] pb-16">
@@ -265,13 +191,6 @@ export default function BlogPage() {
               </div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-2">No blog posts yet</h2>
               <p className="text-gray-600 mb-4">Check back soon for informative articles about dental health and care.</p>
-              {firebaseStatus === 'error' && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 max-w-md mx-auto">
-                  <p className="text-red-800 text-sm">
-                    ⚠️ Firebase connection issue. Posts may not be loading properly.
-                  </p>
-                </div>
-              )}
             </motion.div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
