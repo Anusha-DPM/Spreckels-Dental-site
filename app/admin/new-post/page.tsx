@@ -103,6 +103,21 @@ export default function NewPost() {
         return
       }
       
+      // Clear localStorage if it's full
+      try {
+        const testData = 'test'
+        localStorage.setItem('test', testData)
+        localStorage.removeItem('test')
+      } catch (quotaError) {
+        console.warn('localStorage quota exceeded, clearing old data')
+        // Clear all blog-related data
+        Object.keys(localStorage).forEach(key => {
+          if (key.includes('blog') || key.includes('post')) {
+            localStorage.removeItem(key)
+          }
+        })
+      }
+      
       // Prepare data for Firebase
       const blogData = {
         title: post.title.trim(),
