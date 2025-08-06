@@ -27,6 +27,7 @@ interface BlogPost {
 export default function NewPost() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [saveStatus, setSaveStatus] = useState('')
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: '',
     slug: '',
@@ -86,6 +87,7 @@ export default function NewPost() {
 
   const handleSave = async () => {
     setIsLoading(true)
+    setSaveStatus('Preparing to save...')
     
     try {
       // Prepare data for Firebase
@@ -105,10 +107,35 @@ export default function NewPost() {
         metaDescription: post.metaDescription || ''
       }
 
-      // Save to Firebase
-      const newPost = await createBlogPost(blogData)
+      // Create post with timeout
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Firebase timeout - saving to localStorage only')), 10000)
+      )
       
-      // Also save to localStorage as backup
+      let newPost
+      try {
+        setSaveStatus('Trying to save to Firebase...')
+        // Try Firebase first with timeout
+        newPost = await Promise.race([
+          createBlogPost(blogData),
+          timeoutPromise
+        ])
+        setSaveStatus('✅ Post saved to Firebase successfully')
+        console.log('✅ Post saved to Firebase successfully')
+      } catch (firebaseError) {
+        setSaveStatus('⚠️ Firebase failed, saving to localStorage only...')
+        console.warn('⚠️ Firebase failed, saving to localStorage only:', firebaseError.message)
+        // Create post with localStorage fallback
+        newPost = {
+          id: Date.now().toString(),
+          ...blogData,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      }
+      
+      // Always save to localStorage as backup
+      setSaveStatus('Saving to localStorage...')
       const existingPosts = localStorage.getItem('blogPosts')
       const posts = existingPosts ? JSON.parse(existingPosts) : []
       
@@ -131,10 +158,13 @@ export default function NewPost() {
       posts.unshift(localStoragePost)
       localStorage.setItem('blogPosts', JSON.stringify(posts))
       
-      router.push('/admin/dashboard')
+      setSaveStatus('✅ Blog post saved successfully!')
+      setTimeout(() => {
+        router.push('/admin/dashboard')
+      }, 1000)
     } catch (error) {
       console.error('Error saving post:', error)
-      alert('Error saving post. Please try again.')
+      setSaveStatus('❌ Error saving post. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -168,6 +198,11 @@ export default function NewPost() {
             </div>
             
             <div className="flex items-center space-x-4">
+              {saveStatus && (
+                <div className="text-sm px-3 py-1 rounded bg-blue-100 text-blue-800">
+                  {saveStatus}
+                </div>
+              )}
               <button
                 onClick={handleSave}
                 disabled={isLoading}
