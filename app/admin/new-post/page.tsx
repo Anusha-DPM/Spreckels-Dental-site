@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
-import { createBlogPost, testFirebaseDatabase } from '@/lib/blogDatabase'
-import { uploadImageToFirebase, testFirebaseStorage } from '@/lib/firebase'
+import { createBlogPost } from '@/lib/blogDatabase'
+import { uploadImageToFirebase } from '@/lib/firebase'
 
 interface BlogPost {
   id: string
@@ -148,23 +148,24 @@ export default function NewPost() {
            console.log('✅ File validation passed, attempting Firebase upload...')
            setSaveStatus('Uploading image to Firebase Storage...')
            
-           // Try to upload to Firebase Storage with timeout and immediate fallback
-           try {
-             const uploadPromise = uploadImageToFirebase(uploadedImage, 'blog-images')
-             const timeoutPromise = new Promise<never>((_, reject) => {
-               setTimeout(() => reject(new Error('Upload timeout')), 10000) // 10 second timeout
-             })
-             
-             const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as { url: string; path: string; fileName: string }
-             imageUrl = uploadResult.url
-             console.log('✅ Image uploaded successfully:', imageUrl)
-             setSaveStatus('✅ Image uploaded successfully!')
-           } catch (firebaseError: any) {
-             console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
-             // Fallback to base64 if Firebase Storage fails
-             imageUrl = imagePreview
-             setSaveStatus('⚠️ Using local image storage (Firebase Storage unavailable)')
-           }
+                       // Try to upload to Firebase Storage with better error handling
+            try {
+              console.log('🔥 Attempting direct Firebase Storage upload...')
+              const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
+              imageUrl = uploadResult.url
+              console.log('✅ Image uploaded successfully:', imageUrl)
+              setSaveStatus('✅ Image uploaded successfully!')
+            } catch (firebaseError: any) {
+              console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
+              console.error('Firebase error details:', {
+                code: firebaseError.code,
+                message: firebaseError.message,
+                stack: firebaseError.stack
+              })
+              // Fallback to base64 if Firebase Storage fails
+              imageUrl = imagePreview
+              setSaveStatus('⚠️ Using local image storage (Firebase Storage unavailable)')
+            }
          }
        }
 
@@ -219,155 +220,49 @@ export default function NewPost() {
     await handleSave()
   }
 
-  const handleTestFirebase = async () => {
-    console.log('🧪 Testing Firebase Storage...')
+  // Simple test function to verify Firebase Storage
+  const testFirebaseStorage = async () => {
+    console.log('🧪 Testing Firebase Storage connection...')
     setSaveStatus('Testing Firebase Storage...')
     
     try {
-      const result = await testFirebaseStorage()
-      if (result.success) {
-        setSaveStatus('✅ Firebase Storage test successful!')
-        console.log('✅ Firebase Storage is working correctly')
-      } else {
-        setSaveStatus(`❌ Firebase Storage test failed: ${result.error}`)
-        console.error('❌ Firebase Storage test failed:', result.error)
+      // Create a simple test image
+      const canvas = document.createElement('canvas')
+      canvas.width = 100
+      canvas.height = 100
+      const ctx = canvas.getContext('2d')
+      if (ctx) {
+        ctx.fillStyle = '#ccc'
+        ctx.fillRect(0, 0, 100, 100)
+        ctx.fillStyle = '#666'
+        ctx.font = '14px Arial'
+        ctx.textAlign = 'center'
+        ctx.fillText('Test', 50, 50)
       }
+      
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          const testFile = new File([blob], 'test-image.png', { type: 'image/png' })
+          
+          try {
+            const result = await uploadImageToFirebase(testFile, 'test-uploads')
+            setSaveStatus('✅ Firebase Storage test successful!')
+            console.log('✅ Firebase Storage is working:', result)
+          } catch (error: any) {
+            setSaveStatus(`❌ Firebase Storage test failed: ${error.message}`)
+            console.error('❌ Firebase Storage test failed:', error)
+          }
+        }
+      }, 'image/png')
     } catch (error: any) {
       setSaveStatus(`❌ Test error: ${error.message}`)
       console.error('❌ Test error:', error)
     }
   }
 
-  const handleTestBlogSave = async () => {
-    console.log('🧪 Testing blog post save without image...')
-    setSaveStatus('Testing blog post save...')
-    
-    try {
-      const testBlogData = {
-        title: 'Test Blog Post',
-        content: 'This is a test blog post content.',
-        excerpt: 'Test excerpt',
-        coverImage: '',
-        imageUrl: '',
-        tags: ['test'],
-        category: 'Test',
-        author: 'Admin',
-        published: false,
-        featured: false,
-        slug: 'test-blog-post',
-        metaTitle: 'Test Blog Post',
-        metaDescription: 'Test blog post description',
-        publishDate: new Date().toISOString()
-      }
-      
-      const newPost = await createBlogPost(testBlogData)
-      setSaveStatus('✅ Test blog post saved successfully!')
-      console.log('✅ Test blog post created:', newPost)
-    } catch (error: any) {
-      setSaveStatus(`❌ Test blog save failed: ${error.message}`)
-      console.error('❌ Test blog save failed:', error)
-    }
-  }
 
-  const handleTestBlogWithImage = async () => {
-    console.log('🧪 Testing blog post save with base64 image...')
-    setSaveStatus('Testing blog post save with image...')
-    
-    try {
-      // Create a simple base64 image for testing
-      const testImageUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2NjYyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+VGVzdCBJbWFnZTwvdGV4dD48L3N2Zz4='
-      
-      const testBlogData = {
-        title: 'Test Blog Post with Image',
-        content: 'This is a test blog post content with an image.',
-        excerpt: 'Test excerpt with image',
-        coverImage: testImageUrl,
-        imageUrl: testImageUrl,
-        tags: ['test', 'image'],
-        category: 'Test',
-        author: 'Admin',
-        published: false,
-        featured: false,
-        slug: 'test-blog-post-with-image',
-        metaTitle: 'Test Blog Post with Image',
-        metaDescription: 'Test blog post description with image',
-        publishDate: new Date().toISOString()
-      }
-      
-      const newPost = await createBlogPost(testBlogData)
-      setSaveStatus('✅ Test blog post with image saved successfully!')
-      console.log('✅ Test blog post with image created:', newPost)
-    } catch (error: any) {
-      setSaveStatus(`❌ Test blog with image failed: ${error.message}`)
-      console.error('❌ Test blog with image failed:', error)
-    }
-  }
 
-  const handleTestServerUpload = async () => {
-    console.log('🧪 Testing server-side image upload...')
-    setSaveStatus('Testing server-side upload...')
-    
-    try {
-      // Create a test image file (SVG)
-      const svgContent = `
-        <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" fill="#ccc"/>
-          <text x="50" y="50" font-family="Arial" font-size="14" fill="#666" text-anchor="middle" dy=".3em">Test Image</text>
-        </svg>
-      `
-      const testBlob = new Blob([svgContent], { type: 'image/svg+xml' })
-      const testFile = new File([testBlob], 'test-image.svg', { type: 'image/svg+xml' })
-      
-      console.log('📤 Testing server-side upload with test image file...')
-      const result = await uploadImageToFirebase(testFile, 'test-uploads')
-      
-      setSaveStatus('✅ Server-side upload test successful!')
-      console.log('✅ Server-side upload test result:', result)
-    } catch (error: any) {
-      setSaveStatus(`❌ Server-side upload test failed: ${error.message}`)
-      console.error('❌ Server-side upload test failed:', error)
-    }
-  }
 
-  const handleTestDatabase = async () => {
-    console.log('🧪 Testing Firebase Database...')
-    setSaveStatus('Testing Firebase Database...')
-    
-    try {
-      const result = await testFirebaseDatabase()
-      if (result.success) {
-        setSaveStatus('✅ Firebase Database test successful!')
-        console.log('✅ Firebase Database is working correctly')
-      } else {
-        setSaveStatus(`❌ Firebase Database test failed: ${result.error}`)
-        console.error('❌ Firebase Database test failed:', result.error)
-      }
-    } catch (error: any) {
-      setSaveStatus(`❌ Database test error: ${error.message}`)
-      console.error('❌ Database test error:', error)
-    }
-  }
-
-  const handleTestServerFirebase = async () => {
-    console.log('🧪 Testing server-side Firebase configuration...')
-    setSaveStatus('Testing server Firebase...')
-    
-    try {
-      const response = await fetch('/api/test-firebase')
-      const result = await response.json()
-      
-      if (result.success) {
-        setSaveStatus('✅ Server Firebase test successful!')
-        console.log('✅ Server Firebase is working correctly:', result)
-      } else {
-        setSaveStatus(`❌ Server Firebase test failed: ${result.error}`)
-        console.error('❌ Server Firebase test failed:', result)
-      }
-    } catch (error: any) {
-      setSaveStatus(`❌ Server Firebase test error: ${error.message}`)
-      console.error('❌ Server Firebase test error:', error)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -397,49 +292,21 @@ export default function NewPost() {
                    {saveStatus}
                  </div>
                )}
-               <button
-                 onClick={handleTestFirebase}
-                 className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
-               >
-                 Test Firebase
-               </button>
-               <button
-                 onClick={handleTestBlogSave}
-                 className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
-               >
-                 Test Blog Save
-               </button>
-               <button
-                 onClick={handleTestBlogWithImage}
-                 className="bg-orange-600 text-white px-3 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium text-sm"
-               >
-                 Test Blog + Image
-               </button>
-               <button
-                 onClick={handleTestServerUpload}
-                 className="bg-teal-600 text-white px-3 py-2 rounded-lg hover:bg-teal-700 transition-colors duration-200 font-medium text-sm"
-               >
-                 Test Server Upload
-               </button>
-               <button
-                 onClick={handleTestDatabase}
-                 className="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium text-sm"
-               >
-                 Test Database
-               </button>
-               <button
-                 onClick={handleTestServerFirebase}
-                 className="bg-indigo-600 text-white px-3 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium text-sm"
-               >
-                 Test Server Firebase
-               </button>
-               <button
-                 onClick={handleSave}
-                 disabled={isLoading}
-                 className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
-               >
-                 {isLoading ? 'Saving...' : 'Save Draft'}
-               </button>
+
+
+                               <button
+                  onClick={testFirebaseStorage}
+                  className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
+                >
+                  Test Storage
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={isLoading}
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
+                >
+                  {isLoading ? 'Saving...' : 'Save Draft'}
+                </button>
                <button
                  onClick={handlePublish}
                  disabled={isLoading}
