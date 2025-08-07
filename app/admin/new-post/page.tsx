@@ -382,25 +382,47 @@ export default function NewPost() {
       }
     }
 
-   // Test small image upload
-   const testSmallImage = async () => {
-     console.log('🧪 Testing small image upload...')
-     setSaveStatus('Testing small image upload...')
-     
-     try {
-       const result = await testSmallImageUpload()
-       if (result && result.success) {
-         setSaveStatus('✅ Small image upload test successful!')
-         console.log('✅ Small image upload is working:', result)
-       } else {
-         setSaveStatus(`❌ Small image upload test failed: ${result?.error || 'Unknown error'}`)
-         console.error('❌ Small image upload test failed:', result?.error)
-       }
-     } catch (error: any) {
-       setSaveStatus(`❌ Small image test error: ${error.message}`)
-       console.error('❌ Small image test error:', error)
-     }
-   }
+       // Test small image upload
+    const testSmallImage = async () => {
+      console.log('🧪 Testing small image upload...')
+      setSaveStatus('Testing small image upload...')
+      
+      try {
+        const result = await testSmallImageUpload()
+        if (result && result.success) {
+          setSaveStatus('✅ Small image upload test successful!')
+          console.log('✅ Small image upload is working:', result)
+        } else {
+          setSaveStatus(`❌ Small image upload test failed: ${result?.error || 'Unknown error'}`)
+          console.error('❌ Small image upload test failed:', result?.error)
+        }
+      } catch (error: any) {
+        setSaveStatus(`❌ Small image test error: ${error.message}`)
+        console.error('❌ Small image test error:', error)
+      }
+    }
+
+    // Test Firebase server-side initialization
+    const testFirebaseServer = async () => {
+      console.log('🧪 Testing Firebase server-side initialization...')
+      setSaveStatus('Testing Firebase server...')
+      
+      try {
+        const response = await fetch('/api/test-firebase')
+        const result = await response.json()
+        
+        if (result.success) {
+          setSaveStatus('✅ Firebase server test successful!')
+          console.log('✅ Firebase server is working:', result)
+        } else {
+          setSaveStatus(`❌ Firebase server test failed: ${result.error}`)
+          console.error('❌ Firebase server test failed:', result)
+        }
+      } catch (error: any) {
+        setSaveStatus(`❌ Firebase server test error: ${error.message}`)
+        console.error('❌ Firebase server test error:', error)
+      }
+    }
 
 
 
@@ -442,12 +464,18 @@ export default function NewPost() {
                   >
                     Test Server Upload
                   </button>
-                 <button
-                   onClick={testSmallImage}
-                   className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
-                 >
-                   Test Small Image
-                 </button>
+                                   <button
+                    onClick={testFirebaseServer}
+                    className="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium text-sm"
+                  >
+                    Test Firebase Server
+                  </button>
+                  <button
+                    onClick={testSmallImage}
+                    className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
+                  >
+                    Test Small Image
+                  </button>
                 <button
                   onClick={handleSave}
                   disabled={isLoading}
