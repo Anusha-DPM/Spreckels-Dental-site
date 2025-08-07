@@ -31,6 +31,7 @@ export default function NewPost() {
   const [saveStatus, setSaveStatus] = useState('')
   const [uploadedImage, setUploadedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>('')
+  const [firebaseImageUrl, setFirebaseImageUrl] = useState<string>('')
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: '',
     slug: '',
@@ -72,6 +73,25 @@ export default function NewPost() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
+        return
+      }
+      
+      // Validate file size (max 10MB before compression)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Image file is too large. Please select an image smaller than 10MB.')
+        return
+      }
+      
+      console.log('📁 Image selected:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        sizeInMB: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+      })
+      
       // Store the file for later upload
       setUploadedImage(file)
       
@@ -146,13 +166,14 @@ export default function NewPost() {
               console.log('🔥 Step 1: Uploading image to Firebase Storage...')
               const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
               imageUrl = uploadResult.url
-              console.log('✅ Step 1 Complete: Image uploaded to Firebase Storage:', imageUrl)
-              console.log('📊 Compression stats:', {
-                originalSize: uploadResult.originalSize,
-                compressedSize: uploadResult.compressedSize,
-                savings: ((uploadResult.originalSize - uploadResult.compressedSize) / uploadResult.originalSize * 100).toFixed(1) + '%'
-              })
-              setSaveStatus('✅ Image uploaded to Firebase Storage successfully!')
+                             console.log('✅ Step 1 Complete: Image uploaded to Firebase Storage:', imageUrl)
+               console.log('📊 Compression stats:', {
+                 originalSize: uploadResult.originalSize,
+                 compressedSize: uploadResult.compressedSize,
+                 savings: ((uploadResult.originalSize - uploadResult.compressedSize) / uploadResult.originalSize * 100).toFixed(1) + '%'
+               })
+               setFirebaseImageUrl(imageUrl)
+               setSaveStatus('✅ Image uploaded to Firebase Storage successfully!')
             } catch (firebaseError: any) {
               console.error('❌ Firebase Storage upload failed:', firebaseError.message)
               console.error('Firebase error details:', {
@@ -388,49 +409,72 @@ export default function NewPost() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Cover Image */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Cover Image
-              </label>
-              {imagePreview ? (
-                <div className="mb-4">
-                  <Image
-                    src={imagePreview}
-                    alt="Cover preview"
-                    width={300}
-                    height={200}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
-                  <button
-                    onClick={() => {
-                      setImagePreview('')
-                      setUploadedImage(null)
-                      setPost(prev => ({ ...prev, coverImage: '' }))
-                    }}
-                    className="mt-2 text-red-600 hover:text-red-800 text-sm"
-                  >
-                    Remove Image
-                  </button>
-                </div>
-              ) : (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                    id="cover-image"
-                  />
-                  <label htmlFor="cover-image" className="cursor-pointer">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
-                  </label>
-                </div>
-              )}
-            </div>
+                         {/* Cover Image */}
+             <div className="bg-white rounded-lg shadow-sm p-6">
+               <label className="block text-sm font-medium text-gray-700 mb-2">
+                 Cover Image
+               </label>
+               {imagePreview ? (
+                 <div className="mb-4">
+                   <Image
+                     src={imagePreview}
+                     alt="Cover preview"
+                     width={300}
+                     height={200}
+                     className="w-full h-48 object-cover rounded-lg"
+                   />
+                   
+                   {/* Image Info */}
+                   {uploadedImage && (
+                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                       <div className="text-xs text-gray-600 space-y-1">
+                         <div><strong>File:</strong> {uploadedImage.name}</div>
+                         <div><strong>Type:</strong> {uploadedImage.type}</div>
+                         <div><strong>Size:</strong> {(uploadedImage.size / (1024 * 1024)).toFixed(2)} MB</div>
+                         {firebaseImageUrl ? (
+                           <>
+                             <div><strong>Status:</strong> <span className="text-green-600">✅ Uploaded to Firebase Storage</span></div>
+                             <div><strong>Firebase URL:</strong> <span className="text-blue-600 break-all">{firebaseImageUrl}</span></div>
+                           </>
+                         ) : (
+                           <div><strong>Status:</strong> <span className="text-blue-600">Ready to upload to Firebase Storage</span></div>
+                         )}
+                       </div>
+                     </div>
+                   )}
+                   
+                   <button
+                     onClick={() => {
+                       setImagePreview('')
+                       setUploadedImage(null)
+                       setFirebaseImageUrl('')
+                       setPost(prev => ({ ...prev, coverImage: '' }))
+                     }}
+                     className="mt-2 text-red-600 hover:text-red-800 text-sm"
+                   >
+                     Remove Image
+                   </button>
+                 </div>
+               ) : (
+                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                   <input
+                     type="file"
+                     accept="image/*"
+                     onChange={handleImageUpload}
+                     className="hidden"
+                     id="cover-image"
+                   />
+                   <label htmlFor="cover-image" className="cursor-pointer">
+                     <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                     </svg>
+                     <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
+                     <p className="text-xs text-gray-500 mt-1">Supports: JPG, PNG, SVG, WebP, GIF, etc.</p>
+                     <p className="text-xs text-gray-500">Max size: 10MB (will be compressed automatically)</p>
+                   </label>
+                 </div>
+               )}
+             </div>
 
             {/* Publish Settings */}
             <div className="bg-white rounded-lg shadow-sm p-6">
