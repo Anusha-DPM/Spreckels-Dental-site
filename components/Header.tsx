@@ -256,11 +256,25 @@ export default function Header() {
             
 
             
-            {/* Insurance & Billing */}
+            {/* Blog */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Link
+                href="/blog"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1"
+              >
+                Blog
+              </Link>
+            </motion.div>
+            
+            {/* Insurance & Billing */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
             >
               <Link
                 href="/insurance-billing"
@@ -274,7 +288,7 @@ export default function Header() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
               className="relative"
               onMouseEnter={() => setIsMoreOpen(true)}
               onMouseLeave={() => setIsMoreOpen(false)}
@@ -497,11 +511,25 @@ export default function Header() {
             
 
             
-            {/* Insurance & Billing */}
+            {/* Blog */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Link
+                href="/blog"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap"
+              >
+                Blog
+              </Link>
+            </motion.div>
+            
+            {/* Insurance & Billing */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
             >
               <Link
                 href="/insurance-billing"
@@ -517,7 +545,7 @@ export default function Header() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
               className="relative"
               onMouseEnter={() => setIsMoreOpen(true)}
               onMouseLeave={() => setIsMoreOpen(false)}
@@ -594,7 +622,7 @@ export default function Header() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.55 }}
+              transition={{ duration: 0.6, delay: 0.65 }}
             >
               <Link
                 href="/contact"
@@ -803,6 +831,17 @@ export default function Header() {
                           )}
                         </AnimatePresence>
                       </div>
+                    </li>
+
+                    {/* Blog */}
+                    <li>
+                      <Link
+                        href="/blog"
+                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                        onClick={closeMenu}
+                      >
+                        BLOG
+                      </Link>
                     </li>
 
                     {/* Children's Dentistry */}

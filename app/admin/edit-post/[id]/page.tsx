@@ -26,6 +26,7 @@ interface BlogPost {
   updatedAt: string
   author?: string
 }
+
 import { uploadImageToFirebase } from '../../../../lib/firebase'
 
 export default function EditPost() {
@@ -75,23 +76,24 @@ export default function EditPost() {
         return
       }
 
-      setOriginalPost(post)
+      const blogPost = post as BlogPost
+      setOriginalPost(blogPost)
       setFormData({
-        title: post.title,
-        content: post.content,
-        excerpt: post.excerpt || '',
-        coverImage: post.coverImage || '',
-        imageUrl: post.imageUrl || '',
-        tags: post.tags?.join(', ') || '',
-        categories: post.categories?.join(', ') || '',
-        metaTitle: post.metaTitle || '',
-        metaDescription: post.metaDescription || '',
-        published: post.published,
-        publishDate: post.published ? post.publishDate.split('T')[0] : new Date().toISOString().split('T')[0]
+        title: blogPost.title,
+        content: blogPost.content,
+        excerpt: blogPost.excerpt || '',
+        coverImage: blogPost.coverImage || '',
+        imageUrl: blogPost.imageUrl || '',
+        tags: blogPost.tags?.join(', ') || '',
+        categories: blogPost.categories?.join(', ') || '',
+        metaTitle: blogPost.metaTitle || '',
+        metaDescription: blogPost.metaDescription || '',
+        published: blogPost.published,
+        publishDate: blogPost.published ? blogPost.publishDate.split('T')[0] : new Date().toISOString().split('T')[0]
       })
 
-      if (post.coverImage) {
-        setImagePreview(post.coverImage)
+      if (blogPost.coverImage) {
+        setImagePreview(blogPost.coverImage)
       }
 
     } catch (err) {
