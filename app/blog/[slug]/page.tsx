@@ -50,13 +50,14 @@ export default function BlogPostPage() {
         return
       }
 
-      setPost(fetchedPost)
+      setPost(fetchedPost as BlogPost)
       
       // Load related posts
       const allPosts = await getPublishedBlogPosts()
       const related = allPosts
         .filter(p => p.id !== fetchedPost.id)
         .slice(0, 3)
+        .map(post => post as BlogPost)
       setRelatedPosts(related)
 
     } catch (err) {

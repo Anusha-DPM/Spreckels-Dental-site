@@ -55,7 +55,7 @@ export default function AdminDashboard() {
     try {
       setLoading(true)
       const fetchedPosts = await getBlogPosts()
-      setPosts(fetchedPosts)
+      setPosts(fetchedPosts.map(post => post as BlogPost))
     } catch (err) {
       setError('Failed to load blog posts')
       console.error(err)

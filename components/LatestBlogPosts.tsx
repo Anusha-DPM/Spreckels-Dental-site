@@ -44,7 +44,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
     try {
       setLoading(true)
       const fetchedPosts = await getLatestBlogPosts(limit)
-      setPosts(fetchedPosts)
+      setPosts(fetchedPosts.map(post => post as BlogPost))
     } catch (err) {
       setError('Failed to load blog posts')
       console.error(err)

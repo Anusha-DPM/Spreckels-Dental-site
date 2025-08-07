@@ -41,7 +41,7 @@ export default function BlogPage() {
     try {
       setLoading(true)
       const fetchedPosts = await getPublishedBlogPosts()
-      setPosts(fetchedPosts)
+      setPosts(fetchedPosts.map(post => post as BlogPost))
     } catch (err) {
       setError('Failed to load blog posts')
       console.error(err)
