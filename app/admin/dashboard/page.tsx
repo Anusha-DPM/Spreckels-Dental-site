@@ -60,15 +60,8 @@ export default function AdminDashboard() {
     loadPosts()
     checkSystemStatus()
     
-    // Set up interval to refresh posts every 30 seconds, but only if not in delete operation
-    const interval = setInterval(() => {
-      const isDeleteOperation = sessionStorage.getItem('deleteOperation')
-      if (!isDeleteOperation) {
-        loadPosts()
-      }
-    }, 30000)
-    
-    return () => clearInterval(interval)
+    // Removed auto-refresh interval to prevent unwanted refreshing
+    // Users can manually refresh using the Refresh button
   }, [router])
 
   const checkSystemStatus = () => {
