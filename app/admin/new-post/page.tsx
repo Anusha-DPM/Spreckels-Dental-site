@@ -303,6 +303,27 @@ export default function NewPost() {
     }
   }
 
+  const handleTestServerUpload = async () => {
+    console.log('🧪 Testing server-side image upload...')
+    setSaveStatus('Testing server-side upload...')
+    
+    try {
+      // Create a test file
+      const testContent = 'Test image content'
+      const testBlob = new Blob([testContent], { type: 'text/plain' })
+      const testFile = new File([testBlob], 'test-image.txt', { type: 'text/plain' })
+      
+      console.log('📤 Testing server-side upload with test file...')
+      const result = await uploadImageToFirebase(testFile, 'test-uploads')
+      
+      setSaveStatus('✅ Server-side upload test successful!')
+      console.log('✅ Server-side upload test result:', result)
+    } catch (error: any) {
+      setSaveStatus(`❌ Server-side upload test failed: ${error.message}`)
+      console.error('❌ Server-side upload test failed:', error)
+    }
+  }
+
   const handleTestDatabase = async () => {
     console.log('🧪 Testing Firebase Database...')
     setSaveStatus('Testing Firebase Database...')
@@ -367,6 +388,12 @@ export default function NewPost() {
                  className="bg-orange-600 text-white px-3 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium text-sm"
                >
                  Test Blog + Image
+               </button>
+               <button
+                 onClick={handleTestServerUpload}
+                 className="bg-teal-600 text-white px-3 py-2 rounded-lg hover:bg-teal-700 transition-colors duration-200 font-medium text-sm"
+               >
+                 Test Server Upload
                </button>
                <button
                  onClick={handleTestDatabase}
