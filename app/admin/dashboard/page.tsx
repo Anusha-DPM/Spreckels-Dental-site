@@ -161,13 +161,24 @@ export default function AdminDashboard() {
   const handleDeletePost = async (postId: string) => {
     if (confirm('Are you sure you want to delete this post?')) {
       try {
+        console.log(`🗑️ Deleting post: ${postId}`)
+        
         // Delete from Firebase and localStorage
         await deleteBlogPost(postId)
         
-        // Update local state
+        // Update local state immediately
         const updatedPosts = posts.filter(post => post.id !== postId)
         setPosts(updatedPosts)
         
+        // Also update published posts cache
+        const publishedPosts = localStorage.getItem('publishedBlogPosts')
+        if (publishedPosts) {
+          const parsedPublishedPosts = JSON.parse(publishedPosts)
+          const filteredPublishedPosts = parsedPublishedPosts.filter((post: any) => post.id !== postId)
+          localStorage.setItem('publishedBlogPosts', JSON.stringify(filteredPublishedPosts))
+        }
+        
+        console.log(`✅ Post ${postId} deleted successfully`)
         alert('Post deleted successfully!')
       } catch (error) {
         console.error('Error deleting post:', error)
