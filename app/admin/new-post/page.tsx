@@ -148,18 +148,18 @@ export default function NewPost() {
            console.log('✅ File validation passed, attempting Firebase upload...')
            setSaveStatus('Uploading image to Firebase Storage...')
            
-           // Try to upload to Firebase Storage with timeout
-           try {
-             const uploadPromise = uploadImageToFirebase(uploadedImage, 'blog-images')
-             const timeoutPromise = new Promise((_, reject) => {
-               setTimeout(() => reject(new Error('Upload timeout')), 15000) // 15 second timeout
-             })
-             
-             const uploadResult = await Promise.race([uploadPromise, timeoutPromise])
-             imageUrl = uploadResult.url
-             console.log('✅ Image uploaded successfully:', imageUrl)
-             setSaveStatus('✅ Image uploaded successfully!')
-           } catch (firebaseError: any) {
+                       // Try to upload to Firebase Storage with timeout
+            try {
+              const uploadPromise = uploadImageToFirebase(uploadedImage, 'blog-images')
+              const timeoutPromise = new Promise<never>((_, reject) => {
+                setTimeout(() => reject(new Error('Upload timeout')), 15000) // 15 second timeout
+              })
+              
+              const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as { url: string; path: string; fileName: string }
+              imageUrl = uploadResult.url
+              console.log('✅ Image uploaded successfully:', imageUrl)
+              setSaveStatus('✅ Image uploaded successfully!')
+            } catch (firebaseError: any) {
              console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
              // Fallback to base64 if Firebase Storage fails
              imageUrl = imagePreview
