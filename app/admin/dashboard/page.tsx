@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getBlogPosts, deleteBlogPost } from '@/lib/blogDatabase'
+import { getBlogPosts, deleteBlogPost, updateBlogPost } from '@/lib/blogDatabase'
 import { db } from '@/lib/firebase'
 
 interface BlogPost {
@@ -177,6 +177,38 @@ export default function AdminDashboard() {
       } catch (error) {
         console.error('Error deleting post:', error)
         alert('Error deleting post. Please try again.')
+      }
+    }
+  }
+
+  const handlePublishPost = async (postId: string) => {
+    if (confirm('Are you sure you want to publish this post?')) {
+      try {
+        const updateData = {
+          status: 'published',
+          published: true,
+          publishDate: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+        
+        // Update in Firebase
+        await updateBlogPost(postId, updateData)
+        
+        // Update local state
+        const updatedPosts = posts.map(post => 
+          post.id === postId 
+            ? { ...post, status: 'published' as const, published: true, publishDate: updateData.publishDate, updatedAt: updateData.updatedAt }
+            : post
+        )
+        setPosts(updatedPosts)
+        
+        // Also update localStorage
+        localStorage.setItem('blogPosts', JSON.stringify(updatedPosts))
+        
+        alert('Post published successfully!')
+      } catch (error) {
+        console.error('Error publishing post:', error)
+        alert('Error publishing post. Please try again.')
       }
     }
   }
@@ -405,6 +437,14 @@ export default function AdminDashboard() {
                             >
                               View
                             </Link>
+                            {post.status === 'draft' && (
+                              <button
+                                onClick={() => handlePublishPost(post.id)}
+                                className="text-green-600 hover:text-green-800 transition-colors duration-200"
+                              >
+                                Publish
+                              </button>
+                            )}
                             <button
                               onClick={() => handleDeletePost(post.id)}
                               className="text-red-600 hover:text-red-800 transition-colors duration-200"

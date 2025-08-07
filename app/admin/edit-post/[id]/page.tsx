@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
+import { getBlogPostById, updateBlogPost } from '@/lib/blogDatabase'
 
 interface BlogPost {
   id: string
@@ -41,22 +42,53 @@ export default function EditPost() {
     }
 
     // Load post data
-    const savedPosts = localStorage.getItem('blogPosts')
-    if (savedPosts) {
-      const posts = JSON.parse(savedPosts)
-      const foundPost = posts.find((p: BlogPost) => p.id === params.id)
-      if (foundPost) {
-        setPost(foundPost)
-        // Set image URL if post has a cover image
-        if (foundPost.coverImage && foundPost.coverImage.startsWith('http')) {
-          setImageUrl(foundPost.coverImage)
+    loadPost()
+  }, [router, params.id])
+
+  const loadPost = async () => {
+    try {
+      setIsLoading(true)
+      
+      // Try to get post from Firebase first
+      try {
+        const firebasePost = await getBlogPostById(params.id as string)
+        if (firebasePost) {
+          setPost(firebasePost)
+          // Set image URL if post has a cover image
+          if (firebasePost.coverImage && firebasePost.coverImage.startsWith('http')) {
+            setImageUrl(firebasePost.coverImage)
+          }
+          setIsLoading(false)
+          return
+        }
+      } catch (firebaseError) {
+        console.log('Firebase post not found, trying localStorage...')
+      }
+
+      // Fallback to localStorage
+      const savedPosts = localStorage.getItem('blogPosts')
+      if (savedPosts) {
+        const posts = JSON.parse(savedPosts)
+        const foundPost = posts.find((p: BlogPost) => p.id === params.id)
+        if (foundPost) {
+          setPost(foundPost)
+          // Set image URL if post has a cover image
+          if (foundPost.coverImage && foundPost.coverImage.startsWith('http')) {
+            setImageUrl(foundPost.coverImage)
+          }
+        } else {
+          router.push('/admin/dashboard')
         }
       } else {
         router.push('/admin/dashboard')
       }
+    } catch (error) {
+      console.error('Error loading post:', error)
+      router.push('/admin/dashboard')
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
-  }, [router, params.id])
+  }
 
   const generateSlug = (title: string) => {
     return title
@@ -169,16 +201,25 @@ export default function EditPost() {
         return
       }
       
-      // Get existing posts
-      const savedPosts = localStorage.getItem('blogPosts')
-      const posts = savedPosts ? JSON.parse(savedPosts) : []
+      // Prepare update data
+      const updateData = {
+        title: post.title,
+        content: post.content,
+        excerpt: post.excerpt,
+        coverImage: post.coverImage,
+        tags: post.tags,
+        metaTitle: post.metaTitle,
+        metaDescription: post.metaDescription,
+        publishDate: post.publishDate,
+        status: post.status,
+        slug: post.slug,
+        updatedAt: new Date().toISOString()
+      }
       
-      // Update the post
-      const updatedPosts = posts.map((p: BlogPost) => 
-        p.id === post.id ? { ...post, updatedAt: new Date().toISOString() } : p
-      )
+      // Save to Firebase and localStorage
+      await updateBlogPost(post.id, updateData)
       
-      localStorage.setItem('blogPosts', JSON.stringify(updatedPosts))
+      alert('Post saved successfully!')
       router.push('/admin/dashboard')
     } catch (error) {
       console.error('Error saving post:', error)
