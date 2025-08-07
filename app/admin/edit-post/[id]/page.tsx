@@ -29,6 +29,8 @@ export default function EditPost() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [post, setPost] = useState<BlogPost | null>(null)
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageLoading, setImageLoading] = useState<boolean>(false)
 
   useEffect(() => {
     // Check authentication
@@ -45,6 +47,10 @@ export default function EditPost() {
       const foundPost = posts.find((p: BlogPost) => p.id === params.id)
       if (foundPost) {
         setPost(foundPost)
+        // Set image URL if post has a cover image
+        if (foundPost.coverImage && foundPost.coverImage.startsWith('http')) {
+          setImageUrl(foundPost.coverImage)
+        }
       } else {
         router.push('/admin/dashboard')
       }
@@ -74,6 +80,21 @@ export default function EditPost() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file && post) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
+        return
+      }
+      
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Image file is too large. Please select an image smaller than 10MB.')
+        return
+      }
+      
+      // Clear URL field when uploading a file
+      setImageUrl('')
+      
       const reader = new FileReader()
       reader.onload = (e) => {
         setPost({
@@ -82,6 +103,36 @@ export default function EditPost() {
         })
       }
       reader.readAsDataURL(file)
+    }
+  }
+
+  const handleImageUrlChange = (url: string) => {
+    setImageUrl(url)
+    // If user enters a URL, update the post cover image
+    if (url.trim() && post) {
+      setImageLoading(true)
+      setPost({ ...post, coverImage: url.trim() })
+      setImageLoading(false)
+    }
+  }
+
+  const validateImageUrl = (url: string) => {
+    if (!url.trim()) return true
+    try {
+      new URL(url)
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  const testImageUrl = async (url: string) => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' })
+      return response.ok
+    } catch (error) {
+      console.error('Error testing image URL:', error)
+      return false
     }
   }
 
@@ -98,6 +149,26 @@ export default function EditPost() {
     setIsSaving(true)
     
     try {
+      // Validate required fields
+      if (!post.title?.trim()) {
+        alert('Post title is required')
+        setIsSaving(false)
+        return
+      }
+      
+      if (!post.content?.trim()) {
+        alert('Post content is required')
+        setIsSaving(false)
+        return
+      }
+
+      // Validate image URL if provided
+      if (imageUrl.trim() && !validateImageUrl(imageUrl)) {
+        alert('Invalid image URL format')
+        setIsSaving(false)
+        return
+      }
+      
       // Get existing posts
       const savedPosts = localStorage.getItem('blogPosts')
       const posts = savedPosts ? JSON.parse(savedPosts) : []
@@ -111,6 +182,7 @@ export default function EditPost() {
       router.push('/admin/dashboard')
     } catch (error) {
       console.error('Error saving post:', error)
+      alert('Error saving post. Please try again.')
     } finally {
       setIsSaving(false)
     }
@@ -250,6 +322,46 @@ export default function EditPost() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Cover Image
               </label>
+              
+              {/* Image URL Input */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Blog Image URL
+                </label>
+                <input
+                  type="url"
+                  value={imageUrl}
+                  onChange={(e) => handleImageUrlChange(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
+                  placeholder="https://example.com/image.jpg"
+                />
+                <div className="text-xs text-gray-400 mt-1">
+                  Examples: Unsplash, Pexels, your website, or any direct image URL
+                </div>
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="text-xs text-gray-500">
+                    Enter a direct URL to an image (e.g., from Unsplash, your website, etc.)
+                  </p>
+                  {imageUrl.trim() && (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const isValid = await testImageUrl(imageUrl)
+                        if (isValid) {
+                          alert('✅ Image URL is accessible')
+                        } else {
+                          alert('❌ Image URL is not accessible')
+                        }
+                      }}
+                      className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                    >
+                      Test URL
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Image Preview */}
               {post.coverImage ? (
                 <div className="mb-4">
                   <Image
@@ -260,7 +372,10 @@ export default function EditPost() {
                     className="w-full h-48 object-cover rounded-lg"
                   />
                   <button
-                    onClick={() => setPost({ ...post, coverImage: '' })}
+                    onClick={() => {
+                      setPost({ ...post, coverImage: '' })
+                      setImageUrl('')
+                    }}
                     className="mt-2 text-red-600 hover:text-red-800 text-sm"
                   >
                     Remove Image
@@ -280,6 +395,8 @@ export default function EditPost() {
                       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
+                    <p className="text-xs text-gray-500 mt-1">Supports: JPG, PNG, SVG, WebP, GIF, etc.</p>
+                    <p className="text-xs text-gray-500">Max size: 10MB</p>
                   </label>
                 </div>
               )}

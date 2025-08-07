@@ -73,9 +73,9 @@ export default function NewPost() {
     }))
   }
 
-     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-     const file = event.target.files?.[0]
-     if (file) {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
        // Validate file type
        if (!file.type.startsWith('image/')) {
          alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
@@ -102,17 +102,17 @@ export default function NewPost() {
        setUploadedImage(file)
        
        // Create preview
-       const reader = new FileReader()
-       reader.onload = (e) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
          setImagePreview(e.target?.result as string)
-         setPost(prev => ({
-           ...prev,
-           coverImage: e.target?.result as string
-         }))
-       }
-       reader.readAsDataURL(file)
-     }
-   }
+        setPost(prev => ({
+          ...prev,
+          coverImage: e.target?.result as string
+        }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleTagsChange = (tagsString: string) => {
     const tags = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag)
@@ -275,22 +275,22 @@ export default function NewPost() {
         }
 
                               // Step 2: Save blog post to Firestore with final image URL
-         const blogData = {
-           title: post.title.trim(),
-           content: post.content.trim(),
-           excerpt: post.excerpt?.trim() || '',
+      const blogData = {
+        title: post.title.trim(),
+        content: post.content.trim(),
+        excerpt: post.excerpt?.trim() || '',
            coverImage: finalImageUrl, // This is now the final image URL (Firebase or external)
            imageUrl: finalImageUrl, // Final image URL
-          tags: post.tags || [],
-          category: 'General Dentistry', // Default category
-          author: 'Admin', // Default author
-          published: post.status === 'published', // Convert status to boolean
-          featured: false,
-          slug: post.slug || generateSlug(post.title),
-          metaTitle: post.metaTitle?.trim() || post.title.trim(),
-          metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
-          publishDate: post.publishDate || new Date().toISOString()
-        }
+        tags: post.tags || [],
+        category: 'General Dentistry', // Default category
+        author: 'Admin', // Default author
+        published: post.status === 'published', // Convert status to boolean
+        featured: false,
+        slug: post.slug || generateSlug(post.title),
+        metaTitle: post.metaTitle?.trim() || post.title.trim(),
+        metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
+        publishDate: post.publishDate || new Date().toISOString()
+      }
 
                  console.log('📝 Step 2: Saving blog post to Firestore with final image URL')
          console.log('🔗 Image URL being saved:', finalImageUrl)
@@ -299,16 +299,16 @@ export default function NewPost() {
         
         try {
           // Create the blog post in Firestore
-          const newPost = await createBlogPost(blogData)
-          
+      const newPost = await createBlogPost(blogData)
+      
           setSaveStatus('✅ Blog post saved to Firestore successfully!')
           console.log('✅ Step 2 Complete: Blog post created in Firestore:', newPost)
           console.log('🎉 Process completed: Image uploaded to Firebase Storage + Blog saved to Firestore')
-          
-          // Redirect to dashboard after a short delay
-          setTimeout(() => {
-            router.push('/admin/dashboard')
-          }, 1000)
+      
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        router.push('/admin/dashboard')
+      }, 1000)
         } catch (blogError: any) {
           console.error('❌ Error saving blog post to Firestore:', blogError)
           setSaveStatus(`❌ Error saving blog post: ${blogError?.message || 'Please try again.'}`)
@@ -428,12 +428,17 @@ export default function NewPost() {
     const createTestPost = async () => {
       console.log('🧪 Creating test post with image...')
       setSaveStatus('Creating test post...')
-      
+
       try {
         const result = await createTestPostWithImage()
         if (result.success) {
           setSaveStatus('✅ Test post created successfully!')
           console.log('✅ Test post created:', result)
+          
+          // Force reload the page to see the new post
+          setTimeout(() => {
+            window.location.reload()
+          }, 2000)
         } else {
           setSaveStatus(`❌ Test post creation failed: ${result.error}`)
           console.error('❌ Test post creation failed:', result.error)
@@ -441,6 +446,123 @@ export default function NewPost() {
       } catch (error: any) {
         setSaveStatus(`❌ Test post creation error: ${error.message}`)
         console.error('❌ Test post creation error:', error)
+      }
+    }
+
+    // Test function to create a post with a simple image URL
+    const createSimpleTestPost = async () => {
+      console.log('🧪 Creating simple test post with image...')
+      setSaveStatus('Creating simple test post...')
+
+      try {
+        const simplePostData = {
+          title: 'Simple Test Post',
+          content: 'This is a simple test post with a basic image URL.',
+          excerpt: 'Simple test excerpt.',
+          coverImage: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
+          imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
+          tags: ['test', 'simple'],
+          category: 'Test',
+          author: 'Test Admin',
+          published: true,
+          featured: false,
+          slug: 'simple-test-post',
+          metaTitle: 'Simple Test Post',
+          metaDescription: 'Simple test post with image',
+          publishDate: new Date().toISOString()
+        }
+
+        console.log('📝 Simple test post data:', simplePostData)
+        
+        const result = await createBlogPost(simplePostData)
+        console.log('✅ Simple test post created:', result)
+        
+        setSaveStatus('✅ Simple test post created successfully!')
+        
+        // Force reload the page to see the new post
+        setTimeout(() => {
+          window.location.reload()
+        }, 2000)
+        
+      } catch (error: any) {
+        setSaveStatus(`❌ Simple test post creation error: ${error.message}`)
+        console.error('❌ Simple test post creation error:', error)
+      }
+    }
+
+    // Test function to verify image upload functionality
+    const testImageUpload = async () => {
+      console.log('🧪 Testing image upload functionality...')
+      setSaveStatus('Testing image upload...')
+
+      try {
+        // Create a simple test image using canvas
+        const canvas = document.createElement('canvas')
+        canvas.width = 200
+        canvas.height = 150
+        const ctx = canvas.getContext('2d')
+        
+        if (ctx) {
+          // Draw a simple test image
+          ctx.fillStyle = '#4F46E5'
+          ctx.fillRect(0, 0, 200, 150)
+          ctx.fillStyle = 'white'
+          ctx.font = '20px Arial'
+          ctx.fillText('Test Image', 50, 80)
+          
+          // Convert to blob
+          canvas.toBlob(async (blob) => {
+            if (blob) {
+              const testFile = new File([blob], 'test-image.png', { type: 'image/png' })
+              
+              console.log('📁 Test file created:', {
+                name: testFile.name,
+                size: testFile.size,
+                type: testFile.type
+              })
+              
+              try {
+                const uploadResult = await uploadImageToFirebase(testFile, 'test-images')
+                console.log('✅ Test image uploaded successfully:', uploadResult)
+                setSaveStatus(`✅ Test image uploaded! URL: ${uploadResult.url}`)
+                
+                // Create a test post with this uploaded image
+                const testPostData = {
+                  title: 'Test Post with Uploaded Image',
+                  content: 'This post uses an image that was uploaded to Firebase Storage.',
+                  excerpt: 'Test post with uploaded image.',
+                  coverImage: uploadResult.url,
+                  imageUrl: uploadResult.url,
+                  tags: ['test', 'upload'],
+                  category: 'Test',
+                  author: 'Test Admin',
+                  published: true,
+                  featured: false,
+                  slug: 'test-post-with-uploaded-image',
+                  metaTitle: 'Test Post with Uploaded Image',
+                  metaDescription: 'Test post with uploaded image',
+                  publishDate: new Date().toISOString()
+                }
+                
+                const result = await createBlogPost(testPostData)
+                console.log('✅ Test post with uploaded image created:', result)
+                setSaveStatus('✅ Test post with uploaded image created successfully!')
+                
+                // Force reload the page to see the new post
+                setTimeout(() => {
+                  window.location.reload()
+                }, 2000)
+                
+              } catch (uploadError: any) {
+                console.error('❌ Test image upload failed:', uploadError)
+                setSaveStatus(`❌ Test image upload failed: ${uploadError.message}`)
+              }
+            }
+          }, 'image/png')
+        }
+      } catch (error: any) {
+        console.error('❌ Test image creation failed:', error)
+        setSaveStatus(`❌ Test image creation failed: ${error.message}`)
       }
     }
 
@@ -470,12 +592,12 @@ export default function NewPost() {
               </div>
             </div>
             
-                         <div className="flex items-center space-x-4">
-               {saveStatus && (
-                 <div className="text-sm px-3 py-1 rounded bg-blue-100 text-blue-800">
-                   {saveStatus}
-                 </div>
-               )}
+            <div className="flex items-center space-x-4">
+              {saveStatus && (
+                <div className="text-sm px-3 py-1 rounded bg-blue-100 text-blue-800">
+                  {saveStatus}
+                </div>
+              )}
 
 
                                                                   <button
@@ -502,21 +624,33 @@ export default function NewPost() {
                   >
                     Create Test Post
                   </button>
-                <button
-                  onClick={handleSave}
-                  disabled={isLoading}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
-                >
-                  {isLoading ? 'Saving...' : 'Save Draft'}
-                </button>
-               <button
-                 onClick={handlePublish}
-                 disabled={isLoading}
-                 className="bg-[#441018] text-white px-4 py-2 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-medium disabled:opacity-50"
-               >
-                 {isLoading ? 'Publishing...' : 'Publish'}
-               </button>
-             </div>
+                  <button
+                    onClick={createSimpleTestPost}
+                    className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium text-sm"
+                  >
+                    Create Simple Test Post
+                  </button>
+                  <button
+                    onClick={testImageUpload}
+                    className="bg-yellow-600 text-white px-3 py-2 rounded-lg hover:bg-yellow-700 transition-colors duration-200 font-medium text-sm"
+                  >
+                    Test Image Upload
+                  </button>
+              <button
+                onClick={handleSave}
+                disabled={isLoading}
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
+              >
+                {isLoading ? 'Saving...' : 'Save Draft'}
+              </button>
+              <button
+                onClick={handlePublish}
+                disabled={isLoading}
+                className="bg-[#441018] text-white px-4 py-2 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-medium disabled:opacity-50"
+              >
+                {isLoading ? 'Publishing...' : 'Publish'}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -574,11 +708,11 @@ export default function NewPost() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-                         {/* Cover Image */}
-             <div className="bg-white rounded-lg shadow-sm p-6">
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 Cover Image
-               </label>
+            {/* Cover Image */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cover Image
+              </label>
                
                {/* Image URL Field */}
                <div className="mb-4">
@@ -622,17 +756,17 @@ export default function NewPost() {
                
                <div className="text-center text-sm text-gray-500 mb-4">- OR -</div>
                {(imagePreview || imageUrl) ? (
-                 <div className="mb-4">
+                <div className="mb-4">
                    {imageLoading && imageUrl && (
                      <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
                        <div className="text-gray-500 text-sm">Loading image...</div>
                      </div>
                    )}
-                   <Image
+                  <Image
                      src={imageUrl ? getImageWithProxy(imageUrl) : imagePreview}
-                     alt="Cover preview"
-                     width={300}
-                     height={200}
+                    alt="Cover preview"
+                    width={300}
+                    height={200}
                      className={`w-full h-48 object-cover rounded-lg ${imageLoading && imageUrl ? 'hidden' : ''}`}
                      onLoad={() => {
                        if (imageUrl) {
@@ -683,7 +817,7 @@ export default function NewPost() {
                      </div>
                    )}
                    
-                   <button
+                  <button
                      onClick={() => {
                        setImagePreview('')
                        setUploadedImage(null)
@@ -691,32 +825,32 @@ export default function NewPost() {
                        setImageUrl('')
                        setPost(prev => ({ ...prev, coverImage: '' }))
                      }}
-                     className="mt-2 text-red-600 hover:text-red-800 text-sm"
-                   >
-                     Remove Image
-                   </button>
-                 </div>
-               ) : (
-                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                   <input
-                     type="file"
-                     accept="image/*"
-                     onChange={handleImageUpload}
-                     className="hidden"
-                     id="cover-image"
-                   />
-                   <label htmlFor="cover-image" className="cursor-pointer">
-                     <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                     </svg>
-                     <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
+                    className="mt-2 text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Remove Image
+                  </button>
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="cover-image"
+                  />
+                  <label htmlFor="cover-image" className="cursor-pointer">
+                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
                      <p className="text-xs text-gray-500 mt-1">Supports: JPG, PNG, SVG, WebP, GIF, etc.</p>
                      <p className="text-xs text-gray-500">Max size: 10MB (will be compressed to 500KB)</p>
                      <p className="text-xs text-yellow-600 mt-1">💡 Tip: Smaller images upload faster!</p>
-                   </label>
-                 </div>
-               )}
-             </div>
+                  </label>
+                </div>
+              )}
+            </div>
 
             {/* Publish Settings */}
             <div className="bg-white rounded-lg shadow-sm p-6">

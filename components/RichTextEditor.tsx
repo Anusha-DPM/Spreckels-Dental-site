@@ -19,8 +19,36 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     }
   }, [value])
 
+  const saveSelection = () => {
+    const selection = window.getSelection()
+    if (selection && selection.rangeCount > 0) {
+      return selection.getRangeAt(0)
+    }
+    return null
+  }
+
+  const restoreSelection = (range: Range | null) => {
+    if (range) {
+      const selection = window.getSelection()
+      if (selection) {
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+    }
+  }
+
   const execCommand = (command: string, value?: string) => {
-    document.execCommand(command, false, value)
+    const savedRange = saveSelection()
+    
+    // Try modern approach first
+    if (document.queryCommandSupported && document.queryCommandSupported(command)) {
+      document.execCommand(command, false, value)
+    } else {
+      // Fallback for unsupported commands
+      console.warn(`Command ${command} not supported, using fallback`)
+    }
+    
+    restoreSelection(savedRange)
     editorRef.current?.focus()
     updateContent()
   }
@@ -34,21 +62,53 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault()
     const text = e.clipboardData.getData('text/plain')
-    document.execCommand('insertText', false, text)
+    
+    const savedRange = saveSelection()
+    if (savedRange) {
+      savedRange.deleteContents()
+      savedRange.insertNode(document.createTextNode(text))
+      restoreSelection(savedRange)
+    } else {
+      document.execCommand('insertText', false, text)
+    }
+    
     updateContent()
   }
 
   const insertLink = () => {
     const url = prompt('Enter URL:')
     if (url) {
-      execCommand('createLink', url)
+      const savedRange = saveSelection()
+      if (savedRange) {
+        const link = document.createElement('a')
+        link.href = url
+        link.textContent = savedRange.toString() || url
+        savedRange.deleteContents()
+        savedRange.insertNode(link)
+        restoreSelection(savedRange)
+        updateContent()
+      } else {
+        execCommand('createLink', url)
+      }
     }
   }
 
   const insertImage = () => {
     const url = prompt('Enter image URL:')
     if (url) {
-      execCommand('insertImage', url)
+      const savedRange = saveSelection()
+      if (savedRange) {
+        const img = document.createElement('img')
+        img.src = url
+        img.alt = 'Inserted image'
+        img.style.maxWidth = '100%'
+        img.style.height = 'auto'
+        savedRange.insertNode(img)
+        restoreSelection(savedRange)
+        updateContent()
+      } else {
+        execCommand('insertImage', url)
+      }
     }
   }
 
@@ -67,44 +127,127 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       }
       tableHTML += '</table>'
       
-      execCommand('insertHTML', tableHTML)
+      const savedRange = saveSelection()
+      if (savedRange) {
+        const tempDiv = document.createElement('div')
+        tempDiv.innerHTML = tableHTML
+        const table = tempDiv.firstChild
+        if (table) {
+          savedRange.insertNode(table)
+          restoreSelection(savedRange)
+          updateContent()
+        }
+      } else {
+        execCommand('insertHTML', tableHTML)
+      }
     }
   }
 
   const insertQuote = () => {
-    execCommand('insertHTML', '<blockquote style="border-left: 4px solid #ccc; margin: 20px 0; padding-left: 16px; font-style: italic; background-color: #f9f9f9; padding: 15px;">Quote text here</blockquote>')
+    const quoteHTML = '<blockquote style="border-left: 4px solid #ccc; margin: 20px 0; padding-left: 16px; font-style: italic; background-color: #f9f9f9; padding: 15px;">Quote text here</blockquote>'
+    insertHTML(quoteHTML)
   }
 
   const insertCode = () => {
-    execCommand('insertHTML', '<code style="background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-family: monospace; border: 1px solid #ddd;">code here</code>')
+    const codeHTML = '<code style="background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-family: monospace; border: 1px solid #ddd;">code here</code>'
+    insertHTML(codeHTML)
   }
 
   const insertCodeBlock = () => {
-    execCommand('insertHTML', '<pre style="background-color: #f4f4f4; padding: 15px; border-radius: 5px; font-family: monospace; border: 1px solid #ddd; overflow-x: auto; margin: 20px 0;"><code>Your code here</code></pre>')
+    const codeBlockHTML = '<pre style="background-color: #f4f4f4; padding: 15px; border-radius: 5px; font-family: monospace; border: 1px solid #ddd; overflow-x: auto; margin: 20px 0;"><code>Your code here</code></pre>'
+    insertHTML(codeBlockHTML)
   }
 
   const insertDivider = () => {
-    execCommand('insertHTML', '<hr style="border: none; border-top: 2px solid #ddd; margin: 30px 0;">')
+    const dividerHTML = '<hr style="border: none; border-top: 2px solid #ddd; margin: 30px 0;">'
+    insertHTML(dividerHTML)
+  }
+
+  const insertHTML = (html: string) => {
+    const savedRange = saveSelection()
+    if (savedRange) {
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = html
+      const element = tempDiv.firstChild
+      if (element) {
+        savedRange.insertNode(element)
+        restoreSelection(savedRange)
+        updateContent()
+      }
+    } else {
+      execCommand('insertHTML', html)
+    }
+  }
+
+  const insertText = (text: string) => {
+    const savedRange = saveSelection()
+    if (savedRange) {
+      savedRange.insertNode(document.createTextNode(text))
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      execCommand('insertText', text)
+    }
   }
 
   const insertSubscript = () => {
-    execCommand('subscript')
+    const savedRange = saveSelection()
+    if (savedRange && !savedRange.collapsed) {
+      const sub = document.createElement('sub')
+      sub.textContent = savedRange.toString()
+      savedRange.deleteContents()
+      savedRange.insertNode(sub)
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      execCommand('subscript')
+    }
   }
 
   const insertSuperscript = () => {
-    execCommand('superscript')
+    const savedRange = saveSelection()
+    if (savedRange && !savedRange.collapsed) {
+      const sup = document.createElement('sup')
+      sup.textContent = savedRange.toString()
+      savedRange.deleteContents()
+      savedRange.insertNode(sup)
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      execCommand('superscript')
+    }
   }
 
   const insertStrikethrough = () => {
-    execCommand('strikeThrough')
+    const savedRange = saveSelection()
+    if (savedRange && !savedRange.collapsed) {
+      const strike = document.createElement('s')
+      strike.textContent = savedRange.toString()
+      savedRange.deleteContents()
+      savedRange.insertNode(strike)
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      execCommand('strikeThrough')
+    }
   }
 
   const insertHorizontalRule = () => {
-    execCommand('insertHorizontalRule')
+    const hrHTML = '<hr>'
+    insertHTML(hrHTML)
   }
 
   const clearFormatting = () => {
-    execCommand('removeFormat')
+    const savedRange = saveSelection()
+    if (savedRange && !savedRange.collapsed) {
+      const text = savedRange.toString()
+      savedRange.deleteContents()
+      savedRange.insertNode(document.createTextNode(text))
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      execCommand('removeFormat')
+    }
   }
 
   const undo = () => {
@@ -134,88 +277,135 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
   const insertSpecialCharacter = () => {
     const char = prompt('Enter special character (e.g., ©, ®, ™, €, £, ¥):')
     if (char) {
-      execCommand('insertText', char)
+      insertText(char)
     }
   }
 
   const insertEmoji = () => {
     const emoji = prompt('Enter emoji (e.g., 😊, 👍, ❤️):')
     if (emoji) {
-      execCommand('insertText', emoji)
+      insertText(emoji)
     }
   }
 
   const insertChecklist = () => {
-    execCommand('insertHTML', '<ul style="list-style: none; padding-left: 0;"><li style="margin: 5px 0;"><input type="checkbox" style="margin-right: 8px;">Checklist item</li></ul>')
+    const checklistHTML = '<ul style="list-style: none; padding-left: 0;"><li style="margin: 5px 0;"><input type="checkbox" style="margin-right: 8px;">Checklist item</li></ul>'
+    insertHTML(checklistHTML)
   }
 
   const insertDefinitionList = () => {
-    execCommand('insertHTML', '<dl style="margin: 20px 0;"><dt style="font-weight: bold; margin-bottom: 5px;">Term</dt><dd style="margin-left: 20px; margin-bottom: 15px;">Definition</dd></dl>')
+    const defListHTML = '<dl style="margin: 20px 0;"><dt style="font-weight: bold; margin-bottom: 5px;">Term</dt><dd style="margin-left: 20px; margin-bottom: 15px;">Definition</dd></dl>'
+    insertHTML(defListHTML)
   }
 
   const insertAbbreviation = () => {
     const abbr = prompt('Enter abbreviation:')
     const title = prompt('Enter full form:')
     if (abbr && title) {
-      execCommand('insertHTML', `<abbr title="${title}">${abbr}</abbr>`)
+      const abbrHTML = `<abbr title="${title}">${abbr}</abbr>`
+      insertHTML(abbrHTML)
     }
   }
 
   const insertHighlight = () => {
-    execCommand('insertHTML', '<mark style="background-color: yellow; padding: 2px 4px;">highlighted text</mark>')
+    const savedRange = saveSelection()
+    if (savedRange && !savedRange.collapsed) {
+      const mark = document.createElement('mark')
+      mark.style.backgroundColor = 'yellow'
+      mark.style.padding = '2px 4px'
+      mark.textContent = savedRange.toString()
+      savedRange.deleteContents()
+      savedRange.insertNode(mark)
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      const highlightHTML = '<mark style="background-color: yellow; padding: 2px 4px;">highlighted text</mark>'
+      insertHTML(highlightHTML)
+    }
   }
 
   const insertSmallText = () => {
-    execCommand('insertHTML', '<small style="font-size: 0.875em;">small text</small>')
+    const savedRange = saveSelection()
+    if (savedRange && !savedRange.collapsed) {
+      const small = document.createElement('small')
+      small.style.fontSize = '0.875em'
+      small.textContent = savedRange.toString()
+      savedRange.deleteContents()
+      savedRange.insertNode(small)
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      const smallHTML = '<small style="font-size: 0.875em;">small text</small>'
+      insertHTML(smallHTML)
+    }
   }
 
   const insertBigText = () => {
-    execCommand('insertHTML', '<big style="font-size: 1.2em;">big text</big>')
+    const savedRange = saveSelection()
+    if (savedRange && !savedRange.collapsed) {
+      const big = document.createElement('big')
+      big.style.fontSize = '1.2em'
+      big.textContent = savedRange.toString()
+      savedRange.deleteContents()
+      savedRange.insertNode(big)
+      restoreSelection(savedRange)
+      updateContent()
+    } else {
+      const bigHTML = '<big style="font-size: 1.2em;">big text</big>'
+      insertHTML(bigHTML)
+    }
   }
 
   const insertTime = () => {
     const time = prompt('Enter time (e.g., 14:30):')
     if (time) {
-      execCommand('insertHTML', `<time datetime="${time}">${time}</time>`)
+      const timeHTML = `<time datetime="${time}">${time}</time>`
+      insertHTML(timeHTML)
     }
   }
 
   const insertAddress = () => {
-    execCommand('insertHTML', '<address style="font-style: italic; margin: 20px 0;">Your address here</address>')
+    const addressHTML = '<address style="font-style: italic; margin: 20px 0;">Your address here</address>'
+    insertHTML(addressHTML)
   }
 
   const insertCite = () => {
     const cite = prompt('Enter citation:')
     if (cite) {
-      execCommand('insertHTML', `<cite style="font-style: italic;">${cite}</cite>`)
+      const citeHTML = `<cite style="font-style: italic;">${cite}</cite>`
+      insertHTML(citeHTML)
     }
   }
 
   const insertDefinition = () => {
     const term = prompt('Enter term:')
     if (term) {
-      execCommand('insertHTML', `<dfn style="font-style: italic; font-weight: bold;">${term}</dfn>`)
+      const defHTML = `<dfn style="font-style: italic; font-weight: bold;">${term}</dfn>`
+      insertHTML(defHTML)
     }
   }
 
   const insertKeyboard = () => {
     const key = prompt('Enter keyboard key:')
     if (key) {
-      execCommand('insertHTML', `<kbd style="background-color: #f4f4f4; border: 1px solid #ccc; border-radius: 3px; padding: 2px 4px; font-family: monospace;">${key}</kbd>`)
+      const kbdHTML = `<kbd style="background-color: #f4f4f4; border: 1px solid #ccc; border-radius: 3px; padding: 2px 4px; font-family: monospace;">${key}</kbd>`
+      insertHTML(kbdHTML)
     }
   }
 
   const insertSample = () => {
     const sample = prompt('Enter sample text:')
     if (sample) {
-      execCommand('insertHTML', `<samp style="font-family: monospace; background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px;">${sample}</samp>`)
+      const sampHTML = `<samp style="font-family: monospace; background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px;">${sample}</samp>`
+      insertHTML(sampHTML)
     }
   }
 
   const insertVariable = () => {
     const variable = prompt('Enter variable name:')
     if (variable) {
-      execCommand('insertHTML', `<var style="font-style: italic;">${variable}</var>`)
+      const varHTML = `<var style="font-style: italic;">${variable}</var>`
+      insertHTML(varHTML)
     }
   }
 
@@ -223,14 +413,16 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     const value = prompt('Enter value (0-100):')
     const max = prompt('Enter max value (default 100):', '100')
     if (value) {
-      execCommand('insertHTML', `<meter value="${value}" max="${max}" style="width: 200px; height: 20px;"></meter>`)
+      const meterHTML = `<meter value="${value}" max="${max}" style="width: 200px; height: 20px;"></meter>`
+      insertHTML(meterHTML)
     }
   }
 
   const insertProgress = () => {
     const value = prompt('Enter progress value (0-100):')
     if (value) {
-      execCommand('insertHTML', `<progress value="${value}" max="100" style="width: 200px; height: 20px;"></progress>`)
+      const progressHTML = `<progress value="${value}" max="100" style="width: 200px; height: 20px;"></progress>`
+      insertHTML(progressHTML)
     }
   }
 
@@ -238,7 +430,8 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     const summary = prompt('Enter summary text:')
     const details = prompt('Enter details text:')
     if (summary && details) {
-      execCommand('insertHTML', `<details style="margin: 20px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"><summary style="cursor: pointer; font-weight: bold;">${summary}</summary><div style="margin-top: 10px;">${details}</div></details>`)
+      const detailsHTML = `<details style="margin: 20px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"><summary style="cursor: pointer; font-weight: bold;">${summary}</summary><div style="margin-top: 10px;">${details}</div></details>`
+      insertHTML(detailsHTML)
     }
   }
 
@@ -249,13 +442,19 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-white border border-gray-300 rounded-t-lg p-2 flex flex-wrap gap-1"
+        style={{ 
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+          backgroundColor: '#f8f9fa'
+        }}
       >
         {/* History */}
         <div className="flex gap-1 mr-2">
           <button
             type="button"
             onClick={undo}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Undo"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,7 +464,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={redo}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Redo"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -279,7 +478,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('bold')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold active:bg-gray-200"
             title="Bold"
           >
             B
@@ -287,7 +486,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('italic')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 italic"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 italic active:bg-gray-200"
             title="Italic"
           >
             I
@@ -295,7 +494,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('underline')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 underline"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 underline active:bg-gray-200"
             title="Underline"
           >
             U
@@ -303,7 +502,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertStrikethrough}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 line-through"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 line-through active:bg-gray-200"
             title="Strikethrough"
           >
             S
@@ -311,7 +510,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertSubscript}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-xs"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-xs active:bg-gray-200"
             title="Subscript"
           >
             x₂
@@ -319,7 +518,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertSuperscript}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-xs"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-xs active:bg-gray-200"
             title="Superscript"
           >
             x²
@@ -327,7 +526,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={clearFormatting}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Clear Formatting"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -341,7 +540,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('formatBlock', '<h1>')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold active:bg-gray-200"
             title="Heading 1"
           >
             H1
@@ -349,7 +548,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('formatBlock', '<h2>')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold active:bg-gray-200"
             title="Heading 2"
           >
             H2
@@ -357,7 +556,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('formatBlock', '<h3>')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold active:bg-gray-200"
             title="Heading 3"
           >
             H3
@@ -365,7 +564,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('formatBlock', '<h4>')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-bold active:bg-gray-200"
             title="Heading 4"
           >
             H4
@@ -373,7 +572,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('formatBlock', '<p>')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Paragraph"
           >
             P
@@ -385,7 +584,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('insertUnorderedList')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Bullet List"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -395,7 +594,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('insertOrderedList')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Numbered List"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -405,7 +604,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertChecklist}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Checklist"
           >
             ☐
@@ -413,7 +612,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertDefinitionList}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Definition List"
           >
             DL
@@ -425,7 +624,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('justifyLeft')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Align Left"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -435,7 +634,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('justifyCenter')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Align Center"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,7 +644,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('justifyRight')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Align Right"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -455,7 +654,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={() => execCommand('justifyFull')}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Justify"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -469,7 +668,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertLink}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Link"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -479,7 +678,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertImage}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Image"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -489,7 +688,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertTable}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Table"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -499,7 +698,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertQuote}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Quote"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -509,7 +708,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertCode}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-mono"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-mono active:bg-gray-200"
             title="Insert Code"
           >
             &lt;/&gt;
@@ -517,7 +716,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertCodeBlock}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-mono"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 font-mono active:bg-gray-200"
             title="Insert Code Block"
           >
             &lt;/&gt;&lt;/&gt;
@@ -525,7 +724,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertDivider}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Divider"
           >
             —
@@ -533,7 +732,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertHorizontalRule}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Horizontal Rule"
           >
             HR
@@ -545,7 +744,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertHighlight}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 bg-yellow-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 bg-yellow-200 active:bg-gray-200"
             title="Highlight"
           >
             H
@@ -553,7 +752,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertSmallText}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-xs"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-xs active:bg-gray-200"
             title="Small Text"
           >
             Small
@@ -561,7 +760,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertBigText}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-lg"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 text-lg active:bg-gray-200"
             title="Big Text"
           >
             Big
@@ -569,7 +768,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertSpecialCharacter}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Special Character"
           >
             ©
@@ -577,7 +776,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertEmoji}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Emoji"
           >
             😊
@@ -585,7 +784,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertTime}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Time"
           >
             🕐
@@ -597,7 +796,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertAddress}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Address"
           >
             📍
@@ -605,7 +804,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertCite}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Citation"
           >
             📚
@@ -613,7 +812,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertDefinition}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Definition"
           >
             📖
@@ -621,7 +820,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertKeyboard}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Keyboard"
           >
             ⌨️
@@ -629,7 +828,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertSample}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Sample"
           >
             💻
@@ -637,7 +836,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertVariable}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Variable"
           >
             x
@@ -649,7 +848,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertMeter}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Meter"
           >
             📊
@@ -657,7 +856,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertProgress}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Progress"
           >
             ⏳
@@ -665,7 +864,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <button
             type="button"
             onClick={insertDetails}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200"
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-200 active:bg-gray-200"
             title="Insert Details"
           >
             📋
@@ -677,13 +876,13 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           <input
             type="color"
             onChange={(e) => execCommand('foreColor', e.target.value)}
-            className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
+            className="w-8 h-8 border border-gray-300 rounded cursor-pointer hover:border-gray-400 transition-colors duration-200"
             title="Text Color"
           />
           <input
             type="color"
             onChange={(e) => execCommand('hiliteColor', e.target.value)}
-            className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
+            className="w-8 h-8 border border-gray-300 rounded cursor-pointer hover:border-gray-400 transition-colors duration-200"
             title="Background Color"
           />
         </div>
@@ -700,7 +899,8 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         className="min-h-[400px] p-4 border border-gray-300 border-t-0 rounded-b-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
         style={{ 
           fontFamily: 'inherit',
-          lineHeight: '1.6'
+          lineHeight: '1.6',
+          backgroundColor: '#ffffff'
         }}
         data-placeholder={placeholder}
       />
@@ -709,6 +909,23 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       <div className="mt-2 text-sm text-gray-500 text-right">
         {value.replace(/<[^>]*>/g, '').length} characters
       </div>
+
+      <style jsx>{`
+        .rich-text-editor [contenteditable]:empty:before {
+          content: attr(data-placeholder);
+          color: #9ca3af;
+          pointer-events: none;
+        }
+        
+        .rich-text-editor button:active {
+          transform: scale(0.95);
+        }
+        
+        .rich-text-editor button:focus {
+          outline: 2px solid #441018;
+          outline-offset: 2px;
+        }
+      `}</style>
     </div>
   )
 } 
