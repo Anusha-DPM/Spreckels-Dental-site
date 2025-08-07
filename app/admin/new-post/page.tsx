@@ -33,6 +33,7 @@ export default function NewPost() {
   const [imagePreview, setImagePreview] = useState<string>('')
   const [firebaseImageUrl, setFirebaseImageUrl] = useState<string>('')
   const [uploadProgress, setUploadProgress] = useState<string>('')
+  const [imageUrl, setImageUrl] = useState<string>('')
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: '',
     slug: '',
@@ -71,47 +72,71 @@ export default function NewPost() {
     }))
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
-        return
-      }
-      
-      // Validate file size (max 10MB before compression)
-      if (file.size > 10 * 1024 * 1024) {
-        alert('Image file is too large. Please select an image smaller than 10MB.')
-        return
-      }
-      
-      console.log('📁 Image selected:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        sizeInMB: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
-      })
-      
-      // Store the file for later upload
-      setUploadedImage(file)
-      
-      // Create preview
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string)
-        setPost(prev => ({
-          ...prev,
-          coverImage: e.target?.result as string
-        }))
-      }
-      reader.readAsDataURL(file)
-    }
-  }
+     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+     const file = event.target.files?.[0]
+     if (file) {
+       // Validate file type
+       if (!file.type.startsWith('image/')) {
+         alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
+         return
+       }
+       
+       // Validate file size (max 10MB before compression)
+       if (file.size > 10 * 1024 * 1024) {
+         alert('Image file is too large. Please select an image smaller than 10MB.')
+         return
+       }
+       
+       console.log('📁 Image selected:', {
+         name: file.name,
+         type: file.type,
+         size: file.size,
+         sizeInMB: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+       })
+       
+       // Clear URL field when uploading a file
+       setImageUrl('')
+       
+       // Store the file for later upload
+       setUploadedImage(file)
+       
+       // Create preview
+       const reader = new FileReader()
+       reader.onload = (e) => {
+         setImagePreview(e.target?.result as string)
+         setPost(prev => ({
+           ...prev,
+           coverImage: e.target?.result as string
+         }))
+       }
+       reader.readAsDataURL(file)
+     }
+   }
 
   const handleTagsChange = (tagsString: string) => {
     const tags = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag)
     setPost(prev => ({ ...prev, tags }))
+  }
+
+  const handleImageUrlChange = (url: string) => {
+    setImageUrl(url)
+    // If user enters a URL, clear the uploaded image
+    if (url.trim()) {
+      setUploadedImage(null)
+      setImagePreview('')
+      setFirebaseImageUrl('')
+      setPost(prev => ({ ...prev, coverImage: url.trim() }))
+    }
+  }
+
+  const validateImageUrl = (url: string) => {
+    if (!url.trim()) return true
+    try {
+      new URL(url)
+      return true
+    } catch {
+      return false
+    }
   }
 
   const handleSave = async () => {
@@ -147,35 +172,47 @@ export default function NewPost() {
         })
       }
       
-                                   // Step 1: Upload image to Firebase Storage FIRST (if provided)
-        let imageUrl = post.coverImage || ''
-        if (uploadedImage) {
+                                          // Step 1: Handle image (either URL or upload)
+       let finalImageUrl = post.coverImage || ''
+       
+       // If user provided an image URL, use it
+       if (imageUrl.trim()) {
+         if (!validateImageUrl(imageUrl)) {
+           setSaveStatus('❌ Invalid image URL format')
+           setIsLoading(false)
+           return
+         }
+         finalImageUrl = imageUrl.trim()
+         console.log('🔗 Using provided image URL:', finalImageUrl)
+       }
+       // If user uploaded an image file, upload to Firebase
+       else if (uploadedImage) {
           setSaveStatus('Processing image...')
           console.log('📤 Starting image processing for file:', uploadedImage.name)
           
-          // Validate file type
-          if (!uploadedImage.type.startsWith('image/')) {
-            console.warn('❌ Invalid file type, using base64 fallback')
-            imageUrl = imagePreview
-            setSaveStatus('⚠️ Invalid file type, using local storage')
-          }
-          else {
+                     // Validate file type
+           if (!uploadedImage.type.startsWith('image/')) {
+             console.warn('❌ Invalid file type, using base64 fallback')
+             finalImageUrl = imagePreview
+             setSaveStatus('⚠️ Invalid file type, using local storage')
+           }
+           else {
                          console.log('✅ File validation passed, uploading to Firebase Storage...')
              setSaveStatus('Uploading image to Firebase Storage...')
              setUploadProgress('Compressing image...')
             
-            try {
-                             console.log('🔥 Step 1: Uploading image to Firebase Storage...')
+                         try {
+               console.log('🔥 Step 1: Uploading image to Firebase Storage...')
                setUploadProgress('Uploading to Firebase Storage...')
                const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
-              imageUrl = uploadResult.url
-                             console.log('✅ Step 1 Complete: Image uploaded to Firebase Storage:', imageUrl)
-               console.log('📊 Compression stats:', {
-                 originalSize: uploadResult.originalSize,
-                 compressedSize: uploadResult.compressedSize,
-                 savings: ((uploadResult.originalSize - uploadResult.compressedSize) / uploadResult.originalSize * 100).toFixed(1) + '%'
-               })
-               setFirebaseImageUrl(imageUrl)
+               finalImageUrl = uploadResult.url
+                                              console.log('✅ Step 1 Complete: Image uploaded to Firebase Storage:', finalImageUrl)
+                 console.log('📊 Compression stats:', {
+                   originalSize: uploadResult.originalSize,
+                   compressedSize: uploadResult.compressedSize,
+                   savings: ((uploadResult.originalSize - uploadResult.compressedSize) / uploadResult.originalSize * 100).toFixed(1) + '%'
+                 })
+                 setFirebaseImageUrl(finalImageUrl)
                setUploadProgress('')
                setSaveStatus('✅ Image uploaded to Firebase Storage successfully!')
                          } catch (firebaseError: any) {
@@ -195,11 +232,11 @@ export default function NewPost() {
                    'Image upload failed due to timeout. Would you like to save the blog post without the image? You can add it later.'
                  )
                  
-                 if (continueWithoutImage) {
-                   console.log('✅ User chose to continue without image')
-                   imageUrl = '' // No image URL
-                   setSaveStatus('Continuing without image...')
-                 } else {
+                                   if (continueWithoutImage) {
+                    console.log('✅ User chose to continue without image')
+                    finalImageUrl = '' // No image URL
+                    setSaveStatus('Continuing without image...')
+                  } else {
                    setSaveStatus('❌ Image upload failed. Please try with a smaller image.')
                    setIsLoading(false)
                    return // Stop here - don't save blog post
@@ -214,13 +251,13 @@ export default function NewPost() {
           }
         }
 
-                     // Step 2: Save blog post to Firestore with Firebase Storage URL
-        const blogData = {
-          title: post.title.trim(),
-          content: post.content.trim(),
-          excerpt: post.excerpt?.trim() || '',
-          coverImage: imageUrl, // This is now the Firebase Storage URL
-          imageUrl: imageUrl, // Firebase Storage URL
+                              // Step 2: Save blog post to Firestore with final image URL
+         const blogData = {
+           title: post.title.trim(),
+           content: post.content.trim(),
+           excerpt: post.excerpt?.trim() || '',
+           coverImage: finalImageUrl, // This is now the final image URL (Firebase or external)
+           imageUrl: finalImageUrl, // Final image URL
           tags: post.tags || [],
           category: 'General Dentistry', // Default category
           author: 'Admin', // Default author
@@ -232,8 +269,8 @@ export default function NewPost() {
           publishDate: post.publishDate || new Date().toISOString()
         }
 
-        console.log('📝 Step 2: Saving blog post to Firestore with Firebase Storage URL')
-        console.log('🔗 Image URL being saved:', imageUrl)
+                 console.log('📝 Step 2: Saving blog post to Firestore with final image URL')
+         console.log('🔗 Image URL being saved:', finalImageUrl)
         console.log('📊 Blog data to save:', blogData)
         setSaveStatus('Saving blog post to Firestore...')
         
@@ -439,33 +476,61 @@ export default function NewPost() {
                <label className="block text-sm font-medium text-gray-700 mb-2">
                  Cover Image
                </label>
-               {imagePreview ? (
+               
+               {/* Image URL Field */}
+               <div className="mb-4">
+                 <label className="block text-sm font-medium text-gray-700 mb-2">
+                   Blog Image URL
+                 </label>
+                 <input
+                   type="url"
+                   value={imageUrl}
+                   onChange={(e) => handleImageUrlChange(e.target.value)}
+                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
+                   placeholder="https://example.com/image.jpg"
+                 />
+                 <p className="text-xs text-gray-500 mt-1">
+                   Enter a direct URL to an image (e.g., from Unsplash, your website, etc.)
+                 </p>
+               </div>
+               
+               <div className="text-center text-sm text-gray-500 mb-4">- OR -</div>
+               {(imagePreview || imageUrl) ? (
                  <div className="mb-4">
                    <Image
-                     src={imagePreview}
+                     src={imageUrl || imagePreview}
                      alt="Cover preview"
                      width={300}
                      height={200}
                      className="w-full h-48 object-cover rounded-lg"
                    />
                    
-                   {/* Image Info */}
+                                      {/* Image Info */}
                    {uploadedImage && (
                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
                        <div className="text-xs text-gray-600 space-y-1">
                          <div><strong>File:</strong> {uploadedImage.name}</div>
                          <div><strong>Type:</strong> {uploadedImage.type}</div>
                          <div><strong>Size:</strong> {(uploadedImage.size / (1024 * 1024)).toFixed(2)} MB</div>
-                                                   {firebaseImageUrl ? (
-                            <>
-                              <div><strong>Status:</strong> <span className="text-green-600">✅ Uploaded to Firebase Storage</span></div>
-                              <div><strong>Firebase URL:</strong> <span className="text-blue-600 break-all">{firebaseImageUrl}</span></div>
-                            </>
-                          ) : uploadProgress ? (
-                            <div><strong>Status:</strong> <span className="text-yellow-600">⏳ {uploadProgress}</span></div>
-                          ) : (
-                            <div><strong>Status:</strong> <span className="text-blue-600">Ready to upload to Firebase Storage</span></div>
-                          )}
+                         {firebaseImageUrl ? (
+                           <>
+                             <div><strong>Status:</strong> <span className="text-green-600">✅ Uploaded to Firebase Storage</span></div>
+                             <div><strong>Firebase URL:</strong> <span className="text-blue-600 break-all">{firebaseImageUrl}</span></div>
+                           </>
+                         ) : uploadProgress ? (
+                           <div><strong>Status:</strong> <span className="text-yellow-600">⏳ {uploadProgress}</span></div>
+                         ) : (
+                           <div><strong>Status:</strong> <span className="text-blue-600">Ready to upload to Firebase Storage</span></div>
+                         )}
+                       </div>
+                     </div>
+                   )}
+                   
+                   {imageUrl && !uploadedImage && (
+                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                       <div className="text-xs text-gray-600 space-y-1">
+                         <div><strong>Source:</strong> <span className="text-green-600">External URL</span></div>
+                         <div><strong>URL:</strong> <span className="text-blue-600 break-all">{imageUrl}</span></div>
                        </div>
                      </div>
                    )}
@@ -475,6 +540,7 @@ export default function NewPost() {
                        setImagePreview('')
                        setUploadedImage(null)
                        setFirebaseImageUrl('')
+                       setImageUrl('')
                        setPost(prev => ({ ...prev, coverImage: '' }))
                      }}
                      className="mt-2 text-red-600 hover:text-red-800 text-sm"
