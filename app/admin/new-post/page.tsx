@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import RichTextEditor from '../../../components/RichTextEditor'
+import SimpleTextEditor from '../../../components/SimpleTextEditor'
+import ErrorBoundary from '../../../components/ErrorBoundary'
 import { createBlogPost, generateSlug } from '../../../lib/blogDatabase'
 
 // Define BlogPost type locally since it's not exported from the JS file
@@ -48,6 +50,7 @@ export default function NewPost() {
   const [success, setSuccess] = useState('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState('')
+  const [useSimpleEditor, setUseSimpleEditor] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -203,11 +206,57 @@ export default function NewPost() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Content *
             </label>
-            <RichTextEditor
-              value={formData.content}
-              onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
-              placeholder="Start writing your blog post..."
-            />
+            {!useSimpleEditor ? (
+              <div className="border border-gray-300 rounded-lg">
+                <ErrorBoundary
+                  fallback={
+                    <div className="p-4 text-center">
+                      <p className="text-red-600 mb-2">Rich text editor failed to load</p>
+                      <button
+                        onClick={() => setUseSimpleEditor(true)}
+                        className="text-blue-600 hover:text-blue-800 underline"
+                      >
+                        Switch to simple editor
+                      </button>
+                    </div>
+                  }
+                >
+                  <RichTextEditor
+                    value={formData.content}
+                    onChange={(value) => {
+                      try {
+                        setFormData(prev => ({ ...prev, content: value }))
+                      } catch (err) {
+                        console.error('Error updating content:', err)
+                        setError('Error updating content. Please try again.')
+                        setUseSimpleEditor(true)
+                      }
+                    }}
+                    placeholder="Start writing your blog post..."
+                  />
+                </ErrorBoundary>
+              </div>
+            ) : (
+              <div>
+                <SimpleTextEditor
+                  value={formData.content}
+                  onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                  placeholder="Start writing your blog post..."
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Using simple text editor. You can use HTML tags for formatting.
+                </p>
+              </div>
+            )}
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => setUseSimpleEditor(!useSimpleEditor)}
+                className="text-sm text-blue-600 hover:text-blue-800 underline"
+              >
+                {useSimpleEditor ? 'Switch to Rich Editor' : 'Switch to Simple Editor'}
+              </button>
+            </div>
           </div>
 
           {/* Excerpt */}
