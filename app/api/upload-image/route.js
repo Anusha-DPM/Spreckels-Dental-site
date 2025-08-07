@@ -22,7 +22,7 @@ if (!getApps().length) {
 
 const storage = getStorage(app)
 
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   try {
     const formData = await request.formData()
     const file = formData.get('file')
