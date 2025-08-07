@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
 import { createBlogPost } from '@/lib/blogDatabase'
-import { uploadImageToFirebase } from '@/lib/firebase'
+import { uploadImageToFirebase, testFirebaseStorage } from '@/lib/firebase'
 
 interface BlogPost {
   id: string
@@ -126,31 +126,48 @@ export default function NewPost() {
         })
       }
       
-      // Upload image to Firebase Storage if provided
-      let imageUrl = post.coverImage || ''
-      if (uploadedImage) {
-        setSaveStatus('Uploading image to Firebase Storage...')
-        try {
-          // Validate file size (max 5MB)
-          if (uploadedImage.size > 5 * 1024 * 1024) {
-            throw new Error('Image file size must be less than 5MB')
-          }
-          
-          // Validate file type
-          if (!uploadedImage.type.startsWith('image/')) {
-            throw new Error('File must be an image')
-          }
-          
-          const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
-          imageUrl = uploadResult.url
-          console.log('✅ Image uploaded successfully:', imageUrl)
-          setSaveStatus('✅ Image uploaded successfully!')
-        } catch (uploadError: any) {
-          console.error('Image upload failed:', uploadError)
-          setSaveStatus(`❌ Image upload failed: ${uploadError?.message || 'Unknown error'}. Saving post without image...`)
-          // Continue without image
-        }
-      }
+             // Upload image to Firebase Storage if provided
+       let imageUrl = post.coverImage || ''
+       if (uploadedImage) {
+         setSaveStatus('Uploading image to Firebase Storage...')
+         console.log('📤 Starting image upload for file:', uploadedImage.name)
+         
+         try {
+           // Validate file size (max 5MB)
+           if (uploadedImage.size > 5 * 1024 * 1024) {
+             throw new Error('Image file size must be less than 5MB')
+           }
+           
+           // Validate file type
+           if (!uploadedImage.type.startsWith('image/')) {
+             throw new Error('File must be an image')
+           }
+           
+                       console.log('✅ File validation passed, uploading to Firebase...')
+            
+            // Try to upload to Firebase Storage
+            try {
+              const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
+              imageUrl = uploadResult.url
+              console.log('✅ Image uploaded successfully:', imageUrl)
+              setSaveStatus('✅ Image uploaded successfully!')
+            } catch (firebaseError: any) {
+              console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
+              // Fallback to base64 if Firebase Storage fails
+              imageUrl = imagePreview
+              setSaveStatus('⚠️ Using local image storage (Firebase Storage unavailable)')
+            }
+         } catch (uploadError: any) {
+           console.error('❌ Image upload failed:', uploadError)
+           console.error('Upload error details:', {
+             message: uploadError?.message,
+             code: uploadError?.code,
+             stack: uploadError?.stack
+           })
+           setSaveStatus(`❌ Image upload failed: ${uploadError?.message || 'Unknown error'}. Saving post without image...`)
+           // Continue without image
+         }
+       }
 
       // Prepare data for Firebase
       const blogData = {
@@ -196,6 +213,25 @@ export default function NewPost() {
     await handleSave()
   }
 
+  const handleTestFirebase = async () => {
+    console.log('🧪 Testing Firebase Storage...')
+    setSaveStatus('Testing Firebase Storage...')
+    
+    try {
+      const result = await testFirebaseStorage()
+      if (result.success) {
+        setSaveStatus('✅ Firebase Storage test successful!')
+        console.log('✅ Firebase Storage is working correctly')
+      } else {
+        setSaveStatus(`❌ Firebase Storage test failed: ${result.error}`)
+        console.error('❌ Firebase Storage test failed:', result.error)
+      }
+    } catch (error: any) {
+      setSaveStatus(`❌ Test error: ${error.message}`)
+      console.error('❌ Test error:', error)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -218,27 +254,33 @@ export default function NewPost() {
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              {saveStatus && (
-                <div className="text-sm px-3 py-1 rounded bg-blue-100 text-blue-800">
-                  {saveStatus}
-                </div>
-              )}
-              <button
-                onClick={handleSave}
-                disabled={isLoading}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
-              >
-                {isLoading ? 'Saving...' : 'Save Draft'}
-              </button>
-              <button
-                onClick={handlePublish}
-                disabled={isLoading}
-                className="bg-[#441018] text-white px-4 py-2 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-medium disabled:opacity-50"
-              >
-                {isLoading ? 'Publishing...' : 'Publish'}
-              </button>
-            </div>
+                         <div className="flex items-center space-x-4">
+               {saveStatus && (
+                 <div className="text-sm px-3 py-1 rounded bg-blue-100 text-blue-800">
+                   {saveStatus}
+                 </div>
+               )}
+               <button
+                 onClick={handleTestFirebase}
+                 className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
+               >
+                 Test Firebase
+               </button>
+               <button
+                 onClick={handleSave}
+                 disabled={isLoading}
+                 className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
+               >
+                 {isLoading ? 'Saving...' : 'Save Draft'}
+               </button>
+               <button
+                 onClick={handlePublish}
+                 disabled={isLoading}
+                 className="bg-[#441018] text-white px-4 py-2 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-medium disabled:opacity-50"
+               >
+                 {isLoading ? 'Publishing...' : 'Publish'}
+               </button>
+             </div>
           </div>
         </div>
       </header>
