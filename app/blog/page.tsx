@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import Layout from '../../components/Layout'
 import { getPublishedBlogPosts } from '../../lib/blogDatabase'
 
 // Define BlogPost type locally since it's not exported from the JS file
@@ -50,19 +51,23 @@ export default function BlogPage() {
         console.warn('Firebase not available, checking localStorage:', firebaseError)
       }
       
-      // Fallback to localStorage if Firebase fails
-      try {
-        const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
-        const publishedPosts = localPosts.filter((post: any) => post.published)
-        setPosts(publishedPosts.map((post: any) => post as BlogPost))
-        
-        if (publishedPosts.length === 0) {
-          setError('No blog posts found. Please create some posts in the admin dashboard.')
-        }
-      } catch (localError) {
-        console.error('Error loading from localStorage:', localError)
-        setError('Failed to load blog posts from local storage')
-      }
+             // Fallback to localStorage if Firebase fails
+       try {
+         const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+         console.log('Found local posts:', localPosts)
+         
+         const publishedPosts = localPosts.filter((post: any) => post.published)
+         console.log('Published posts:', publishedPosts)
+         
+         setPosts(publishedPosts.map((post: any) => post as BlogPost))
+         
+         if (publishedPosts.length === 0) {
+           setError('No published blog posts found. Please create and publish some posts in the admin dashboard.')
+         }
+       } catch (localError) {
+         console.error('Error loading from localStorage:', localError)
+         setError('Failed to load blog posts from local storage')
+       }
     } catch (err) {
       setError('Failed to load blog posts')
       console.error(err)
@@ -105,7 +110,8 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <Layout>
+      <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <motion.section 
         className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white py-20"
@@ -318,8 +324,9 @@ export default function BlogPage() {
               Subscribe
             </button>
           </div>
-        </div>
-      </motion.section>
-    </div>
-  )
-}
+                 </div>
+       </motion.section>
+       </div>
+     </Layout>
+   )
+ }

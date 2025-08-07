@@ -89,7 +89,22 @@ export default function AdminDashboard() {
 
   const handleDeletePost = async (postId: string) => {
     try {
-      await deleteBlogPost(postId)
+      // Try Firebase first
+      try {
+        await deleteBlogPost(postId)
+      } catch (firebaseError) {
+        console.warn('Firebase delete failed, using localStorage:', firebaseError)
+      }
+      
+      // Update localStorage
+      try {
+        const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+        const updatedPosts = localPosts.filter((post: any) => post.id !== postId)
+        localStorage.setItem('tempBlogPosts', JSON.stringify(updatedPosts))
+      } catch (localError) {
+        console.error('Error updating localStorage:', localError)
+      }
+      
       setPosts(posts.filter(post => post.id !== postId))
       setShowDeleteModal(false)
       setSelectedPost(null)
@@ -102,10 +117,29 @@ export default function AdminDashboard() {
   const handlePublishPost = async (post: BlogPost) => {
     try {
       const publishDate = new Date().toISOString()
-      await updateBlogPost(post.id!, {
-        published: true,
-        publishDate: publishDate
-      })
+      
+      // Try Firebase first
+      try {
+        await updateBlogPost(post.id!, {
+          published: true,
+          publishDate: publishDate
+        })
+      } catch (firebaseError) {
+        console.warn('Firebase update failed, using localStorage:', firebaseError)
+      }
+      
+      // Update localStorage
+      try {
+        const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+        const updatedPosts = localPosts.map((p: any) => 
+          p.id === post.id 
+            ? { ...p, published: true, publishDate: publishDate }
+            : p
+        )
+        localStorage.setItem('tempBlogPosts', JSON.stringify(updatedPosts))
+      } catch (localError) {
+        console.error('Error updating localStorage:', localError)
+      }
       
       setPosts(posts.map(p => 
         p.id === post.id 

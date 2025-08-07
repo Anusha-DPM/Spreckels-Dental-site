@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import Layout from '../../../components/Layout'
 import { getBlogPostBySlug, getPublishedBlogPosts } from '../../../lib/blogDatabase'
 
 // Define BlogPost type locally since it's not exported from the JS file
@@ -78,35 +79,40 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#441018] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading blog post...</p>
+      <Layout>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#441018] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading blog post...</p>
+          </div>
         </div>
-      </div>
+      </Layout>
     )
   }
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-600 text-6xl mb-4">❌</div>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-2">Post Not Found</h3>
-          <p className="text-gray-500 mb-6">{error || 'The blog post you are looking for does not exist.'}</p>
-          <Link
-            href="/blog"
-            className="bg-[#441018] text-white px-6 py-3 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200"
-          >
+      <Layout>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-600 text-6xl mb-4">❌</div>
+            <h3 className="text-2xl font-semibold text-gray-900 mb-2">Post Not Found</h3>
+            <p className="text-gray-500 mb-6">{error || 'The blog post you are looking for does not exist.'}</p>
+            <Link
+              href="/blog"
+              className="bg-[#441018] text-white px-6 py-3 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200"
+            >
             Back to Blog
           </Link>
         </div>
       </div>
+    </Layout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <Layout>
+      <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <motion.section 
         className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white py-20"
@@ -344,6 +350,7 @@ export default function BlogPostPage() {
           </div>
         </div>
       </motion.section>
-    </div>
+      </div>
+    </Layout>
   )
 }
