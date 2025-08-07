@@ -10,6 +10,15 @@ interface RichTextEditorProps {
   className?: string
 }
 
+interface ToolbarButton {
+  label?: string
+  icon?: string
+  command?: string
+  value?: string
+  custom?: boolean
+  type?: 'separator'
+}
+
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
   value,
   onChange,
@@ -61,7 +70,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     }
   }
 
-  const toolbarButtons = [
+  const toolbarButtons: ToolbarButton[] = [
     { label: 'Bold', icon: 'B', command: 'bold' },
     { label: 'Italic', icon: 'I', command: 'italic' },
     { label: 'Underline', icon: 'U', command: 'underline' },
@@ -117,7 +126,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                   }
                 } else if (button.command === 'formatBlock') {
                   formatBlock(button.value!)
-                } else {
+                } else if (button.command) {
                   execCommand(button.command)
                 }
               }}
