@@ -40,8 +40,29 @@ export default function BlogPage() {
   const loadPosts = async () => {
     try {
       setLoading(true)
-      const fetchedPosts = await getPublishedBlogPosts()
-      setPosts(fetchedPosts.map(post => post as BlogPost))
+      
+      // Try to get posts from Firebase first
+      try {
+        const fetchedPosts = await getPublishedBlogPosts()
+        setPosts(fetchedPosts.map(post => post as BlogPost))
+        return
+      } catch (firebaseError) {
+        console.warn('Firebase not available, checking localStorage:', firebaseError)
+      }
+      
+      // Fallback to localStorage if Firebase fails
+      try {
+        const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+        const publishedPosts = localPosts.filter((post: any) => post.published)
+        setPosts(publishedPosts.map((post: any) => post as BlogPost))
+        
+        if (publishedPosts.length === 0) {
+          setError('No blog posts found. Please create some posts in the admin dashboard.')
+        }
+      } catch (localError) {
+        console.error('Error loading from localStorage:', localError)
+        setError('Failed to load blog posts from local storage')
+      }
     } catch (err) {
       setError('Failed to load blog posts')
       console.error(err)

@@ -43,8 +43,28 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
   const loadPosts = async () => {
     try {
       setLoading(true)
-      const fetchedPosts = await getLatestBlogPosts(limit)
-      setPosts(fetchedPosts.map(post => post as BlogPost))
+      
+      // Try to get posts from Firebase first
+      try {
+        const fetchedPosts = await getLatestBlogPosts(limit)
+        setPosts(fetchedPosts.map(post => post as BlogPost))
+        return
+      } catch (firebaseError) {
+        console.warn('Firebase not available, checking localStorage:', firebaseError)
+      }
+      
+      // Fallback to localStorage if Firebase fails
+      try {
+        const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+        const publishedPosts = localPosts
+          .filter((post: any) => post.published)
+          .sort((a: any, b: any) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
+          .slice(0, limit)
+        setPosts(publishedPosts.map((post: any) => post as BlogPost))
+      } catch (localError) {
+        console.error('Error loading from localStorage:', localError)
+        setError('Failed to load blog posts from local storage')
+      }
     } catch (err) {
       setError('Failed to load blog posts')
       console.error(err)
