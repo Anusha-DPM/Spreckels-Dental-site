@@ -35,6 +35,7 @@ export default function BlogPostPage() {
   const [post, setPost] = useState<BlogPost | null>(null)
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
     const loadPost = async () => {
@@ -100,6 +101,30 @@ export default function BlogPostPage() {
       month: 'long',
       day: 'numeric'
     })
+  }
+
+  // Sanitize HTML content to prevent React errors
+  const sanitizeHTML = (html: string) => {
+    if (!html || typeof html !== 'string') return ''
+    
+    try {
+      // Remove any script tags and potentially dangerous content
+      const sanitized = html
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+        .replace(/javascript:/gi, '')
+        .replace(/on\w+\s*=/gi, '')
+        .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+        .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
+        .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '')
+        .replace(/<input\b[^>]*>/gi, '')
+        .replace(/<button\b[^<]*(?:(?!<\/button>)<[^<]*)*<\/button>/gi, '')
+      
+      return sanitized
+    } catch (error) {
+      console.warn('Error sanitizing HTML:', error)
+      return html.replace(/<[^>]*>/g, '') // Strip all HTML tags if sanitization fails
+    }
   }
 
   if (isLoading) {
@@ -207,8 +232,29 @@ export default function BlogPostPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          >
+            {post.content ? (
+              <div 
+                dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
+                onError={(e) => {
+                  console.error('Error rendering blog content:', e)
+                  setHasError(true)
+                  // Fallback to plain text if HTML rendering fails
+                  e.target.innerHTML = post.content.replace(/<[^>]*>/g, '')
+                }}
+              />
+            ) : (
+              <p className="text-gray-500 italic">No content available.</p>
+            )}
+            
+            {hasError && (
+              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-yellow-800 text-sm">
+                  ⚠️ There was an issue rendering some content. The post has been displayed with simplified formatting.
+                </p>
+              </div>
+            )}
+          </motion.div>
         </div>
       </section>
 
