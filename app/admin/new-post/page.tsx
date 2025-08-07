@@ -34,6 +34,7 @@ export default function NewPost() {
   const [firebaseImageUrl, setFirebaseImageUrl] = useState<string>('')
   const [uploadProgress, setUploadProgress] = useState<string>('')
   const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageLoading, setImageLoading] = useState<boolean>(false)
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: '',
     slug: '',
@@ -125,7 +126,10 @@ export default function NewPost() {
       setUploadedImage(null)
       setImagePreview('')
       setFirebaseImageUrl('')
+      setImageLoading(true)
       setPost(prev => ({ ...prev, coverImage: url.trim() }))
+    } else {
+      setImageLoading(false)
     }
   }
 
@@ -137,6 +141,25 @@ export default function NewPost() {
     } catch {
       return false
     }
+  }
+
+  const testImageUrl = async (url: string) => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' })
+      return response.ok
+    } catch (error) {
+      console.error('Error testing image URL:', error)
+      return false
+    }
+  }
+
+  const getImageWithProxy = (url: string) => {
+    // For CORS issues, we can use a proxy service
+    // This is a simple approach - in production you might want to use your own proxy
+    if (url.startsWith('http')) {
+      return `https://images.weserv.nl/?url=${encodeURIComponent(url)}`
+    }
+    return url
   }
 
   const handleSave = async () => {
@@ -482,27 +505,72 @@ export default function NewPost() {
                  <label className="block text-sm font-medium text-gray-700 mb-2">
                    Blog Image URL
                  </label>
-                 <input
-                   type="url"
-                   value={imageUrl}
-                   onChange={(e) => handleImageUrlChange(e.target.value)}
-                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
-                   placeholder="https://example.com/image.jpg"
-                 />
-                 <p className="text-xs text-gray-500 mt-1">
-                   Enter a direct URL to an image (e.g., from Unsplash, your website, etc.)
-                 </p>
+                                   <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => handleImageUrlChange(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  <div className="text-xs text-gray-400 mt-1">
+                    Examples: Unsplash, Pexels, your website, or any direct image URL
+                  </div>
+                                   <div className="flex items-center gap-2 mt-1">
+                    <p className="text-xs text-gray-500">
+                      Enter a direct URL to an image (e.g., from Unsplash, your website, etc.)
+                    </p>
+                    {imageUrl.trim() && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setSaveStatus('Testing image URL...')
+                          const isValid = await testImageUrl(imageUrl)
+                          if (isValid) {
+                            setSaveStatus('✅ Image URL is accessible')
+                          } else {
+                            setSaveStatus('❌ Image URL is not accessible')
+                          }
+                          setTimeout(() => setSaveStatus(''), 3000)
+                        }}
+                        className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                      >
+                        Test URL
+                      </button>
+                    )}
+                  </div>
                </div>
                
                <div className="text-center text-sm text-gray-500 mb-4">- OR -</div>
                {(imagePreview || imageUrl) ? (
                  <div className="mb-4">
+                   {imageLoading && imageUrl && (
+                     <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+                       <div className="text-gray-500 text-sm">Loading image...</div>
+                     </div>
+                   )}
                    <Image
-                     src={imageUrl || imagePreview}
+                     src={imageUrl ? getImageWithProxy(imageUrl) : imagePreview}
                      alt="Cover preview"
                      width={300}
                      height={200}
-                     className="w-full h-48 object-cover rounded-lg"
+                     className={`w-full h-48 object-cover rounded-lg ${imageLoading && imageUrl ? 'hidden' : ''}`}
+                     onLoad={() => {
+                       if (imageUrl) {
+                         setImageLoading(false)
+                       }
+                     }}
+                     onError={(e) => {
+                       console.error('Image failed to load:', imageUrl || imagePreview)
+                       setImageLoading(false)
+                       // Fallback to a placeholder or show error
+                       const target = e.target as HTMLImageElement
+                       target.style.display = 'none'
+                       // Show error message
+                       const errorDiv = document.createElement('div')
+                       errorDiv.className = 'w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 text-sm'
+                       errorDiv.innerHTML = '❌ Image failed to load<br><span class="text-xs">Check URL or try a different image</span>'
+                       target.parentNode?.appendChild(errorDiv)
+                     }}
                    />
                    
                                       {/* Image Info */}
