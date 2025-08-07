@@ -7,9 +7,28 @@ import Link from 'next/link'
 import { 
   getBlogPosts, 
   deleteBlogPost, 
-  updateBlogPost,
-  type BlogPost 
+  updateBlogPost
 } from '../../../lib/blogDatabase'
+
+// Define BlogPost type locally since it's not exported from the JS file
+interface BlogPost {
+  id?: string
+  title: string
+  content: string
+  excerpt?: string
+  coverImage?: string
+  imageUrl?: string
+  tags: string[]
+  categories: string[]
+  metaTitle: string
+  metaDescription: string
+  slug: string
+  published: boolean
+  publishDate: string
+  createdAt: string
+  updatedAt: string
+  author?: string
+}
 import { uploadImageToFirebase } from '../../../lib/firebase'
 
 export default function AdminDashboard() {

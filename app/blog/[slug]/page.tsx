@@ -5,7 +5,27 @@ import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getBlogPostBySlug, getPublishedBlogPosts, type BlogPost } from '../../../lib/blogDatabase'
+import { getBlogPostBySlug, getPublishedBlogPosts } from '../../../lib/blogDatabase'
+
+// Define BlogPost type locally since it's not exported from the JS file
+interface BlogPost {
+  id?: string
+  title: string
+  content: string
+  excerpt?: string
+  coverImage?: string
+  imageUrl?: string
+  tags: string[]
+  categories: string[]
+  metaTitle: string
+  metaDescription: string
+  slug: string
+  published: boolean
+  publishDate: string
+  createdAt: string
+  updatedAt: string
+  author?: string
+}
 
 export default function BlogPostPage() {
   const [post, setPost] = useState<BlogPost | null>(null)

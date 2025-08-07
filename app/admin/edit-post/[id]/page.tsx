@@ -5,7 +5,27 @@ import { useRouter, useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import RichTextEditor from '../../../../components/RichTextEditor'
-import { getBlogPostById, updateBlogPost, generateSlug, type BlogPost } from '../../../../lib/blogDatabase'
+import { getBlogPostById, updateBlogPost, generateSlug } from '../../../../lib/blogDatabase'
+
+// Define BlogPost type locally since it's not exported from the JS file
+interface BlogPost {
+  id?: string
+  title: string
+  content: string
+  excerpt?: string
+  coverImage?: string
+  imageUrl?: string
+  tags: string[]
+  categories: string[]
+  metaTitle: string
+  metaDescription: string
+  slug: string
+  published: boolean
+  publishDate: string
+  createdAt: string
+  updatedAt: string
+  author?: string
+}
 import { uploadImageToFirebase } from '../../../../lib/firebase'
 
 export default function EditPost() {
