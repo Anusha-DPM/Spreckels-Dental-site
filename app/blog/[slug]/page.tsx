@@ -234,15 +234,18 @@ export default function BlogPostPage() {
             className="prose prose-lg max-w-none"
           >
             {post.content ? (
-              <div 
-                dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
-                onError={(e) => {
-                  console.error('Error rendering blog content:', e)
-                  setHasError(true)
-                  // Fallback to plain text if HTML rendering fails
-                  e.target.innerHTML = post.content.replace(/<[^>]*>/g, '')
-                }}
-              />
+                             <div 
+                 dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
+                 onError={(e) => {
+                   console.error('Error rendering blog content:', e)
+                   setHasError(true)
+                   // Fallback to plain text if HTML rendering fails
+                   const target = e.target as HTMLDivElement
+                   if (target && post.content) {
+                     target.innerHTML = post.content.replace(/<[^>]*>/g, '')
+                   }
+                 }}
+               />
             ) : (
               <p className="text-gray-500 italic">No content available.</p>
             )}
