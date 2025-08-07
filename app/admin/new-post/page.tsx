@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
 import { createBlogPost } from '@/lib/blogDatabase'
+import { uploadImageToFirebase } from '@/lib/firebase'
 
 interface BlogPost {
   id: string
@@ -28,6 +29,8 @@ export default function NewPost() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [saveStatus, setSaveStatus] = useState('')
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>('')
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: '',
     slug: '',
@@ -69,8 +72,13 @@ export default function NewPost() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
+      // Store the file for later upload
+      setUploadedImage(file)
+      
+      // Create preview
       const reader = new FileReader()
       reader.onload = (e) => {
+        setImagePreview(e.target?.result as string)
         setPost(prev => ({
           ...prev,
           coverImage: e.target?.result as string
@@ -118,13 +126,39 @@ export default function NewPost() {
         })
       }
       
+      // Upload image to Firebase Storage if provided
+      let imageUrl = post.coverImage || ''
+      if (uploadedImage) {
+        setSaveStatus('Uploading image to Firebase Storage...')
+        try {
+          // Validate file size (max 5MB)
+          if (uploadedImage.size > 5 * 1024 * 1024) {
+            throw new Error('Image file size must be less than 5MB')
+          }
+          
+          // Validate file type
+          if (!uploadedImage.type.startsWith('image/')) {
+            throw new Error('File must be an image')
+          }
+          
+          const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
+          imageUrl = uploadResult.url
+          console.log('✅ Image uploaded successfully:', imageUrl)
+          setSaveStatus('✅ Image uploaded successfully!')
+        } catch (uploadError: any) {
+          console.error('Image upload failed:', uploadError)
+          setSaveStatus(`❌ Image upload failed: ${uploadError?.message || 'Unknown error'}. Saving post without image...`)
+          // Continue without image
+        }
+      }
+
       // Prepare data for Firebase
       const blogData = {
         title: post.title.trim(),
         content: post.content.trim(),
         excerpt: post.excerpt?.trim() || '',
-        coverImage: post.coverImage || '',
-        imageUrl: post.coverImage || '', // Firebase uses imageUrl
+        coverImage: imageUrl,
+        imageUrl: imageUrl, // Firebase uses imageUrl
         tags: post.tags || [],
         category: 'General Dentistry', // Default category
         author: 'Admin', // Default author
@@ -267,17 +301,21 @@ export default function NewPost() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Cover Image
               </label>
-              {post.coverImage ? (
+              {imagePreview ? (
                 <div className="mb-4">
                   <Image
-                    src={post.coverImage}
+                    src={imagePreview}
                     alt="Cover preview"
                     width={300}
                     height={200}
                     className="w-full h-48 object-cover rounded-lg"
                   />
                   <button
-                    onClick={() => setPost(prev => ({ ...prev, coverImage: '' }))}
+                    onClick={() => {
+                      setImagePreview('')
+                      setUploadedImage(null)
+                      setPost(prev => ({ ...prev, coverImage: '' }))
+                    }}
                     className="mt-2 text-red-600 hover:text-red-800 text-sm"
                   >
                     Remove Image
