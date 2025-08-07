@@ -165,15 +165,14 @@ export default function AdminDashboard() {
   const handleDeletePost = async (postId: string) => {
     if (confirm('Are you sure you want to delete this post?')) {
       try {
-        // Delete from Firebase
+        // Delete from Firebase and localStorage
         await deleteBlogPost(postId)
         
         // Update local state
         const updatedPosts = posts.filter(post => post.id !== postId)
         setPosts(updatedPosts)
         
-        // Also update localStorage
-        localStorage.setItem('blogPosts', JSON.stringify(updatedPosts))
+        alert('Post deleted successfully!')
       } catch (error) {
         console.error('Error deleting post:', error)
         alert('Error deleting post. Please try again.')
@@ -191,7 +190,7 @@ export default function AdminDashboard() {
           updatedAt: new Date().toISOString()
         }
         
-        // Update in Firebase
+        // Update in Firebase and localStorage
         await updateBlogPost(postId, updateData)
         
         // Update local state
@@ -201,9 +200,6 @@ export default function AdminDashboard() {
             : post
         )
         setPosts(updatedPosts)
-        
-        // Also update localStorage
-        localStorage.setItem('blogPosts', JSON.stringify(updatedPosts))
         
         alert('Post published successfully!')
       } catch (error) {
