@@ -32,6 +32,7 @@ export default function NewPost() {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>('')
   const [firebaseImageUrl, setFirebaseImageUrl] = useState<string>('')
+  const [uploadProgress, setUploadProgress] = useState<string>('')
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: '',
     slug: '',
@@ -159,12 +160,14 @@ export default function NewPost() {
             setSaveStatus('⚠️ Invalid file type, using local storage')
           }
           else {
-            console.log('✅ File validation passed, uploading to Firebase Storage...')
-            setSaveStatus('Uploading image to Firebase Storage...')
+                         console.log('✅ File validation passed, uploading to Firebase Storage...')
+             setSaveStatus('Uploading image to Firebase Storage...')
+             setUploadProgress('Compressing image...')
             
             try {
-              console.log('🔥 Step 1: Uploading image to Firebase Storage...')
-              const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
+                             console.log('🔥 Step 1: Uploading image to Firebase Storage...')
+               setUploadProgress('Uploading to Firebase Storage...')
+               const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
               imageUrl = uploadResult.url
                              console.log('✅ Step 1 Complete: Image uploaded to Firebase Storage:', imageUrl)
                console.log('📊 Compression stats:', {
@@ -173,19 +176,41 @@ export default function NewPost() {
                  savings: ((uploadResult.originalSize - uploadResult.compressedSize) / uploadResult.originalSize * 100).toFixed(1) + '%'
                })
                setFirebaseImageUrl(imageUrl)
+               setUploadProgress('')
                setSaveStatus('✅ Image uploaded to Firebase Storage successfully!')
-            } catch (firebaseError: any) {
-              console.error('❌ Firebase Storage upload failed:', firebaseError.message)
-              console.error('Firebase error details:', {
-                code: firebaseError.code,
-                message: firebaseError.message,
-                stack: firebaseError.stack
-              })
-              // If Firebase Storage fails, we should not proceed with blog post creation
-              setSaveStatus(`❌ Image upload failed: ${firebaseError.message}`)
-              setIsLoading(false)
-              return // Stop here - don't save blog post if image upload fails
-            }
+                         } catch (firebaseError: any) {
+               console.error('❌ Firebase Storage upload failed:', firebaseError.message)
+               console.error('Firebase error details:', {
+                 code: firebaseError.code,
+                 message: firebaseError.message,
+                 stack: firebaseError.stack
+               })
+               
+               // Check if it's a timeout or network error
+               if (firebaseError.message.includes('timeout') || firebaseError.message.includes('network')) {
+                 setSaveStatus(`⚠️ Image upload timed out. Would you like to continue without the image or try again?`)
+                 
+                 // Ask user if they want to continue without image
+                 const continueWithoutImage = confirm(
+                   'Image upload failed due to timeout. Would you like to save the blog post without the image? You can add it later.'
+                 )
+                 
+                 if (continueWithoutImage) {
+                   console.log('✅ User chose to continue without image')
+                   imageUrl = '' // No image URL
+                   setSaveStatus('Continuing without image...')
+                 } else {
+                   setSaveStatus('❌ Image upload failed. Please try with a smaller image.')
+                   setIsLoading(false)
+                   return // Stop here - don't save blog post
+                 }
+               } else {
+                 // For other errors, don't proceed
+                 setSaveStatus(`❌ Image upload failed: ${firebaseError.message}`)
+                 setIsLoading(false)
+                 return // Stop here - don't save blog post if image upload fails
+               }
+             }
           }
         }
 
@@ -431,14 +456,16 @@ export default function NewPost() {
                          <div><strong>File:</strong> {uploadedImage.name}</div>
                          <div><strong>Type:</strong> {uploadedImage.type}</div>
                          <div><strong>Size:</strong> {(uploadedImage.size / (1024 * 1024)).toFixed(2)} MB</div>
-                         {firebaseImageUrl ? (
-                           <>
-                             <div><strong>Status:</strong> <span className="text-green-600">✅ Uploaded to Firebase Storage</span></div>
-                             <div><strong>Firebase URL:</strong> <span className="text-blue-600 break-all">{firebaseImageUrl}</span></div>
-                           </>
-                         ) : (
-                           <div><strong>Status:</strong> <span className="text-blue-600">Ready to upload to Firebase Storage</span></div>
-                         )}
+                                                   {firebaseImageUrl ? (
+                            <>
+                              <div><strong>Status:</strong> <span className="text-green-600">✅ Uploaded to Firebase Storage</span></div>
+                              <div><strong>Firebase URL:</strong> <span className="text-blue-600 break-all">{firebaseImageUrl}</span></div>
+                            </>
+                          ) : uploadProgress ? (
+                            <div><strong>Status:</strong> <span className="text-yellow-600">⏳ {uploadProgress}</span></div>
+                          ) : (
+                            <div><strong>Status:</strong> <span className="text-blue-600">Ready to upload to Firebase Storage</span></div>
+                          )}
                        </div>
                      </div>
                    )}
@@ -470,7 +497,8 @@ export default function NewPost() {
                      </svg>
                      <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
                      <p className="text-xs text-gray-500 mt-1">Supports: JPG, PNG, SVG, WebP, GIF, etc.</p>
-                     <p className="text-xs text-gray-500">Max size: 10MB (will be compressed automatically)</p>
+                     <p className="text-xs text-gray-500">Max size: 10MB (will be compressed to 500KB)</p>
+                     <p className="text-xs text-yellow-600 mt-1">💡 Tip: Smaller images upload faster!</p>
                    </label>
                  </div>
                )}
