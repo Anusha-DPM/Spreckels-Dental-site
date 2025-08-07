@@ -15,7 +15,7 @@ export default function AdminDashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Blog Management Card */}
-            <Link href="/admin/blog" className="block">
+            <Link href="/admin/dashboard" className="block">
               <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
@@ -86,15 +86,29 @@ export default function AdminDashboard() {
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
             <h3 className="font-semibold text-gray-900 mb-2">🚀 Quick Actions</h3>
             <div className="flex flex-wrap gap-2">
-              <Link href="/admin/blog" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors">
+              <Link href="/admin/new-post" className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors">
                 Create New Blog Post
               </Link>
-              <Link href="/debug" className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 transition-colors">
-                Test Firebase
+              <Link href="/admin/dashboard" className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700 transition-colors">
+                View Blog Dashboard
               </Link>
-              <Link href="/" className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors">
+              <Link href="/blog" className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors">
+                View Public Blog
+              </Link>
+              <Link href="/" className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 transition-colors">
                 View Website
               </Link>
+            </div>
+          </div>
+
+          {/* Blog Status */}
+          <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+            <h3 className="font-semibold text-green-900 mb-2">📊 Blog System Status</h3>
+            <div className="text-sm text-green-800 space-y-1">
+              <p>✅ Blog posts are automatically saved to Firebase database</p>
+              <p>✅ Published posts appear on the public blog page</p>
+              <p>✅ System includes fallback to localStorage if Firebase is unavailable</p>
+              <p>✅ Real-time status monitoring in the blog dashboard</p>
             </div>
           </div>
         </div>

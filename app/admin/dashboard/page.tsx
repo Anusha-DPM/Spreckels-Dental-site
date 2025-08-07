@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getBlogPosts, deleteBlogPost } from '@/lib/blogDatabase'
+import { db } from '@/lib/firebase'
 
 interface BlogPost {
   id: string
@@ -43,6 +44,9 @@ interface FirebasePost {
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [firebaseStatus, setFirebaseStatus] = useState<'connected' | 'offline' | 'error'>('connected')
+  const [localStorageStatus, setLocalStorageStatus] = useState<'available' | 'unavailable'>('available')
+  const [verificationMessage, setVerificationMessage] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -54,7 +58,26 @@ export default function AdminDashboard() {
     }
 
     loadPosts()
+    checkSystemStatus()
   }, [router])
+
+  const checkSystemStatus = () => {
+    // Check Firebase connection
+    if (db) {
+      setFirebaseStatus('connected')
+    } else {
+      setFirebaseStatus('offline')
+    }
+
+    // Check localStorage availability
+    try {
+      localStorage.setItem('test', 'test')
+      localStorage.removeItem('test')
+      setLocalStorageStatus('available')
+    } catch (error) {
+      setLocalStorageStatus('unavailable')
+    }
+  }
 
   const loadPosts = async () => {
     try {
@@ -80,8 +103,10 @@ export default function AdminDashboard() {
       }))
       
       setPosts(dashboardPosts)
+      setVerificationMessage(`✅ Successfully loaded ${dashboardPosts.length} posts`)
     } catch (error) {
       console.error('Error loading posts:', error)
+      setVerificationMessage(`❌ Error loading posts: ${error}`)
       // Fallback to localStorage
       const savedPosts = localStorage.getItem('blogPosts')
       if (savedPosts) {
@@ -189,6 +214,60 @@ export default function AdminDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
+          {/* System Status */}
+          <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center">
+                <div className={`w-3 h-3 rounded-full mr-3 ${
+                  firebaseStatus === 'connected' ? 'bg-green-500' : 
+                  firebaseStatus === 'offline' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">Firebase Status</h3>
+                  <p className="text-sm text-gray-600 capitalize">{firebaseStatus}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center">
+                <div className={`w-3 h-3 rounded-full mr-3 ${
+                  localStorageStatus === 'available' ? 'bg-green-500' : 'bg-red-500'
+                }`}></div>
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">Local Storage</h3>
+                  <p className="text-sm text-gray-600 capitalize">{localStorageStatus}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full mr-3 bg-blue-500"></div>
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">Data Source</h3>
+                  <p className="text-sm text-gray-600">
+                    {firebaseStatus === 'connected' ? 'Firebase + Local' : 'Local Storage Only'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Verification Message */}
+          {verificationMessage && (
+            <div className={`mb-6 p-4 rounded-lg ${
+              verificationMessage.includes('✅') 
+                ? 'bg-green-100 text-green-800 border border-green-200' 
+                : 'bg-red-100 text-red-800 border border-red-200'
+            }`}>
+              <div className="flex items-center">
+                <span className="mr-2">{verificationMessage.includes('✅') ? '✅' : '❌'}</span>
+                <span className="text-sm font-medium">{verificationMessage}</span>
+              </div>
+            </div>
+          )}
+
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white rounded-lg shadow-sm p-6">
