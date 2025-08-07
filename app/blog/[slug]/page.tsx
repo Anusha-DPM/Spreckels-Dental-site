@@ -44,23 +44,46 @@ export default function BlogPostPage() {
   const loadPost = async () => {
     try {
       setLoading(true)
-      const fetchedPost = await getBlogPostBySlug(slug)
       
-      if (!fetchedPost) {
-        setError('Post not found')
-        return
+      // Try to get post from Firebase first
+      try {
+        const fetchedPost = await getBlogPostBySlug(slug)
+        
+        if (fetchedPost) {
+          setPost(fetchedPost as BlogPost)
+          
+          // Load related posts
+          const allPosts = await getPublishedBlogPosts()
+          const related = allPosts
+            .filter(p => p.id !== fetchedPost.id)
+            .slice(0, 3)
+            .map(post => post as BlogPost)
+          setRelatedPosts(related)
+          return
+        }
+      } catch (firebaseError) {
+        console.warn('Firebase not available, checking localStorage:', firebaseError)
       }
-
-      setPost(fetchedPost as BlogPost)
       
-      // Load related posts
-      const allPosts = await getPublishedBlogPosts()
-      const related = allPosts
-        .filter(p => p.id !== fetchedPost.id)
-        .slice(0, 3)
-        .map(post => post as BlogPost)
-      setRelatedPosts(related)
-
+      // Fallback to localStorage if Firebase fails
+      try {
+        const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+        const foundPost = localPosts.find((post: any) => post.slug === slug && post.published)
+        
+        if (foundPost) {
+          setPost(foundPost as BlogPost)
+          
+          // Load related posts from localStorage
+          const publishedPosts = localPosts.filter((post: any) => post.published && post.id !== foundPost.id)
+          const related = publishedPosts.slice(0, 3).map((post: any) => post as BlogPost)
+          setRelatedPosts(related)
+        } else {
+          setError('Post not found')
+        }
+      } catch (localError) {
+        console.error('Error loading from localStorage:', localError)
+        setError('Failed to load blog post from local storage')
+      }
     } catch (err) {
       setError('Failed to load blog post')
       console.error(err)

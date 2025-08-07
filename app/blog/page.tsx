@@ -179,15 +179,58 @@ export default function BlogPage() {
       {/* Blog Posts */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {error && (
-            <motion.div 
-              className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-8"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              {error}
-            </motion.div>
-          )}
+                     {error && (
+             <motion.div 
+               className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-8"
+               initial={{ opacity: 0, y: -10 }}
+               animate={{ opacity: 1, y: 0 }}
+             >
+               {error}
+               <div className="mt-4 flex gap-4">
+                 <button
+                   onClick={() => {
+                     const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+                     console.log('All localStorage posts:', localPosts)
+                     alert(`Found ${localPosts.length} posts in localStorage. Check console for details.`)
+                   }}
+                   className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                 >
+                   Debug: Check localStorage
+                 </button>
+                 <button
+                   onClick={() => {
+                     // Create a test post
+                     const testPost = {
+                       id: Date.now().toString(),
+                       title: 'Test Blog Post',
+                       content: '<p>This is a test blog post content.</p>',
+                       excerpt: 'This is a test excerpt for the blog post.',
+                       coverImage: '',
+                       imageUrl: '',
+                       tags: ['test', 'demo'],
+                       categories: ['General'],
+                       metaTitle: 'Test Blog Post',
+                       metaDescription: 'A test blog post for demonstration',
+                       slug: 'test-blog-post',
+                       published: true,
+                       publishDate: new Date().toISOString(),
+                       createdAt: new Date().toISOString(),
+                       updatedAt: new Date().toISOString(),
+                       author: 'Admin'
+                     }
+                     const existingPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+                     existingPosts.unshift(testPost)
+                     localStorage.setItem('tempBlogPosts', JSON.stringify(existingPosts))
+                     alert('Test post created! Refresh the page to see it.')
+                     window.location.reload()
+                   }}
+                   className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                 >
+                   Create Test Post
+                 </button>
+               </div>
+             </motion.div>
+           )}
 
           {filteredPosts.length === 0 ? (
             <motion.div 
