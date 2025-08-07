@@ -31,23 +31,60 @@ export default function BlogPostPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Load post from localStorage
-    const savedPosts = localStorage.getItem('blogPosts')
-    if (savedPosts) {
-      const allPosts = JSON.parse(savedPosts)
-      const foundPost = allPosts.find((p: BlogPost) => p.slug === params.slug && p.status === 'published')
-      
-      if (foundPost) {
-        setPost(foundPost)
+    const loadPost = async () => {
+      try {
+        // Try to load from localStorage first
+        const savedPosts = localStorage.getItem('blogPosts')
+        if (savedPosts) {
+          const allPosts = JSON.parse(savedPosts)
+          const foundPost = allPosts.find((p: BlogPost) => {
+            return p.slug === params.slug && (
+              p.status === 'published' || p.published === true
+            )
+          })
+          
+          if (foundPost) {
+            setPost(foundPost)
+            
+            // Get related posts (excluding current post)
+            const related = allPosts
+              .filter((p: BlogPost) => p.id !== foundPost.id && (
+                p.status === 'published' || p.published === true
+              ))
+              .slice(0, 3)
+            setRelatedPosts(related)
+            setIsLoading(false)
+            return
+          }
+        }
         
-        // Get related posts (excluding current post)
-        const related = allPosts
-          .filter((p: BlogPost) => p.id !== foundPost.id && p.status === 'published')
-          .slice(0, 3)
-        setRelatedPosts(related)
+        // If not found in localStorage, try Firebase
+        try {
+          const { getBlogPostBySlug } = await import('@/lib/blogDatabase')
+          const firebasePost = await getBlogPostBySlug(params.slug as string)
+          
+          if (firebasePost && (firebasePost.published || firebasePost.status === 'published')) {
+            setPost(firebasePost)
+            
+            // Get related posts from Firebase
+            const { getBlogPosts } = await import('@/lib/blogDatabase')
+            const allPosts = await getBlogPosts({ published: true })
+            const related = allPosts
+              .filter((p: BlogPost) => p.id !== firebasePost.id)
+              .slice(0, 3)
+            setRelatedPosts(related)
+          }
+        } catch (firebaseError) {
+          console.warn('Firebase load failed:', firebaseError)
+        }
+      } catch (error) {
+        console.error('Error loading post:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
-    setIsLoading(false)
+    
+    loadPost()
   }, [params.slug])
 
   const formatDate = (dateString: string) => {

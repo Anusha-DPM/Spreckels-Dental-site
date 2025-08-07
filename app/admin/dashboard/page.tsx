@@ -59,14 +59,23 @@ export default function AdminDashboard() {
 
     loadPosts()
     checkSystemStatus()
+    
+    // Set up interval to refresh posts every 30 seconds
+    const interval = setInterval(() => {
+      loadPosts()
+    }, 30000)
+    
+    return () => clearInterval(interval)
   }, [router])
 
   const checkSystemStatus = () => {
     // Check Firebase connection
     if (db) {
       setFirebaseStatus('connected')
+      console.log('✅ Firebase connection available')
     } else {
       setFirebaseStatus('offline')
+      console.log('❌ Firebase connection not available')
     }
 
     // Check localStorage availability
@@ -74,8 +83,23 @@ export default function AdminDashboard() {
       localStorage.setItem('test', 'test')
       localStorage.removeItem('test')
       setLocalStorageStatus('available')
+      console.log('✅ localStorage available')
     } catch (error) {
       setLocalStorageStatus('unavailable')
+      console.log('❌ localStorage not available:', error)
+    }
+    
+    // Log current posts in localStorage for debugging
+    try {
+      const savedPosts = localStorage.getItem('blogPosts')
+      if (savedPosts) {
+        const posts = JSON.parse(savedPosts)
+        console.log('📊 Current posts in localStorage:', posts.length)
+      } else {
+        console.log('📊 No posts in localStorage')
+      }
+    } catch (error) {
+      console.log('❌ Error reading localStorage posts:', error)
     }
   }
 
@@ -96,10 +120,10 @@ export default function AdminDashboard() {
         tags: post.tags || [],
         metaTitle: post.metaTitle || '',
         metaDescription: post.metaDescription || '',
-                 publishDate: post.publishDate || (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt?.toDate?.()?.toISOString()) || new Date().toISOString(),
-         status: (post.published ? 'published' : 'draft') as 'draft' | 'published',
-         createdAt: (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt?.toDate?.()?.toISOString()) || new Date().toISOString(),
-         updatedAt: (typeof post.updatedAt === 'string' ? post.updatedAt : post.updatedAt?.toDate?.()?.toISOString()) || new Date().toISOString()
+        publishDate: post.publishDate || (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt?.toDate?.()?.toISOString()) || new Date().toISOString(),
+        status: (post.published ? 'published' : 'draft') as 'draft' | 'published',
+        createdAt: (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt?.toDate?.()?.toISOString()) || new Date().toISOString(),
+        updatedAt: (typeof post.updatedAt === 'string' ? post.updatedAt : post.updatedAt?.toDate?.()?.toISOString()) || new Date().toISOString()
       }))
       
       setPosts(dashboardPosts)
@@ -110,7 +134,23 @@ export default function AdminDashboard() {
       // Fallback to localStorage
       const savedPosts = localStorage.getItem('blogPosts')
       if (savedPosts) {
-        setPosts(JSON.parse(savedPosts))
+        const parsedPosts = JSON.parse(savedPosts)
+        const dashboardPosts = parsedPosts.map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          content: post.content,
+          excerpt: post.excerpt,
+          coverImage: post.coverImage || post.imageUrl || '',
+          tags: post.tags || [],
+          metaTitle: post.metaTitle || '',
+          metaDescription: post.metaDescription || '',
+          publishDate: post.publishDate || post.createdAt || new Date().toISOString(),
+          status: (post.published ? 'published' : 'draft') as 'draft' | 'published',
+          createdAt: post.createdAt || new Date().toISOString(),
+          updatedAt: post.updatedAt || new Date().toISOString()
+        }))
+        setPosts(dashboardPosts)
       }
     } finally {
       setIsLoading(false)

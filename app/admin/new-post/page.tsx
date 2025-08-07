@@ -132,7 +132,8 @@ export default function NewPost() {
         featured: false,
         slug: post.slug || generateSlug(post.title),
         metaTitle: post.metaTitle?.trim() || post.title.trim(),
-        metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || ''
+        metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
+        publishDate: post.publishDate || new Date().toISOString()
       }
 
       console.log('Attempting to save blog post:', blogData)

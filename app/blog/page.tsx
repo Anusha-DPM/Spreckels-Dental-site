@@ -43,29 +43,8 @@ export default function BlogPage() {
     try {
       setIsLoading(true)
       setFirebaseStatus('connected')
-      // First, try to load from localStorage immediately for faster display
-      const savedPosts = localStorage.getItem('blogPosts')
-      if (savedPosts) {
-        const allPosts = JSON.parse(savedPosts)
-        
-        // Filter published posts from localStorage
-        const publishedPosts = allPosts.filter((post: BlogPost) => {
-          // Handle both Firebase format (published: boolean) and localStorage format (status: string)
-          if (post.published !== undefined) {
-            return post.published === true
-          } else if (post.status !== undefined) {
-            return post.status === 'published'
-          }
-          return false
-        })
-        
-        if (publishedPosts.length > 0) {
-          setPosts(publishedPosts)
-          setIsLoading(false) // Show posts immediately
-        }
-      }
       
-      // Then try Firebase to get the latest data
+      // Try Firebase first
       try {
         const firebasePosts = await getBlogPosts({ published: true })
         
@@ -77,22 +56,23 @@ export default function BlogPage() {
         }
       } catch (firebaseError) {
         setFirebaseStatus('error')
-        
-        // If we don't have posts from localStorage yet, try to load them
-        if (posts.length === 0) {
-          const savedPosts = localStorage.getItem('blogPosts')
-          if (savedPosts) {
-            const allPosts = JSON.parse(savedPosts)
-            const publishedPosts = allPosts.filter((post: BlogPost) => {
-              if (post.published !== undefined) {
-                return post.published === true
-              } else if (post.status !== undefined) {
-                return post.status === 'published'
-              }
-              return false
-            })
-            setPosts(publishedPosts)
-          }
+      }
+      
+      // Fallback to localStorage if no posts from Firebase
+      if (posts.length === 0) {
+        const savedPosts = localStorage.getItem('blogPosts')
+        if (savedPosts) {
+          const allPosts = JSON.parse(savedPosts)
+          const publishedPosts = allPosts.filter((post: BlogPost) => {
+            // Handle both Firebase format (published: boolean) and localStorage format (status: string)
+            if (post.published !== undefined) {
+              return post.published === true
+            } else if (post.status !== undefined) {
+              return post.status === 'published'
+            }
+            return false
+          })
+          setPosts(publishedPosts)
         }
       }
     } catch (error) {
