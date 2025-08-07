@@ -393,6 +393,15 @@ export default function AdminDashboard() {
                                   width={48}
                                   height={48}
                                   className="h-12 w-12 rounded-lg object-cover"
+                                  onError={(e) => {
+                                    console.error('Dashboard image failed to load for post:', post.title)
+                                    console.error('Image URL:', post.coverImage)
+                                    console.error('Post data:', post)
+                                  }}
+                                  onLoad={() => {
+                                    console.log('Dashboard image loaded successfully for post:', post.title)
+                                    console.log('Image URL:', post.coverImage)
+                                  }}
                                 />
                               </div>
                             )}

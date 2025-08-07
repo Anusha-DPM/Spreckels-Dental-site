@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
-import { createBlogPost } from '@/lib/blogDatabase'
+import { createBlogPost, createTestPostWithImage } from '@/lib/blogDatabase'
 import { uploadImageToFirebase, testSmallImageUpload } from '@/lib/firebase'
 
 interface BlogPost {
@@ -424,6 +424,26 @@ export default function NewPost() {
       }
     }
 
+    // Test function to create a sample post with image
+    const createTestPost = async () => {
+      console.log('🧪 Creating test post with image...')
+      setSaveStatus('Creating test post...')
+      
+      try {
+        const result = await createTestPostWithImage()
+        if (result.success) {
+          setSaveStatus('✅ Test post created successfully!')
+          console.log('✅ Test post created:', result)
+        } else {
+          setSaveStatus(`❌ Test post creation failed: ${result.error}`)
+          console.error('❌ Test post creation failed:', result.error)
+        }
+      } catch (error: any) {
+        setSaveStatus(`❌ Test post creation error: ${error.message}`)
+        console.error('❌ Test post creation error:', error)
+      }
+    }
+
 
 
 
@@ -475,6 +495,12 @@ export default function NewPost() {
                     className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
                   >
                     Test Small Image
+                  </button>
+                  <button
+                    onClick={createTestPost}
+                    className="bg-orange-600 text-white px-3 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium text-sm"
+                  >
+                    Create Test Post
                   </button>
                 <button
                   onClick={handleSave}

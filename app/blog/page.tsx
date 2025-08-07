@@ -48,18 +48,26 @@ export default function BlogPage() {
       try {
         const firebasePosts = await getBlogPosts({ published: true })
         
-        if (firebasePosts.length > 0) {
-          console.log('Firebase posts loaded:', firebasePosts)
-          console.log('Post images:', firebasePosts.map((post: BlogPost) => ({
-            title: post.title,
-            coverImage: post.coverImage,
-            imageUrl: post.imageUrl
-          })))
-          setPosts(firebasePosts)
-          setFirebaseStatus('connected')
-        } else {
-          setFirebaseStatus('offline')
-        }
+                 if (firebasePosts.length > 0) {
+           console.log('Firebase posts loaded:', firebasePosts)
+           console.log('Post images:', firebasePosts.map((post: BlogPost) => ({
+             title: post.title,
+             coverImage: post.coverImage,
+             imageUrl: post.imageUrl
+           })))
+           console.log('Detailed post data:', firebasePosts.map((post: BlogPost) => ({
+             id: post.id,
+             title: post.title,
+             coverImage: post.coverImage,
+             imageUrl: post.imageUrl,
+             published: post.published,
+             status: post.status
+           })))
+           setPosts(firebasePosts)
+           setFirebaseStatus('connected')
+         } else {
+           setFirebaseStatus('offline')
+         }
       } catch (firebaseError) {
         setFirebaseStatus('error')
       }
@@ -201,7 +209,9 @@ export default function BlogPage() {
                         fill
                         className="object-cover hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
-                          console.error('Image failed to load:', post.coverImage || post.imageUrl)
+                          console.error('Image failed to load for post:', post.title)
+                          console.error('Image URL:', post.coverImage || post.imageUrl)
+                          console.error('Post data:', post)
                           // Hide the image and show a placeholder
                           const target = e.target as HTMLImageElement
                           target.style.display = 'none'
@@ -217,6 +227,10 @@ export default function BlogPage() {
                             </div>
                           `
                           target.parentNode?.appendChild(placeholder)
+                        }}
+                        onLoad={() => {
+                          console.log('Image loaded successfully for post:', post.title)
+                          console.log('Image URL:', post.coverImage || post.imageUrl)
                         }}
                       />
                     </div>
