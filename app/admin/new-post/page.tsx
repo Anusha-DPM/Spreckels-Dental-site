@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
-import { createBlogPost, createTestPostWithImage } from '@/lib/blogDatabase'
-import { uploadImageToFirebase, testSmallImageUpload } from '@/lib/firebase'
+import { createBlogPost } from '@/lib/blogDatabase'
+import { uploadImageToFirebase } from '@/lib/firebase'
 
 interface BlogPost {
   id: string
@@ -26,16 +26,8 @@ interface BlogPost {
 }
 
 export default function NewPost() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const [saveStatus, setSaveStatus] = useState('')
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string>('')
-  const [firebaseImageUrl, setFirebaseImageUrl] = useState<string>('')
-  const [uploadProgress, setUploadProgress] = useState<string>('')
-  const [imageUrl, setImageUrl] = useState<string>('')
-  const [imageLoading, setImageLoading] = useState<boolean>(false)
-  const [post, setPost] = useState<Partial<BlogPost>>({
+  const [post, setPost] = useState<BlogPost>({
+    id: '',
     title: '',
     slug: '',
     content: '',
@@ -45,66 +37,55 @@ export default function NewPost() {
     metaTitle: '',
     metaDescription: '',
     publishDate: new Date().toISOString().split('T')[0],
-    status: 'draft'
+    status: 'draft',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   })
 
-  useEffect(() => {
-    // Check authentication
-    const isAuthenticated = localStorage.getItem('adminAuthenticated')
-    if (!isAuthenticated) {
-      router.push('/admin/login')
-    }
-  }, [router])
+  const [isLoading, setIsLoading] = useState(false)
+  const [saveStatus, setSaveStatus] = useState('')
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageLoading, setImageLoading] = useState<boolean>(false)
+  const router = useRouter()
 
   const generateSlug = (title: string) => {
     return title
       .toLowerCase()
-      .replace(/[^a-z0-9 -]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
   }
 
   const handleTitleChange = (title: string) => {
     setPost(prev => ({
       ...prev,
       title,
-      slug: generateSlug(title)
+      slug: generateSlug(title),
+      metaTitle: title
     }))
   }
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-       // Validate file type
-       if (!file.type.startsWith('image/')) {
-         alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
-         return
-       }
-       
-       // Validate file size (max 10MB before compression)
-       if (file.size > 10 * 1024 * 1024) {
-         alert('Image file is too large. Please select an image smaller than 10MB.')
-         return
-       }
-       
-       console.log('📁 Image selected:', {
-         name: file.name,
-         type: file.type,
-         size: file.size,
-         sizeInMB: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
-       })
-       
-       // Clear URL field when uploading a file
-       setImageUrl('')
-       
-       // Store the file for later upload
-       setUploadedImage(file)
-       
-       // Create preview
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
+        return
+      }
+      
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Image file is too large. Please select an image smaller than 10MB.')
+        return
+      }
+      
+      // Clear URL field when uploading a file
+      setImageUrl('')
+      
       const reader = new FileReader()
       reader.onload = (e) => {
-         setImagePreview(e.target?.result as string)
+        setImagePreview(e.target?.result as string)
         setPost(prev => ({
           ...prev,
           coverImage: e.target?.result as string
@@ -114,21 +95,11 @@ export default function NewPost() {
     }
   }
 
-  const handleTagsChange = (tagsString: string) => {
-    const tags = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag)
-    setPost(prev => ({ ...prev, tags }))
-  }
-
   const handleImageUrlChange = (url: string) => {
     setImageUrl(url)
-    // If user enters a URL, clear the uploaded image
     if (url.trim()) {
-      setUploadedImage(null)
-      setImagePreview('')
-      setFirebaseImageUrl('')
       setImageLoading(true)
       setPost(prev => ({ ...prev, coverImage: url.trim() }))
-    } else {
       setImageLoading(false)
     }
   }
@@ -153,167 +124,37 @@ export default function NewPost() {
     }
   }
 
-  const getImageWithProxy = (url: string) => {
-    // For CORS issues, we can use a proxy service
-    // This is a simple approach - in production you might want to use your own proxy
-    if (url.startsWith('http')) {
-      return `https://images.weserv.nl/?url=${encodeURIComponent(url)}`
-    }
-    return url
+  const handleTagsChange = (tagsString: string) => {
+    const tags = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag)
+    setPost(prev => ({ ...prev, tags }))
   }
 
   const handleSave = async () => {
+    if (!post.title?.trim()) {
+      setSaveStatus('❌ Post title is required')
+      return
+    }
+    if (!post.content?.trim()) {
+      setSaveStatus('❌ Post content is required')
+      return
+    }
+    if (imageUrl.trim() && !validateImageUrl(imageUrl)) {
+      setSaveStatus('❌ Invalid image URL format')
+      return
+    }
+
     setIsLoading(true)
-    setSaveStatus('Preparing to save...')
-    
+    setSaveStatus('Saving post...')
+
     try {
-      // Validate required fields
-      if (!post.title?.trim()) {
-        setSaveStatus('❌ Post title is required')
-        setIsLoading(false)
-        return
-      }
-      
-      if (!post.content?.trim()) {
-        setSaveStatus('❌ Post content is required')
-        setIsLoading(false)
-        return
-      }
-      
-      // Clear localStorage if it's full
-      try {
-        const testData = 'test'
-        localStorage.setItem('test', testData)
-        localStorage.removeItem('test')
-      } catch (quotaError) {
-        console.warn('localStorage quota exceeded, clearing old data')
-        // Clear all blog-related data
-        Object.keys(localStorage).forEach(key => {
-          if (key.includes('blog') || key.includes('post')) {
-            localStorage.removeItem(key)
-          }
-        })
-      }
-      
-                                          // Step 1: Handle image (either URL or upload)
-       let finalImageUrl = post.coverImage || ''
-       
-       // If user provided an image URL, use it
-       if (imageUrl.trim()) {
-         if (!validateImageUrl(imageUrl)) {
-           setSaveStatus('❌ Invalid image URL format')
-           setIsLoading(false)
-           return
-         }
-         finalImageUrl = imageUrl.trim()
-         console.log('🔗 Using provided image URL:', finalImageUrl)
-       }
-       // If user uploaded an image file, upload to Firebase
-       else if (uploadedImage) {
-          setSaveStatus('Processing image...')
-          console.log('📤 Starting image processing for file:', uploadedImage.name)
-          
-                     // Validate file type
-           if (!uploadedImage.type.startsWith('image/')) {
-             console.warn('❌ Invalid file type, using base64 fallback')
-             finalImageUrl = imagePreview
-             setSaveStatus('⚠️ Invalid file type, using local storage')
-           }
-           else {
-                         console.log('✅ File validation passed, uploading to Firebase Storage...')
-             setSaveStatus('Uploading image to Firebase Storage...')
-             setUploadProgress('Compressing image...')
-            
-                         try {
-               console.log('🔥 Step 1: Uploading image to Firebase Storage...')
-               setUploadProgress('Uploading to Firebase Storage...')
-               const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
-               finalImageUrl = uploadResult.url
-                                              console.log('✅ Step 1 Complete: Image uploaded to Firebase Storage:', finalImageUrl)
-                 console.log('📊 Compression stats:', {
-                   originalSize: uploadResult.originalSize,
-                   compressedSize: uploadResult.compressedSize,
-                   savings: ((uploadResult.originalSize - uploadResult.compressedSize) / uploadResult.originalSize * 100).toFixed(1) + '%'
-                 })
-                 setFirebaseImageUrl(finalImageUrl)
-               setUploadProgress('')
-               setSaveStatus('✅ Image uploaded to Firebase Storage successfully!')
-                         } catch (firebaseError: any) {
-               console.error('❌ Firebase Storage upload failed:', firebaseError.message)
-               console.error('Firebase error details:', {
-                 code: firebaseError.code,
-                 message: firebaseError.message,
-                 stack: firebaseError.stack
-               })
-               
-               // Check if it's a timeout or network error
-               if (firebaseError.message.includes('timeout') || firebaseError.message.includes('network')) {
-                 setSaveStatus(`⚠️ Image upload timed out. Would you like to continue without the image or try again?`)
-                 
-                 // Ask user if they want to continue without image
-                 const continueWithoutImage = confirm(
-                   'Image upload failed due to timeout. Would you like to save the blog post without the image? You can add it later.'
-                 )
-                 
-                                   if (continueWithoutImage) {
-                    console.log('✅ User chose to continue without image')
-                    finalImageUrl = '' // No image URL
-                    setSaveStatus('Continuing without image...')
-                  } else {
-                   setSaveStatus('❌ Image upload failed. Please try with a smaller image.')
-                   setIsLoading(false)
-                   return // Stop here - don't save blog post
-                 }
-               } else {
-                 // For other errors, don't proceed
-                 setSaveStatus(`❌ Image upload failed: ${firebaseError.message}`)
-                 setIsLoading(false)
-                 return // Stop here - don't save blog post if image upload fails
-               }
-             }
-          }
-        }
-
-                              // Step 2: Save blog post to Firestore with final image URL
-      const blogData = {
-        title: post.title.trim(),
-        content: post.content.trim(),
-        excerpt: post.excerpt?.trim() || '',
-           coverImage: finalImageUrl, // This is now the final image URL (Firebase or external)
-           imageUrl: finalImageUrl, // Final image URL
-        tags: post.tags || [],
-        category: 'General Dentistry', // Default category
-        author: 'Admin', // Default author
-        published: post.status === 'published', // Convert status to boolean
-        featured: false,
-        slug: post.slug || generateSlug(post.title),
-        metaTitle: post.metaTitle?.trim() || post.title.trim(),
-        metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
-        publishDate: post.publishDate || new Date().toISOString()
-      }
-
-                 console.log('📝 Step 2: Saving blog post to Firestore with final image URL')
-         console.log('🔗 Image URL being saved:', finalImageUrl)
-        console.log('📊 Blog data to save:', blogData)
-        setSaveStatus('Saving blog post to Firestore...')
-        
-        try {
-          // Create the blog post in Firestore
-      const newPost = await createBlogPost(blogData)
-      
-          setSaveStatus('✅ Blog post saved to Firestore successfully!')
-          console.log('✅ Step 2 Complete: Blog post created in Firestore:', newPost)
-          console.log('🎉 Process completed: Image uploaded to Firebase Storage + Blog saved to Firestore')
+      const result = await createBlogPost(post)
+      console.log('✅ Post created successfully:', result)
+      setSaveStatus('✅ Post saved successfully!')
       
       // Redirect to dashboard after a short delay
       setTimeout(() => {
         router.push('/admin/dashboard')
-      }, 1000)
-        } catch (blogError: any) {
-          console.error('❌ Error saving blog post to Firestore:', blogError)
-          setSaveStatus(`❌ Error saving blog post: ${blogError?.message || 'Please try again.'}`)
-          throw blogError // Re-throw to be caught by outer catch block
-        }
+      }, 1500)
     } catch (error: any) {
       console.error('Error saving post:', error)
       setSaveStatus(`❌ Error saving post: ${error?.message || 'Please try again.'}`)
@@ -326,249 +167,6 @@ export default function NewPost() {
     setPost(prev => ({ ...prev, status: 'published' }))
     await handleSave()
   }
-
-         // Test function to verify server-side Firebase Storage with compression
-    const testFirebaseStorage = async () => {
-      console.log('🧪 Testing server-side Firebase Storage with compression...')
-      setSaveStatus('Testing server-side Firebase Storage...')
-      
-      try {
-        // Create a larger test image to test compression
-        const canvas = document.createElement('canvas')
-        canvas.width = 2000
-        canvas.height = 1500
-        const ctx = canvas.getContext('2d')
-        if (ctx) {
-          // Create a gradient background
-          const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-          gradient.addColorStop(0, '#ff6b6b')
-          gradient.addColorStop(0.5, '#4ecdc4')
-          gradient.addColorStop(1, '#45b7d1')
-          ctx.fillStyle = gradient
-          ctx.fillRect(0, 0, canvas.width, canvas.height)
-          
-          // Add some text
-          ctx.fillStyle = '#fff'
-          ctx.font = 'bold 48px Arial'
-          ctx.textAlign = 'center'
-          ctx.fillText('Test Image', canvas.width / 2, canvas.height / 2)
-          ctx.font = '24px Arial'
-          ctx.fillText('Testing Server-Side Upload', canvas.width / 2, canvas.height / 2 + 50)
-        }
-        
-        canvas.toBlob(async (blob) => {
-          if (blob) {
-            const testFile = new File([blob], 'test-image-large.png', { type: 'image/png' })
-            console.log('📊 Test file size:', testFile.size, 'bytes')
-            
-            try {
-              const result = await uploadImageToFirebase(testFile, 'test-uploads')
-              setSaveStatus('✅ Server-side Firebase Storage test successful!')
-              console.log('✅ Server-side Firebase Storage is working:', result)
-              console.log('📊 Compression test results:', {
-                originalSize: result.originalSize,
-                compressedSize: result.compressedSize,
-                savings: ((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(1) + '%'
-              })
-            } catch (error: any) {
-              setSaveStatus(`❌ Server-side Firebase Storage test failed: ${error.message}`)
-              console.error('❌ Server-side Firebase Storage test failed:', error)
-            }
-          }
-        }, 'image/png', 0.9) // High quality to test compression
-      } catch (error: any) {
-        setSaveStatus(`❌ Test error: ${error.message}`)
-        console.error('❌ Test error:', error)
-      }
-    }
-
-       // Test small image upload
-    const testSmallImage = async () => {
-      console.log('🧪 Testing small image upload...')
-      setSaveStatus('Testing small image upload...')
-      
-      try {
-        const result = await testSmallImageUpload()
-        if (result && result.success) {
-          setSaveStatus('✅ Small image upload test successful!')
-          console.log('✅ Small image upload is working:', result)
-        } else {
-          setSaveStatus(`❌ Small image upload test failed: ${result?.error || 'Unknown error'}`)
-          console.error('❌ Small image upload test failed:', result?.error)
-        }
-      } catch (error: any) {
-        setSaveStatus(`❌ Small image test error: ${error.message}`)
-        console.error('❌ Small image test error:', error)
-      }
-    }
-
-    // Test Firebase server-side initialization
-    const testFirebaseServer = async () => {
-      console.log('🧪 Testing Firebase server-side initialization...')
-      setSaveStatus('Testing Firebase server...')
-      
-      try {
-        const response = await fetch('/api/test-firebase')
-        const result = await response.json()
-        
-        if (result.success) {
-          setSaveStatus('✅ Firebase server test successful!')
-          console.log('✅ Firebase server is working:', result)
-        } else {
-          setSaveStatus(`❌ Firebase server test failed: ${result.error}`)
-          console.error('❌ Firebase server test failed:', result)
-        }
-      } catch (error: any) {
-        setSaveStatus(`❌ Firebase server test error: ${error.message}`)
-        console.error('❌ Firebase server test error:', error)
-      }
-    }
-
-    // Test function to create a sample post with image
-    const createTestPost = async () => {
-      console.log('🧪 Creating test post with image...')
-      setSaveStatus('Creating test post...')
-
-      try {
-        const result = await createTestPostWithImage()
-        if (result.success) {
-          setSaveStatus('✅ Test post created successfully!')
-          console.log('✅ Test post created:', result)
-          
-          // Force reload the page to see the new post
-          setTimeout(() => {
-            window.location.reload()
-          }, 2000)
-        } else {
-          setSaveStatus(`❌ Test post creation failed: ${result.error}`)
-          console.error('❌ Test post creation failed:', result.error)
-        }
-      } catch (error: any) {
-        setSaveStatus(`❌ Test post creation error: ${error.message}`)
-        console.error('❌ Test post creation error:', error)
-      }
-    }
-
-    // Test function to create a post with a simple image URL
-    const createSimpleTestPost = async () => {
-      console.log('🧪 Creating simple test post with image...')
-      setSaveStatus('Creating simple test post...')
-
-      try {
-        const simplePostData = {
-          title: 'Simple Test Post',
-          content: 'This is a simple test post with a basic image URL.',
-          excerpt: 'Simple test excerpt.',
-          coverImage: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
-          imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop',
-          tags: ['test', 'simple'],
-          category: 'Test',
-          author: 'Test Admin',
-          published: true,
-          featured: false,
-          slug: 'simple-test-post',
-          metaTitle: 'Simple Test Post',
-          metaDescription: 'Simple test post with image',
-          publishDate: new Date().toISOString()
-        }
-
-        console.log('📝 Simple test post data:', simplePostData)
-        
-        const result = await createBlogPost(simplePostData)
-        console.log('✅ Simple test post created:', result)
-        
-        setSaveStatus('✅ Simple test post created successfully!')
-        
-        // Force reload the page to see the new post
-        setTimeout(() => {
-          window.location.reload()
-        }, 2000)
-        
-      } catch (error: any) {
-        setSaveStatus(`❌ Simple test post creation error: ${error.message}`)
-        console.error('❌ Simple test post creation error:', error)
-      }
-    }
-
-    // Test function to verify image upload functionality
-    const testImageUpload = async () => {
-      console.log('🧪 Testing image upload functionality...')
-      setSaveStatus('Testing image upload...')
-
-      try {
-        // Create a simple test image using canvas
-        const canvas = document.createElement('canvas')
-        canvas.width = 200
-        canvas.height = 150
-        const ctx = canvas.getContext('2d')
-        
-        if (ctx) {
-          // Draw a simple test image
-          ctx.fillStyle = '#4F46E5'
-          ctx.fillRect(0, 0, 200, 150)
-          ctx.fillStyle = 'white'
-          ctx.font = '20px Arial'
-          ctx.fillText('Test Image', 50, 80)
-          
-          // Convert to blob
-          canvas.toBlob(async (blob) => {
-            if (blob) {
-              const testFile = new File([blob], 'test-image.png', { type: 'image/png' })
-              
-              console.log('📁 Test file created:', {
-                name: testFile.name,
-                size: testFile.size,
-                type: testFile.type
-              })
-              
-              try {
-                const uploadResult = await uploadImageToFirebase(testFile, 'test-images')
-                console.log('✅ Test image uploaded successfully:', uploadResult)
-                setSaveStatus(`✅ Test image uploaded! URL: ${uploadResult.url}`)
-                
-                // Create a test post with this uploaded image
-                const testPostData = {
-                  title: 'Test Post with Uploaded Image',
-                  content: 'This post uses an image that was uploaded to Firebase Storage.',
-                  excerpt: 'Test post with uploaded image.',
-                  coverImage: uploadResult.url,
-                  imageUrl: uploadResult.url,
-                  tags: ['test', 'upload'],
-                  category: 'Test',
-                  author: 'Test Admin',
-                  published: true,
-                  featured: false,
-                  slug: 'test-post-with-uploaded-image',
-                  metaTitle: 'Test Post with Uploaded Image',
-                  metaDescription: 'Test post with uploaded image',
-                  publishDate: new Date().toISOString()
-                }
-                
-                const result = await createBlogPost(testPostData)
-                console.log('✅ Test post with uploaded image created:', result)
-                setSaveStatus('✅ Test post with uploaded image created successfully!')
-                
-                // Force reload the page to see the new post
-                setTimeout(() => {
-                  window.location.reload()
-                }, 2000)
-                
-              } catch (uploadError: any) {
-                console.error('❌ Test image upload failed:', uploadError)
-                setSaveStatus(`❌ Test image upload failed: ${uploadError.message}`)
-              }
-            }
-          }, 'image/png')
-        }
-      } catch (error: any) {
-        console.error('❌ Test image creation failed:', error)
-        setSaveStatus(`❌ Test image creation failed: ${error.message}`)
-      }
-    }
-
-
-
-
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -588,7 +186,7 @@ export default function NewPost() {
               </Link>
               <div className="border-l border-gray-300 pl-4">
                 <h1 className="text-xl font-semibold text-gray-900">New Blog Post</h1>
-                <p className="text-sm text-gray-600">Create and publish your content</p>
+                <p className="text-sm text-gray-600">Create your content</p>
               </div>
             </div>
             
@@ -598,44 +196,6 @@ export default function NewPost() {
                   {saveStatus}
                 </div>
               )}
-
-
-                                                                  <button
-                    onClick={testFirebaseStorage}
-                    className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
-                  >
-                    Test Server Upload
-                  </button>
-                                   <button
-                    onClick={testFirebaseServer}
-                    className="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium text-sm"
-                  >
-                    Test Firebase Server
-                  </button>
-                  <button
-                    onClick={testSmallImage}
-                    className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
-                  >
-                    Test Small Image
-                  </button>
-                  <button
-                    onClick={createTestPost}
-                    className="bg-orange-600 text-white px-3 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium text-sm"
-                  >
-                    Create Test Post
-                  </button>
-                  <button
-                    onClick={createSimpleTestPost}
-                    className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium text-sm"
-                  >
-                    Create Simple Test Post
-                  </button>
-                  <button
-                    onClick={testImageUpload}
-                    className="bg-yellow-600 text-white px-3 py-2 rounded-lg hover:bg-yellow-700 transition-colors duration-200 font-medium text-sm"
-                  >
-                    Test Image Upload
-                  </button>
               <button
                 onClick={handleSave}
                 disabled={isLoading}
@@ -686,7 +246,7 @@ export default function NewPost() {
               </label>
               <RichTextEditor
                 value={post.content || ''}
-                onChange={(content) => setPost(prev => ({ ...prev, content }))}
+                onChange={(content) => setPost({ ...post, content })}
                 placeholder="Write your blog post content here..."
               />
             </div>
@@ -698,28 +258,45 @@ export default function NewPost() {
               </label>
               <textarea
                 value={post.excerpt}
-                onChange={(e) => setPost(prev => ({ ...prev, excerpt: e.target.value }))}
+                onChange={(e) => setPost({ ...post, excerpt: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200 resize-none"
-                placeholder="Brief summary of your post (optional)"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200 resize-none"
+                placeholder="Brief summary of your post..."
               />
             </div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Cover Image */}
+            {/* Image Upload */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Cover Image
-              </label>
-               
-               {/* Image URL Field */}
-               <div className="mb-4">
-                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                   Blog Image URL
-                 </label>
-                                   <input
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Cover Image</h3>
+              
+              <div className="space-y-4">
+                {/* File Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
+                  />
+                  <div className="text-xs text-gray-500 mt-1">
+                    Supported: JPG, PNG, SVG, WebP (max 10MB)
+                  </div>
+                </div>
+                
+                <div className="text-center text-sm text-gray-500 mb-4">- OR -</div>
+                
+                {/* Image URL */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Blog Image URL
+                  </label>
+                  <input
                     type="url"
                     value={imageUrl}
                     onChange={(e) => handleImageUrlChange(e.target.value)}
@@ -729,7 +306,7 @@ export default function NewPost() {
                   <div className="text-xs text-gray-400 mt-1">
                     Examples: Unsplash, Pexels, your website, or any direct image URL
                   </div>
-                                   <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-2 mt-1">
                     <p className="text-xs text-gray-500">
                       Enter a direct URL to an image (e.g., from Unsplash, your website, etc.)
                     </p>
@@ -752,104 +329,70 @@ export default function NewPost() {
                       </button>
                     )}
                   </div>
-               </div>
-               
-               <div className="text-center text-sm text-gray-500 mb-4">- OR -</div>
-               {(imagePreview || imageUrl) ? (
-                <div className="mb-4">
-                   {imageLoading && imageUrl && (
-                     <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-                       <div className="text-gray-500 text-sm">Loading image...</div>
-                     </div>
-                   )}
-                  <Image
-                     src={imageUrl ? getImageWithProxy(imageUrl) : imagePreview}
-                    alt="Cover preview"
-                    width={300}
-                    height={200}
-                     className={`w-full h-48 object-cover rounded-lg ${imageLoading && imageUrl ? 'hidden' : ''}`}
-                     onLoad={() => {
-                       if (imageUrl) {
-                         setImageLoading(false)
-                       }
-                     }}
-                     onError={(e) => {
-                       console.error('Image failed to load:', imageUrl || imagePreview)
-                       setImageLoading(false)
-                       // Fallback to a placeholder or show error
-                       const target = e.target as HTMLImageElement
-                       target.style.display = 'none'
-                       // Show error message
-                       const errorDiv = document.createElement('div')
-                       errorDiv.className = 'w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 text-sm'
-                       errorDiv.innerHTML = '❌ Image failed to load<br><span class="text-xs">Check URL or try a different image</span>'
-                       target.parentNode?.appendChild(errorDiv)
-                     }}
-                   />
-                   
-                                      {/* Image Info */}
-                   {uploadedImage && (
-                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                       <div className="text-xs text-gray-600 space-y-1">
-                         <div><strong>File:</strong> {uploadedImage.name}</div>
-                         <div><strong>Type:</strong> {uploadedImage.type}</div>
-                         <div><strong>Size:</strong> {(uploadedImage.size / (1024 * 1024)).toFixed(2)} MB</div>
-                         {firebaseImageUrl ? (
-                           <>
-                             <div><strong>Status:</strong> <span className="text-green-600">✅ Uploaded to Firebase Storage</span></div>
-                             <div><strong>Firebase URL:</strong> <span className="text-blue-600 break-all">{firebaseImageUrl}</span></div>
-                           </>
-                         ) : uploadProgress ? (
-                           <div><strong>Status:</strong> <span className="text-yellow-600">⏳ {uploadProgress}</span></div>
-                         ) : (
-                           <div><strong>Status:</strong> <span className="text-blue-600">Ready to upload to Firebase Storage</span></div>
-                         )}
-                       </div>
-                     </div>
-                   )}
-                   
-                   {imageUrl && !uploadedImage && (
-                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                       <div className="text-xs text-gray-600 space-y-1">
-                         <div><strong>Source:</strong> <span className="text-green-600">External URL</span></div>
-                         <div><strong>URL:</strong> <span className="text-blue-600 break-all">{imageUrl}</span></div>
-                       </div>
-                     </div>
-                   )}
-                   
-                  <button
-                     onClick={() => {
-                       setImagePreview('')
-                       setUploadedImage(null)
-                       setFirebaseImageUrl('')
-                       setImageUrl('')
-                       setPost(prev => ({ ...prev, coverImage: '' }))
-                     }}
-                    className="mt-2 text-red-600 hover:text-red-800 text-sm"
-                  >
-                    Remove Image
-                  </button>
                 </div>
-              ) : (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                    id="cover-image"
-                  />
-                  <label htmlFor="cover-image" className="cursor-pointer">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
-                     <p className="text-xs text-gray-500 mt-1">Supports: JPG, PNG, SVG, WebP, GIF, etc.</p>
-                     <p className="text-xs text-gray-500">Max size: 10MB (will be compressed to 500KB)</p>
-                     <p className="text-xs text-yellow-600 mt-1">💡 Tip: Smaller images upload faster!</p>
-                  </label>
-                </div>
-              )}
+
+                {/* Image Preview */}
+                {(imagePreview || imageUrl) ? (
+                  <div className="mb-4">
+                    {imageLoading && imageUrl && (
+                      <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <div className="text-gray-500 text-sm">Loading image...</div>
+                      </div>
+                    )}
+                                         <Image
+                       src={imageUrl ? imageUrl : (imagePreview || '')}
+                       alt="Cover preview"
+                       width={300}
+                       height={200}
+                       className={`w-full h-48 object-cover rounded-lg ${imageLoading && imageUrl ? 'hidden' : ''}`}
+                      onLoad={() => {
+                        if (imageUrl) {
+                          setImageLoading(false)
+                        }
+                      }}
+                      onError={(e) => {
+                        console.error('Image failed to load:', imageUrl || imagePreview)
+                        setImageLoading(false)
+                        // Fallback to a placeholder or show error
+                        const target = e.target as HTMLImageElement
+                        target.style.display = 'none'
+                        // Show error message
+                        const errorDiv = document.createElement('div')
+                        errorDiv.className = 'w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 text-sm'
+                        errorDiv.innerHTML = '❌ Image failed to load<br><span class="text-xs">Check URL or try a different image</span>'
+                        target.parentNode?.appendChild(errorDiv)
+                      }}
+                    />
+                    
+                    {/* Image Info */}
+                    <div className="mt-2 text-xs text-gray-500">
+                      {imageUrl ? 'Image from URL' : 'Uploaded image'}
+                    </div>
+                    
+                    {/* Remove Image Button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImagePreview(null)
+                        setImageUrl('')
+                        setPost(prev => ({ ...prev, coverImage: '' }))
+                      }}
+                      className="mt-2 w-full bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition-colors duration-200 text-sm"
+                    >
+                      Remove Image
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="text-center text-gray-500">
+                      <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-sm">No image selected</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Publish Settings */}
@@ -863,7 +406,7 @@ export default function NewPost() {
                   </label>
                   <select
                     value={post.status}
-                    onChange={(e) => setPost(prev => ({ ...prev, status: e.target.value as 'draft' | 'published' }))}
+                    onChange={(e) => setPost({ ...post, status: e.target.value as 'draft' | 'published' })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
                   >
                     <option value="draft">Draft</option>
@@ -878,7 +421,7 @@ export default function NewPost() {
                   <input
                     type="date"
                     value={post.publishDate}
-                    onChange={(e) => setPost(prev => ({ ...prev, publishDate: e.target.value }))}
+                    onChange={(e) => setPost({ ...post, publishDate: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
                   />
                 </div>
@@ -910,7 +453,7 @@ export default function NewPost() {
                   <input
                     type="text"
                     value={post.metaTitle}
-                    onChange={(e) => setPost(prev => ({ ...prev, metaTitle: e.target.value }))}
+                    onChange={(e) => setPost({ ...post, metaTitle: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
                     placeholder="SEO title for search engines"
                   />
@@ -922,7 +465,7 @@ export default function NewPost() {
                   </label>
                   <textarea
                     value={post.metaDescription}
-                    onChange={(e) => setPost(prev => ({ ...prev, metaDescription: e.target.value }))}
+                    onChange={(e) => setPost({ ...post, metaDescription: e.target.value })}
                     rows={3}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200 resize-none"
                     placeholder="Brief description for search engines"
@@ -936,7 +479,7 @@ export default function NewPost() {
                   <input
                     type="text"
                     value={post.slug}
-                    onChange={(e) => setPost(prev => ({ ...prev, slug: e.target.value }))}
+                    onChange={(e) => setPost({ ...post, slug: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
                     placeholder="URL-friendly version of title"
                   />
