@@ -126,80 +126,85 @@ export default function NewPost() {
         })
       }
       
-             // Upload image to Firebase Storage if provided
+                    // Upload image to Firebase Storage if provided
        let imageUrl = post.coverImage || ''
        if (uploadedImage) {
-         setSaveStatus('Uploading image to Firebase Storage...')
-         console.log('📤 Starting image upload for file:', uploadedImage.name)
+         setSaveStatus('Processing image...')
+         console.log('📤 Starting image processing for file:', uploadedImage.name)
          
-         try {
-           // Validate file size (max 5MB)
-           if (uploadedImage.size > 5 * 1024 * 1024) {
-             throw new Error('Image file size must be less than 5MB')
-           }
+         // Validate file size (max 5MB)
+         if (uploadedImage.size > 5 * 1024 * 1024) {
+           console.warn('❌ File too large, using base64 fallback')
+           imageUrl = imagePreview
+           setSaveStatus('⚠️ File too large, using local storage')
+         }
+         // Validate file type
+         else if (!uploadedImage.type.startsWith('image/')) {
+           console.warn('❌ Invalid file type, using base64 fallback')
+           imageUrl = imagePreview
+           setSaveStatus('⚠️ Invalid file type, using local storage')
+         }
+         else {
+           console.log('✅ File validation passed, attempting Firebase upload...')
+           setSaveStatus('Uploading image to Firebase Storage...')
            
-           // Validate file type
-           if (!uploadedImage.type.startsWith('image/')) {
-             throw new Error('File must be an image')
+           // Try to upload to Firebase Storage with timeout
+           try {
+             const uploadPromise = uploadImageToFirebase(uploadedImage, 'blog-images')
+             const timeoutPromise = new Promise((_, reject) => {
+               setTimeout(() => reject(new Error('Upload timeout')), 15000) // 15 second timeout
+             })
+             
+             const uploadResult = await Promise.race([uploadPromise, timeoutPromise])
+             imageUrl = uploadResult.url
+             console.log('✅ Image uploaded successfully:', imageUrl)
+             setSaveStatus('✅ Image uploaded successfully!')
+           } catch (firebaseError: any) {
+             console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
+             // Fallback to base64 if Firebase Storage fails
+             imageUrl = imagePreview
+             setSaveStatus('⚠️ Using local image storage (Firebase Storage unavailable)')
            }
-           
-                       console.log('✅ File validation passed, uploading to Firebase...')
-            
-            // Try to upload to Firebase Storage
-            try {
-              const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
-              imageUrl = uploadResult.url
-              console.log('✅ Image uploaded successfully:', imageUrl)
-              setSaveStatus('✅ Image uploaded successfully!')
-            } catch (firebaseError: any) {
-              console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
-              // Fallback to base64 if Firebase Storage fails
-              imageUrl = imagePreview
-              setSaveStatus('⚠️ Using local image storage (Firebase Storage unavailable)')
-            }
-         } catch (uploadError: any) {
-           console.error('❌ Image upload failed:', uploadError)
-           console.error('Upload error details:', {
-             message: uploadError?.message,
-             code: uploadError?.code,
-             stack: uploadError?.stack
-           })
-           setSaveStatus(`❌ Image upload failed: ${uploadError?.message || 'Unknown error'}. Saving post without image...`)
-           // Continue without image
          }
        }
 
-      // Prepare data for Firebase
-      const blogData = {
-        title: post.title.trim(),
-        content: post.content.trim(),
-        excerpt: post.excerpt?.trim() || '',
-        coverImage: imageUrl,
-        imageUrl: imageUrl, // Firebase uses imageUrl
-        tags: post.tags || [],
-        category: 'General Dentistry', // Default category
-        author: 'Admin', // Default author
-        published: post.status === 'published', // Convert status to boolean
-        featured: false,
-        slug: post.slug || generateSlug(post.title),
-        metaTitle: post.metaTitle?.trim() || post.title.trim(),
-        metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
-        publishDate: post.publishDate || new Date().toISOString()
-      }
+             // Prepare data for Firebase
+       const blogData = {
+         title: post.title.trim(),
+         content: post.content.trim(),
+         excerpt: post.excerpt?.trim() || '',
+         coverImage: imageUrl,
+         imageUrl: imageUrl, // Firebase uses imageUrl
+         tags: post.tags || [],
+         category: 'General Dentistry', // Default category
+         author: 'Admin', // Default author
+         published: post.status === 'published', // Convert status to boolean
+         featured: false,
+         slug: post.slug || generateSlug(post.title),
+         metaTitle: post.metaTitle?.trim() || post.title.trim(),
+         metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
+         publishDate: post.publishDate || new Date().toISOString()
+       }
 
-      console.log('Attempting to save blog post:', blogData)
-      setSaveStatus('Saving blog post...')
-      
-      // Create the blog post
-      const newPost = await createBlogPost(blogData)
-      
-      setSaveStatus('✅ Blog post saved successfully!')
-      console.log('✅ Blog post created:', newPost)
-      
-      // Redirect to dashboard after a short delay
-      setTimeout(() => {
-        router.push('/admin/dashboard')
-      }, 1000)
+       console.log('📝 Attempting to save blog post:', blogData)
+       setSaveStatus('Saving blog post...')
+       
+       try {
+         // Create the blog post
+         const newPost = await createBlogPost(blogData)
+         
+         setSaveStatus('✅ Blog post saved successfully!')
+         console.log('✅ Blog post created:', newPost)
+         
+         // Redirect to dashboard after a short delay
+         setTimeout(() => {
+           router.push('/admin/dashboard')
+         }, 1000)
+       } catch (blogError: any) {
+         console.error('❌ Error saving blog post:', blogError)
+         setSaveStatus(`❌ Error saving blog post: ${blogError?.message || 'Please try again.'}`)
+         throw blogError // Re-throw to be caught by outer catch block
+       }
     } catch (error: any) {
       console.error('Error saving post:', error)
       setSaveStatus(`❌ Error saving post: ${error?.message || 'Please try again.'}`)
@@ -229,6 +234,37 @@ export default function NewPost() {
     } catch (error: any) {
       setSaveStatus(`❌ Test error: ${error.message}`)
       console.error('❌ Test error:', error)
+    }
+  }
+
+  const handleTestBlogSave = async () => {
+    console.log('🧪 Testing blog post save without image...')
+    setSaveStatus('Testing blog post save...')
+    
+    try {
+      const testBlogData = {
+        title: 'Test Blog Post',
+        content: 'This is a test blog post content.',
+        excerpt: 'Test excerpt',
+        coverImage: '',
+        imageUrl: '',
+        tags: ['test'],
+        category: 'Test',
+        author: 'Admin',
+        published: false,
+        featured: false,
+        slug: 'test-blog-post',
+        metaTitle: 'Test Blog Post',
+        metaDescription: 'Test blog post description',
+        publishDate: new Date().toISOString()
+      }
+      
+      const newPost = await createBlogPost(testBlogData)
+      setSaveStatus('✅ Test blog post saved successfully!')
+      console.log('✅ Test blog post created:', newPost)
+    } catch (error: any) {
+      setSaveStatus(`❌ Test blog save failed: ${error.message}`)
+      console.error('❌ Test blog save failed:', error)
     }
   }
 
@@ -265,6 +301,12 @@ export default function NewPost() {
                  className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
                >
                  Test Firebase
+               </button>
+               <button
+                 onClick={handleTestBlogSave}
+                 className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
+               >
+                 Test Blog Save
                </button>
                <button
                  onClick={handleSave}
