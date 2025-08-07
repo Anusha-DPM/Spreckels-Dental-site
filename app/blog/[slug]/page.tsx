@@ -51,6 +51,12 @@ export default function BlogPostPage() {
           })
           
           if (foundPost) {
+            console.log('Post loaded from localStorage:', foundPost)
+            console.log('Post image data:', {
+              title: foundPost.title,
+              coverImage: foundPost.coverImage,
+              imageUrl: foundPost.imageUrl
+            })
             setPost(foundPost)
             
             // Get related posts (excluding current post)
@@ -71,6 +77,12 @@ export default function BlogPostPage() {
           const firebasePost = await getBlogPostBySlug(params.slug as string)
           
           if (firebasePost && (firebasePost.published || firebasePost.status === 'published')) {
+            console.log('Post loaded from Firebase:', firebasePost)
+            console.log('Post image data:', {
+              title: firebasePost.title,
+              coverImage: firebasePost.coverImage,
+              imageUrl: firebasePost.imageUrl
+            })
             setPost(firebasePost)
             
             // Get related posts from Firebase
@@ -218,6 +230,27 @@ export default function BlogPostPage() {
                 alt={post.title}
                 fill
                 className="object-cover"
+                onError={(e) => {
+                  console.error('Cover image failed to load for post:', post.title, 'URL:', post.coverImage)
+                  // Hide the image and show a placeholder
+                  const target = e.target as HTMLImageElement
+                  target.style.display = 'none'
+                  // Create a placeholder div
+                  const placeholder = document.createElement('div')
+                  placeholder.className = 'absolute inset-0 bg-gray-200 flex items-center justify-center'
+                  placeholder.innerHTML = `
+                    <div class="text-center text-gray-500">
+                      <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p class="text-lg">Cover image not available</p>
+                    </div>
+                  `
+                  target.parentNode?.appendChild(placeholder)
+                }}
+                onLoad={() => {
+                  console.log('Cover image loaded successfully for post:', post.title, 'URL:', post.coverImage)
+                }}
               />
             </motion.div>
           </div>
@@ -290,6 +323,27 @@ export default function BlogPostPage() {
                           alt={relatedPost.title}
                           fill
                           className="object-cover hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            console.error('Related post image failed to load:', relatedPost.title, 'URL:', relatedPost.coverImage)
+                            // Hide the image and show a placeholder
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                            // Create a placeholder div
+                            const placeholder = document.createElement('div')
+                            placeholder.className = 'absolute inset-0 bg-gray-200 flex items-center justify-center'
+                            placeholder.innerHTML = `
+                              <div class="text-center text-gray-500">
+                                <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <p class="text-sm">Image not available</p>
+                              </div>
+                            `
+                            target.parentNode?.appendChild(placeholder)
+                          }}
+                          onLoad={() => {
+                            console.log('Related post image loaded successfully:', relatedPost.title, 'URL:', relatedPost.coverImage)
+                          }}
                         />
                       </div>
                     )}
