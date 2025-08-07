@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getBlogPosts, deleteBlogPost } from '@/lib/blogDatabase'
+import { getBlogPosts, deleteBlogPost, fixPostsWithMissingImages, validateAllPostImages } from '@/lib/blogDatabase'
 import { db } from '@/lib/firebase'
 
 interface BlogPost {
@@ -181,6 +181,54 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleFixImages = async () => {
+    if (confirm('This will fix all posts with missing or broken images. Continue?')) {
+      try {
+        setVerificationMessage('🔧 Fixing posts with missing images...')
+        const result = await fixPostsWithMissingImages()
+        
+        if (result.success) {
+          setVerificationMessage(`✅ ${result.message}`)
+          // Reload posts to show updated data
+          loadPosts()
+        } else {
+          setVerificationMessage(`❌ Error: ${result.error}`)
+        }
+      } catch (error) {
+        console.error('Error fixing images:', error)
+        setVerificationMessage(`❌ Error fixing images: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      }
+    }
+  }
+
+  const handleValidateImages = async () => {
+    try {
+      setVerificationMessage('🔍 Validating all post images...')
+      const results = await validateAllPostImages()
+      
+      // Check if results is an error object
+      if ('success' in results && results.success === false) {
+        setVerificationMessage(`❌ Error: ${results.error}`)
+        return
+      }
+      
+      // TypeScript now knows this is the validation results object
+      const validationResults = results as { total: number; valid: number; invalid: number; missing: number; issues: any[] }
+      
+      const message = `📊 Image validation complete: ${validationResults.valid} valid, ${validationResults.invalid} invalid, ${validationResults.missing} missing`
+      setVerificationMessage(message)
+      
+      // Log detailed results to console
+      console.log('📋 Detailed image validation results:', validationResults)
+      if (validationResults.issues.length > 0) {
+        console.log('🚨 Issues found:', validationResults.issues)
+      }
+    } catch (error) {
+      console.error('Error validating images:', error)
+      setVerificationMessage(`❌ Error validating images: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    }
+  }
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -255,58 +303,41 @@ export default function AdminDashboard() {
           transition={{ duration: 0.6 }}
         >
           {/* System Status */}
-          <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">System Status</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div className="flex items-center">
-                <div className={`w-3 h-3 rounded-full mr-3 ${
-                  firebaseStatus === 'connected' ? 'bg-green-500' : 
-                  firebaseStatus === 'offline' ? 'bg-yellow-500' : 'bg-red-500'
-                }`}></div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Firebase Status</h3>
-                  <p className="text-sm text-gray-600 capitalize">{firebaseStatus}</p>
-                </div>
+                <div className={`w-3 h-3 rounded-full mr-3 ${firebaseStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className="text-sm text-gray-600">Firebase: {firebaseStatus}</span>
+              </div>
+              <div className="flex items-center">
+                <div className={`w-3 h-3 rounded-full mr-3 ${localStorageStatus === 'available' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className="text-sm text-gray-600">localStorage: {localStorageStatus}</span>
               </div>
             </div>
             
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center">
-                <div className={`w-3 h-3 rounded-full mr-3 ${
-                  localStorageStatus === 'available' ? 'bg-green-500' : 'bg-red-500'
-                }`}></div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Local Storage</h3>
-                  <p className="text-sm text-gray-600 capitalize">{localStorageStatus}</p>
-                </div>
-              </div>
+            {/* Image Management Buttons */}
+            <div className="space-y-2">
+              <button
+                onClick={handleValidateImages}
+                className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm"
+              >
+                🔍 Validate All Post Images
+              </button>
+              <button
+                onClick={handleFixImages}
+                className="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200 text-sm"
+              >
+                🔧 Fix Missing Images
+              </button>
             </div>
             
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center">
-                <div className="w-3 h-3 rounded-full mr-3 bg-blue-500"></div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Data Source</h3>
-                  <p className="text-sm text-gray-600">
-                    {firebaseStatus === 'connected' ? 'Firebase + Local' : 'Local Storage Only'}
-                  </p>
-                </div>
+            {verificationMessage && (
+              <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-700">{verificationMessage}</p>
               </div>
-            </div>
+            )}
           </div>
-
-          {/* Verification Message */}
-          {verificationMessage && (
-            <div className={`mb-6 p-4 rounded-lg ${
-              verificationMessage.includes('✅') 
-                ? 'bg-green-100 text-green-800 border border-green-200' 
-                : 'bg-red-100 text-red-800 border border-red-200'
-            }`}>
-              <div className="flex items-center">
-                <span className="mr-2">{verificationMessage.includes('✅') ? '✅' : '❌'}</span>
-                <span className="text-sm font-medium">{verificationMessage}</span>
-              </div>
-            </div>
-          )}
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
