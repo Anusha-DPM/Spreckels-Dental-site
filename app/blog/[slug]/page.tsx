@@ -14,14 +14,20 @@ interface BlogPost {
   slug: string
   content: string
   excerpt: string
-  coverImage: string
+  coverImage?: string
+  imageUrl?: string
   tags: string[]
-  metaTitle: string
-  metaDescription: string
-  publishDate: string
-  status: 'draft' | 'published'
-  createdAt: string
-  updatedAt: string
+  category?: string
+  author?: string
+  metaTitle?: string
+  metaDescription?: string
+  publishDate?: string
+  createdAt?: string
+  updatedAt?: string
+  published?: boolean
+  featured?: boolean
+  views?: number
+  status?: 'draft' | 'published'
 }
 
 export default function BlogPostPage() {
@@ -87,7 +93,8 @@ export default function BlogPostPage() {
     loadPost()
   }, [params.slug])
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return 'Unknown date'
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
