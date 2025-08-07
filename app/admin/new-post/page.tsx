@@ -58,7 +58,23 @@ export default function NewPost() {
     const isAuthenticated = localStorage.getItem('adminAuthenticated')
     if (!isAuthenticated) {
       router.push('/admin/login')
+      return
     }
+
+    // Check Firebase connection
+    const checkFirebaseConnection = async () => {
+      try {
+        const { db } = await import('../../../lib/firebase')
+        if (!db) {
+          setError('Firebase is not connected. Please check your .env.local configuration.')
+        }
+      } catch (err) {
+        console.error('Firebase connection check failed:', err)
+        setError('Firebase connection failed. Please check your configuration.')
+      }
+    }
+
+    checkFirebaseConnection()
   }, [router])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -116,9 +132,19 @@ export default function NewPost() {
         router.push('/admin/dashboard')
       }, 2000)
 
-    } catch (err) {
-      setError('Failed to create blog post. Please try again.')
-      console.error(err)
+    } catch (err: any) {
+      console.error('Blog post creation error:', err)
+      
+      // Provide more specific error messages
+      if (err.message?.includes('Firebase')) {
+        setError('Firebase connection error. Please check your Firebase configuration in .env.local file.')
+      } else if (err.message?.includes('permission')) {
+        setError('Permission denied. Please check your Firebase security rules.')
+      } else if (err.message?.includes('network')) {
+        setError('Network error. Please check your internet connection.')
+      } else {
+        setError(`Failed to create blog post: ${err.message || 'Unknown error'}`)
+      }
     } finally {
       setLoading(false)
     }
