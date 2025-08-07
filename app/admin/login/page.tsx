@@ -15,7 +15,7 @@ export default function AdminLogin() {
     // Check if already authenticated
     const isAuthenticated = localStorage.getItem('adminAuthenticated')
     if (isAuthenticated) {
-      router.push('/admin')
+      router.push('/admin/dashboard')
     }
   }, [router])
 
@@ -26,7 +26,7 @@ export default function AdminLogin() {
     // Admin authentication
     if (username === 'admin' && password === 'dental2024') {
       localStorage.setItem('adminAuthenticated', 'true')
-      router.push('/admin')
+      router.push('/admin/dashboard')
     } else {
       alert('Invalid credentials. Please use admin/dental2024')
     }
@@ -100,10 +100,20 @@ export default function AdminLogin() {
             </button>
           </div>
           
-          <div className="text-center">
+          <div className="text-center space-y-2">
             <p className="text-xs text-gray-500">
               Admin credentials: admin / dental2024
             </p>
+            <button
+              type="button"
+              onClick={() => {
+                localStorage.removeItem('adminAuthenticated')
+                alert('Logged out successfully. Please refresh the page.')
+              }}
+              className="text-xs text-red-600 hover:text-red-800 underline"
+            >
+              Clear Login Session
+            </button>
           </div>
         </form>
       </div>
