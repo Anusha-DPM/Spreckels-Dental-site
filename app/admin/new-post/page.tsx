@@ -308,12 +308,17 @@ export default function NewPost() {
     setSaveStatus('Testing server-side upload...')
     
     try {
-      // Create a test file
-      const testContent = 'Test image content'
-      const testBlob = new Blob([testContent], { type: 'text/plain' })
-      const testFile = new File([testBlob], 'test-image.txt', { type: 'text/plain' })
+      // Create a test image file (SVG)
+      const svgContent = `
+        <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" fill="#ccc"/>
+          <text x="50" y="50" font-family="Arial" font-size="14" fill="#666" text-anchor="middle" dy=".3em">Test Image</text>
+        </svg>
+      `
+      const testBlob = new Blob([svgContent], { type: 'image/svg+xml' })
+      const testFile = new File([testBlob], 'test-image.svg', { type: 'image/svg+xml' })
       
-      console.log('📤 Testing server-side upload with test file...')
+      console.log('📤 Testing server-side upload with test image file...')
       const result = await uploadImageToFirebase(testFile, 'test-uploads')
       
       setSaveStatus('✅ Server-side upload test successful!')
