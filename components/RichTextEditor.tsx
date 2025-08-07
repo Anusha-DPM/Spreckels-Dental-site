@@ -50,7 +50,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const createLink = () => {
     const url = prompt('Enter URL:')
     if (url) {
-      execCommand('createLink', url)
+        execCommand('createLink', url)
     }
   }
 
@@ -91,7 +91,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   return (
     <div className={`rich-text-editor ${className}`}>
       {/* Toolbar */}
-      <motion.div 
+      <motion.div
         className="bg-gray-50 border border-gray-200 rounded-t-lg p-2 flex flex-wrap gap-1"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -107,7 +107,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           return (
             <motion.button
               key={index}
-              type="button"
+            type="button"
               onClick={() => {
                 if (button.custom) {
                   if (button.command === 'createLink') {
@@ -144,7 +144,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           ${isFocused ? 'bg-white' : 'bg-gray-50'}
           prose prose-sm max-w-none
         `}
-        style={{
+        style={{ 
           fontFamily: 'inherit',
           lineHeight: '1.6'
         }}
@@ -166,6 +166,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       </div>
     </div>
   )
-}
+} 
 
 export default RichTextEditor 
