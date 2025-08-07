@@ -126,7 +126,7 @@ export default function NewPost() {
         })
       }
       
-                    // Upload image to Firebase Storage if provided
+                           // Upload image to Firebase Storage if provided
        let imageUrl = post.coverImage || ''
        if (uploadedImage) {
          setSaveStatus('Processing image...')
@@ -148,18 +148,18 @@ export default function NewPost() {
            console.log('✅ File validation passed, attempting Firebase upload...')
            setSaveStatus('Uploading image to Firebase Storage...')
            
-                       // Try to upload to Firebase Storage with timeout
-            try {
-              const uploadPromise = uploadImageToFirebase(uploadedImage, 'blog-images')
-              const timeoutPromise = new Promise<never>((_, reject) => {
-                setTimeout(() => reject(new Error('Upload timeout')), 15000) // 15 second timeout
-              })
-              
-              const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as { url: string; path: string; fileName: string }
-              imageUrl = uploadResult.url
-              console.log('✅ Image uploaded successfully:', imageUrl)
-              setSaveStatus('✅ Image uploaded successfully!')
-            } catch (firebaseError: any) {
+           // Try to upload to Firebase Storage with timeout and immediate fallback
+           try {
+             const uploadPromise = uploadImageToFirebase(uploadedImage, 'blog-images')
+             const timeoutPromise = new Promise<never>((_, reject) => {
+               setTimeout(() => reject(new Error('Upload timeout')), 10000) // 10 second timeout
+             })
+             
+             const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as { url: string; path: string; fileName: string }
+             imageUrl = uploadResult.url
+             console.log('✅ Image uploaded successfully:', imageUrl)
+             setSaveStatus('✅ Image uploaded successfully!')
+           } catch (firebaseError: any) {
              console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
              // Fallback to base64 if Firebase Storage fails
              imageUrl = imagePreview
@@ -186,9 +186,10 @@ export default function NewPost() {
          publishDate: post.publishDate || new Date().toISOString()
        }
 
-       console.log('📝 Attempting to save blog post:', blogData)
+       console.log('📝 Final blog data to save:', blogData)
        setSaveStatus('Saving blog post...')
        
+       // Always try to save the blog post, regardless of image upload status
        try {
          // Create the blog post
          const newPost = await createBlogPost(blogData)
@@ -268,6 +269,40 @@ export default function NewPost() {
     }
   }
 
+  const handleTestBlogWithImage = async () => {
+    console.log('🧪 Testing blog post save with base64 image...')
+    setSaveStatus('Testing blog post save with image...')
+    
+    try {
+      // Create a simple base64 image for testing
+      const testImageUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2NjYyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+VGVzdCBJbWFnZTwvdGV4dD48L3N2Zz4='
+      
+      const testBlogData = {
+        title: 'Test Blog Post with Image',
+        content: 'This is a test blog post content with an image.',
+        excerpt: 'Test excerpt with image',
+        coverImage: testImageUrl,
+        imageUrl: testImageUrl,
+        tags: ['test', 'image'],
+        category: 'Test',
+        author: 'Admin',
+        published: false,
+        featured: false,
+        slug: 'test-blog-post-with-image',
+        metaTitle: 'Test Blog Post with Image',
+        metaDescription: 'Test blog post description with image',
+        publishDate: new Date().toISOString()
+      }
+      
+      const newPost = await createBlogPost(testBlogData)
+      setSaveStatus('✅ Test blog post with image saved successfully!')
+      console.log('✅ Test blog post with image created:', newPost)
+    } catch (error: any) {
+      setSaveStatus(`❌ Test blog with image failed: ${error.message}`)
+      console.error('❌ Test blog with image failed:', error)
+    }
+  }
+
   const handleTestDatabase = async () => {
     console.log('🧪 Testing Firebase Database...')
     setSaveStatus('Testing Firebase Database...')
@@ -326,6 +361,12 @@ export default function NewPost() {
                  className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
                >
                  Test Blog Save
+               </button>
+               <button
+                 onClick={handleTestBlogWithImage}
+                 className="bg-orange-600 text-white px-3 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium text-sm"
+               >
+                 Test Blog + Image
                </button>
                <button
                  onClick={handleTestDatabase}
