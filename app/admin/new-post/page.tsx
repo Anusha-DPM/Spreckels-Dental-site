@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from '@/components/RichTextEditor'
-import { createBlogPost } from '@/lib/blogDatabase'
+import { createBlogPost, testFirebaseDatabase } from '@/lib/blogDatabase'
 import { uploadImageToFirebase, testFirebaseStorage } from '@/lib/firebase'
 
 interface BlogPost {
@@ -268,6 +268,25 @@ export default function NewPost() {
     }
   }
 
+  const handleTestDatabase = async () => {
+    console.log('🧪 Testing Firebase Database...')
+    setSaveStatus('Testing Firebase Database...')
+    
+    try {
+      const result = await testFirebaseDatabase()
+      if (result.success) {
+        setSaveStatus('✅ Firebase Database test successful!')
+        console.log('✅ Firebase Database is working correctly')
+      } else {
+        setSaveStatus(`❌ Firebase Database test failed: ${result.error}`)
+        console.error('❌ Firebase Database test failed:', result.error)
+      }
+    } catch (error: any) {
+      setSaveStatus(`❌ Database test error: ${error.message}`)
+      console.error('❌ Database test error:', error)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -307,6 +326,12 @@ export default function NewPost() {
                  className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
                >
                  Test Blog Save
+               </button>
+               <button
+                 onClick={handleTestDatabase}
+                 className="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium text-sm"
+               >
+                 Test Database
                </button>
                <button
                  onClick={handleSave}
