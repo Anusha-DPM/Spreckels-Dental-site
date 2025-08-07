@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createBlogPost, updateBlogPost } from '../../../lib/blogDatabase'
+import { createBlogPost, updateBlogPost } from '../../../../lib/blogDatabase'
 
 export async function POST(request) {
   try {
