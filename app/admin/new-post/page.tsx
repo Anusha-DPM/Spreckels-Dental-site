@@ -327,60 +327,60 @@ export default function NewPost() {
     await handleSave()
   }
 
-     // Test function to verify Firebase Storage with compression
-   const testFirebaseStorage = async () => {
-     console.log('🧪 Testing Firebase Storage with compression...')
-     setSaveStatus('Testing Firebase Storage...')
-     
-     try {
-       // Create a larger test image to test compression
-       const canvas = document.createElement('canvas')
-       canvas.width = 2000
-       canvas.height = 1500
-       const ctx = canvas.getContext('2d')
-       if (ctx) {
-         // Create a gradient background
-         const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-         gradient.addColorStop(0, '#ff6b6b')
-         gradient.addColorStop(0.5, '#4ecdc4')
-         gradient.addColorStop(1, '#45b7d1')
-         ctx.fillStyle = gradient
-         ctx.fillRect(0, 0, canvas.width, canvas.height)
-         
-         // Add some text
-         ctx.fillStyle = '#fff'
-         ctx.font = 'bold 48px Arial'
-         ctx.textAlign = 'center'
-         ctx.fillText('Test Image', canvas.width / 2, canvas.height / 2)
-         ctx.font = '24px Arial'
-         ctx.fillText('Testing Compression', canvas.width / 2, canvas.height / 2 + 50)
-       }
-       
-       canvas.toBlob(async (blob) => {
-         if (blob) {
-           const testFile = new File([blob], 'test-image-large.png', { type: 'image/png' })
-           console.log('📊 Test file size:', testFile.size, 'bytes')
-           
-           try {
-             const result = await uploadImageToFirebase(testFile, 'test-uploads')
-             setSaveStatus('✅ Firebase Storage test successful!')
-             console.log('✅ Firebase Storage is working:', result)
-             console.log('📊 Compression test results:', {
-               originalSize: result.originalSize,
-               compressedSize: result.compressedSize,
-               savings: ((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(1) + '%'
-             })
-           } catch (error: any) {
-             setSaveStatus(`❌ Firebase Storage test failed: ${error.message}`)
-             console.error('❌ Firebase Storage test failed:', error)
-           }
-         }
-       }, 'image/png', 0.9) // High quality to test compression
-     } catch (error: any) {
-       setSaveStatus(`❌ Test error: ${error.message}`)
-       console.error('❌ Test error:', error)
-     }
-   }
+         // Test function to verify server-side Firebase Storage with compression
+    const testFirebaseStorage = async () => {
+      console.log('🧪 Testing server-side Firebase Storage with compression...')
+      setSaveStatus('Testing server-side Firebase Storage...')
+      
+      try {
+        // Create a larger test image to test compression
+        const canvas = document.createElement('canvas')
+        canvas.width = 2000
+        canvas.height = 1500
+        const ctx = canvas.getContext('2d')
+        if (ctx) {
+          // Create a gradient background
+          const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
+          gradient.addColorStop(0, '#ff6b6b')
+          gradient.addColorStop(0.5, '#4ecdc4')
+          gradient.addColorStop(1, '#45b7d1')
+          ctx.fillStyle = gradient
+          ctx.fillRect(0, 0, canvas.width, canvas.height)
+          
+          // Add some text
+          ctx.fillStyle = '#fff'
+          ctx.font = 'bold 48px Arial'
+          ctx.textAlign = 'center'
+          ctx.fillText('Test Image', canvas.width / 2, canvas.height / 2)
+          ctx.font = '24px Arial'
+          ctx.fillText('Testing Server-Side Upload', canvas.width / 2, canvas.height / 2 + 50)
+        }
+        
+        canvas.toBlob(async (blob) => {
+          if (blob) {
+            const testFile = new File([blob], 'test-image-large.png', { type: 'image/png' })
+            console.log('📊 Test file size:', testFile.size, 'bytes')
+            
+            try {
+              const result = await uploadImageToFirebase(testFile, 'test-uploads')
+              setSaveStatus('✅ Server-side Firebase Storage test successful!')
+              console.log('✅ Server-side Firebase Storage is working:', result)
+              console.log('📊 Compression test results:', {
+                originalSize: result.originalSize,
+                compressedSize: result.compressedSize,
+                savings: ((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(1) + '%'
+              })
+            } catch (error: any) {
+              setSaveStatus(`❌ Server-side Firebase Storage test failed: ${error.message}`)
+              console.error('❌ Server-side Firebase Storage test failed:', error)
+            }
+          }
+        }, 'image/png', 0.9) // High quality to test compression
+      } catch (error: any) {
+        setSaveStatus(`❌ Test error: ${error.message}`)
+        console.error('❌ Test error:', error)
+      }
+    }
 
    // Test small image upload
    const testSmallImage = async () => {
@@ -436,12 +436,12 @@ export default function NewPost() {
                )}
 
 
-                                                <button
-                   onClick={testFirebaseStorage}
-                   className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
-                 >
-                   Test Storage
-                 </button>
+                                                                  <button
+                    onClick={testFirebaseStorage}
+                    className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm"
+                  >
+                    Test Server Upload
+                  </button>
                  <button
                    onClick={testSmallImage}
                    className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
