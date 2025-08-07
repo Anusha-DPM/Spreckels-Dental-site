@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getBlogPosts, deleteBlogPost, fixPostsWithMissingImages, validateAllPostImages } from '@/lib/blogDatabase'
+import { getBlogPosts, deleteBlogPost } from '@/lib/blogDatabase'
 import { db } from '@/lib/firebase'
 
 interface BlogPost {
@@ -181,54 +181,6 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleFixImages = async () => {
-    if (confirm('This will fix all posts with missing or broken images. Continue?')) {
-      try {
-        setVerificationMessage('🔧 Fixing posts with missing images...')
-        const result = await fixPostsWithMissingImages()
-        
-        if (result.success) {
-          setVerificationMessage(`✅ ${result.message}`)
-          // Reload posts to show updated data
-          loadPosts()
-        } else {
-          setVerificationMessage(`❌ Error: ${result.error}`)
-        }
-      } catch (error) {
-        console.error('Error fixing images:', error)
-        setVerificationMessage(`❌ Error fixing images: ${error instanceof Error ? error.message : 'Unknown error'}`)
-      }
-    }
-  }
-
-  const handleValidateImages = async () => {
-    try {
-      setVerificationMessage('🔍 Validating all post images...')
-      const results = await validateAllPostImages()
-      
-      // Check if results is an error object
-      if ('success' in results && results.success === false) {
-        setVerificationMessage(`❌ Error: ${results.error}`)
-        return
-      }
-      
-      // TypeScript now knows this is the validation results object
-      const validationResults = results as { total: number; valid: number; invalid: number; missing: number; issues: any[] }
-      
-      const message = `📊 Image validation complete: ${validationResults.valid} valid, ${validationResults.invalid} invalid, ${validationResults.missing} missing`
-      setVerificationMessage(message)
-      
-      // Log detailed results to console
-      console.log('📋 Detailed image validation results:', validationResults)
-      if (validationResults.issues.length > 0) {
-        console.log('🚨 Issues found:', validationResults.issues)
-      }
-    } catch (error) {
-      console.error('Error validating images:', error)
-      setVerificationMessage(`❌ Error validating images: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    }
-  }
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -314,22 +266,6 @@ export default function AdminDashboard() {
                 <div className={`w-3 h-3 rounded-full mr-3 ${localStorageStatus === 'available' ? 'bg-green-500' : 'bg-red-500'}`}></div>
                 <span className="text-sm text-gray-600">localStorage: {localStorageStatus}</span>
               </div>
-            </div>
-            
-            {/* Image Management Buttons */}
-            <div className="space-y-2">
-              <button
-                onClick={handleValidateImages}
-                className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm"
-              >
-                🔍 Validate All Post Images
-              </button>
-              <button
-                onClick={handleFixImages}
-                className="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200 text-sm"
-              >
-                🔧 Fix Missing Images
-              </button>
             </div>
             
             {verificationMessage && (
