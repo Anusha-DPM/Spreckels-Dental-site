@@ -1,113 +1,53 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-
-interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  content: string
-  excerpt: string
-  coverImage?: string
-  imageUrl?: string
-  tags: string[]
-  category?: string
-  author?: string
-  metaTitle?: string
-  metaDescription?: string
-  publishDate?: string
-  createdAt?: string
-  updatedAt?: string
-  published?: boolean
-  featured?: boolean
-  views?: number
-  status?: 'draft' | 'published'
-}
+import { getBlogPostBySlug, getPublishedBlogPosts, type BlogPost } from '../../../lib/blogDatabase'
 
 export default function BlogPostPage() {
-  const params = useParams()
   const [post, setPost] = useState<BlogPost | null>(null)
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const params = useParams()
+  const router = useRouter()
+  const slug = params.slug as string
 
   useEffect(() => {
-    const loadPost = async () => {
-      try {
-        // Try to load from localStorage first
-        const savedPosts = localStorage.getItem('blogPosts')
-        if (savedPosts) {
-          const allPosts = JSON.parse(savedPosts)
-          const foundPost = allPosts.find((p: BlogPost) => {
-            return p.slug === params.slug && (
-              p.status === 'published' || p.published === true
-            )
-          })
-          
-          if (foundPost) {
-            console.log('Post loaded from localStorage:', foundPost)
-            console.log('Post image data:', {
-              title: foundPost.title,
-              coverImage: foundPost.coverImage,
-              imageUrl: foundPost.imageUrl
-            })
-            setPost(foundPost)
-            
-            // Get related posts (excluding current post)
-            const related = allPosts
-              .filter((p: BlogPost) => p.id !== foundPost.id && (
-                p.status === 'published' || p.published === true
-              ))
-              .slice(0, 3)
-            setRelatedPosts(related)
-            setIsLoading(false)
-            return
-          }
-        }
-        
-        // If not found in localStorage, try Firebase
-        try {
-          const { getBlogPostBySlug } = await import('@/lib/blogDatabase')
-          const firebasePost = await getBlogPostBySlug(params.slug as string)
-          
-          if (firebasePost && (firebasePost.published || firebasePost.status === 'published')) {
-            console.log('Post loaded from Firebase:', firebasePost)
-            console.log('Post image data:', {
-              title: firebasePost.title,
-              coverImage: firebasePost.coverImage,
-              imageUrl: firebasePost.imageUrl
-            })
-            setPost(firebasePost)
-            
-            // Get related posts from Firebase
-            const { getBlogPosts } = await import('@/lib/blogDatabase')
-            const allPosts = await getBlogPosts({ published: true })
-            const related = allPosts
-              .filter((p: BlogPost) => p.id !== firebasePost.id)
-              .slice(0, 3)
-            setRelatedPosts(related)
-          }
-        } catch (firebaseError) {
-          console.warn('Firebase load failed:', firebaseError)
-        }
-      } catch (error) {
-        console.error('Error loading post:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    
     loadPost()
-  }, [params.slug])
+  }, [slug])
 
-  const formatDate = (dateString: string | undefined) => {
-    if (!dateString) return 'Unknown date'
+  const loadPost = async () => {
+    try {
+      setLoading(true)
+      const fetchedPost = await getBlogPostBySlug(slug)
+      
+      if (!fetchedPost) {
+        setError('Post not found')
+        return
+      }
+
+      setPost(fetchedPost)
+      
+      // Load related posts
+      const allPosts = await getPublishedBlogPosts()
+      const related = allPosts
+        .filter(p => p.id !== fetchedPost.id)
+        .slice(0, 3)
+      setRelatedPosts(related)
+
+    } catch (err) {
+      setError('Failed to load blog post')
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -115,31 +55,7 @@ export default function BlogPostPage() {
     })
   }
 
-  // Sanitize HTML content to prevent React errors
-  const sanitizeHTML = (html: string) => {
-    if (!html || typeof html !== 'string') return ''
-    
-    try {
-      // Remove any script tags and potentially dangerous content
-      const sanitized = html
-        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-        .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-        .replace(/javascript:/gi, '')
-        .replace(/on\w+\s*=/gi, '')
-        .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-        .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
-        .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '')
-        .replace(/<input\b[^>]*>/gi, '')
-        .replace(/<button\b[^<]*(?:(?!<\/button>)<[^<]*)*<\/button>/gi, '')
-      
-      return sanitized
-    } catch (error) {
-      console.warn('Error sanitizing HTML:', error)
-      return html.replace(/<[^>]*>/g, '') // Strip all HTML tags if sanitization fails
-    }
-  }
-
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -150,274 +66,263 @@ export default function BlogPostPage() {
     )
   }
 
-  if (!post) {
+  if (error || !post) {
     return (
-      <div className="min-h-screen bg-white">
-        <Header />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Post Not Found</h1>
-          <p className="text-xl text-gray-600 mb-8">The blog post you're looking for doesn't exist.</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-600 text-6xl mb-4">❌</div>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2">Post Not Found</h3>
+          <p className="text-gray-500 mb-6">{error || 'The blog post you are looking for does not exist.'}</p>
           <Link
             href="/blog"
-            className="bg-[#441018] text-white px-8 py-3 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold"
+            className="bg-[#441018] text-white px-6 py-3 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200"
           >
             Back to Blog
           </Link>
         </div>
-        <Footer />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] pt-[150px] pb-16">
+      <motion.section 
+        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white py-20"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="flex items-center justify-center text-sm text-gray-300 mb-4">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              {formatDate(post.publishDate)}
-            </div>
+            <Link 
+              href="/blog"
+              className="inline-flex items-center text-gray-200 hover:text-white transition-colors duration-200 mb-6"
+            >
+              ← Back to Blog
+            </Link>
             
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              {post.title}
-            </h1>
-            
-            {post.excerpt && (
-              <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-                {post.excerpt}
-              </p>
-            )}
-            
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-2 mt-6">
-                {post.tags.map((tag) => (
+            {/* Categories */}
+            {post.categories && post.categories.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {post.categories.map(category => (
                   <span
-                    key={tag}
-                    className="px-3 py-1 bg-white bg-opacity-20 text-white text-sm rounded-full"
+                    key={category}
+                    className="px-3 py-1 bg-white text-[#441018] text-sm rounded-full font-medium"
                   >
-                    {tag}
+                    {category}
                   </span>
                 ))}
               </div>
             )}
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Cover Image */}
-      {post.coverImage && (
-        <section className="py-8">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative h-96 rounded-2xl overflow-hidden shadow-2xl"
-            >
-              <Image
-                src={post.coverImage}
-                alt={post.title}
-                fill
-                className="object-cover"
-                onError={(e) => {
-                  console.error('Cover image failed to load for post:', post.title, 'URL:', post.coverImage)
-                  // Hide the image and show a placeholder
-                  const target = e.target as HTMLImageElement
-                  target.style.display = 'none'
-                  // Create a placeholder div
-                  const placeholder = document.createElement('div')
-                  placeholder.className = 'absolute inset-0 bg-gray-200 flex items-center justify-center'
-                  placeholder.innerHTML = `
-                    <div class="text-center text-gray-500">
-                      <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p class="text-lg">Cover image not available</p>
-                    </div>
-                  `
-                  target.parentNode?.appendChild(placeholder)
-                }}
-                onLoad={() => {
-                  console.log('Cover image loaded successfully for post:', post.title, 'URL:', post.coverImage)
-                }}
-              />
-            </motion.div>
-          </div>
-        </section>
-      )}
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              {post.title}
+            </h1>
 
-      {/* Content */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="prose prose-lg max-w-none"
-          >
-            {post.content ? (
-                             <div 
-                 dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
-                 onError={(e) => {
-                   console.error('Error rendering blog content:', e)
-                   setHasError(true)
-                   // Fallback to plain text if HTML rendering fails
-                   const target = e.target as HTMLDivElement
-                   if (target && post.content) {
-                     target.innerHTML = post.content.replace(/<[^>]*>/g, '')
-                   }
-                 }}
-               />
-            ) : (
-              <p className="text-gray-500 italic">No content available.</p>
-            )}
-            
-            {hasError && (
-              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-yellow-800 text-sm">
-                  ⚠️ There was an issue rendering some content. The post has been displayed with simplified formatting.
-                </p>
-              </div>
-            )}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Related Posts */}
-      {relatedPosts.length > 0 && (
-        <section className="bg-gray-50 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                Related Articles
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {relatedPosts.map((relatedPost, index) => (
-                  <motion.article
-                    key={relatedPost.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-                  >
-                    {relatedPost.coverImage && (
-                      <div className="relative h-48 overflow-hidden">
-                        <Image
-                          src={relatedPost.coverImage}
-                          alt={relatedPost.title}
-                          fill
-                          className="object-cover hover:scale-105 transition-transform duration-300"
-                          onError={(e) => {
-                            console.error('Related post image failed to load:', relatedPost.title, 'URL:', relatedPost.coverImage)
-                            // Hide the image and show a placeholder
-                            const target = e.target as HTMLImageElement
-                            target.style.display = 'none'
-                            // Create a placeholder div
-                            const placeholder = document.createElement('div')
-                            placeholder.className = 'absolute inset-0 bg-gray-200 flex items-center justify-center'
-                            placeholder.innerHTML = `
-                              <div class="text-center text-gray-500">
-                                <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <p class="text-sm">Image not available</p>
-                              </div>
-                            `
-                            target.parentNode?.appendChild(placeholder)
-                          }}
-                          onLoad={() => {
-                            console.log('Related post image loaded successfully:', relatedPost.title, 'URL:', relatedPost.coverImage)
-                          }}
-                        />
-                      </div>
-                    )}
-                    
-                    <div className="p-6">
-                      <div className="flex items-center text-sm text-gray-500 mb-3">
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        {formatDate(relatedPost.publishDate)}
-                      </div>
-                      
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
-                        {relatedPost.title}
-                      </h3>
-                      
-                      {relatedPost.excerpt && (
-                        <p className="text-gray-600 mb-4 line-clamp-3">
-                          {relatedPost.excerpt}
-                        </p>
-                      )}
-                      
-                      <Link
-                        href={`/blog/${relatedPost.slug}`}
-                        className="inline-flex items-center text-[#441018] hover:text-[#5a1a2a] font-medium transition-colors duration-200"
-                      >
-                        Read More
-                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-      )}
-
-      {/* CTA Section */}
-      <section className="bg-[#441018] py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Ready to Improve Your Oral Health?
-            </h2>
-            <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-              Our dental professionals are here to help you achieve a healthy, beautiful smile. Schedule your appointment today.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="https://spreckels-dental-site.vercel.app/appointment-request"
-                className="bg-white text-[#441018] px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-semibold"
-              >
-                Schedule Appointment
-              </Link>
-              <Link
-                href="/contact"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold"
-              >
-                Contact Us
-              </Link>
+            <div className="flex items-center text-gray-200 text-lg">
+              <span>{formatDate(post.publishDate)}</span>
+              {post.author && (
+                <>
+                  <span className="mx-3">•</span>
+                  <span>By {post.author}</span>
+                </>
+              )}
             </div>
           </motion.div>
         </div>
+      </motion.section>
+
+      {/* Main Content */}
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Article Content */}
+            <motion.article 
+              className="lg:col-span-2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              {/* Featured Image */}
+              {(post.coverImage || post.imageUrl) && (
+                <div className="mb-8">
+                  <div className="relative h-96 rounded-lg overflow-hidden">
+                    <Image
+                      src={post.coverImage || post.imageUrl!}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Excerpt */}
+              {post.excerpt && (
+                <div className="mb-8 p-6 bg-gray-50 rounded-lg">
+                  <p className="text-xl text-gray-700 italic">
+                    {post.excerpt}
+                  </p>
+                </div>
+              )}
+
+              {/* Content */}
+              <div 
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+
+              {/* Tags */}
+              {post.tags && post.tags.length > 0 && (
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map(tag => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-colors duration-200"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Share Buttons */}
+              <div className="mt-8 pt-8 border-t border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Share this post</h3>
+                <div className="flex space-x-4">
+                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    Facebook
+                  </button>
+                  <button className="px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors duration-200">
+                    Twitter
+                  </button>
+                  <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+                    WhatsApp
+                  </button>
+                </div>
+              </div>
+            </motion.article>
+
+            {/* Sidebar */}
+            <motion.aside 
+              className="lg:col-span-1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              {/* Author Info */}
+              {post.author && (
+                <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">About the Author</h3>
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-[#441018] rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                      {post.author.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">{post.author}</p>
+                      <p className="text-sm text-gray-500">Dental Health Expert</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Related Posts */}
+              {relatedPosts.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Related Posts</h3>
+                  <div className="space-y-4">
+                    {relatedPosts.map(relatedPost => (
+                      <Link
+                        key={relatedPost.id}
+                        href={`/blog/${relatedPost.slug}`}
+                        className="block group"
+                      >
+                        <div className="flex items-start space-x-3">
+                          {(relatedPost.coverImage || relatedPost.imageUrl) && (
+                            <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                              <Image
+                                src={relatedPost.coverImage || relatedPost.imageUrl!}
+                                alt={relatedPost.title}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-200"
+                              />
+                            </div>
+                          )}
+                          <div>
+                            <h4 className="font-medium text-gray-900 group-hover:text-[#441018] transition-colors duration-200 line-clamp-2">
+                              {relatedPost.title}
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                              {formatDate(relatedPost.publishDate)}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Newsletter Signup */}
+              <div className="bg-[#441018] text-white rounded-lg p-6 mt-8">
+                <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
+                <p className="text-gray-200 mb-4">
+                  Get the latest dental health tips and updates delivered to your inbox.
+                </p>
+                <div className="space-y-3">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+                  />
+                  <button className="w-full px-4 py-2 bg-white text-[#441018] font-semibold rounded hover:bg-gray-100 transition-colors duration-200">
+                    Subscribe
+                  </button>
+                </div>
+              </div>
+            </motion.aside>
+          </div>
+        </div>
       </section>
 
-      <Footer />
+      {/* Call to Action */}
+      <motion.section 
+        className="bg-white py-16 border-t border-gray-200"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Ready to Transform Your Smile?
+          </h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Schedule your consultation today and take the first step towards a healthier, more beautiful smile.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/appointment-request"
+              className="px-8 py-3 bg-[#441018] text-white font-semibold rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200"
+            >
+              Book Appointment
+            </Link>
+            <Link
+              href="/contact"
+              className="px-8 py-3 border border-[#441018] text-[#441018] font-semibold rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </motion.section>
     </div>
   )
-} 
+}

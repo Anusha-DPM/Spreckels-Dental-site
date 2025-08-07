@@ -9,6 +9,7 @@ import {
   MissionSection,
   FeaturesSection,
   NewOutgridAppSection,
+  LatestBlogPosts,
   CTASection
 } from '../components'
 
@@ -24,6 +25,7 @@ export default function Home() {
       <ServicesSection />
       <InfoStatsSection />
       <NewOutgridAppSection />
+      <LatestBlogPosts />
       <CTASection />
     </Layout>
   )

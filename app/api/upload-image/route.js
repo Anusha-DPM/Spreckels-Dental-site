@@ -26,7 +26,7 @@ export async function POST(request) {
   try {
     const formData = await request.formData()
     const file = formData.get('file')
-    const folder = formData.get('folder') || 'blog-images'
+    const folder = formData.get('folder') || 'images'
 
     if (!file || !(file instanceof File)) {
       return NextResponse.json(

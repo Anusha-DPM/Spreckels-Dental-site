@@ -15,7 +15,7 @@ export default function AdminLogin() {
     // Check if already authenticated
     const isAuthenticated = localStorage.getItem('adminAuthenticated')
     if (isAuthenticated) {
-      router.push('/admin/dashboard')
+      router.push('/admin')
     }
   }, [router])
 
@@ -26,7 +26,7 @@ export default function AdminLogin() {
     // Admin authentication
     if (username === 'admin' && password === 'dental2024') {
       localStorage.setItem('adminAuthenticated', 'true')
-      router.push('/admin/dashboard')
+      router.push('/admin')
     } else {
       alert('Invalid credentials. Please use admin/dental2024')
     }
@@ -51,7 +51,7 @@ export default function AdminLogin() {
             Admin Login
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Access your blog management dashboard
+            Access your admin dashboard
           </p>
         </div>
         

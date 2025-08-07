@@ -1,37 +1,38 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
-import Image from 'next/image'
-import RichTextEditor from '@/components/RichTextEditor'
-import { getBlogPostById, updateBlogPost } from '@/lib/blogDatabase'
-
-interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  content: string
-  excerpt: string
-  coverImage: string
-  tags: string[]
-  metaTitle: string
-  metaDescription: string
-  publishDate: string
-  status: 'draft' | 'published'
-  createdAt: string
-  updatedAt: string
-}
+import RichTextEditor from '../../../../components/RichTextEditor'
+import { getBlogPostById, updateBlogPost, generateSlug, type BlogPost } from '../../../../lib/blogDatabase'
+import { uploadImageToFirebase } from '../../../../lib/firebase'
 
 export default function EditPost() {
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    excerpt: '',
+    coverImage: '',
+    imageUrl: '',
+    tags: '',
+    categories: '',
+    metaTitle: '',
+    metaDescription: '',
+    published: false,
+    publishDate: new Date().toISOString().split('T')[0]
+  })
+  
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState('')
+  const [originalPost, setOriginalPost] = useState<BlogPost | null>(null)
   const router = useRouter()
   const params = useParams()
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSaving, setIsSaving] = useState(false)
-  const [post, setPost] = useState<BlogPost | null>(null)
-  const [imageUrl, setImageUrl] = useState<string>('')
-  const [imageLoading, setImageLoading] = useState<boolean>(false)
+  const postId = params.id as string
 
   useEffect(() => {
     // Check authentication
@@ -41,202 +42,119 @@ export default function EditPost() {
       return
     }
 
-    // Load post data
     loadPost()
-  }, [router, params.id])
+  }, [postId, router])
 
   const loadPost = async () => {
     try {
-      setIsLoading(true)
+      setLoading(true)
+      const post = await getBlogPostById(postId)
       
-      // Try to get post from Firebase first
-      try {
-        const firebasePost = await getBlogPostById(params.id as string)
-        if (firebasePost) {
-          setPost(firebasePost)
-          // Set image URL if post has a cover image
-          if (firebasePost.coverImage && firebasePost.coverImage.startsWith('http')) {
-            setImageUrl(firebasePost.coverImage)
-          }
-          setIsLoading(false)
-          return
-        }
-      } catch (firebaseError) {
-        console.log('Firebase post not found, trying localStorage...')
-      }
-
-      // Fallback to localStorage
-      const savedPosts = localStorage.getItem('blogPosts')
-      if (savedPosts) {
-        const posts = JSON.parse(savedPosts)
-        const foundPost = posts.find((p: BlogPost) => p.id === params.id)
-        if (foundPost) {
-          setPost(foundPost)
-          // Set image URL if post has a cover image
-          if (foundPost.coverImage && foundPost.coverImage.startsWith('http')) {
-            setImageUrl(foundPost.coverImage)
-          }
-        } else {
-          router.push('/admin/dashboard')
-        }
-      } else {
-        router.push('/admin/dashboard')
-      }
-    } catch (error) {
-      console.error('Error loading post:', error)
-      router.push('/admin/dashboard')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9 -]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim()
-  }
-
-  const handleTitleChange = (title: string) => {
-    if (post) {
-      setPost({
-        ...post,
-        title,
-        slug: generateSlug(title)
-      })
-    }
-  }
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file && post) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please select a valid image file (JPG, PNG, SVG, WebP, etc.)')
-        return
-      }
-      
-      // Validate file size (max 10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        alert('Image file is too large. Please select an image smaller than 10MB.')
-        return
-      }
-      
-      // Clear URL field when uploading a file
-      setImageUrl('')
-      
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setPost({
-          ...post,
-          coverImage: e.target?.result as string
-        })
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleImageUrlChange = (url: string) => {
-    setImageUrl(url)
-    // If user enters a URL, update the post cover image
-    if (url.trim() && post) {
-      setImageLoading(true)
-      setPost({ ...post, coverImage: url.trim() })
-      setImageLoading(false)
-    }
-  }
-
-  const validateImageUrl = (url: string) => {
-    if (!url.trim()) return true
-    try {
-      new URL(url)
-      return true
-    } catch {
-      return false
-    }
-  }
-
-  const testImageUrl = async (url: string) => {
-    try {
-      const response = await fetch(url, { method: 'HEAD' })
-      return response.ok
-    } catch (error) {
-      console.error('Error testing image URL:', error)
-      return false
-    }
-  }
-
-  const handleTagsChange = (tagsString: string) => {
-    if (post) {
-      const tags = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag)
-      setPost({ ...post, tags })
-    }
-  }
-
-  const handleSave = async () => {
-    if (!post) return
-    
-    setIsSaving(true)
-    
-    try {
-      // Validate required fields
-      if (!post.title?.trim()) {
-        alert('Post title is required')
-        setIsSaving(false)
-        return
-      }
-      
-      if (!post.content?.trim()) {
-        alert('Post content is required')
-        setIsSaving(false)
+      if (!post) {
+        setError('Post not found')
         return
       }
 
-      // Validate image URL if provided
-      if (imageUrl.trim() && !validateImageUrl(imageUrl)) {
-        alert('Invalid image URL format')
-        setIsSaving(false)
-        return
-      }
-      
-      // Prepare update data
-      const updateData = {
+      setOriginalPost(post)
+      setFormData({
         title: post.title,
         content: post.content,
-        excerpt: post.excerpt,
-        coverImage: post.coverImage,
-        tags: post.tags,
-        metaTitle: post.metaTitle,
-        metaDescription: post.metaDescription,
-        publishDate: post.publishDate,
-        status: post.status,
-        slug: post.slug,
-        updatedAt: new Date().toISOString()
+        excerpt: post.excerpt || '',
+        coverImage: post.coverImage || '',
+        imageUrl: post.imageUrl || '',
+        tags: post.tags?.join(', ') || '',
+        categories: post.categories?.join(', ') || '',
+        metaTitle: post.metaTitle || '',
+        metaDescription: post.metaDescription || '',
+        published: post.published,
+        publishDate: post.published ? post.publishDate.split('T')[0] : new Date().toISOString().split('T')[0]
+      })
+
+      if (post.coverImage) {
+        setImagePreview(post.coverImage)
       }
-      
-      // Save to Firebase and localStorage
-      await updateBlogPost(post.id, updateData)
-      
-      alert('Post saved successfully!')
-      router.push('/admin/dashboard')
-    } catch (error) {
-      console.error('Error saving post:', error)
-      alert('Error saving post. Please try again.')
+
+    } catch (err) {
+      setError('Failed to load post')
+      console.error(err)
     } finally {
-      setIsSaving(false)
+      setLoading(false)
     }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }))
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageFile(file)
+      setImagePreview(URL.createObjectURL(file))
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    setError('')
+    setSuccess('')
+
+    try {
+      let coverImageUrl = formData.coverImage
+
+      // Upload image if file is selected
+      if (imageFile) {
+        const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images')
+        coverImageUrl = uploadResult.url
+      }
+
+      const updateData: Partial<BlogPost> = {
+        title: formData.title,
+        content: formData.content,
+        excerpt: formData.excerpt,
+        coverImage: coverImageUrl,
+        imageUrl: formData.imageUrl,
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+        categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
+        metaTitle: formData.metaTitle || formData.title,
+        metaDescription: formData.metaDescription || formData.excerpt,
+        slug: generateSlug(formData.title),
+        published: formData.published,
+        publishDate: formData.published ? formData.publishDate : new Date().toISOString()
+      }
+
+      await updateBlogPost(postId, updateData)
+      setSuccess('Blog post updated successfully!')
+      
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        router.push('/admin/dashboard')
+      }, 2000)
+
+    } catch (err) {
+      setError('Failed to update blog post. Please try again.')
+      console.error(err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleSaveDraft = async () => {
+    setFormData(prev => ({ ...prev, published: false }))
+    await handleSubmit(new Event('submit') as any)
   }
 
   const handlePublish = async () => {
-    if (post) {
-      setPost({ ...post, status: 'published' })
-      await handleSave()
-    }
+    setFormData(prev => ({ ...prev, published: true }))
+    await handleSubmit(new Event('submit') as any)
   }
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -247,14 +165,16 @@ export default function EditPost() {
     )
   }
 
-  if (!post) {
+  if (error && !originalPost) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Post Not Found</h1>
+          <div className="text-red-600 text-6xl mb-4">❌</div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Post Not Found</h3>
+          <p className="text-gray-500 mb-4">{error}</p>
           <Link
             href="/admin/dashboard"
-            className="bg-[#441018] text-white px-6 py-3 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-medium"
+            className="bg-[#441018] text-white px-6 py-2 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200"
           >
             Back to Dashboard
           </Link>
@@ -266,277 +186,268 @@ export default function EditPost() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <motion.header 
+        className="bg-white shadow-sm border-b border-gray-200"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <Link href="/admin/dashboard" className="flex items-center">
-                <Image
-                  src="/logo.webp"
-                  alt="SprekelSpark Dental Logo"
-                  width={120}
-                  height={48}
-                  className="h-12 w-auto"
-                />
+              <Link href="/admin/dashboard" className="text-gray-600 hover:text-gray-900">
+                ← Back to Dashboard
               </Link>
-              <div className="border-l border-gray-300 pl-4">
-                <h1 className="text-xl font-semibold text-gray-900">Edit Blog Post</h1>
-                <p className="text-sm text-gray-600">Update your content</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50"
-              >
-                {isSaving ? 'Saving...' : 'Save Changes'}
-              </button>
-              <button
-                onClick={handlePublish}
-                disabled={isSaving}
-                className="bg-[#441018] text-white px-4 py-2 rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-medium disabled:opacity-50"
-              >
-                {isSaving ? 'Publishing...' : 'Update & Publish'}
-              </button>
+              <h1 className="text-2xl font-bold text-gray-900">Edit Post</h1>
             </div>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <motion.div
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {error && (
+          <motion.div 
+            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {success && (
+          <motion.div 
+            className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {success}
+          </motion.div>
+        )}
+
+        <motion.form 
+          onSubmit={handleSubmit}
+          className="space-y-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {/* Main Editor */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Title */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Post Title *
-              </label>
-              <input
-                type="text"
-                value={post.title}
-                onChange={(e) => handleTitleChange(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200 text-lg"
-                placeholder="Enter your post title..."
-              />
-            </div>
-
-            {/* Content */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Content *
-              </label>
-              <RichTextEditor
-                value={post.content || ''}
-                onChange={(content) => setPost({ ...post, content })}
-                placeholder="Write your blog post content here..."
-              />
-            </div>
-
-            {/* Excerpt */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Excerpt
-              </label>
-              <textarea
-                value={post.excerpt}
-                onChange={(e) => setPost({ ...post, excerpt: e.target.value })}
-                rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200 resize-none"
-                placeholder="Brief summary of your post (optional)"
-              />
-            </div>
+          {/* Title */}
+          <div>
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              Post Title *
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+              placeholder="Enter your post title..."
+            />
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Cover Image */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Cover Image
-              </label>
-              
-              {/* Image URL Input */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Blog Image URL
-                </label>
-                <input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => handleImageUrlChange(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
-                  placeholder="https://example.com/image.jpg"
-                />
-                <div className="text-xs text-gray-400 mt-1">
-                  Examples: Unsplash, Pexels, your website, or any direct image URL
-                </div>
-                <div className="flex items-center gap-2 mt-1">
-                  <p className="text-xs text-gray-500">
-                    Enter a direct URL to an image (e.g., from Unsplash, your website, etc.)
-                  </p>
-                  {imageUrl.trim() && (
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        const isValid = await testImageUrl(imageUrl)
-                        if (isValid) {
-                          alert('✅ Image URL is accessible')
-                        } else {
-                          alert('❌ Image URL is not accessible')
-                        }
-                      }}
-                      className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-                    >
-                      Test URL
-                    </button>
-                  )}
-                </div>
-              </div>
+          {/* Content */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Content *
+            </label>
+            <RichTextEditor
+              value={formData.content}
+              onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+              placeholder="Start writing your blog post..."
+            />
+          </div>
 
-              {/* Image Preview */}
-              {post.coverImage ? (
-                <div className="mb-4">
-                  <Image
-                    src={post.coverImage}
-                    alt="Cover preview"
-                    width={300}
-                    height={200}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
-                  <button
-                    onClick={() => {
-                      setPost({ ...post, coverImage: '' })
-                      setImageUrl('')
-                    }}
-                    className="mt-2 text-red-600 hover:text-red-800 text-sm"
-                  >
-                    Remove Image
-                  </button>
-                </div>
-              ) : (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                    id="cover-image"
-                  />
-                  <label htmlFor="cover-image" className="cursor-pointer">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <p className="mt-2 text-sm text-gray-600">Click to upload cover image</p>
-                    <p className="text-xs text-gray-500 mt-1">Supports: JPG, PNG, SVG, WebP, GIF, etc.</p>
-                    <p className="text-xs text-gray-500">Max size: 10MB</p>
-                  </label>
+          {/* Excerpt */}
+          <div>
+            <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 mb-2">
+              Excerpt
+            </label>
+            <textarea
+              id="excerpt"
+              name="excerpt"
+              value={formData.excerpt}
+              onChange={handleInputChange}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+              placeholder="Brief summary of your post..."
+            />
+          </div>
+
+          {/* Image Upload */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700 mb-2">
+                Cover Image (Upload)
+              </label>
+              <input
+                type="file"
+                id="coverImage"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+              />
+              {imagePreview && (
+                <div className="mt-2">
+                  <img src={imagePreview} alt="Preview" className="h-32 w-auto rounded-lg" />
                 </div>
               )}
             </div>
 
-            {/* Publish Settings */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Publish Settings</h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Status
-                  </label>
-                  <select
-                    value={post.status}
-                    onChange={(e) => setPost({ ...post, status: e.target.value as 'draft' | 'published' })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
-                  >
-                    <option value="draft">Draft</option>
-                    <option value="published">Published</option>
-                  </select>
-                </div>
+            <div>
+              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                Image URL
+              </label>
+              <input
+                type="url"
+                id="imageUrl"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+          </div>
 
+          {/* Tags and Categories */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+                Tags
+              </label>
+              <input
+                type="text"
+                id="tags"
+                name="tags"
+                value={formData.tags}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                placeholder="tag1, tag2, tag3"
+              />
+              <p className="text-xs text-gray-500 mt-1">Separate tags with commas</p>
+            </div>
+
+            <div>
+              <label htmlFor="categories" className="block text-sm font-medium text-gray-700 mb-2">
+                Categories
+              </label>
+              <input
+                type="text"
+                id="categories"
+                name="categories"
+                value={formData.categories}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                placeholder="category1, category2"
+              />
+              <p className="text-xs text-gray-500 mt-1">Separate categories with commas</p>
+            </div>
+          </div>
+
+          {/* Meta Data */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">SEO Settings</h3>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="metaTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                  Meta Title
+                </label>
+                <input
+                  type="text"
+                  id="metaTitle"
+                  name="metaTitle"
+                  value={formData.metaTitle}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                  placeholder="SEO title for search engines"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="metaDescription" className="block text-sm font-medium text-gray-700 mb-2">
+                  Meta Description
+                </label>
+                <textarea
+                  id="metaDescription"
+                  name="metaDescription"
+                  value={formData.metaDescription}
+                  onChange={handleInputChange}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                  placeholder="Brief description for search engines"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Publish Settings */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Publish Settings</h3>
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="published"
+                  name="published"
+                  checked={formData.published}
+                  onChange={handleInputChange}
+                  className="h-4 w-4 text-[#441018] focus:ring-[#441018] border-gray-300 rounded"
+                />
+                <label htmlFor="published" className="ml-2 block text-sm text-gray-900">
+                  Publish immediately
+                </label>
+              </div>
+
+              {formData.published && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="publishDate" className="block text-sm font-medium text-gray-700 mb-2">
                     Publish Date
                   </label>
                   <input
                     type="date"
-                    value={post.publishDate}
-                    onChange={(e) => setPost({ ...post, publishDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
+                    id="publishDate"
+                    name="publishDate"
+                    value={formData.publishDate}
+                    onChange={handleInputChange}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                   />
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tags
-                  </label>
-                  <input
-                    type="text"
-                    value={post.tags?.join(', ') || ''}
-                    onChange={(e) => handleTagsChange(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
-                    placeholder="Enter tags separated by commas"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* SEO Settings */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">SEO Settings</h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Meta Title
-                  </label>
-                  <input
-                    type="text"
-                    value={post.metaTitle}
-                    onChange={(e) => setPost({ ...post, metaTitle: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
-                    placeholder="SEO title for search engines"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Meta Description
-                  </label>
-                  <textarea
-                    value={post.metaDescription}
-                    onChange={(e) => setPost({ ...post, metaDescription: e.target.value })}
-                    rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200 resize-none"
-                    placeholder="Brief description for search engines"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL Slug
-                  </label>
-                  <input
-                    type="text"
-                    value={post.slug}
-                    onChange={(e) => setPost({ ...post, slug: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#441018] focus:border-transparent transition-all duration-200"
-                    placeholder="URL-friendly version of title"
-                  />
-                </div>
-              </div>
+              )}
             </div>
           </div>
-        </motion.div>
-      </main>
+
+          {/* Action Buttons */}
+          <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+            <Link
+              href="/admin/dashboard"
+              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+            >
+              Cancel
+            </Link>
+            <button
+              type="button"
+              onClick={handleSaveDraft}
+              disabled={saving}
+              className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : 'Save Draft'}
+            </button>
+            <button
+              type="button"
+              onClick={handlePublish}
+              disabled={saving}
+              className="px-6 py-2 bg-[#441018] text-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 disabled:opacity-50"
+            >
+              {saving ? 'Publishing...' : 'Publish'}
+            </button>
+          </div>
+        </motion.form>
+      </div>
     </div>
   )
-} 
+}

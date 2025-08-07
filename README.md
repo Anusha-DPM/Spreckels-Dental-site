@@ -4,7 +4,7 @@ A modern dental practice website built with Next.js, TypeScript, and Firebase.
 
 ## Features
 
-- Blog management system with image uploads
+- Content management system with image uploads
 - Admin dashboard for content management
 - Responsive design with Tailwind CSS
 - Firebase integration for data storage

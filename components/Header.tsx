@@ -17,6 +17,7 @@ export default function Header() {
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Insurance & Billing', href: '/insurance-billing' },
     { name: 'Contact Us', href: '/contact' },
   ]
@@ -348,19 +349,7 @@ export default function Header() {
               )}
             </motion.div>
             
-            {/* Blog */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <Link
-                href="/blog"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1"
-              >
-                Blog
-              </Link>
-            </motion.div>
+
             
             {/* Contact Us */}
             <motion.div
@@ -522,19 +511,7 @@ export default function Header() {
               </Link>
             </motion.div>
             
-            {/* Blog */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.45 }}
-            >
-              <Link
-                href="/blog"
-                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap"
-              >
-                Blog
-              </Link>
-            </motion.div>
+
             
             {/* More Dropdown for Tablet */}
             <motion.div
@@ -899,16 +876,7 @@ export default function Header() {
                       </div>
                     </li>
 
-                    {/* Blog */}
-                    <li>
-                      <Link
-                        href="/blog"
-                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
-                        onClick={closeMenu}
-                      >
-                        BLOG
-                      </Link>
-                    </li>
+
 
                     {/* Insurance & Billing */}
                     <li>

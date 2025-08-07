@@ -21,31 +21,28 @@ export default function DatabaseTest() {
       
       setStatus('✅ Firebase connected')
       
-      // Test 2: Create a test document in blog_posts collection
-      setStatus('Creating test blog post...')
-      const testPost = {
-        title: "Test Blog Post",
-        content: "This is a test post to verify database connection",
-        excerpt: "Test excerpt",
-        category: "Test",
-        tags: ["test"],
-        published: true,
+      // Test 2: Create a test document in test_collection
+      setStatus('Creating test document...')
+      const testDoc = {
+        title: "Test Document",
+        content: "This is a test document to verify database connection",
+        type: "test",
         createdAt: new Date(),
         updatedAt: new Date()
       }
       
-      const docRef = await addDoc(collection(db, 'blog_posts'), testPost)
-      setStatus(`✅ Test blog post created! Document ID: ${docRef.id}`)
+      const docRef = await addDoc(collection(db, 'test_collection'), testDoc)
+      setStatus(`✅ Test document created! Document ID: ${docRef.id}`)
       
       // Test 3: Read documents from the collection
       setStatus('Reading documents from database...')
-      const querySnapshot = await getDocs(collection(db, 'blog_posts'))
-      const posts = []
+      const querySnapshot = await getDocs(collection(db, 'test_collection'))
+      const docs = []
       querySnapshot.forEach((doc) => {
-        posts.push({ id: doc.id, ...doc.data() })
+        docs.push({ id: doc.id, ...doc.data() })
       })
       
-      setStatus(`✅ Database working! Found ${posts.length} blog posts`)
+      setStatus(`✅ Database working! Found ${docs.length} test documents`)
       
     } catch (error) {
       console.error('Database test error:', error)
@@ -86,8 +83,8 @@ export default function DatabaseTest() {
           <h3 className="font-semibold text-gray-900 mb-2">What This Test Does:</h3>
           <ul className="text-sm text-gray-700 space-y-1">
             <li>• Checks if Firebase is connected</li>
-            <li>• Creates a test blog post in the database</li>
-            <li>• Reads documents from the blog_posts collection</li>
+            <li>• Creates a test document in the database</li>
+            <li>• Reads documents from the test_collection</li>
             <li>• Verifies the database is working properly</li>
           </ul>
         </div>
@@ -95,7 +92,7 @@ export default function DatabaseTest() {
         <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
           <h3 className="font-semibold text-gray-900 mb-2">Collections That Will Be Created:</h3>
           <ul className="text-sm text-gray-700 space-y-1">
-            <li>• <strong>blog_posts</strong> - Blog articles</li>
+            <li>• <strong>test_collection</strong> - Test documents</li>
             <li>• <strong>appointments</strong> - Patient appointments</li>
             <li>• <strong>contact_messages</strong> - Contact form submissions</li>
             <li>• <strong>testimonials</strong> - Patient testimonials</li>

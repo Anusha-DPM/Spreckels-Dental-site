@@ -10,7 +10,7 @@
 
 ### ✅ Local Testing
 - [ ] Firebase connection tested locally
-- [ ] Blog posts can be created/read
+- [ ] Content can be created/read
 - [ ] No console errors
 
 ## 🚀 Deployment Steps
@@ -19,7 +19,7 @@
 Make sure your code is committed to Git:
 ```bash
 git add .
-git commit -m "Add Firebase integration for blog functionality"
+git commit -m "Add Firebase integration for content management"
 git push origin main
 ```
 
@@ -78,10 +78,10 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 ### 1. Test Firebase Connection
 Visit: `https://your-domain.vercel.app/firebase-test`
 
-### 2. Test Blog Functionality
-- Create a test blog post
+### 2. Test Content Functionality
+- Create a test content item
 - Verify it appears in Firebase Console
-- Check that published posts are readable
+- Check that content is readable
 
 ### 3. Test Admin Features
 - Try accessing admin features (will need authentication)
@@ -172,7 +172,7 @@ Visit: `https://your-domain.vercel.app/firebase-test`
 - [ ] Environment variables configured
 - [ ] Deployment successful
 - [ ] Firebase connection working
-- [ ] Blog functionality tested
+- [ ] Content functionality tested
 - [ ] Security rules updated
 - [ ] Custom domain configured (if needed)
 - [ ] Monitoring set up
