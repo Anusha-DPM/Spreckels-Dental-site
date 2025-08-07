@@ -348,6 +348,27 @@ export default function NewPost() {
     }
   }
 
+  const handleTestServerFirebase = async () => {
+    console.log('🧪 Testing server-side Firebase configuration...')
+    setSaveStatus('Testing server Firebase...')
+    
+    try {
+      const response = await fetch('/api/test-firebase')
+      const result = await response.json()
+      
+      if (result.success) {
+        setSaveStatus('✅ Server Firebase test successful!')
+        console.log('✅ Server Firebase is working correctly:', result)
+      } else {
+        setSaveStatus(`❌ Server Firebase test failed: ${result.error}`)
+        console.error('❌ Server Firebase test failed:', result)
+      }
+    } catch (error: any) {
+      setSaveStatus(`❌ Server Firebase test error: ${error.message}`)
+      console.error('❌ Server Firebase test error:', error)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -405,6 +426,12 @@ export default function NewPost() {
                  className="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium text-sm"
                >
                  Test Database
+               </button>
+               <button
+                 onClick={handleTestServerFirebase}
+                 className="bg-indigo-600 text-white px-3 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium text-sm"
+               >
+                 Test Server Firebase
                </button>
                <button
                  onClick={handleSave}
