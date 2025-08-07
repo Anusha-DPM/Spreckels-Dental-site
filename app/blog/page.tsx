@@ -74,19 +74,31 @@ export default function BlogPage() {
       
       // Fallback to localStorage if no posts from Firebase
       if (posts.length === 0) {
-        const savedPosts = localStorage.getItem('blogPosts')
-        if (savedPosts) {
-          const allPosts = JSON.parse(savedPosts)
-          const publishedPosts = allPosts.filter((post: BlogPost) => {
-            // Handle both Firebase format (published: boolean) and localStorage format (status: string)
-            if (post.published !== undefined) {
-              return post.published === true
-            } else if (post.status !== undefined) {
-              return post.status === 'published'
-            }
-            return false
-          })
+        // Try published posts first
+        const publishedPostsData = localStorage.getItem('publishedBlogPosts')
+        if (publishedPostsData) {
+          const publishedPosts = JSON.parse(publishedPostsData)
           setPosts(publishedPosts)
+          console.log('✅ Loaded published posts from localStorage')
+        } else {
+          // Fallback to all posts and filter
+          const savedPosts = localStorage.getItem('blogPosts')
+          if (savedPosts) {
+            const allPosts = JSON.parse(savedPosts)
+            const publishedPosts = allPosts.filter((post: BlogPost) => {
+              // Handle both Firebase format (published: boolean) and localStorage format (status: string)
+              if (post.published !== undefined) {
+                return post.published === true
+              } else if (post.status !== undefined) {
+                return post.status === 'published'
+              }
+              return false
+            })
+            setPosts(publishedPosts)
+            
+            // Save published posts for future use
+            localStorage.setItem('publishedBlogPosts', JSON.stringify(publishedPosts))
+          }
         }
       }
     } catch (error) {
