@@ -126,87 +126,88 @@ export default function NewPost() {
         })
       }
       
-                           // Upload image to Firebase Storage if provided
-       let imageUrl = post.coverImage || ''
-       if (uploadedImage) {
-         setSaveStatus('Processing image...')
-         console.log('📤 Starting image processing for file:', uploadedImage.name)
-         
-         // Validate file size (max 5MB)
-         if (uploadedImage.size > 5 * 1024 * 1024) {
-           console.warn('❌ File too large, using base64 fallback')
-           imageUrl = imagePreview
-           setSaveStatus('⚠️ File too large, using local storage')
-         }
-         // Validate file type
-         else if (!uploadedImage.type.startsWith('image/')) {
-           console.warn('❌ Invalid file type, using base64 fallback')
-           imageUrl = imagePreview
-           setSaveStatus('⚠️ Invalid file type, using local storage')
-         }
-         else {
-           console.log('✅ File validation passed, attempting Firebase upload...')
-           setSaveStatus('Uploading image to Firebase Storage...')
-           
-                       // Try to upload to Firebase Storage with better error handling
+                                   // Step 1: Upload image to Firebase Storage FIRST (if provided)
+        let imageUrl = post.coverImage || ''
+        if (uploadedImage) {
+          setSaveStatus('Processing image...')
+          console.log('📤 Starting image processing for file:', uploadedImage.name)
+          
+          // Validate file type
+          if (!uploadedImage.type.startsWith('image/')) {
+            console.warn('❌ Invalid file type, using base64 fallback')
+            imageUrl = imagePreview
+            setSaveStatus('⚠️ Invalid file type, using local storage')
+          }
+          else {
+            console.log('✅ File validation passed, uploading to Firebase Storage...')
+            setSaveStatus('Uploading image to Firebase Storage...')
+            
             try {
-              console.log('🔥 Attempting direct Firebase Storage upload...')
+              console.log('🔥 Step 1: Uploading image to Firebase Storage...')
               const uploadResult = await uploadImageToFirebase(uploadedImage, 'blog-images')
               imageUrl = uploadResult.url
-              console.log('✅ Image uploaded successfully:', imageUrl)
-              setSaveStatus('✅ Image uploaded successfully!')
+              console.log('✅ Step 1 Complete: Image uploaded to Firebase Storage:', imageUrl)
+              console.log('📊 Compression stats:', {
+                originalSize: uploadResult.originalSize,
+                compressedSize: uploadResult.compressedSize,
+                savings: ((uploadResult.originalSize - uploadResult.compressedSize) / uploadResult.originalSize * 100).toFixed(1) + '%'
+              })
+              setSaveStatus('✅ Image uploaded to Firebase Storage successfully!')
             } catch (firebaseError: any) {
-              console.warn('Firebase Storage upload failed, using base64 fallback:', firebaseError.message)
+              console.error('❌ Firebase Storage upload failed:', firebaseError.message)
               console.error('Firebase error details:', {
                 code: firebaseError.code,
                 message: firebaseError.message,
                 stack: firebaseError.stack
               })
-              // Fallback to base64 if Firebase Storage fails
-              imageUrl = imagePreview
-              setSaveStatus('⚠️ Using local image storage (Firebase Storage unavailable)')
+              // If Firebase Storage fails, we should not proceed with blog post creation
+              setSaveStatus(`❌ Image upload failed: ${firebaseError.message}`)
+              setIsLoading(false)
+              return // Stop here - don't save blog post if image upload fails
             }
-         }
-       }
+          }
+        }
 
-             // Prepare data for Firebase
-       const blogData = {
-         title: post.title.trim(),
-         content: post.content.trim(),
-         excerpt: post.excerpt?.trim() || '',
-         coverImage: imageUrl,
-         imageUrl: imageUrl, // Firebase uses imageUrl
-         tags: post.tags || [],
-         category: 'General Dentistry', // Default category
-         author: 'Admin', // Default author
-         published: post.status === 'published', // Convert status to boolean
-         featured: false,
-         slug: post.slug || generateSlug(post.title),
-         metaTitle: post.metaTitle?.trim() || post.title.trim(),
-         metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
-         publishDate: post.publishDate || new Date().toISOString()
-       }
+                     // Step 2: Save blog post to Firestore with Firebase Storage URL
+        const blogData = {
+          title: post.title.trim(),
+          content: post.content.trim(),
+          excerpt: post.excerpt?.trim() || '',
+          coverImage: imageUrl, // This is now the Firebase Storage URL
+          imageUrl: imageUrl, // Firebase Storage URL
+          tags: post.tags || [],
+          category: 'General Dentistry', // Default category
+          author: 'Admin', // Default author
+          published: post.status === 'published', // Convert status to boolean
+          featured: false,
+          slug: post.slug || generateSlug(post.title),
+          metaTitle: post.metaTitle?.trim() || post.title.trim(),
+          metaDescription: post.metaDescription?.trim() || post.excerpt?.trim() || '',
+          publishDate: post.publishDate || new Date().toISOString()
+        }
 
-       console.log('📝 Final blog data to save:', blogData)
-       setSaveStatus('Saving blog post...')
-       
-       // Always try to save the blog post, regardless of image upload status
-       try {
-         // Create the blog post
-         const newPost = await createBlogPost(blogData)
-         
-         setSaveStatus('✅ Blog post saved successfully!')
-         console.log('✅ Blog post created:', newPost)
-         
-         // Redirect to dashboard after a short delay
-         setTimeout(() => {
-           router.push('/admin/dashboard')
-         }, 1000)
-       } catch (blogError: any) {
-         console.error('❌ Error saving blog post:', blogError)
-         setSaveStatus(`❌ Error saving blog post: ${blogError?.message || 'Please try again.'}`)
-         throw blogError // Re-throw to be caught by outer catch block
-       }
+        console.log('📝 Step 2: Saving blog post to Firestore with Firebase Storage URL')
+        console.log('🔗 Image URL being saved:', imageUrl)
+        console.log('📊 Blog data to save:', blogData)
+        setSaveStatus('Saving blog post to Firestore...')
+        
+        try {
+          // Create the blog post in Firestore
+          const newPost = await createBlogPost(blogData)
+          
+          setSaveStatus('✅ Blog post saved to Firestore successfully!')
+          console.log('✅ Step 2 Complete: Blog post created in Firestore:', newPost)
+          console.log('🎉 Process completed: Image uploaded to Firebase Storage + Blog saved to Firestore')
+          
+          // Redirect to dashboard after a short delay
+          setTimeout(() => {
+            router.push('/admin/dashboard')
+          }, 1000)
+        } catch (blogError: any) {
+          console.error('❌ Error saving blog post to Firestore:', blogError)
+          setSaveStatus(`❌ Error saving blog post: ${blogError?.message || 'Please try again.'}`)
+          throw blogError // Re-throw to be caught by outer catch block
+        }
     } catch (error: any) {
       console.error('Error saving post:', error)
       setSaveStatus(`❌ Error saving post: ${error?.message || 'Please try again.'}`)
@@ -220,40 +221,55 @@ export default function NewPost() {
     await handleSave()
   }
 
-  // Simple test function to verify Firebase Storage
+  // Test function to verify Firebase Storage with compression
   const testFirebaseStorage = async () => {
-    console.log('🧪 Testing Firebase Storage connection...')
+    console.log('🧪 Testing Firebase Storage with compression...')
     setSaveStatus('Testing Firebase Storage...')
     
     try {
-      // Create a simple test image
+      // Create a larger test image to test compression
       const canvas = document.createElement('canvas')
-      canvas.width = 100
-      canvas.height = 100
+      canvas.width = 2000
+      canvas.height = 1500
       const ctx = canvas.getContext('2d')
       if (ctx) {
-        ctx.fillStyle = '#ccc'
-        ctx.fillRect(0, 0, 100, 100)
-        ctx.fillStyle = '#666'
-        ctx.font = '14px Arial'
+        // Create a gradient background
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
+        gradient.addColorStop(0, '#ff6b6b')
+        gradient.addColorStop(0.5, '#4ecdc4')
+        gradient.addColorStop(1, '#45b7d1')
+        ctx.fillStyle = gradient
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        
+        // Add some text
+        ctx.fillStyle = '#fff'
+        ctx.font = 'bold 48px Arial'
         ctx.textAlign = 'center'
-        ctx.fillText('Test', 50, 50)
+        ctx.fillText('Test Image', canvas.width / 2, canvas.height / 2)
+        ctx.font = '24px Arial'
+        ctx.fillText('Testing Compression', canvas.width / 2, canvas.height / 2 + 50)
       }
       
       canvas.toBlob(async (blob) => {
         if (blob) {
-          const testFile = new File([blob], 'test-image.png', { type: 'image/png' })
+          const testFile = new File([blob], 'test-image-large.png', { type: 'image/png' })
+          console.log('📊 Test file size:', testFile.size, 'bytes')
           
           try {
             const result = await uploadImageToFirebase(testFile, 'test-uploads')
             setSaveStatus('✅ Firebase Storage test successful!')
             console.log('✅ Firebase Storage is working:', result)
+            console.log('📊 Compression test results:', {
+              originalSize: result.originalSize,
+              compressedSize: result.compressedSize,
+              savings: ((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(1) + '%'
+            })
           } catch (error: any) {
             setSaveStatus(`❌ Firebase Storage test failed: ${error.message}`)
             console.error('❌ Firebase Storage test failed:', error)
           }
         }
-      }, 'image/png')
+      }, 'image/png', 0.9) // High quality to test compression
     } catch (error: any) {
       setSaveStatus(`❌ Test error: ${error.message}`)
       console.error('❌ Test error:', error)
