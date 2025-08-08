@@ -321,23 +321,7 @@ export default function BlogPostPage() {
                 </div>
               )}
 
-              {/* Newsletter Signup */}
-              <div className="bg-[#441018] text-white rounded-lg p-6 mt-8">
-                <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
-                <p className="text-gray-200 mb-4">
-                  Get the latest dental health tips and updates delivered to your inbox.
-                </p>
-                <div className="space-y-3">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-                  />
-                  <button className="w-full px-4 py-2 bg-white text-[#441018] font-semibold rounded hover:bg-gray-100 transition-colors duration-200">
-                    Subscribe
-                  </button>
-                </div>
-              </div>
+
             </motion.aside>
           </div>
         </div>

@@ -112,13 +112,13 @@ export default function BlogPage() {
   return (
     <Layout>
       <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <motion.section 
-        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white py-20"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
+             {/* Hero Section */}
+       <motion.section 
+         className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-[150px] pb-20"
+         initial={{ opacity: 0, y: -20 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ duration: 0.6 }}
+       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h1 
             className="text-4xl md:text-6xl font-bold mb-6"
@@ -345,30 +345,6 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Newsletter Signup */}
-      <motion.section 
-        className="bg-[#441018] text-white py-16"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 1.2 }}
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-          <p className="text-xl text-gray-200 mb-8">
-            Subscribe to our newsletter for the latest dental health tips and updates
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-            />
-            <button className="px-6 py-3 bg-white text-[#441018] font-semibold rounded-lg hover:bg-gray-100 transition-colors duration-200">
-              Subscribe
-            </button>
-          </div>
-                 </div>
-       </motion.section>
        </div>
      </Layout>
    )

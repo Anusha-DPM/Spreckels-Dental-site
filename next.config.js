@@ -33,6 +33,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'secure.officite.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   compiler: {
