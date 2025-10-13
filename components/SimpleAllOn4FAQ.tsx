@@ -68,7 +68,7 @@ export default function SimpleAllOn4FAQ() {
                                  {/* Doctor Image */}
                  <div className="w-24 h-24 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                    <Image
-                     src="/doctor-1.webp"
+                     src="/Rujul.jpeg"
                      alt="Dr. Rujul G Parikh"
                      width={96}
                      height={96}

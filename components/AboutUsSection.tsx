@@ -7,13 +7,13 @@ export default function AboutUsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
           
           {/* Left Column - Image with Overlay Card */}
-          <div className="relative w-full h-full">
-            <div className="relative rounded-xl overflow-hidden w-full h-full">
+          <div className="relative w-full">
+            <div className="relative rounded-xl overflow-hidden w-full h-[400px] sm:h-[500px] md:h-[600px]">
               <Image
-                src="/doctor-1.webp"
+                src="/Rujul.jpeg"
                 alt="Dr. Rujul G Parikh DDS - Professional dental care"
                 fill
-                className="object-cover object-center"
+                className="object-cover object-top"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />

@@ -16,7 +16,7 @@ export default function JourneySection() {
     {
       name: "Dr. Rujul G. Parikh DDS",
       text: "With over 23 years of experience in dentistry, I've dedicated my career to creating beautiful, healthy smiles. Our commitment to patient care and advanced dental techniques has made Spreckels Park Dental a trusted name in Manteca.",
-      avatar: "/doctor-1.webp",
+      avatar: "/Rujul.jpeg",
       nameColor: "text-green-600",
       avatarPosition: 'left'
     },

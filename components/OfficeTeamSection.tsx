@@ -15,7 +15,7 @@ export default function OfficeTeamSection() {
     {
       name: "Dr. Rujul G. Parikh DDS",
       role: "General Dentist",
-      image: "/doctor-1.webp",
+      image: "/Rujul.jpeg",
       bgColor: "bg-pink-200"
     },
     {

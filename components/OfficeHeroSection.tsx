@@ -5,58 +5,74 @@ import Image from 'next/image'
 
 export default function OfficeHeroSection() {
   return (
-    <section className="pt-[140px] lg:pt-[140px] pb-12 lg:pb-16" style={{ backgroundColor: '#441018' }}>
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <section className="pt-[140px] pb-12 sm:pb-16 md:pb-20 border-t border-gray-200" style={{ backgroundColor: '#441018' }}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
+          
           {/* Left Column - Content */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-white"
+            className="text-left"
           >
-            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-normal text-white mb-6 leading-tight">
-              Manteca, CA Dentist - Dental Office
-            </h1>
-            <p className="text-lg lg:text-xl text-gray-200 mb-8 leading-relaxed">
-            Comfort and convenience are the hallmarks of Spreckels Park Dental's office operations. 
+            <div className="space-y-4 sm:space-y-6">
+              {/* Label */}
+              <div className="text-blue-300 text-sm font-semibold uppercase tracking-wide">
+                Dental Office in Manteca, CA
+              </div>
+              
+              {/* Main Heading */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight">
+                Manteca, CA Dentist - Dental Office
+              </h1>
+              
+              {/* Horizontal Divider */}
+              <div className="border-t border-gray-400 my-6"></div>
+              
+              {/* Description */}
+              <p className="text-base sm:text-lg leading-relaxed mb-4 sm:mb-5 text-gray-200">
+              Comfort and convenience are the hallmarks of Spreckels Park Dental's office operations. 
 
 To ensure your convenience, below is the information you need about our hours, location, & appointment scheduling.
 
 Parking is provided in front of office & parking lot is located in the rear alley on S Washington Ave., on your first right.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="https://spreckels-dental-site.vercel.app/appointment-request"
-                className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
-              >
-                Book Appointment
-              </a>
-              <a 
-                href="/contact"
-                className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200 cursor-pointer inline-block text-center"
-              >
-                Contact Us
-              </a>
+              </p>
+              
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a 
+                  href="https://spreckels-dental-site.vercel.app/appointment-request"
+                  className="bg-white text-[#441018] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center"
+                >
+                  Book Appointment
+                </a>
+                <a 
+                  href="/contact"
+                  className="bg-transparent text-white border border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#441018] transition-colors duration-200 cursor-pointer inline-block text-center"
+                >
+                  Contact Us
+                </a>
+              </div>
             </div>
           </motion.div>
-
+          
           {/* Right Column - Image */}
           <motion.div 
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
+            className="relative w-full"
           >
-            <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative rounded-xl overflow-hidden w-full h-[400px] sm:h-[500px] md:h-[600px]">
               <Image
                 src="/officehero.jpeg"
                 alt="Spreckels Park Dental Office - Modern dental facility"
                 fill
-                className="object-cover"
+                className="object-cover object-center"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
           </motion.div>
         </div>

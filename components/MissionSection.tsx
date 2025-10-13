@@ -49,9 +49,9 @@ export default function MissionSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="flex justify-center w-full h-full"
+            className="flex justify-center w-full"
           >
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px]">
               <Image
                 src="/doctor-2.webp"
                 alt="Dr. Shivli Arora DDS - Professional dental care"
