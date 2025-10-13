@@ -86,7 +86,7 @@ export default function SimpleOrthoContent() {
               className="relative h-full min-h-[384px] rounded-xl overflow-hidden shadow-2xl"
             >
               <Image
-                src="/Invisalign Aligners.jpeg"
+                src="/invisalign-2.png"
                 alt="Spreckels Park Dental Invisalign Aligners - Clear Orthodontic Treatment"
                 fill
                 className="object-cover"

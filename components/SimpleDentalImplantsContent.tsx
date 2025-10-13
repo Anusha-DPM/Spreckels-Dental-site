@@ -8,7 +8,7 @@ export default function SimpleDentalImplantsContent() {
     {
       price: "",
       title: "Dental Implants",
-      image: "/Dental Implants.jpeg",
+      image: "/dental implant.jpg",
       description: [
         "Small titanium posts that replace the roots of missing teeth",
         "Inserted into the jawbone during a minor surgical procedure",
@@ -20,7 +20,7 @@ export default function SimpleDentalImplantsContent() {
     {
       price: "$5,999",
       title: "Implant Denture",
-      image: "/Implant Denture.jpeg",
+      image: "/hybrid denture.jpg",
       description: [
         "Includes two implants and an implant retained denture"
       ],
@@ -122,12 +122,13 @@ export default function SimpleDentalImplantsContent() {
                 )}
 
                 {/* CTA Button */}
-                <button 
-                  className="w-full bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200"
+                <a 
+                  href="https://spreckels-dental-site.vercel.app/appointment-request"
+                  className="w-full bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
                   style={{ backgroundColor: '#f97316' }}
                 >
                   {service.buttonText}
-                </button>
+                </a>
               </div>
             </motion.div>
           ))}

@@ -74,7 +74,7 @@ export default function DentalImplantsHeroSection() {
           >
             <div className="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="/Dental Implants.jpeg"
+                src="/dental implant.jpg"
                 alt="Spreckels Park Dental Implants - Advanced Tooth Replacement Technology"
                 fill
                 className="object-cover"

@@ -49,9 +49,12 @@ export default function SimpleAllOn4FAQ() {
                   to schedule a consultation and see if you are a good candidate!
                 </p>
               </div>
-              <button className="mt-6 w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200">
+              <a 
+                href="https://spreckels-dental-site.vercel.app/appointment-request"
+                className="mt-6 w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
+              >
                 Schedule Consultation
-              </button>
+              </a>
             </div>
           </motion.div>
 
