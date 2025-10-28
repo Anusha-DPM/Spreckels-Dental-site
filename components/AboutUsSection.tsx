@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 'use client'
 
 import React from 'react'
-=======
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
 import Image from 'next/image'
 
 export default function AboutUsSection() {
@@ -24,34 +21,17 @@ export default function AboutUsSection() {
                 priority
               />
               
-<<<<<<< HEAD
               {/* Floating Dental Summary Card - Commented out for now
               <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-[280px] sm:max-w-xs">
                 <div className="space-y-3">
-=======
-              {/* Floating Dental Summary Card */}
-              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-[280px] sm:max-w-xs">
-                <div className="space-y-3">
-                  {/* Years of Experience */}
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm">Years of Experience</span>
                     <span className="text-gray-900 font-semibold">23+</span>
                   </div>
-<<<<<<< HEAD
-=======
-                  
-                  {/* Patients Served */}
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm">Patients Served</span>
                     <span className="text-gray-900 font-semibold">10,000+</span>
                   </div>
-<<<<<<< HEAD
-=======
-                  
-                  {/* Specializations */}
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
                   <div className="bg-gray-50 rounded-lg p-3 mt-4">
                     <div className="text-gray-600 text-sm mb-2">Specializations</div>
                     <div className="bg-blue-600 text-white px-4 py-2 rounded-full text-center font-semibold text-sm">
@@ -60,10 +40,7 @@ export default function AboutUsSection() {
                   </div>
                 </div>
               </div>
-<<<<<<< HEAD
               */}
-=======
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
             </div>
           </div>
           
@@ -72,20 +49,12 @@ export default function AboutUsSection() {
             <div className="space-y-4 sm:space-y-6">
               {/* About Us Label */}
               <div className="text-blue-500 text-sm font-semibold uppercase tracking-wide">
-<<<<<<< HEAD
                 General & implant dentist in manteca, ca
-=======
-              General & implant dentist in manteca, ca
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
               </div>
               
               {/* Main Heading */}
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 leading-tight">
-<<<<<<< HEAD
                 Dr. Rujul G Parikh DDS
-=======
-              Dr. Rujul G Parikh DDS
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
               </h2>
               
               {/* Horizontal Divider */}
@@ -93,11 +62,7 @@ export default function AboutUsSection() {
               
               {/* Description Paragraph */}
               <p className="text-base sm:text-lg leading-relaxed mb-4 sm:mb-5" style={{ color: '#656565' }}>
-<<<<<<< HEAD
                 For more than 23 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. His main priorities are oral health and patient care. As a General Dentist, he has invested many hours in continuing education and constantly updated and educated in dentistry. His continual pursuit of better methods, depth of understanding, and range of experience make him skilled in numerous dental procedures including Dental Implants, Root Canals and Crowns, Dentures and many more.
-=======
-              For more than 23 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. His main priorities are oral health and patient care. As a General Dentist, he has invested many hours in continuing education and constantly updated and educated in dentistry. His continual pursuit of better methods, depth of understanding, and range of experience make him skilled in numerous dental procedures including Dental Implants, Root Canals and Crowns, Dentures and many more.
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
               </p>
               
               {/* Learn More Button */}
@@ -113,8 +78,4 @@ export default function AboutUsSection() {
       </div>
     </section>
   )
-<<<<<<< HEAD
 }
-=======
-} 
->>>>>>> e6d365c4cff9a738f97526f8c151f1f4a468b62a
