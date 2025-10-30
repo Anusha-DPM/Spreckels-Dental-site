@@ -97,7 +97,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
   try {
     if (loading) {
       return (
-        <section className="py-16 bg-gray-50">
+        <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#441018] mx-auto"></div>
@@ -128,10 +128,10 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-[27px] sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Latest from Our Blog
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-[16px] sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Stay informed about dental health, latest treatments, and tips for maintaining your beautiful smile
             </p>
           </motion.div>
@@ -226,7 +226,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
             >
               <Link
                 href="/blog"
-                className="inline-flex items-center px-8 py-3 bg-[#441018] text-white font-semibold rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200"
+                className="inline-flex items-center px-8 py-3 bg-[#441018] text-white font-semibold rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 text-[15px] sm:text-base"
               >
                 View All Posts
                 <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,10 +244,10 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-[27px] sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Error Loading Posts
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-[16px] sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Failed to load the latest blog posts. Please try again later.
             </p>
           </div>

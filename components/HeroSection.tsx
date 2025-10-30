@@ -19,7 +19,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[68px] font-normal leading-tight mb-4 sm:mb-6 font-heading pt-[110px]"
+              className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[68px] font-normal leading-tight mb-4 sm:mb-6 font-heading pt-[110px]"
             >
               BUILD A BRIGHTER SMILE
             </motion.h1>
@@ -28,7 +28,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-base sm:text-lg md:text-xl lg:text-[22px] text-red-100 mb-6 sm:mb-8 md:mb-12 leading-relaxed font-sans pr-0 sm:pr-4 lg:pr-[50px]"
+              className="text-[16px] sm:text-lg md:text-xl lg:text-[22px] text-red-100 mb-6 sm:mb-8 md:mb-12 leading-relaxed font-sans pr-0 sm:pr-4 lg:pr-[50px]"
             >
               Experience exceptional dental care with our expert team. We provide comprehensive dental services to help you achieve a healthy, beautiful smile that lasts a lifetime.
             </motion.p>
@@ -41,7 +41,7 @@ export default function HeroSection() {
             >
               <a 
                 href="https://spreckels-dental-site.vercel.app/appointment-request"
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-sm sm:text-base cursor-pointer inline-block text-center"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base cursor-pointer inline-block text-center"
               >
                 Book Appointment
               </a>

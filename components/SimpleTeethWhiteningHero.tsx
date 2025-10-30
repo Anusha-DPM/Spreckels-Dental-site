@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function SimpleTeethWhiteningHero() {
   return (
-    <section className="relative pt-[200px] pb-20 lg:pb-32" style={{ backgroundColor: '#441018' }}>
+    <section className="relative pt-[140px] pb-12 sm:pb-16 lg:pb-20 xl:pb-32" style={{ backgroundColor: '#441018' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -25,7 +25,7 @@ export default function SimpleTeethWhiteningHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-normal text-white mb-6 leading-tight"
+            className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white mb-6 leading-tight"
           >
             Teeth Whitening
           </motion.h1>
@@ -48,7 +48,7 @@ export default function SimpleTeethWhiteningHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-xl text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed"
+            className="text-[16px] sm:text-xl text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed"
           >
             Transform your smile with professional teeth whitening treatments.
             Get the bright, white smile you've always wanted.
@@ -62,13 +62,13 @@ export default function SimpleTeethWhiteningHero() {
           >
             <a 
                               href="https://spreckels-dental-site.vercel.app/appointment-request"
-              className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+              className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
               BOOK A CONSULTATION
             </a>
             <a 
               href="/contact"
-              className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+              className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
               Learn More
             </a>

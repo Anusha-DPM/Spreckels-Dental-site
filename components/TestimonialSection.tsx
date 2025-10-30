@@ -57,7 +57,7 @@ export default function TestimonialSection() {
   const currentTestimonial = testimonials[currentIndex]
 
   return (
-    <section className="py-10 sm:py-12 md:py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-2xl p-4 sm:p-6 md:p-8 relative" style={{ backgroundColor: '#441018' }}>
           {/* Centered Testimonial Content */}
@@ -69,7 +69,7 @@ export default function TestimonialSection() {
             </div>
             
             {/* Testimonial Quote */}
-            <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-normal leading-relaxed mb-8 sm:mb-10 transition-opacity duration-300 max-w-4xl text-gray-100">
+            <blockquote className="text-[16px] sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-normal leading-relaxed mb-8 sm:mb-10 transition-opacity duration-300 max-w-4xl text-gray-100">
               "{currentTestimonial.quote}"
             </blockquote>
             

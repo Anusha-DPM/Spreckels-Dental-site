@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function TrustedBySection() {
   return (
-    <section className="pt-16 pb-20 bg-white w-full">
+    <section className="pt-8 pb-10 lg:pt-16 lg:pb-20 bg-white w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -18,7 +18,7 @@ export default function TrustedBySection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+            className="text-[27px] sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
           >
             Welcome to Our Practice
           </motion.h2>
@@ -28,7 +28,7 @@ export default function TrustedBySection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
-            className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#441018] leading-relaxed"
+            className="text-[22px] sm:text-3xl lg:text-4xl font-semibold text-[#441018] leading-relaxed"
           >
             General & Cosmetic Dentistry
           </motion.h3>

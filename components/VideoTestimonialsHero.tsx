@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function VideoTestimonialsHero() {
   return (
-    <section className="relative pt-[200px] pb-20 lg:pb-32" style={{ backgroundColor: '#441018' }}>
+    <section className="relative pt-[200px] pb-12 sm:pb-16 lg:pb-20 xl:pb-32" style={{ backgroundColor: '#441018' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -25,7 +25,7 @@ export default function VideoTestimonialsHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-normal text-white mb-6 leading-tight"
+            className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white mb-6 leading-tight"
           >
             Video Testimonials
           </motion.h1>
@@ -34,8 +34,7 @@ export default function VideoTestimonialsHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-xl text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed"
-            style={{ fontSize: '16px' }}
+            className="text-[16px] sm:text-xl text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed"
           >
             Hear from our patients about their experiences at Spreckels Park Dental. See real stories of transformation and satisfaction.
           </motion.p>

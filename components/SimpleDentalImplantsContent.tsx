@@ -57,7 +57,7 @@ export default function SimpleDentalImplantsContent() {
   ]
 
   return (
-    <section className="py-16 lg:py-20 bg-white border-t border-gray-200">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {implantServices.map((service, index) => (
@@ -72,11 +72,11 @@ export default function SimpleDentalImplantsContent() {
               {/* Price and Title */}
               <div className="p-6 text-center border-b border-gray-100">
                 {service.price && (
-                  <div className="text-3xl font-bold text-orange-500 mb-2">
+                  <div className="text-[27px] sm:text-3xl font-bold text-orange-500 mb-2">
                     {service.price}
                   </div>
                 )}
-                <div className={`font-semibold text-lg ${service.price ? 'text-gray-900' : 'text-orange-500'}`}>
+                <div className={`font-semibold text-[22px] sm:text-lg ${service.price ? 'text-gray-900' : 'text-orange-500'}`}>
                   {service.title}
                 </div>
               </div>
@@ -94,10 +94,10 @@ export default function SimpleDentalImplantsContent() {
               </div>
 
               {/* Description */}
-              <div className="p-6">
+              <div className="p-6 text-center">
                 <div className="space-y-2 mb-4">
                   {service.description.map((desc, descIndex) => (
-                    <p key={descIndex} className="text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
+                    <p key={descIndex} className="text-[16px] text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
                       {desc}
                     </p>
                   ))}
@@ -108,13 +108,13 @@ export default function SimpleDentalImplantsContent() {
                     {Array.isArray(service.details) ? (
                       <div className="space-y-1">
                         {service.details.map((detail, detailIndex) => (
-                          <p key={detailIndex} className="text-gray-500 text-sm" style={{ color: '#656565' }}>
+                          <p key={detailIndex} className="text-[16px] text-gray-500" style={{ color: '#656565' }}>
                             {detail}
                           </p>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-gray-500 text-sm" style={{ color: '#656565' }}>
+                      <p className="text-[16px] text-gray-500" style={{ color: '#656565' }}>
                         {service.details}
                       </p>
                     )}
@@ -124,7 +124,7 @@ export default function SimpleDentalImplantsContent() {
                 {/* CTA Button */}
                 <a 
                   href="https://spreckels-dental-site.vercel.app/appointment-request"
-                  className="w-full bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
+                  className="w-full bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold text-[15px] sm:text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
                   style={{ backgroundColor: '#f97316' }}
                 >
                   {service.buttonText}

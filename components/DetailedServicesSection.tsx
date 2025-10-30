@@ -100,7 +100,7 @@ export default function DetailedServicesSection() {
   ]
 
   return (
-    <section className="py-12 lg:py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div 
@@ -113,10 +113,10 @@ export default function DetailedServicesSection() {
           <h3 className="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-4">
             OUR SERVICES
           </h3>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
           Emergency Dental Care Manteca, CA
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto">
           If you have a life-threatening or severe injury, call 911 or go directly to the nearest hospital emergency room. We can treat a variety of traumatic dental injuries, including teeth that have been chipped, moved, or knocked out entirely. Please call our office for assistance.
           </p>
         </motion.div>
@@ -150,11 +150,11 @@ export default function DetailedServicesSection() {
                 {/* Icon and Title */}
                 <div className="flex items-center mb-4">
                   <div className="text-3xl mr-3">{service.icon}</div>
-                  <h3 className="text-xl font-bold text-gray-900">{service.title}</h3>
+                  <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900">{service.title}</h3>
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-600 mb-4 leading-relaxed">
+                <p className="text-[16px] text-gray-600 mb-4 leading-relaxed">
                   {service.description}
                 </p>
 

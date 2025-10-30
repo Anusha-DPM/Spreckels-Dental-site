@@ -41,7 +41,7 @@ export default function ServicesSection() {
   ]
 
   return (
-    <section id="services" className="py-8 sm:py-12 lg:py-20 bg-white">
+    <section id="services" className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -53,7 +53,7 @@ export default function ServicesSection() {
           <div className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
             Services
           </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
+          <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
             Dental Services We Offer
           </h2>
         </motion.div>
@@ -71,10 +71,10 @@ export default function ServicesSection() {
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white" style={{ backgroundColor: '#441018' }}>
                   {service.icon}
                 </div>
-                <h3 className="text-base sm:text-lg lg:text-xl font-normal text-gray-900 mb-2 sm:mb-3 lg:mb-4 font-heading">
+                <h3 className="text-[22px] sm:text-lg lg:text-xl font-normal text-gray-900 mb-2 sm:mb-3 lg:mb-4 font-heading">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed font-sans text-sm sm:text-base lg:text-base">
+                <p className="text-gray-600 leading-relaxed font-sans text-[16px] sm:text-base lg:text-base">
                   {service.description}
                 </p>
               </Link>

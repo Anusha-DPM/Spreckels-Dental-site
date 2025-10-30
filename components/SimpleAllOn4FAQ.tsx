@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function SimpleAllOn4FAQ() {
   return (
-    <section className="py-16 lg:py-20 bg-gray-50 border-t border-gray-200">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-gray-50 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* All-on-4® Treatment Description */}
@@ -14,13 +14,13 @@ export default function SimpleAllOn4FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            className="space-y-6 text-center lg:text-left"
           >
             <div>
-              <h2 className="text-3xl lg:text-4xl font-normal text-gray-900 mb-6 leading-tight">
+              <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-6 leading-tight">
                 All-on-4® Implant-Supported Denture Treatment
               </h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
+              <div className="space-y-4 text-[16px] text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
                 <p>
                   All-on-4® implant-supported denture treatment is the process of placing a minimum of four dental implants in each jaw to stabilize a non-removable denture. So your teeth are fixed to the jaw.
                 </p>
@@ -34,24 +34,24 @@ export default function SimpleAllOn4FAQ() {
             </div>
 
             {/* Call to Action */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 text-center">
+              <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-4">
                 Dental Implants Manteca, CA
               </h3>
-              <p className="text-gray-600 mb-6" style={{ color: '#656565' }}>
+              <p className="text-[16px] text-gray-600 mb-6" style={{ color: '#656565' }}>
                 Spreckels Park Dental provides All-on-4® implant-supported dentures for greater stability and comfort.
               </p>
               <div className="space-y-3">
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-[22px] sm:text-lg font-semibold text-gray-900">
                   Call our Manteca, CA office today at (209) 825-1030
                 </p>
-                <p className="text-gray-600" style={{ color: '#656565' }}>
+                <p className="text-[16px] text-gray-600" style={{ color: '#656565' }}>
                   to schedule a consultation and see if you are a good candidate!
                 </p>
               </div>
               <a 
                 href="https://spreckels-dental-site.vercel.app/appointment-request"
-                className="mt-6 w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
+                className="mt-6 w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold text-[15px] sm:text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
               >
                 Schedule Consultation
               </a>
@@ -67,7 +67,7 @@ export default function SimpleAllOn4FAQ() {
             className="space-y-6"
           >
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <div className="flex items-start space-x-6">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
                                  {/* Doctor Image */}
                  <div className="w-24 h-24 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                    <Image
@@ -79,15 +79,15 @@ export default function SimpleAllOn4FAQ() {
                    />
                  </div>
                 
-                <div className="flex-1">
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                <div className="flex-1 text-center sm:text-left">
+                  <h3 className="text-[22px] sm:text-2xl font-semibold text-gray-900 mb-2">
                     Dr. Rujul G Parikh
                   </h3>
-                  <p className="text-lg text-gray-600 mb-4" style={{ color: '#656565' }}>
+                  <p className="text-[16px] sm:text-lg text-gray-600 mb-4" style={{ color: '#656565' }}>
                     DDS FICOI AFAAID
                   </p>
                   
-                  <div className="space-y-3 text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
+                  <div className="space-y-3 text-[16px] text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
                     <p>
                       Dr. Parikh has been practicing for more than 25 years and he is passionate about achieving excellence in dentistry with a focus on Dental Implants. He has been trained by many national and international surgeons to become an Associate Fellow of AAID and a Fellow of ICOI and GDIA.
                     </p>
@@ -112,9 +112,9 @@ export default function SimpleAllOn4FAQ() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-12 pt-8 border-t border-gray-200"
+          className="text-center mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-200"
         >
-          <p className="text-gray-400 text-sm">
+          <p className="text-[16px] sm:text-sm text-gray-400">
             All-on-4® is a trademark of Nobel Biocare.
           </p>
         </motion.div>

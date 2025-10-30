@@ -48,7 +48,7 @@ She is happily married with a daughter and loves to spend quality time with her 
   ]
 
   return (
-    <section className="py-12 lg:py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <motion.div 
@@ -58,10 +58,10 @@ She is happily married with a daughter and loves to spend quality time with her 
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
             Our Doctors
           </h2>
-          <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[16px] sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Meet our experienced dental professionals who are dedicated to providing exceptional care and creating beautiful, healthy smiles for our patients in Manteca, CA.
           </p>
         </motion.div>
@@ -97,10 +97,10 @@ She is happily married with a daughter and loves to spend quality time with her 
                   />
                 </div>
                 <div className="flex-1">
-                  <h4 className={`font-semibold text-lg mb-2 ${testimonials[0].nameColor} transition-all duration-200`}>
+                  <h4 className={`font-semibold text-[22px] sm:text-lg mb-2 ${testimonials[0].nameColor} transition-all duration-200`}>
                     {testimonials[0].name}
                   </h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-[16px] text-gray-700 leading-relaxed">
                     {testimonials[0].text}
                   </p>
                 </div>
@@ -147,10 +147,10 @@ She is happily married with a daughter and loves to spend quality time with her 
             >
               <div className="flex items-start space-x-4">
                 <div className="flex-1">
-                  <h4 className={`font-semibold text-lg mb-2 ${testimonials[1].nameColor} transition-all duration-200`}>
+                  <h4 className={`font-semibold text-[22px] sm:text-lg mb-2 ${testimonials[1].nameColor} transition-all duration-200`}>
                     {testimonials[1].name}
                   </h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-[16px] text-gray-700 leading-relaxed">
                     {testimonials[1].text}
                   </p>
                 </div>
@@ -213,13 +213,13 @@ She is happily married with a daughter and loves to spend quality time with her 
                         className="object-cover"
                       />
                     </div>
-                    <h3 className="text-2xl lg:text-3xl font-semibold text-gray-900">
+                    <h3 className="text-[22px] sm:text-2xl lg:text-3xl font-semibold text-gray-900">
                       {hoveredDoctor}
                     </h3>
                   </div>
                   
                   {/* Doctor Biography */}
-                  <div className="text-gray-700 leading-relaxed text-sm lg:text-base space-y-4 flex-1">
+                  <div className="text-[16px] leading-relaxed text-sm lg:text-base space-y-4 flex-1" style={{ color: '#656565' }}>
                     {testimonials.find(t => t.name === hoveredDoctor)?.fullBio.split('\n\n').map((paragraph, index) => (
                       <p key={index} className="mb-4">
                         {paragraph}

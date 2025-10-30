@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function SmileGallerySection() {
   const galleryImages = [
@@ -20,7 +21,7 @@ export default function SmileGallerySection() {
   ]
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -32,12 +33,18 @@ export default function SmileGallerySection() {
           <div className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
             Gallery
           </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
+          <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
             Smile Gallery
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565', fontSize: '16px' }}>
+          <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8" style={{ color: '#656565' }}>
             See the amazing transformations we've created for our patients. Each smile tells a story of confidence, health, and happiness.
           </p>
+          <Link 
+            href="/smile-gallery"
+            className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-[#441018] text-white border border-[#441018] rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base"
+          >
+            View Full Gallery
+          </Link>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">

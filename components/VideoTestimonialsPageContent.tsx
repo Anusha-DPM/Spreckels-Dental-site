@@ -91,7 +91,7 @@ export default function VideoTestimonialsPageContent() {
   return (
     <>
       {/* Videos Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+      <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -100,10 +100,10 @@ export default function VideoTestimonialsPageContent() {
             viewport={{ once: true }}
             className="text-center mb-8 sm:mb-12 lg:mb-16"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
+            <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
               Patient Video Testimonials
             </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565', fontSize: '16px' }}>
+            <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565' }}>
               Watch real patients share their stories and experiences with our dental care services.
             </p>
           </motion.div>
@@ -162,10 +162,10 @@ export default function VideoTestimonialsPageContent() {
                       </video>
                     </div>
                     <div className="text-center">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2 font-heading">
+                      <h3 className="text-[22px] sm:text-lg font-semibold text-gray-900 mb-2 font-heading">
                         {video.title}
                       </h3>
-                      <p className="text-gray-600 text-sm" style={{ color: '#656565', fontSize: '16px' }}>
+                      <p className="text-[16px] text-gray-600" style={{ color: '#656565' }}>
                         {video.description}
                       </p>
                     </div>
@@ -194,7 +194,7 @@ export default function VideoTestimonialsPageContent() {
       </section>
 
       {/* Reviews Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -203,10 +203,10 @@ export default function VideoTestimonialsPageContent() {
             viewport={{ once: true }}
             className="text-center mb-8 sm:mb-12 lg:mb-16"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
+            <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
               Patient Reviews
             </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565', fontSize: '16px' }}>
+            <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565' }}>
               Read what our patients have to say about their experiences at Spreckels Park Dental.
             </p>
           </motion.div>

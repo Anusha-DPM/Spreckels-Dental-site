@@ -30,7 +30,7 @@ export default function JourneySection() {
   ]
 
   return (
-    <section className="py-12 lg:py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <motion.div 
@@ -40,10 +40,10 @@ export default function JourneySection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
             Our journey to dental excellence
           </h2>
-          <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[16px] sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Over the years, we've grown from a small practice to a trusted name in dental care, but our core belief remains the same — everyone deserves the right to a healthy, beautiful smile.
           </p>
         </motion.div>
@@ -77,10 +77,10 @@ export default function JourneySection() {
                   />
                 </div>
                 <div className="flex-1">
-                  <h4 className={`font-semibold text-lg mb-2 ${testimonials[0].nameColor}`}>
+                  <h4 className={`font-semibold text-[22px] sm:text-lg mb-2 ${testimonials[0].nameColor}`}>
                     {testimonials[0].name}
                   </h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-[16px] text-gray-700 leading-relaxed">
                     {testimonials[0].text}
                   </p>
                 </div>
@@ -126,10 +126,10 @@ export default function JourneySection() {
             >
               <div className="flex items-start space-x-4">
                 <div className="flex-1">
-                  <h4 className={`font-semibold text-lg mb-2 ${testimonials[1].nameColor}`}>
+                  <h4 className={`font-semibold text-[22px] sm:text-lg mb-2 ${testimonials[1].nameColor}`}>
                     {testimonials[1].name}
                   </h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-[16px] text-gray-700 leading-relaxed">
                     {testimonials[1].text}
                   </p>
                 </div>

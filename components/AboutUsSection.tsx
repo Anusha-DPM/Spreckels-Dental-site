@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function AboutUsSection() {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-gray-200">
+    <section className="py-8 sm:py-12 lg:py-16 md:py-20 bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
           
@@ -45,7 +45,7 @@ export default function AboutUsSection() {
           </div>
           
           {/* Right Column - Text Content */}
-          <div className="text-left">
+          <div className="text-center md:text-left">
             <div className="space-y-4 sm:space-y-6">
               {/* About Us Label */}
               <div className="text-blue-500 text-sm font-semibold uppercase tracking-wide">
@@ -53,7 +53,7 @@ export default function AboutUsSection() {
               </div>
               
               {/* Main Heading */}
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 leading-tight">
+              <h2 className="text-[27px] sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 leading-tight">
                 Dr. Rujul G Parikh DDS
               </h2>
               
@@ -61,17 +61,19 @@ export default function AboutUsSection() {
               <div className="border-t border-gray-300 my-6"></div>
               
               {/* Description Paragraph */}
-              <p className="text-base sm:text-lg leading-relaxed mb-4 sm:mb-5" style={{ color: '#656565' }}>
+              <p className="text-[16px] sm:text-lg leading-relaxed mb-4 sm:mb-5" style={{ color: '#656565' }}>
                 For more than 25 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. His main priorities are oral health and patient care. As a General Dentist, he has invested many hours in continuing education and constantly updated and educated in dentistry. His continual pursuit of better methods, depth of understanding, and range of experience make him skilled in numerous dental procedures including Dental Implants, Root Canals and Crowns, Dentures and many more.
               </p>
               
               {/* Learn More Button */}
-              <a 
-                href="/dental-staff"
-                className="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block"
-              >
+              <div className="flex justify-center md:justify-start">
+                <a 
+                  href="/dental-staff"
+                  className="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block text-[15px] sm:text-base"
+                >
                 Learn More
-              </a>
+                </a>
+              </div>
             </div>
           </div>
         </div>

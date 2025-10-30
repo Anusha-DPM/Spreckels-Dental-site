@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function JoinTeamSection() {
   return (
-    <section className="py-12 lg:py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -52,7 +52,7 @@ export default function JoinTeamSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6"
+            className="text-[27px] sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6"
           >
             Want to work with us?
           </motion.h2>
@@ -63,7 +63,7 @@ export default function JoinTeamSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
             viewport={{ once: true }}
-            className="text-lg text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed"
+            className="text-[16px] sm:text-lg text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed"
           >
             Join our dedicated team of dental professionals committed to providing exceptional patient care. We offer a supportive environment where you can grow your skills and make a difference in patients' lives.
           </motion.p>

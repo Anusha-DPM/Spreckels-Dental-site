@@ -31,23 +31,23 @@ export default function FeaturesSection() {
   ]
 
   return (
-    <section className="py-12 sm:py-16 bg-white">
+    <section className="py-8 sm:py-12 lg:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
           {features.map((feature, index) => (
-            <div key={index} className="text-left">
+            <div key={index} className="text-center sm:text-left">
               {/* Icon */}
-              <div className="mb-4 sm:mb-6">
+              <div className="mb-4 sm:mb-6 flex justify-center sm:justify-start">
                 {feature.icon}
               </div>
               
               {/* Title */}
-              <h3 className="text-lg sm:text-xl font-normal text-gray-900 mb-3 sm:mb-4">
+              <h3 className="text-[22px] sm:text-xl font-normal text-gray-900 mb-3 sm:mb-4">
                 {feature.title}
               </h3>
               
               {/* Description */}
-              <p className="text-[#656565] leading-relaxed text-sm sm:text-base">
+              <p className="text-[#656565] leading-relaxed text-[16px] sm:text-base">
                 {feature.description}
               </p>
             </div>

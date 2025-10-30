@@ -10,7 +10,7 @@ export default function CosmeticServicesSection() {
   ]
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -19,7 +19,7 @@ export default function CosmeticServicesSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-6">
             Our Cosmetic Services Include
           </h2>
         </motion.div>
@@ -39,10 +39,10 @@ export default function CosmeticServicesSection() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-4">
                 {service.name}
               </h3>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-[16px] text-gray-700 leading-relaxed">
                 {service.description}
               </p>
             </motion.div>

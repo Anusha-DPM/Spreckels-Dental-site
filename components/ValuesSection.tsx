@@ -40,7 +40,7 @@ export default function ValuesSection({
   className = ""
 }: ValuesSectionProps) {
   return (
-    <section className={`py-16 lg:py-24 ${className}`}>
+    <section className={`py-8 sm:py-10 lg:py-12 xl:py-24 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -52,10 +52,10 @@ export default function ValuesSection({
           <h3 className="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-4">
             {subtitle}
           </h3>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
             {title}
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto">
             {description}
           </p>
         </motion.div>
@@ -71,8 +71,8 @@ export default function ValuesSection({
               className="text-center p-8 rounded-xl hover:shadow-lg transition-shadow duration-300"
             >
               <div className="text-4xl mb-4">{value.icon}</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">{value.title}</h3>
-              <p className="text-gray-600">{value.description}</p>
+              <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-4">{value.title}</h3>
+              <p className="text-[16px] text-gray-600">{value.description}</p>
             </motion.div>
           ))}
         </div>

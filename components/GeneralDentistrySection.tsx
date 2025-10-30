@@ -5,21 +5,22 @@ import Image from 'next/image'
 
 export default function GeneralDentistrySection() {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Content */}
+          {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="text-center lg:text-left"
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
+            <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-8">
               General Dentistry in Manteca, CA
             </h2>
             
-            <div className="space-y-6 text-gray-700 leading-relaxed">
+            <div className="space-y-6 text-[16px] text-gray-700 leading-relaxed">
               <p>
                 Dentistry is both an art and a science, covering everything from emergency situations to aesthetic needs, all under the umbrella of general dentistry. This challenging and inspiring work is what drives our team at Spreckels Park Dental.
               </p>

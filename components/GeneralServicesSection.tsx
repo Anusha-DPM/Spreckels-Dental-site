@@ -19,7 +19,7 @@ export default function GeneralServicesSection() {
   ]
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -28,7 +28,7 @@ export default function GeneralServicesSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-6">
             Our General Dentistry Services Include
           </h2>
         </motion.div>
@@ -43,10 +43,10 @@ export default function GeneralServicesSection() {
               viewport={{ once: true }}
               className="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow duration-300"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-[22px] sm:text-lg font-semibold text-gray-900 mb-2">
                 {service.name}
               </h3>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-[16px] text-gray-700 leading-relaxed">
                 {service.description}
               </p>
             </motion.div>

@@ -72,7 +72,7 @@ export default function SmileGalleryPageContent() {
           viewport={{ once: true }}
           className="text-center mb-12 sm:mb-16 lg:mb-20"
         >
-          <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565', fontSize: '16px' }}>
+          <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565' }}>
             See the amazing transformations we've created for our patients. Each smile represents a journey of confidence, health, and happiness.
           </p>
         </motion.div>
@@ -91,7 +91,7 @@ export default function SmileGalleryPageContent() {
             <div className="mb-8 sm:mb-12">
               <div className="flex items-center gap-4">
                 <div className="h-1 w-12" style={{ backgroundColor: '#441018' }}></div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 font-heading">
+                <h2 className="text-[27px] sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 font-heading">
                   {category.title}
                 </h2>
               </div>
@@ -127,7 +127,7 @@ export default function SmileGalleryPageContent() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-white/90 text-xs font-medium uppercase tracking-wider mb-1">Before & After</p>
-                        <p className="text-white text-lg font-semibold font-heading">{category.title}</p>
+                        <p className="text-white text-[22px] sm:text-lg font-semibold font-heading">{category.title}</p>
                       </div>
                       <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

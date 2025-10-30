@@ -15,11 +15,11 @@ export default function MaintainingSmileSection() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
+            <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-8">
               Maintaining Your New Smile
             </h2>
             
-            <div className="space-y-6 text-gray-700 leading-relaxed">
+            <div className="space-y-6 text-[16px] text-gray-700 leading-relaxed">
               <p>
                 After cosmetic dental work, it's important to maintain your new smile with daily brushing and flossing. Avoid smoking and be mindful of colored foods like coffee, ketchup, and fruit juice after teeth whitening, as they can increase the risk of staining.
               </p>

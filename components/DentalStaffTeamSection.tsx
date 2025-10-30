@@ -45,7 +45,7 @@ export default function DentalStaffTeamSection() {
   ]
 
   return (
-    <section className="py-12 lg:py-16 bg-white border-t border-gray-200">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Column - Heading */}
@@ -54,12 +54,12 @@ export default function DentalStaffTeamSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-left max-w-md"
+            className="text-center lg:text-left max-w-md"
           >
             <h3 className="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-4">
               OUR DENTAL TEAM
             </h3>
-            <h2 className="text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
+            <h2 className="text-[27px] sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-6">
               Meet our experienced dental professionals
             </h2>
           </motion.div>
@@ -93,8 +93,8 @@ export default function DentalStaffTeamSection() {
                 </div>
                 
                 {/* Team Member Info */}
-                <h3 className="text-lg font-bold text-gray-900 mb-1 text-left">{member.name}</h3>
-                <p className="text-sm text-gray-600 mb-3 text-left">{member.role}</p>
+                <h3 className="text-[22px] sm:text-lg font-semibold text-gray-900 mb-1 text-center sm:text-left">{member.name}</h3>
+                <p className="text-[16px] sm:text-sm text-gray-600 mb-3 text-center sm:text-left">{member.role}</p>
               </motion.div>
             ))}
           </motion.div>

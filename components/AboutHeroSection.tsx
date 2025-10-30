@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function AboutHeroSection() {
   return (
-    <section className="pt-[140px] lg:pt-[140px] pb-12 lg:pb-16" style={{ backgroundColor: '#441018' }}>
+    <section className="pt-[140px] lg:pt-[140px] pb-8 lg:pb-16" style={{ backgroundColor: '#441018' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Side - Text Content */}
@@ -14,7 +14,7 @@ export default function AboutHeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-4xl lg:text-5xl xl:text-6xl font-normal leading-tight mb-2.5"
+              className="text-[27px] lg:text-5xl xl:text-6xl font-normal leading-tight mb-2.5"
             >
               About Us
             </motion.h1>
@@ -22,7 +22,7 @@ export default function AboutHeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-lg lg:text-xl text-red-100 mb-20 pr-0 lg:pr-20 leading-relaxed"
+              className="text-[16px] lg:text-xl text-red-100 mb-8 lg:mb-20 pr-0 lg:pr-20 leading-relaxed"
             >
               We are a trusted dental practice dedicated to providing exceptional oral care and creating beautiful smiles through advanced technology, personalized treatment plans, and compassionate care for every patient.
             </motion.p>
@@ -34,13 +34,13 @@ export default function AboutHeroSection() {
             >
               <a 
                 href="https://spreckels-dental-site.vercel.app/appointment-request"
-                className="px-8 py-3 bg-white text-gray-900 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium text-center"
+                className="px-8 py-3 bg-white text-gray-900 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium text-center text-[15px] sm:text-base"
               >
                 Schedule Consultation
               </a>
               <a 
                 href="https://spreckels-dental-site.vercel.app/dental-staff"
-                className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-medium text-center"
+                className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-medium text-center text-[15px] sm:text-base"
               >
                 Meet Our Team
               </a>

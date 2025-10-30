@@ -19,15 +19,15 @@ export default function InfoStatsSection() {
   ]
 
   return (
-    <section className="pt-6 sm:pt-8 pb-8 sm:pb-12 lg:pb-20 bg-white">
+    <section className="pt-6 sm:pt-8 pb-8 sm:pb-10 lg:pb-12 xl:pb-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
           {/* Left Column - Informational Content */}
-          <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-gray-900 mb-6 font-heading leading-tight">
+          <div className="text-center lg:text-left">
+            <h2 className="text-[27px] sm:text-4xl lg:text-5xl font-normal text-gray-900 mb-6 font-heading leading-tight">
               Your journey to a perfect smile starts here
             </h2>
-            <p className="text-lg text-[#656565] leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-lg text-[#656565] leading-relaxed font-sans">
               Experience exceptional dental care with our expert team. We provide comprehensive dental services to help you achieve a healthy, beautiful smile that lasts a lifetime.
             </p>
           </div>

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function CosmeticDentistrySection() {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -13,11 +13,11 @@ export default function CosmeticDentistrySection() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-8">
             Cosmetic Dentistry in Manteca, CA
           </h2>
           
-          <div className="space-y-6 text-gray-700 leading-relaxed text-lg">
+          <div className="space-y-6 text-[16px] text-gray-700 leading-relaxed text-center">
             <p>
               Dr. Parikh, Dr. Arora, and the team at Spreckels Park Dental aim to provide patients with their desired beautiful smiles. A smile says it all!
             </p>
