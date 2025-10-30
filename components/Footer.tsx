@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
           
                      {/* Column 2 - Information Links */}
-           <div className="text-left" style={{ paddingLeft: '90px' }}>
+           <div className="text-left pl-0 lg:pl-20">
              <h3 className="font-semibold text-white mb-6">INFORMATION</h3>
              <ul className="space-y-6">
                <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
@@ -63,7 +63,7 @@ export default function Footer() {
            </div>
            
            {/* Column 3 - Company Links */}
-           <div className="text-left" style={{ paddingLeft: '90px' }}>
+           <div className="text-left pl-0 lg:pl-20">
              <div>
                <h3 className="text-white font-semibold mb-4">QUICK LINKS</h3>
                <ul className="space-y-2">
@@ -91,7 +91,7 @@ export default function Footer() {
         
         {/* Bottom Section - Copyright and Social Media */}
         <div className="border-t border-gray-700 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               Copyright: © 2025 Sprekels Park Dental. All Rights Reserved.
             </p>

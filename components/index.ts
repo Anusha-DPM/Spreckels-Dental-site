@@ -80,6 +80,8 @@ export { default as LatestBlogPosts } from './LatestBlogPosts'
 export { default as SmileGallerySection } from './SmileGallerySection'
 export { default as SmileGalleryHero } from './SmileGalleryHero'
 export { default as SmileGalleryPageContent } from './SmileGalleryPageContent'
+export { default as VideoTestimonialsHero } from './VideoTestimonialsHero'
+export { default as VideoTestimonialsPageContent } from './VideoTestimonialsPageContent'
 export { default as VideoTestimonialsSection } from './VideoTestimonialsSection'
 
 
