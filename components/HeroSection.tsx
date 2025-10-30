@@ -8,7 +8,7 @@ export default function HeroSection() {
     <section id="home" className="relative min-h-screen flex flex-col lg:flex-row">
       {/* Left Side with Background Color */}
       <div className="relative w-full lg:w-1/2 flex items-center justify-center min-h-screen" style={{ backgroundColor: '#441018' }}>
-        <div className="relative z-10 px-4 sm:px-6 lg:px-[80px] py-12 lg:py-0">
+        <div className="relative z-10 px-4 sm:px-6 lg:px-[80px] py-6 sm:py-10 lg:py-0">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -19,7 +19,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[68px] font-normal leading-tight mb-4 sm:mb-6 font-heading pt-[110px]"
+              className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[68px] font-normal leading-tight mb-4 sm:mb-6 font-heading pt-[50px] sm:pt-[90px]"
             >
               BUILD A BRIGHTER SMILE
             </motion.h1>

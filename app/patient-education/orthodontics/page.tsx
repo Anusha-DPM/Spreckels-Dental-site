@@ -97,7 +97,7 @@ export default function OrthodonticsPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-8 sm:py-10 lg:py-12">
+      <section className="pt-0 pb-8 sm:pb-10 lg:pb-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

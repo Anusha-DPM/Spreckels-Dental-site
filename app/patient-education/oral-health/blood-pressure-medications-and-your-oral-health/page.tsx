@@ -138,10 +138,10 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
               <li>Changes in bite or tooth alignment</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Dry Mouth (Xerostomia)
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Many blood pressure medications can reduce saliva production, leading to:
             </p>
 
@@ -153,10 +153,10 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
               <li>Problems with dentures or other dental appliances</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Taste Changes
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Some medications can alter taste perception, leading to:
             </p>
 
@@ -167,19 +167,19 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
               <li>Potential impact on nutrition</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Prevention and Management Strategies
             </h3>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Enhanced Oral Hygiene
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               If you're taking blood pressure medications, maintaining excellent oral hygiene is 
               crucial:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li><strong>Brush More Frequently:</strong> Consider brushing after every meal if 
                 you have dry mouth</li>
               <li><strong>Use Fluoride Products:</strong> Choose fluoride toothpaste and consider 
@@ -189,14 +189,14 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
               <li><strong>Consider Electric Toothbrush:</strong> May be more effective for thorough cleaning</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Managing Dry Mouth
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               If you experience dry mouth from your medications:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li><strong>Stay Hydrated:</strong> Drink water throughout the day</li>
               <li><strong>Use Saliva Substitutes:</strong> Over-the-counter products can help</li>
               <li><strong>Chew Sugar-Free Gum:</strong> Stimulates saliva production</li>
@@ -206,64 +206,64 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
                 medications to stimulate saliva production</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Managing Gingival Hyperplasia
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               If you develop gum overgrowth:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li><strong>Professional Cleaning:</strong> More frequent dental cleanings may be needed</li>
               <li><strong>Gum Surgery:</strong> In severe cases, surgical removal of excess tissue</li>
               <li><strong>Medication Adjustment:</strong> Your doctor may consider alternative medications</li>
               <li><strong>Enhanced Home Care:</strong> Special attention to cleaning around affected areas</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Communication with Healthcare Providers
             </h3>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Dental Team Communication
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Always inform your dental team about your blood pressure medications:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Provide a complete list of all medications</li>
               <li>Inform them of any changes in your medication regimen</li>
               <li>Report any oral health changes or concerns</li>
               <li>Ask about specific oral care recommendations for your medications</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Medical Team Communication
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Keep your medical team informed about oral health issues:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Report any oral side effects from medications</li>
               <li>Discuss potential medication alternatives if oral side effects are severe</li>
               <li>Coordinate care between your dentist and physician</li>
               <li>Ask about timing of dental procedures in relation to medication doses</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Special Considerations for Dental Procedures
             </h3>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text+[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Before Dental Procedures
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               When planning dental procedures, consider:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li><strong>Blood Pressure Monitoring:</strong> Your dentist may check your blood 
                 pressure before procedures</li>
               <li><strong>Medication Timing:</strong> Some procedures may need to be scheduled 
@@ -274,32 +274,32 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
                 procedures</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Post-Procedure Care
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               After dental procedures:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Follow all post-procedure instructions carefully</li>
               <li>Monitor for any unusual bleeding or complications</li>
               <li>Continue taking your blood pressure medications as prescribed</li>
               <li>Contact your dentist if you experience any concerning symptoms</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Lifestyle Modifications
             </h3>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Dietary Considerations
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Your diet can help support both cardiovascular and oral health:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li><strong>Low-Sodium Diet:</strong> Helps manage blood pressure</li>
               <li><strong>Calcium-Rich Foods:</strong> Supports dental health</li>
               <li><strong>Vitamin D:</strong> Important for both heart and oral health</li>
@@ -307,46 +307,46 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
               <li><strong>Stay Hydrated:</strong> Helps with dry mouth and overall health</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Stress Management
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Stress can affect both blood pressure and oral health:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Practice stress-reduction techniques</li>
               <li>Get adequate sleep</li>
               <li>Exercise regularly (as approved by your doctor)</li>
               <li>Consider relaxation techniques like meditation or yoga</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Monitoring and Follow-up
             </h3>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Regular Dental Checkups
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               If you're taking blood pressure medications, you may need more frequent dental visits:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Schedule checkups every 3-4 months instead of every 6 months</li>
               <li>More frequent professional cleanings may be needed</li>
               <li>Regular monitoring for gum disease and other oral health issues</li>
               <li>Early detection and treatment of any problems</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Self-Monitoring
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Be aware of changes in your oral health:
             </p>
 
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Check your gums regularly for swelling or bleeding</li>
               <li>Monitor for changes in taste or dry mouth</li>
               <li>Watch for any new oral sores or lesions</li>
@@ -369,7 +369,7 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
       </section>
 
       {/* Related Articles */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-10 lg:py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -377,7 +377,7 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-12 text-center">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
               Related Articles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -393,10 +393,10 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
                 >
                   <Link href={article.href}>
                     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 h-full">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 font-heading">
+                      <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 font-heading">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed font-sans">
+                      <p className="text-[16px] text-gray-600 leading-relaxed font-sans">
                         {article.description}
                       </p>
                     </div>

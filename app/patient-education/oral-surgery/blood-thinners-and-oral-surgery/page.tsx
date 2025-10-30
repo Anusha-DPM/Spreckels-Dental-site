@@ -29,7 +29,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
+      <section className="pt-[140px] pb-12 sm:pb-16 lg:pb-20" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -37,10 +37,10 @@ export default function BloodThinnersAndOralSurgeryPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+            <h1 className="text-[27px] sm:text-4xl lg:text-6xl font-normal text-white font-heading leading-tight mb-4 sm:mb-6">
               Blood Thinners and Oral Surgery
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
               Understanding how blood thinners affect oral surgery and what precautions need to be taken 
               to ensure safe and successful procedures.
             </p>
@@ -49,7 +49,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -57,10 +57,10 @@ export default function BloodThinnersAndOralSurgeryPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-6">
               What are Blood Thinners?
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Blood thinners, also known as anticoagulants, are medications that help prevent blood clots 
               from forming. They work by interfering with the blood clotting process, which can be 
               beneficial for patients with certain medical conditions such as atrial fibrillation, 
@@ -70,7 +70,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Common Blood Thinners
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               There are several types of blood thinners commonly prescribed. Warfarin (Coumadin) is a 
               traditional blood thinner that requires regular monitoring. Newer medications include 
               direct oral anticoagulants (DOACs) such as apixaban (Eliquis), rivaroxaban (Xarelto), 
@@ -81,7 +81,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Impact on Oral Surgery
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Blood thinners can significantly impact oral surgery procedures by increasing the risk of 
               bleeding during and after surgery. This is particularly important for procedures that 
               involve cutting into tissue, such as extractions, biopsies, or more complex oral surgery 
@@ -92,7 +92,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Pre-Surgical Evaluation
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Before any oral surgery procedure, patients taking blood thinners will undergo a thorough 
               evaluation. This typically includes a review of their medical history, current medications, 
               and the specific blood thinner they are taking. Blood tests may be ordered to assess the 
@@ -102,7 +102,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Management Strategies
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               There are several strategies for managing blood thinners during oral surgery. For some 
               patients, the blood thinner may be temporarily discontinued before surgery, while for 
               others, the medication may be continued but with additional precautions. The specific 
@@ -113,7 +113,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Communication with Healthcare Providers
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Open communication between the oral surgeon, the patient's primary care physician, and 
               any specialists involved in the patient's care is essential. This ensures that all 
               healthcare providers are aware of the planned surgery and can coordinate the management 
@@ -124,7 +124,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Post-Surgical Care
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               After oral surgery, patients taking blood thinners may require additional monitoring and 
               care. This can include more frequent follow-up appointments, specific instructions for 
               wound care, and monitoring for signs of excessive bleeding or other complications. The 
@@ -135,7 +135,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Emergency Situations
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               In emergency oral surgery situations, the management of blood thinners becomes more 
               complex. The surgical team must quickly assess the patient's anticoagulation status and 
               determine the safest approach. This may involve administering reversal agents or other 
@@ -146,7 +146,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Patient Education
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Patients taking blood thinners should be well-informed about their medications and how 
               they may affect oral surgery. This includes understanding the importance of disclosing 
               all medications to their oral surgeon, following pre- and post-surgical instructions 
@@ -157,7 +157,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Alternative Treatment Options
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               In some cases, alternative treatment options may be considered for patients taking blood 
               thinners. This could include less invasive procedures, different timing for surgery, or 
               the use of specific techniques designed to minimize bleeding risk. The decision about 
@@ -168,7 +168,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6 mt-12">
               Conclusion
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               While blood thinners can complicate oral surgery, with proper planning and coordination 
               between healthcare providers, safe and successful procedures can be performed. The key 
               is open communication, thorough evaluation, and careful management of the anticoagulation 
@@ -179,7 +179,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
       </section>
 
       {/* Related Articles Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-10 lg:py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -187,7 +187,7 @@ export default function BloodThinnersAndOralSurgeryPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
               Related Articles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -203,10 +203,10 @@ export default function BloodThinnersAndOralSurgeryPage() {
                 >
                   <Link href={article.href}>
                     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 h-full border border-gray-100">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-[#441018] transition-colors duration-200 font-heading">
+                      <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-3 group-hover:text-[#441018] transition-colors duration-200 font-heading">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed font-sans mb-4">
+                      <p className="text-[16px] text-gray-600 leading-relaxed font-sans mb-4">
                         {article.description}
                       </p>
                       <div className="flex items-center text-[#441018] font-medium group-hover:translate-x-1 transition-transform duration-200">
