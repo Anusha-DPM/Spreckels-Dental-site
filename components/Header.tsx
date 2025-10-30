@@ -25,6 +25,7 @@ export default function Header() {
   const aboutItems = [
     { name: 'Office', href: '/office' },
     { name: 'Dental Staff', href: '/dental-staff' },
+    { name: 'Smile Gallery', href: '/smile-gallery' },
   ]
 
   const servicesItems = [
