@@ -29,7 +29,7 @@ export default function OrthodonticEmergenciesPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
+      <section className="pt-[140px] pb-12 sm:pb-16 lg:pb-20" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -37,10 +37,10 @@ export default function OrthodonticEmergenciesPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+            <h1 className="text-[27px] sm:text-4xl lg:text-6xl font-normal text-white font-heading leading-tight mb-4 sm:mb-6">
               Orthodontic Emergencies
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
               Orthodontic emergencies can be uncomfortable and concerning. Learn about common 
               issues with braces and aligners, and how to handle them before seeing your orthodontist.
             </p>
@@ -49,7 +49,7 @@ export default function OrthodonticEmergenciesPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -57,59 +57,59 @@ export default function OrthodonticEmergenciesPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-6">
               What Are Orthodontic Emergencies?
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Orthodontic emergencies are problems with braces, aligners, or other orthodontic 
               appliances that require immediate attention. While most orthodontic issues can wait 
               until your next appointment, some situations require prompt care to prevent damage 
               or discomfort.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Common Orthodontic Emergencies
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Several issues can constitute an orthodontic emergency:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Broken or Loose Brackets
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Brackets that have come loose or broken off can cause discomfort and may affect 
               treatment progress. This can happen from eating hard foods, trauma, or normal wear.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Poking or Broken Wires
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Wires that have broken or are poking into your cheeks, gums, or tongue can cause 
               significant pain and irritation. This is one of the most common orthodontic emergencies.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Loose Bands
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Bands around molars that have become loose or fallen off can affect the stability 
               of your braces and treatment progress.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Severe Pain or Discomfort
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               While some discomfort is normal after adjustments, severe or persistent pain that 
               doesn't improve with over-the-counter pain relievers may indicate a problem.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Trauma to the Mouth
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Injuries to the mouth that damage braces or cause severe pain require immediate 
               attention to prevent further damage.
             </p>
@@ -261,7 +261,7 @@ export default function OrthodonticEmergenciesPage() {
       </section>
 
       {/* Related Articles */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-10 lg:py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -269,7 +269,7 @@ export default function OrthodonticEmergenciesPage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-12 text-center">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
               Related Articles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -285,10 +285,10 @@ export default function OrthodonticEmergenciesPage() {
                 >
                   <Link href={article.href}>
                     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 h-full">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 font-heading">
+                      <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 font-heading">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed font-sans">
+                      <p className="text-[16px] text-gray-600 leading-relaxed font-sans">
                         {article.description}
                       </p>
                     </div>

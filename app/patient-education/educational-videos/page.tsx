@@ -118,7 +118,7 @@ export default function EducationalVideos() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
+      <section className="pt-[140px] pb-12 sm:pb-16 lg:pb-20" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -126,10 +126,10 @@ export default function EducationalVideos() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+            <h1 className="text-[27px] sm:text-4xl lg:text-6xl font-normal text-white font-heading leading-tight mb-4 sm:mb-6">
               Educational Videos
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
               Take a few minutes to watch our educational videos and learn more about different dental treatments and procedures. 
               Video topics include general & cosmetic dentistry, implants, oral health and hygiene, orthodontics, and preventative dentistry.
             </p>
@@ -138,7 +138,7 @@ export default function EducationalVideos() {
       </section>
 
       {/* Main Content */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             
@@ -150,7 +150,7 @@ export default function EducationalVideos() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="mb-8"
+                className="mb-6 sm:mb-8"
               >
                 <div className="bg-gray-100 rounded-xl overflow-hidden aspect-video relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center">
@@ -189,14 +189,14 @@ export default function EducationalVideos() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="mb-8"
+                className="mb-6 sm:mb-8"
               >
                 <div className="flex flex-wrap items-center justify-between border-b border-gray-200">
                   <div className="flex space-x-8">
                     {navigationTabs.map((tab, index) => (
                       <button
                         key={tab}
-                        className={`py-3 px-1 border-b-2 font-semibold text-sm transition-colors duration-200 ${
+                        className={`py-3 px-1 border-b-2 font-semibold text-[15px] sm:text-sm transition-colors duration-200 ${
                           index === 0 
                             ? 'border-blue-500 text-blue-600' 
                             : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -206,7 +206,7 @@ export default function EducationalVideos() {
                       </button>
                     ))}
                   </div>
-                  <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                  <button className="text-blue-600 hover:text-blue-700 text-[15px] sm:text-sm font-medium">
                     Share by email
                   </button>
                 </div>
@@ -217,9 +217,9 @@ export default function EducationalVideos() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="mb-12"
+                className="mb-10 sm:mb-12"
               >
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6 font-heading">Featured Videos</h2>
+                <h2 className="text-[22px] sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6 font-heading">Featured Videos</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {featuredVideos.map((video, index) => (
                     <div key={video.id} className="group cursor-pointer">
@@ -235,7 +235,7 @@ export default function EducationalVideos() {
                           {video.duration}
                         </div>
                       </div>
-                      <h3 className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
+                      <h3 className="text-[16px] sm:text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
                         {video.title}
                       </h3>
                     </div>
@@ -252,11 +252,11 @@ export default function EducationalVideos() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {Object.entries(videoTopics).map(([category, topics], categoryIndex) => (
                     <div key={category} className="space-y-4">
-                      <h3 className="text-lg font-semibold text-gray-900 font-heading">{category}</h3>
+                      <h3 className="text-[22px] sm:text-lg font-semibold text-gray-900 font-heading">{category}</h3>
                       <ul className="space-y-2">
                         {topics.map((topic, topicIndex) => (
                           <li key={topicIndex}>
-                            <button className="text-left text-blue-600 hover:text-blue-700 hover:underline text-sm transition-colors duration-200">
+                            <button className="text-left text-blue-600 hover:text-blue-700 hover:underline text-[15px] sm:text-sm transition-colors duration-200">
                               {topic}
                             </button>
                           </li>
@@ -276,13 +276,13 @@ export default function EducationalVideos() {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="bg-gray-50 rounded-xl p-6 sticky top-24"
               >
-                <h2 className="text-lg font-semibold text-gray-900 mb-2 font-heading">CATEGORIES</h2>
-                <h3 className="text-sm text-gray-600 mb-6">Educational Videos</h3>
+                <h2 className="text-[22px] sm:text-lg font-semibold text-gray-900 mb-2 font-heading">CATEGORIES</h2>
+                <h3 className="text-[16px] sm:text-sm text-gray-600 mb-6">Educational Videos</h3>
                 <ul className="space-y-3">
                   {categories.map((category, index) => (
                     <li key={category.name}>
                       <Link href={category.href}>
-                        <button className="text-left text-blue-600 hover:text-blue-700 hover:underline text-sm transition-colors duration-200">
+                        <button className="text-left text-blue-600 hover:text-blue-700 hover:underline text-[15px] sm:text-sm transition-colors duration-200">
                           {category.name}
                         </button>
                       </Link>
@@ -296,15 +296,15 @@ export default function EducationalVideos() {
       </section>
 
       {/* Footer Note */}
-      <section className="py-8 bg-gray-50 border-t border-gray-200">
+      <section className="py-6 sm:py-8 bg-gray-50 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
-            <p>Dental videos by Optio Publishing © 2003-2005 Terms of use</p>
+            <p className="text-[16px]">Dental videos by Optio Publishing © 2003-2005 Terms of use</p>
             <div className="flex space-x-4 mt-2 md:mt-0">
-              <button className="hover:text-blue-600 transition-colors duration-200">EN</button>
-              <button className="hover:text-blue-600 transition-colors duration-200">FR</button>
-              <button className="hover:text-blue-600 transition-colors duration-200">HE</button>
-              <button className="hover:text-blue-600 transition-colors duration-200">ES</button>
+              <button className="text-[15px] sm:text-sm hover:text-blue-600 transition-colors duration-200">EN</button>
+              <button className="text-[15px] sm:text-sm hover:text-blue-600 transition-colors duration-200">FR</button>
+              <button className="text-[15px] sm:text-sm hover:text-blue-600 transition-colors duration-200">HE</button>
+              <button className="text-[15px] sm:text-sm hover:text-blue-600 transition-colors duration-200">ES</button>
             </div>
           </div>
         </div>

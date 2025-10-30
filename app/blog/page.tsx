@@ -113,15 +113,15 @@ export default function BlogPage() {
     <Layout>
       <div className="min-h-screen bg-gray-50">
              {/* Hero Section */}
-       <motion.section 
-         className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-[150px] pb-20"
+      <motion.section 
+        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-[140px] pb-12 sm:pb-16 lg:pb-20"
          initial={{ opacity: 0, y: -20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.6 }}
        >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h1 
-            className="text-4xl md:text-6xl font-bold mb-6"
+            className="text-[27px] sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -129,7 +129,7 @@ export default function BlogPage() {
             Our Blog
           </motion.h1>
           <motion.p 
-            className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto"
+            className="text-[16px] sm:text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -177,7 +177,7 @@ export default function BlogPage() {
       </motion.section>
 
       {/* Blog Posts */}
-      <section className="py-16">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                      {error && (
              <motion.div 
@@ -233,17 +233,17 @@ export default function BlogPage() {
            )}
 
           {filteredPosts.length === 0 ? (
-            <motion.div 
-              className="text-center py-16"
+                <motion.div 
+              className="text-center py-12 sm:py-16"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
             >
               <div className="text-gray-400 text-6xl mb-4">📝</div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                  <h3 className="text-[22px] sm:text-2xl font-semibold text-gray-900 mb-2">
                 {posts.length === 0 ? 'No blog posts yet' : 'No posts found'}
               </h3>
-              <p className="text-gray-500">
+                  <p className="text-[16px] text-gray-500">
                 {posts.length === 0 
                   ? 'Check back soon for our latest articles and dental health tips.'
                   : 'Try adjusting your search terms or category filter.'
@@ -290,7 +290,7 @@ export default function BlogPage() {
                     )}
 
                     {/* Title */}
-                    <h2 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
+                    <h2 className="text-[22px] sm:text-lg lg:text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
                       <Link 
                         href={`/blog/${post.slug}`}
                         className="hover:text-[#441018] transition-colors duration-200"
@@ -301,7 +301,7 @@ export default function BlogPage() {
 
                     {/* Excerpt */}
                     {post.excerpt && (
-                      <p className="text-gray-600 mb-4 line-clamp-3">
+                      <p className="text-[16px] text-gray-600 mb-4 line-clamp-3">
                         {post.excerpt}
                       </p>
                     )}

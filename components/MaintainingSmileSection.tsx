@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function MaintainingSmileSection() {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Content */}

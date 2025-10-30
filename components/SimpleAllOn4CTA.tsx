@@ -48,7 +48,7 @@ export default function SimpleAllOn4CTA() {
             </a>
             <a 
               href="tel:(209) 825-1030"
-              className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+              className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
               Call Us Today
             </a>

@@ -29,7 +29,7 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
+      <section className="pt-[140px] pb-12 sm:pb-16 lg:pb-20" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -37,10 +37,10 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+            <h1 className="text-[27px] sm:text-4xl lg:text-6xl font-normal text-white font-heading leading-tight mb-4 sm:mb-6">
               Blood Pressure Medications and Your Oral Health
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
               Understanding how blood pressure medications can affect your oral health and what you 
               should know to maintain optimal dental wellness.
             </p>
@@ -49,7 +49,7 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -57,75 +57,75 @@ export default function BloodPressureMedicationsAndOralHealthPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-6">
               The Connection Between Blood Pressure Medications and Oral Health
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Blood pressure medications are among the most commonly prescribed drugs worldwide, 
               and while they are essential for managing cardiovascular health, they can have 
               significant effects on oral health. Understanding these effects and taking appropriate 
               preventive measures can help you maintain both your cardiovascular and oral health.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Common Blood Pressure Medications and Their Oral Effects
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Different classes of blood pressure medications can affect oral health in various ways:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Calcium Channel Blockers
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Medications like amlodipine, nifedipine, and diltiazem can cause gingival hyperplasia 
               (overgrowth of gum tissue). This condition can make gums appear swollen, red, and 
               may cause them to grow over the teeth, making proper oral hygiene difficult.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               ACE Inhibitors
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Drugs like lisinopril, enalapril, and ramipril can cause dry mouth (xerostomia) and 
               may lead to a metallic taste in the mouth. Dry mouth increases the risk of tooth 
               decay and gum disease.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Beta Blockers
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Medications such as metoprolol, atenolol, and propranolol can cause dry mouth and 
               may affect taste perception. They can also cause fatigue, which might impact your 
               ability to maintain proper oral hygiene routines.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Diuretics
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Thiazide diuretics like hydrochlorothiazide and loop diuretics like furosemide can 
               cause dry mouth and may lead to increased thirst. They can also affect calcium 
               metabolism, which is important for dental health.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Angiotensin Receptor Blockers (ARBs)
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Drugs like losartan, valsartan, and candesartan can cause dry mouth and may affect 
               taste. They are generally well-tolerated but can still impact oral health.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Specific Oral Health Issues Related to Blood Pressure Medications
             </h3>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Gingival Hyperplasia
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               This condition, commonly associated with calcium channel blockers, causes gum tissue 
               to grow excessively. Symptoms include:
             </p>

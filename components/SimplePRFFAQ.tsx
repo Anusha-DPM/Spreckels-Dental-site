@@ -31,23 +31,23 @@ export default function SimplePRFFAQ() {
   ]
 
   return (
-    <section className="py-16 lg:py-20 bg-gray-50 border-t border-gray-200">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-gray-50 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-12 lg:mb-16"
+          className="text-center mb-8 sm:mb-12 lg:mb-16"
         >
           <div className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
             Common Questions
           </div>
-          <h2 className="text-3xl lg:text-4xl font-normal text-gray-900 mb-4 leading-tight">
+          <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-4 leading-tight">
             Frequently Asked Questions
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed" style={{ color: '#656565' }}>
-            Get answers to common questions about PRF therapy
+          <p className="text-[16px] sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed" style={{ color: '#656565' }}>
+Get answers to common questions about PRF therapy
           </p>
         </motion.div>
         
@@ -59,12 +59,12 @@ export default function SimplePRFFAQ() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white rounded-xl p-6 lg:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
+              className="bg-white rounded-xl p-6 lg:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 text-center lg:text-left"
             >
-              <h3 className="text-lg lg:text-xl font-semibold text-gray-900 mb-4 leading-tight">
+              <h3 className="text-[22px] sm:text-lg lg:text-xl font-semibold text-gray-900 mb-4 leading-tight">
                 {faq.question}
               </h3>
-              <p className="text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
+              <p className="text-[16px] text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
                 {faq.answer}
               </p>
             </motion.div>

@@ -29,7 +29,7 @@ export default function RootCanalTreatmentForChildrenPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
+      <section className="pt-[140px] pb-12 sm:pb-16 lg:pb-20" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -37,10 +37,10 @@ export default function RootCanalTreatmentForChildrenPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+            <h1 className="text-[27px] sm:text-4xl lg:text-6xl font-normal text-white font-heading leading-tight mb-4 sm:mb-6">
               Root Canal Treatment for Children
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
               Specialized endodontic care for children, including baby teeth and young permanent 
               teeth, to preserve their oral health and development.
             </p>
@@ -49,7 +49,7 @@ export default function RootCanalTreatmentForChildrenPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -57,23 +57,23 @@ export default function RootCanalTreatmentForChildrenPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-6">
               Understanding Root Canal Treatment for Children
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Root canal treatment for children is a specialized dental procedure designed to 
               save infected or damaged teeth in young patients. While the concept may seem 
               concerning to parents, modern pediatric endodontics is safe, effective, and 
               often the best way to preserve your child's oral health and development.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Why Children May Need Root Canal Treatment
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Children may require root canal treatment for several reasons:
             </p>
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Deep cavities that have reached the pulp</li>
               <li>Dental trauma from falls, sports injuries, or accidents</li>
               <li>Severe tooth decay that has compromised the nerve</li>
@@ -82,21 +82,21 @@ export default function RootCanalTreatmentForChildrenPage() {
               <li>Previous dental work that has failed</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Baby Teeth vs. Permanent Teeth
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               The approach to root canal treatment differs between baby teeth and permanent teeth:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Baby Teeth (Primary Teeth)
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Baby teeth serve as important placeholders for permanent teeth and help guide 
               proper jaw development. Preserving them is crucial for:
             </p>
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Maintaining proper spacing for permanent teeth</li>
               <li>Supporting normal speech development</li>
               <li>Ensuring proper chewing and nutrition</li>
@@ -104,90 +104,90 @@ export default function RootCanalTreatmentForChildrenPage() {
               <li>Maintaining facial structure and appearance</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Permanent Teeth
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Root canal treatment on permanent teeth in children follows similar principles 
               to adult treatment but with special considerations for:
             </p>
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Incomplete root development</li>
               <li>Younger, more sensitive pulp tissue</li>
               <li>Different treatment techniques for immature teeth</li>
               <li>Long-term planning for dental development</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Special Considerations for Children
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Pediatric root canal treatment requires special considerations:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Age-Appropriate Communication
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Dentists use child-friendly language and explanations to help children understand 
               what will happen during treatment, reducing fear and anxiety.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Behavioral Management
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Techniques such as tell-show-do, positive reinforcement, and distraction are 
               used to help children cooperate during treatment.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Sedation Options
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               For anxious children or complex cases, various sedation options may be available, 
               including nitrous oxide (laughing gas) or oral sedation.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Types of Pediatric Root Canal Treatment
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Different approaches are used depending on the child's age and tooth type:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Pulpotomy (Baby Teeth)
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               A partial root canal treatment that removes only the infected portion of the 
               pulp in the crown of the tooth, leaving the healthy root pulp intact. This 
               is often sufficient for baby teeth.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Pulpectomy (Complete Root Canal)
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Removes all the pulp from both the crown and roots of the tooth. This is 
               performed when the infection has spread to the root canals.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Apexification (Immature Permanent Teeth)
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               A specialized procedure for permanent teeth that haven't finished developing 
               their roots. This encourages the root to continue developing and close properly.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Signs Your Child May Need Root Canal Treatment
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Watch for these symptoms that may indicate the need for treatment:
             </p>
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Complaints of tooth pain, especially when eating</li>
               <li>Sensitivity to hot or cold foods and drinks</li>
               <li>Swelling or tenderness in the gums</li>
@@ -198,34 +198,34 @@ export default function RootCanalTreatmentForChildrenPage() {
               <li>Bad breath or taste in the mouth</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               The Treatment Process
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               The procedure is adapted to be child-friendly and comfortable:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Preparation and Comfort
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               The dentist will explain the procedure in child-friendly terms and ensure 
               your child is comfortable. Local anesthesia is used to numb the area completely.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Treatment Steps
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               The procedure involves removing infected tissue, cleaning the canals, and 
               filling them with appropriate materials. For baby teeth, a special filling 
               material that dissolves with the root is often used.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Restoration
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               After treatment, the tooth is restored with a filling or crown to protect 
               it and restore function. For baby teeth, stainless steel crowns are commonly used.
             </p>
@@ -342,7 +342,7 @@ export default function RootCanalTreatmentForChildrenPage() {
       </section>
 
       {/* Related Articles */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-10 lg:py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -350,7 +350,7 @@ export default function RootCanalTreatmentForChildrenPage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-12 text-center">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
               Related Articles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -366,10 +366,10 @@ export default function RootCanalTreatmentForChildrenPage() {
                 >
                   <Link href={article.href}>
                     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 h-full">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 font-heading">
+                      <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 font-heading">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed font-sans">
+                      <p className="text-[16px] text-gray-600 leading-relaxed font-sans">
                         {article.description}
                       </p>
                     </div>

@@ -29,7 +29,7 @@ export default function RootCanalTreatmentPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
+      <section className="pt-[140px] pb-12 sm:pb-16 lg:pb-20" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -37,10 +37,10 @@ export default function RootCanalTreatmentPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+            <h1 className="text-[27px] sm:text-4xl lg:text-6xl font-normal text-white font-heading leading-tight mb-4 sm:mb-6">
               Root Canal Treatment
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
               Comprehensive guide to root canal treatment, including the procedure, benefits, 
               and what to expect during recovery to save your natural tooth and restore oral health.
             </p>
@@ -49,7 +49,7 @@ export default function RootCanalTreatmentPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -57,20 +57,20 @@ export default function RootCanalTreatmentPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-6">
               Understanding Root Canal Treatment
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Root canal treatment is a dental procedure designed to save a tooth that has 
               become infected or severely damaged. Despite its reputation, modern root canal 
               treatment is typically no more uncomfortable than getting a filling, and it's 
               often the best way to preserve your natural tooth and avoid extraction.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               What is a Root Canal?
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               A root canal is the natural cavity within the center of a tooth that contains 
               the pulp chamber and root canals. The pulp is the soft tissue inside the tooth 
               that contains nerves, blood vessels, and connective tissue. When this pulp 
@@ -78,13 +78,13 @@ export default function RootCanalTreatmentPage() {
               infected tissue and save the tooth.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               When is Root Canal Treatment Needed?
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Root canal treatment may be necessary when:
             </p>
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Deep decay has reached the pulp</li>
               <li>A tooth has been cracked or chipped, exposing the pulp</li>
               <li>Trauma has damaged the pulp</li>
@@ -95,18 +95,18 @@ export default function RootCanalTreatmentPage() {
               <li>Darkening of the tooth</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               The Root Canal Procedure
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Root canal treatment typically involves several steps and may require one or 
               more visits depending on the complexity of the case:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Step 1: Examination and Diagnosis
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Your dentist will examine the tooth, take X-rays, and perform tests to determine 
               if root canal treatment is necessary. This helps identify the extent of the 
               infection and plan the treatment approach.

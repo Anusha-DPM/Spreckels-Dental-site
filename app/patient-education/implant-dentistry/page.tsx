@@ -44,7 +44,7 @@ export default function ImplantDentistryPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-24" style={{ backgroundColor: '#441018' }}>
+      <section className="pt-[140px] pb-12 sm:pb-16 lg:pb-20" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -52,10 +52,10 @@ export default function ImplantDentistryPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-white font-heading leading-tight mb-6">
+            <h1 className="text-[27px] sm:text-4xl lg:text-6xl font-normal text-white font-heading leading-tight mb-4 sm:mb-6">
               Implant Dentistry
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
+            <p className="text-[16px] sm:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-sans">
               Discover how dental implants can restore your smile, confidence, and oral function 
               with the most advanced tooth replacement solution available today.
             </p>
@@ -64,15 +64,15 @@ export default function ImplantDentistryPage() {
       </section>
 
       {/* Category Filter */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-12"
+            className="mb-8 sm:mb-12"
           >
-            <h2 className="text-2xl sm:text-3xl font-normal text-gray-900 font-heading mb-8 text-center">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-6 sm:mb-8 text-center">
               Browse by Category
             </h2>
             <div className="flex flex-wrap justify-center gap-4">
@@ -85,7 +85,7 @@ export default function ImplantDentistryPage() {
                   whileHover={{ scale: 1.05 }}
                 >
                   <Link href={category.href}>
-                    <button className="px-6 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-all duration-200 font-semibold">
+                    <button className="px-6 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-all duration-200 font-semibold text-[15px] sm:text-base">
                       {category.name}
                     </button>
                   </Link>
@@ -97,7 +97,7 @@ export default function ImplantDentistryPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 sm:py-20">
+      <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -105,20 +105,20 @@ export default function ImplantDentistryPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="prose prose-lg max-w-none"
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-6">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-6">
               Understanding Dental Implants
             </h2>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Dental implants are the gold standard for replacing missing teeth. They provide 
               a permanent solution that looks, feels, and functions like your natural teeth. 
               Unlike traditional dentures or bridges, dental implants are surgically placed 
               into your jawbone, creating a stable foundation for replacement teeth.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               What Are Dental Implants?
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Dental implants are small titanium posts that serve as artificial tooth roots. 
               They are surgically placed into your jawbone where teeth are missing. The bone 
               bonds with the titanium, creating a strong foundation for artificial teeth. 
@@ -126,13 +126,13 @@ export default function ImplantDentistryPage() {
               that occurs when teeth are missing.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Benefits of Dental Implants
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Dental implants offer numerous advantages over other tooth replacement options:
             </p>
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Natural appearance and feel</li>
               <li>Improved speech and chewing ability</li>
               <li>Enhanced comfort and confidence</li>
@@ -143,14 +143,14 @@ export default function ImplantDentistryPage() {
               <li>Prevention of facial sagging</li>
             </ul>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Who Is a Good Candidate for Dental Implants?
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Most people who are missing one or more teeth are good candidates for dental 
               implants. Ideal candidates have:
             </p>
-            <ul className="list-disc pl-6 text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
+            <ul className="list-disc pl-6 text-[16px] text-gray-700 leading-relaxed font-sans mb-6 space-y-2">
               <li>Good general and oral health</li>
               <li>Adequate bone density in the jaw</li>
               <li>Healthy gum tissue</li>
@@ -165,7 +165,7 @@ export default function ImplantDentistryPage() {
               The dental implant process typically involves several stages:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Initial Consultation and Planning
             </h4>
             <p className="text-gray-700 leading-relaxed font-sans mb-6">
@@ -175,7 +175,7 @@ export default function ImplantDentistryPage() {
               treatment plan.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Implant Placement Surgery
             </h4>
             <p className="text-gray-700 leading-relaxed font-sans mb-6">
@@ -184,7 +184,7 @@ export default function ImplantDentistryPage() {
               placed into the jawbone. The gum is then sutured closed over the implant.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Osseointegration Period
             </h4>
             <p className="text-gray-700 leading-relaxed font-sans mb-6">
@@ -193,7 +193,7 @@ export default function ImplantDentistryPage() {
               restoration while the implant heals.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Abutment Placement
             </h4>
             <p className="text-gray-700 leading-relaxed font-sans mb-6">
@@ -201,7 +201,7 @@ export default function ImplantDentistryPage() {
               is attached to the implant. This serves as the foundation for your new tooth.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Final Restoration
             </h4>
             <p className="text-gray-700 leading-relaxed font-sans mb-6">
@@ -250,57 +250,57 @@ export default function ImplantDentistryPage() {
               function.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Advanced Technology in Implant Dentistry
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Modern implant dentistry utilizes cutting-edge technology for optimal results:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               3D Cone Beam CT Scanning
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Advanced imaging technology provides detailed 3D views of your jawbone, 
               allowing for precise implant placement planning and avoiding vital structures.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Computer-Guided Implant Surgery
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Computer-guided surgery uses 3D planning to create surgical guides that 
               ensure implants are placed with maximum precision and minimal invasiveness.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Digital Impressions
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Digital scanning technology creates precise digital models of your mouth, 
               eliminating the need for messy traditional impressions and improving accuracy.
             </p>
 
-            <h3 className="text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
+            <h3 className="text-[22px] sm:text-2xl font-normal text-gray-900 font-heading mb-4 mt-8">
               Recovery and Aftercare
             </h3>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Proper care after implant surgery is essential for successful healing:
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Immediate Post-Surgery Care
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Follow your dentist's instructions for pain management, oral hygiene, and 
               dietary restrictions. Avoid smoking and strenuous activities during the 
               initial healing period.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 font-heading mb-3">
+            <h4 className="text-[22px] sm:text-xl font-semibold text-gray-900 font-heading mb-3">
               Long-term Maintenance
             </h4>
-            <p className="text-gray-700 leading-relaxed font-sans mb-6">
+            <p className="text-[16px] text-gray-700 leading-relaxed font-sans mb-6">
               Maintain excellent oral hygiene with regular brushing, flossing, and 
               professional cleanings. Dental implants require the same care as natural 
               teeth to ensure their longevity.
@@ -366,7 +366,7 @@ export default function ImplantDentistryPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16" style={{ backgroundColor: '#441018' }}>
+      <section className="py-8 sm:py-10 lg:py-12" style={{ backgroundColor: '#441018' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -375,23 +375,23 @@ export default function ImplantDentistryPage() {
             viewport={{ once: true }}
             className="text-center"
           >
-            <h2 className="text-3xl sm:text-4xl font-normal text-white font-heading mb-6">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-white font-heading mb-6">
               Ready to Restore Your Smile?
             </h2>
-            <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto font-sans">
+            <p className="text-[16px] sm:text-lg text-gray-200 mb-8 max-w-2xl mx-auto font-sans">
               Schedule a consultation to learn how dental implants can transform your 
               smile and improve your quality of life.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="https://spreckels-dental-site.vercel.app/appointment-request"
-                className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+                className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
               >
                 Schedule Consultation
               </a>
               <a 
                 href="/dental-implants"
-                className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
+                className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
               >
                 Learn More About Implants
               </a>
@@ -401,7 +401,7 @@ export default function ImplantDentistryPage() {
       </section>
 
       {/* Related Articles */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 sm:py-10 lg:py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -409,7 +409,7 @@ export default function ImplantDentistryPage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-normal text-gray-900 font-heading mb-12 text-center">
+            <h2 className="text-[27px] sm:text-3xl font-normal text-gray-900 font-heading mb-8 sm:mb-12 text-center">
               Related Articles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -425,10 +425,10 @@ export default function ImplantDentistryPage() {
                 >
                   <Link href={article.href}>
                     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 h-full">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 font-heading">
+                      <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 font-heading">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed font-sans">
+                      <p className="text-[16px] text-gray-600 leading-relaxed font-sans">
                         {article.description}
                       </p>
                     </div>
