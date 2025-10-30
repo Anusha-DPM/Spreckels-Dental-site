@@ -89,7 +89,7 @@ export default function SimpleAllOn4FAQ() {
                   
                   <div className="space-y-3 text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
                     <p>
-                      Dr. Parikh has been practicing for more than 24 years and he is passionate about achieving excellence in dentistry with a focus on Dental Implants. He has been trained by many national and international surgeons to become an Associate Fellow of AAID and a Fellow of ICOI and GDIA.
+                      Dr. Parikh has been practicing for more than 25 years and he is passionate about achieving excellence in dentistry with a focus on Dental Implants. He has been trained by many national and international surgeons to become an Associate Fellow of AAID and a Fellow of ICOI and GDIA.
                     </p>
                     <p>
                       Over the years he has invested to advance his knowledge in many phases of dentistry including Dental Implants, Dental Extractions, Cosmetic and Restorative dentistry, Orthodontics, TMD, Sleep Apnea, Endodontics and many others and have treated thousands of patients.

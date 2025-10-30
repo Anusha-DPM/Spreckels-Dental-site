@@ -116,13 +116,13 @@ export default function SimpleSedationContent() {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
+            <div className="flex flex-col">
               <h3 className="text-3xl font-bold text-gray-900 mb-8">
                 About Our Sedation Services
               </h3>
-              <div className="space-y-6 text-gray-600 leading-relaxed" style={{ color: '#656565' }}>
-                <p className="text-lg">
+              <div className="space-y-6 text-gray-600 leading-relaxed flex-grow" style={{ color: '#656565' }}>
+                <p style={{ fontSize: '16px' }}>
                   Dr. Parikh and Dr. Arora offer inhalation sedation, commonly known as nitrous oxide or 'laughing gas,' for both children and adults who experience dental phobia or anxiety. Please note, that our sedation does <strong>NOT</strong> put patients to sleep.
                 </p>
                 <p>
@@ -138,8 +138,8 @@ export default function SimpleSedationContent() {
             </div>
             
             {/* About Our Sedation Services Image */}
-            <div className="relative">
-              <div className="relative h-96 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative flex flex-col h-full">
+              <div className="relative flex-1 min-h-[400px] rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="/About Our Sedation Services.jpeg"
                   alt="Spreckels Park Dental Sedation Services - Comfortable Care for Anxious Patients"

@@ -77,6 +77,7 @@ export { default as FAQSection } from './FAQSection'
 export { default as NewOutgridAppSection } from './NewOutgridAppSection'
 export { default as CTASection } from './CTASection'
 export { default as LatestBlogPosts } from './LatestBlogPosts'
+export { default as SmileGallerySection } from './SmileGallerySection'
 
 
 // UI Components 

@@ -6,6 +6,7 @@ import {
   AboutUsSection,
   TestimonialSection,
   ServicesSection,
+  SmileGallerySection,
   MissionSection,
   FeaturesSection,
   NewOutgridAppSection,
@@ -23,6 +24,7 @@ export default function Home() {
       <FeaturesSection />
       <TestimonialSection />
       <ServicesSection />
+      <SmileGallerySection />
       <InfoStatsSection />
       <NewOutgridAppSection />
       <LatestBlogPosts />

@@ -19,13 +19,13 @@ export default function DentalStaffJourneySection() {
   const testimonials: Testimonial[] = [
     {
       name: "Dr. Rujul G. Parikh DDS",
-      text: "With over 23 years of experience in dentistry, I've dedicated my career to creating beautiful, healthy smiles. Our commitment to patient care and advanced dental techniques has made Spreckels Park Dental a trusted name in Manteca.",
+      text: "With over 25 years of experience in dentistry, I've dedicated my career to creating beautiful, healthy smiles. Our commitment to patient care and advanced dental techniques has made Spreckels Park Dental a trusted name in Manteca.",
       avatar: "/Rujul.jpeg",
       nameColor: "text-green-600",
       avatarPosition: 'left',
       fullBio: `Dentist & Implant Dentist in Manteca & Stockton, CA
 
-For more than 23 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. His main priorities are oral health and patient care. He received his education from the highly regarded GDCH in Ahmedabad, India, and from numerous lecturers at Loma Linda University, UCLA, UCSF, UOP, and other institutions. His continual pursuit of better methods, depth of understanding, and breadth of experience make him skilled in numerous dental procedures including Dental Implants, Dental Veneers and Crowns, Dentures and many more.
+For more than 25 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. His main priorities are oral health and patient care. He received his education from the highly regarded GDCH in Ahmedabad, India, and from numerous lecturers at Loma Linda University, UCLA, UCSF, UOP, and other institutions. His continual pursuit of better methods, depth of understanding, and breadth of experience make him skilled in numerous dental procedures including Dental Implants, Dental Veneers and Crowns, Dentures and many more.
 
 As a General Dentist, he has invested many hours in continuing education and constantly updated and educated in dentistry. He graduated from the United States Dental Institute with continuous education in orthodontics and for dental implants, he has been trained by many national and international surgeons to become an Associate Fellow of AAID and a Fellow of ICOI and GDIA. He is passionate about achieving excellence in dentistry with a focus on Dental Implants.
 

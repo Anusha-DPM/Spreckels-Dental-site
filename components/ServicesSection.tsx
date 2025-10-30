@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 export default function ServicesSection() {
   const services = [
@@ -12,7 +13,8 @@ export default function ServicesSection() {
         </svg>
       ),
       title: 'All-on-4® or Hybrid Dentures',
-      description: 'If you have lost an entire arch of teeth (top and/or bottom), or are soon to have your remaining teeth removed because they are too unhealthy to save, you may be able to replace them with fixed dentures supported by dental implants.'
+      description: 'If you have lost an entire arch of teeth (top and/or bottom), or are soon to have your remaining teeth removed because they are too unhealthy to save, you may be able to replace them with fixed dentures supported by dental implants.',
+      href: '/all-on-4-implant-dentures'
     },
     {
       // Bar chart icon
@@ -22,7 +24,8 @@ export default function ServicesSection() {
         </svg>
       ),
       title: 'Dental Implants',
-      description: 'Before the development of dental implants, dentures were the only alternative to replacing a missing tooth or teeth. '
+      description: 'Before the development of dental implants, dentures were the only alternative to replacing a missing tooth or teeth. ',
+      href: '/dental-implants'
     },
     {
       // Document/File icon
@@ -32,7 +35,8 @@ export default function ServicesSection() {
         </svg>
       ),
       title: 'General Dentistry',
-      description: 'General Dentistry, to help you to preserve your natural teeth.'
+      description: 'General Dentistry, to help you to preserve your natural teeth.',
+      href: '/general-cosmetic-dentistry'
     }
   ]
 
@@ -62,17 +66,18 @@ export default function ServicesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
-              className="text-center p-4 sm:p-6 lg:p-8 rounded-xl hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white" style={{ backgroundColor: '#441018' }}>
-                {service.icon}
-              </div>
-              <h3 className="text-base sm:text-lg lg:text-xl font-normal text-gray-900 mb-2 sm:mb-3 lg:mb-4 font-heading">
-                {service.title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed font-sans text-sm sm:text-base lg:text-base">
-                {service.description}
-              </p>
+              <Link href={service.href} className="block text-center p-4 sm:p-6 lg:p-8 rounded-xl hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white" style={{ backgroundColor: '#441018' }}>
+                  {service.icon}
+                </div>
+                <h3 className="text-base sm:text-lg lg:text-xl font-normal text-gray-900 mb-2 sm:mb-3 lg:mb-4 font-heading">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed font-sans text-sm sm:text-base lg:text-base">
+                  {service.description}
+                </p>
+              </Link>
             </motion.div>
           ))}
         </div>
