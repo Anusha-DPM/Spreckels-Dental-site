@@ -64,11 +64,7 @@ export default function HeroSection() {
         className="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen overflow-hidden"
       >
         <Image
-<<<<<<< HEAD
           src="/herobanner.jpg"
-=======
-          src="/Team-hero.JPG"
->>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
           alt="Professional dental care and smiling patient"
           fill
           className="object-cover object-top"
