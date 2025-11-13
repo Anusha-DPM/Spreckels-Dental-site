@@ -5,9 +5,9 @@ import Image from 'next/image'
 
 export default function HeroSection() {
   return (
-    <section id="home" className="relative min-h-screen flex flex-col lg:flex-row">
+    <section id="home" className="relative min-h-[77vh] lg:min-h-screen flex flex-col lg:flex-row">
       {/* Left Side with Background Color */}
-      <div className="relative w-full lg:w-1/2 flex items-center justify-center min-h-screen" style={{ backgroundColor: '#441018' }}>
+      <div className="relative w-full lg:w-1/2 flex items-center justify-center min-h-[77vh] lg:min-h-screen" style={{ backgroundColor: '#441018' }}>
         <div className="relative z-10 px-4 sm:px-6 lg:px-[80px] py-6 sm:py-10 lg:py-0">
           <motion.div
             initial={{ opacity: 0, x: -50 }}

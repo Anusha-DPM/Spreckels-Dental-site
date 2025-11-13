@@ -38,7 +38,7 @@ export default function Footer() {
               <div className="space-y-6">
                 {/* Address */}
                 <div>
-                  <div className="text-sm font-semibold text-white mb-2">Address</div>
+                  <div className="text-base font-semibold text-white mb-2">Address</div>
                   <div className="text-base text-white">
                     626 E. Yosemite Ave., Manteca, CA
                   </div>
@@ -46,7 +46,7 @@ export default function Footer() {
                 
                 {/* Phone */}
                 <div>
-                  <div className="text-sm font-semibold text-white mb-2">Phone</div>
+                  <div className="text-base font-semibold text-white mb-2">Phone</div>
                   <a href="tel:(209) 825-1030" className="text-base text-white hover:text-gray-300 transition-colors">
                     (209) 825-1030
                   </a>
@@ -54,7 +54,7 @@ export default function Footer() {
                 
                 {/* Office Hours */}
                 <div>
-                  <div className="text-sm font-semibold text-white mb-3">Office Hours</div>
+                  <div className="text-base font-semibold text-white mb-3">Office Hours</div>
                   <ul className="space-y-2">
                     <li className="flex justify-between items-center text-base">
                       <span className="font-semibold text-white">Monday</span>
@@ -89,7 +89,7 @@ export default function Footer() {
                 
                 {/* Follow Us */}
                 <div>
-                  <div className="text-sm font-semibold text-white mb-3">FOLLOW US</div>
+                  <div className="text-base font-semibold text-white mb-3">FOLLOW US</div>
                   <div className="flex space-x-4">
                     <a href="https://x.com/centralvalleydn" className="text-white hover:text-gray-300 transition-colors">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@ export default function Footer() {
                 Request An Appointment
               </h2>
               
-              <div className="w-full bg-white rounded-lg" style={{ height: '700px', minHeight: '700px' }}>
+              <div className="w-full rounded-lg" style={{ height: '700px', minHeight: '700px' }}>
                 <iframe
                   src="https://link.digitalpresencematters.com/widget/form/PPE5tyRGLABGSWtnGQQf"
                   style={{ width: '100%', height: '100%', border: 'none', borderRadius: '3px', display: 'block' }}
