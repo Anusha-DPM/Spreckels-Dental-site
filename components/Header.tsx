@@ -207,42 +207,12 @@ export default function Header() {
                 >
                   {servicesItems.map((item) => (
                     <div key={item.name} className="relative">
-                      {item.hasSubmenu ? (
-                        <div
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium cursor-pointer flex items-center justify-between"
-                          onMouseEnter={() => setIsGeneralCosmeticOpen(true)}
-                          onMouseLeave={() => setIsGeneralCosmeticOpen(false)}
-                        >
-                          <Link href={item.href}>{item.name}</Link>
-                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                          {isGeneralCosmeticOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, x: 10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              className="absolute left-full top-0 ml-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
-                            >
-                              {item.subItems?.map((subItem) => (
-                                <Link
-                                  key={subItem.name}
-                                  href={subItem.href}
-                                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium"
-                                >
-                                  {subItem.name}
-                                </Link>
-                              ))}
-                            </motion.div>
-                          )}
-                        </div>
-                      ) : (
-                        <Link
-                          href={item.href}
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium"
-                        >
-                          {item.name}
-                        </Link>
-                      )}
+                      <Link
+                        href={item.href}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium"
+                      >
+                        {item.name}
+                      </Link>
                     </div>
                   ))}
                 </motion.div>
@@ -448,42 +418,12 @@ export default function Header() {
                 >
                   {servicesItems.map((item) => (
                     <div key={item.name} className="relative">
-                      {item.hasSubmenu ? (
-                        <div
-                          className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs cursor-pointer flex items-center justify-between"
-                          onMouseEnter={() => setIsGeneralCosmeticOpen(true)}
-                          onMouseLeave={() => setIsGeneralCosmeticOpen(false)}
-                        >
-                          <Link href={item.href}>{item.name}</Link>
-                          <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                          {isGeneralCosmeticOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, x: 10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              className="absolute left-full top-0 ml-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
-                            >
-                              {item.subItems?.map((subItem) => (
-                                <Link
-                                  key={subItem.name}
-                                  href={subItem.href}
-                                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
-                                >
-                                  {subItem.name}
-                                </Link>
-                              ))}
-                            </motion.div>
-                          )}
-                        </div>
-                      ) : (
-                        <Link
-                          href={item.href}
-                          className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
-                        >
-                          {item.name}
-                        </Link>
-                      )}
+                      <Link
+                        href={item.href}
+                        className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
+                      >
+                        {item.name}
+                      </Link>
                     </div>
                   ))}
                 </motion.div>
@@ -756,40 +696,13 @@ export default function Header() {
                             >
                               {servicesItems.map((item) => (
                                 <li key={item.name}>
-                                  {item.hasSubmenu ? (
-                                    <div className="relative">
-                                      <Link
-                                        href={item.href}
-                                        className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
-                                        onClick={closeMenu}
-                                      >
-                                        {item.name}
-                                      </Link>
-                                      {item.subItems && (
-                                        <ul className="ml-4">
-                                          {item.subItems.map((subItem) => (
-                                            <li key={subItem.name}>
-                                              <Link
-                                                href={subItem.href}
-                                                className="block px-6 py-1 text-gray-400 hover:text-white transition-colors duration-200 font-medium text-xs"
-                                                onClick={closeMenu}
-                                              >
-                                                {subItem.name}
-                                              </Link>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <Link
-                                      href={item.href}
-                                      className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
-                                      onClick={closeMenu}
-                                    >
-                                      {item.name}
-                                    </Link>
-                                  )}
+                                  <Link
+                                    href={item.href}
+                                    className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                    onClick={closeMenu}
+                                  >
+                                    {item.name}
+                                  </Link>
                                 </li>
                               ))}
                             </motion.ul>
