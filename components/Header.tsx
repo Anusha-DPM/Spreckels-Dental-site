@@ -29,8 +29,20 @@ export default function Header() {
   ]
 
   const servicesItems = [
+<<<<<<< HEAD
     { name: 'General & Cosmetic Dentistry', href: '/general-cosmetic-dentistry' },
     { name: 'Sedation Dentistry', href: '/services/sedation-dentistry' },
+=======
+    { 
+      name: 'General & Cosmetic Dentistry', 
+      href: '/general-cosmetic-dentistry',
+      hasSubmenu: true,
+      subItems: [
+        { name: 'Sedation Dentistry', href: '/services/sedation-dentistry' },
+        { name: 'Teeth Whitening', href: '/services/teeth-whitening' }
+      ]
+    },
+>>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
     { name: 'Dental Implants', href: '/dental-implants' },
     { name: 'All-on-4® Implant Dentures', href: '/all-on-4-implant-dentures' },
     { name: 'Platelet Rich Fibrin Therapy', href: '/services/platelet-rich-fibrin-therapy' },
@@ -56,8 +68,12 @@ export default function Header() {
         { name: 'Periodontal Therapy', href: '/patient-education/periodontal-therapy' },
         { name: 'Technology', href: '/patient-education/technology' }
       ]
+<<<<<<< HEAD
     },
     { name: 'Insurance & Billing', href: '/insurance-billing' }
+=======
+    }
+>>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
   ]
 
   const toggleDropdown = (itemName: string) => {
@@ -265,7 +281,25 @@ export default function Header() {
               </Link>
             </motion.div>
             
+<<<<<<< HEAD
             {/* Resources Dropdown */}
+=======
+            {/* Insurance & Billing */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <Link
+                href="/insurance-billing"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1"
+              >
+                Insurance & Billing
+              </Link>
+            </motion.div>
+            
+            {/* More Dropdown */}
+>>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -278,7 +312,11 @@ export default function Header() {
                 href="#"
                 className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-sm xl:text-base whitespace-nowrap px-1 flex items-center py-2"
               >
+<<<<<<< HEAD
                 Resources
+=======
+                More
+>>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
                 <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -506,7 +544,27 @@ export default function Header() {
               </Link>
             </motion.div>
             
+<<<<<<< HEAD
             {/* Resources Dropdown for Tablet */}
+=======
+            {/* Insurance & Billing */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <Link
+                href="/insurance-billing"
+                className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap"
+              >
+                Insurance & Billing
+              </Link>
+            </motion.div>
+            
+
+            
+            {/* More Dropdown for Tablet */}
+>>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -519,7 +577,11 @@ export default function Header() {
                 href="#"
                 className="text-gray-700 hover:text-[#656565] transition-colors duration-200 font-medium font-heading text-xs px-1 py-2 rounded-md hover:bg-gray-50 whitespace-nowrap flex items-center"
               >
+<<<<<<< HEAD
                 Resources
+=======
+                More
+>>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
                 <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -880,6 +942,11 @@ export default function Header() {
                       </div>
                     </li>
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 07dc7cc8b43e921d0f50c356abb398fb22ed2a79
                     {/* Insurance & Billing */}
                     <li>
                       <Link
