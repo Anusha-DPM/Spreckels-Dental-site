@@ -722,88 +722,6 @@ export default function Header() {
                       </Link>
                     </li>
 
-                    {/* Children's Dentistry */}
-                    <li>
-                      <Link
-                        href="/services/orthodontics"
-                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
-                        onClick={closeMenu}
-                      >
-                        CHILDREN'S DENTISTRY
-                      </Link>
-                    </li>
-
-                    {/* Invisalign */}
-                    <li>
-                      <Link
-                        href="/services/orthodontics"
-                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
-                        onClick={closeMenu}
-                      >
-                        INVISALIGN®
-                      </Link>
-                    </li>
-
-                    {/* Patient Education */}
-                    <li>
-                      <div className="relative">
-                        <button
-                          onClick={() => toggleDropdown('Patient Education')}
-                          onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Patient Education'))}
-                          className="w-full flex items-center justify-between px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
-                          aria-expanded={expandedItems.includes('Patient Education')}
-                          aria-controls="patient-education-dropdown"
-                        >
-                          PATIENT EDUCATION
-                          <motion.svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            animate={{ rotate: expandedItems.includes('Patient Education') ? 90 : 0 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </motion.svg>
-                        </button>
-                        <AnimatePresence>
-                          {expandedItems.includes('Patient Education') && (
-                            <motion.ul
-                              id="patient-education-dropdown"
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="overflow-hidden"
-                            >
-                              {moreItems[0]?.subItems?.map((subItem) => (
-                                <li key={subItem.name}>
-                                  <Link
-                                    href={subItem.href}
-                                    className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
-                                    onClick={closeMenu}
-                                  >
-                                    {subItem.name}
-                                  </Link>
-                                </li>
-                              ))}
-                            </motion.ul>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </li>
-
-                    {/* Insurance & Billing */}
-                    <li>
-                      <Link
-                        href="/insurance-billing"
-                        className="block px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
-                        onClick={closeMenu}
-                      >
-                        INSURANCE & BILLING
-                      </Link>
-                    </li>
-
                     {/* Contact Us */}
                     <li>
                       <Link
@@ -813,6 +731,102 @@ export default function Header() {
                       >
                         CONTACT US
                       </Link>
+                    </li>
+
+                    {/* Resources */}
+                    <li>
+                      <div className="relative">
+                        <button
+                          onClick={() => toggleDropdown('Resources')}
+                          onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Resources'))}
+                          className="w-full flex items-center justify-between px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                          aria-expanded={expandedItems.includes('Resources')}
+                          aria-controls="resources-dropdown"
+                        >
+                          RESOURCES
+                          <motion.svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            animate={{ rotate: expandedItems.includes('Resources') ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </motion.svg>
+                        </button>
+                        <AnimatePresence>
+                          {expandedItems.includes('Resources') && (
+                            <motion.ul
+                              id="resources-dropdown"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              {/* Patient Education */}
+                              <li>
+                                <div className="relative">
+                                  <button
+                                    onClick={() => toggleDropdown('Patient Education')}
+                                    onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Patient Education'))}
+                                    className="w-full flex items-center justify-between px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                    aria-expanded={expandedItems.includes('Patient Education')}
+                                    aria-controls="patient-education-dropdown"
+                                  >
+                                    Patient Education
+                                    <motion.svg
+                                      className="w-4 h-4"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                      animate={{ rotate: expandedItems.includes('Patient Education') ? 90 : 0 }}
+                                      transition={{ duration: 0.2 }}
+                                    >
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </motion.svg>
+                                  </button>
+                                  <AnimatePresence>
+                                    {expandedItems.includes('Patient Education') && (
+                                      <motion.ul
+                                        id="patient-education-dropdown"
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="overflow-hidden"
+                                      >
+                                        {moreItems[0]?.subItems?.map((subItem) => (
+                                          <li key={subItem.name}>
+                                            <Link
+                                              href={subItem.href}
+                                              className="block px-9 py-2 text-gray-400 hover:text-white transition-colors duration-200 font-medium text-xs"
+                                              onClick={closeMenu}
+                                            >
+                                              {subItem.name}
+                                            </Link>
+                                          </li>
+                                        ))}
+                                      </motion.ul>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              </li>
+                              {/* Insurance & Billing */}
+                              <li>
+                                <Link
+                                  href="/insurance-billing"
+                                  className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                  onClick={closeMenu}
+                                >
+                                  Insurance & Billing
+                                </Link>
+                              </li>
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </li>
                   </ul>
                 </nav>
