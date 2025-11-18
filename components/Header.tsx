@@ -94,7 +94,7 @@ export default function Header() {
             <Link href="/" className="hover:opacity-80 transition-opacity duration-200">
               <Image
                 src="/logo.webp"
-                alt="SprekelSpark Dental Logo"
+                alt="Spreckels Park Dental Logo"
                 width={160}
                 height={60}
                 className="h-12 lg:h-16 w-auto"

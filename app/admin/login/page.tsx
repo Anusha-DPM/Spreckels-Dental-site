@@ -41,7 +41,7 @@ export default function AdminLogin() {
           <Link href="/" className="flex justify-center">
             <Image
               src="/logo.webp"
-              alt="SprekelSpark Dental Logo"
+              alt="Spreckels Park Dental Logo"
               width={200}
               height={80}
               className="h-16 w-auto"

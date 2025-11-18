@@ -259,7 +259,7 @@ export default function PeriodontalTherapyPage() {
                 Schedule Consultation
               </a>
               <a 
-                href="/dental-implants"
+                href="/patient-education/periodontal-therapy"
                 className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
               >
                 Learn More About Periodontal Therapy

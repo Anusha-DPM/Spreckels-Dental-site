@@ -214,7 +214,7 @@ export default function OralSurgeryPage() {
                 Schedule Consultation
               </a>
               <a 
-                href="/dental-implants"
+                href="/patient-education/oral-surgery/oral-surgery-procedures"
                 className="px-8 py-4 bg-white text-[#441018] border-2 border-[#441018] rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
               >
                 Learn More About Oral Surgery
