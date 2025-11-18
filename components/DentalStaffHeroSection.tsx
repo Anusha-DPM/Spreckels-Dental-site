@@ -24,7 +24,7 @@ export default function DentalStaffHeroSection() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-[16px] lg:text-xl text-red-100 mb-8 lg:mb-20 pr-0 lg:pr-20 leading-relaxed"
             >
-              All professionals at Spreckels Park Dental maintain the highest levels of accreditation and pursue ongoing education to stay abreast of the latest trends in the dental field. Our staff is professionally trained with your comfort and satisfaction in mind and are fluent in a multitude of languages including English, Spanish, Hindi, Gujrati, and Punjabi.
+              All professionals at Spreckels Park Dental maintain the highest levels of accreditation and pursue ongoing education to stay abreast of the latest trends in the dental field. Our staff is professionally trained with your comfort and satisfaction in mind and are fluent in a multitude of languages including English, Spanish, Hindi, Gujarati, and Punjabi.
             </motion.p>
             <motion.div 
               initial={{ opacity: 0, y: 30 }}

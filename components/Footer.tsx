@@ -140,7 +140,7 @@ export default function Footer() {
         {/* Bottom Section - Copyright */}
         <div className="border-t border-gray-700 pt-8 mt-8">
           <p className="text-white text-sm text-center">
-            Copyright: © 2025 Sprekels Park Dental. All Rights Reserved. |{' '}
+            Copyright: © 2025 Spreckels Park Dental. All Rights Reserved. |{' '}
             <Link href="/privacy-policy" className="text-white hover:text-gray-300 transition-colors">Privacy Policy</Link>
             {' | '}
             <Link href="/disclaimer" className="text-white hover:text-gray-300 transition-colors">Disclaimer</Link>

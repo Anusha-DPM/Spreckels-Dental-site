@@ -138,7 +138,7 @@ export default function BlogPostPage() {
       <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <motion.section 
-        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white py-20"
+        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-20 pb-20"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -189,7 +189,7 @@ export default function BlogPostPage() {
 
       {/* Main Content */}
       <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Article Content */}
             <motion.article 
@@ -243,22 +243,6 @@ export default function BlogPostPage() {
                   </div>
                 </div>
               )}
-
-              {/* Share Buttons */}
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Share this post</h3>
-                <div className="flex space-x-4">
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    Facebook
-                  </button>
-                  <button className="px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors duration-200">
-                    Twitter
-                  </button>
-                  <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
-                    WhatsApp
-                  </button>
-                </div>
-              </div>
             </motion.article>
 
             {/* Sidebar */}
