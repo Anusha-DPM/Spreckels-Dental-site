@@ -13,7 +13,7 @@ export default function NewOutgridAppSection() {
             
             {/* Large Heading */}
             <h2 className="text-[27px] sm:text-3xl md:text-4xl lg:text-5xl font-normal text-gray-900 leading-tight mb-4 sm:mb-6">
-            Dental implants at spreckels park dental
+            Dental Implants at Spreckels Park Dental
         
             </h2>
             
@@ -42,7 +42,7 @@ export default function NewOutgridAppSection() {
             <div className="relative w-full max-w-lg">
               <img
                 src="/AdobeStock_1423904609.jpeg"
-                alt="Dental implants at spreckels park dental"
+                alt="Dental Implants at Spreckels Park Dental"
                 className="w-full h-auto rounded-xl object-cover"
               />
             </div>

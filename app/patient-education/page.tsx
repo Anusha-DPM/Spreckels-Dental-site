@@ -41,31 +41,36 @@ export default function PatientEducation() {
       id: 'antibiotic-premedication',
       title: 'Antibiotic Premedication',
       description: 'Understanding when and why antibiotics are needed before dental procedures.',
-      category: 'Dental Procedures'
+      category: 'Dental Procedures',
+      href: '/patient-education/oral-health/antibiotic-premedication'
     },
     {
       id: 'apicoectomy',
       title: 'Apicoectomy',
       description: 'A surgical procedure to treat persistent root canal infections.',
-      category: 'Endodontics'
+      category: 'Endodontics',
+      href: '/patient-education/endodontics/apicoectomy'
     },
     {
       id: 'bad-breath',
       title: 'Bad Breath',
       description: 'Causes, prevention, and treatment of halitosis.',
-      category: 'Oral Health'
+      category: 'Oral Health',
+      href: '/patient-education/oral-health/bad-breath'
     },
     {
       id: 'bite-problems',
       title: 'Bite Problems',
       description: 'Understanding malocclusion and its impact on oral health.',
-      category: 'Orthodontics'
+      category: 'Orthodontics',
+      href: '/patient-education/orthodontics'
     },
     {
       id: 'blood-pressure-medications',
       title: 'Blood Pressure Medications and Your Oral Health',
       description: 'How blood pressure medications can affect your dental health.',
-      category: 'Medication & Health'
+      category: 'Medication & Health',
+      href: '/patient-education/oral-health/blood-pressure-medications-and-your-oral-health'
     }
   ]
 
@@ -151,7 +156,7 @@ export default function PatientEducation() {
                 whileHover={{ y: -5 }}
                 className="group"
               >
-                <Link href={`/patient-education/${article.id}`}>
+                <Link href={article.href || `/patient-education/${article.id}`}>
                   <div className="bg-white border border-gray-200 rounded-xl p-6 h-full hover:shadow-lg transition-all duration-300 hover:border-blue-300">
                     <div className="mb-4">
                       <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
