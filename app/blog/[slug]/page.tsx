@@ -253,20 +253,18 @@ export default function BlogPostPage() {
               transition={{ duration: 0.6, delay: 0.6 }}
             >
               {/* Author Info */}
-              {post.author && (
-                <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">About the Author</h3>
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 bg-[#441018] rounded-full flex items-center justify-center text-white font-semibold mr-4">
-                      {post.author.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">{post.author}</p>
-                      <p className="text-sm text-gray-500">Dental Health Expert</p>
-                    </div>
+              <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">About the Author</h3>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-[#441018] rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                    S
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Spreckels Park Dental</p>
+                    <p className="text-sm text-gray-500">Professional Dental Care</p>
                   </div>
                 </div>
-              )}
+              </div>
 
               {/* Related Posts */}
               {relatedPosts.length > 0 && (
