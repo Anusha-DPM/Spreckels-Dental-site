@@ -5,11 +5,7 @@ import dynamic from 'next/dynamic'
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(
-  async () => {
-    const { default: RQ } = await import('react-quill')
-    await import('react-quill/dist/quill.snow.css')
-    return RQ
-  },
+  () => import('react-quill'),
   { 
     ssr: false,
     loading: () => (
