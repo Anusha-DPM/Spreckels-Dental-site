@@ -29,6 +29,7 @@ interface BlogPost {
   author?: string
 }
 import { uploadImageToFirebase } from '../../../lib/firebase'
+import { processContentImages } from '../../../lib/processContentImages'
 
 export default function NewPost() {
   const [formData, setFormData] = useState({
@@ -123,9 +124,18 @@ export default function NewPost() {
          throw new Error('Post content is required')
        }
 
+       // Process content to upload any base64 images to Firebase
+       let processedContent = formData.content
+       try {
+         processedContent = await processContentImages(formData.content)
+       } catch (contentError) {
+         console.warn('Content image processing failed, using original content:', contentError)
+         // Continue with original content if processing fails
+       }
+
        const postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'> = {
          title: formData.title.trim(),
-         content: formData.content.trim(),
+         content: processedContent,
          excerpt: formData.excerpt.trim(),
          coverImage: coverImageUrl,
          imageUrl: formData.imageUrl.trim(),

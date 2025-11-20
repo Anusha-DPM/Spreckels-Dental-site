@@ -28,6 +28,7 @@ interface BlogPost {
 }
 
 import { uploadImageToFirebase } from '../../../../lib/firebase'
+import { processContentImages } from '../../../../lib/processContentImages'
 
 export default function EditPost() {
   const [formData, setFormData] = useState({
@@ -131,20 +132,34 @@ export default function EditPost() {
 
       // Upload image if file is selected
       if (imageFile) {
-        const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images')
-        coverImageUrl = uploadResult.url
+        try {
+          const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images')
+          coverImageUrl = uploadResult.url
+        } catch (uploadError) {
+          console.warn('Cover image upload failed, continuing without image:', uploadError)
+          coverImageUrl = formData.coverImage || formData.imageUrl || ''
+        }
+      }
+
+      // Process content to upload any base64 images to Firebase
+      let processedContent = formData.content
+      try {
+        processedContent = await processContentImages(formData.content)
+      } catch (contentError) {
+        console.warn('Content image processing failed, using original content:', contentError)
+        // Continue with original content if processing fails
       }
 
       const updateData: Partial<BlogPost> = {
-        title: formData.title,
-        content: formData.content,
-        excerpt: formData.excerpt,
+        title: formData.title.trim(),
+        content: processedContent,
+        excerpt: formData.excerpt.trim(),
         coverImage: coverImageUrl,
-        imageUrl: formData.imageUrl,
+        imageUrl: formData.imageUrl.trim(),
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
-        metaTitle: formData.metaTitle || formData.title,
-        metaDescription: formData.metaDescription || formData.excerpt,
+        metaTitle: formData.metaTitle.trim() || formData.title.trim(),
+        metaDescription: formData.metaDescription.trim() || formData.excerpt.trim(),
         slug: generateSlug(formData.title),
         published: formData.published,
         publishDate: formData.published ? formData.publishDate : new Date().toISOString()
@@ -158,9 +173,25 @@ export default function EditPost() {
         router.push('/admin/dashboard')
       }, 2000)
 
-    } catch (err) {
-      setError('Failed to update blog post. Please try again.')
-      console.error(err)
+    } catch (err: any) {
+      console.error('Blog post update error:', err)
+      
+      // Provide more specific error messages
+      let errorMessage = 'Failed to update blog post. Please try again.'
+      
+      if (err.message?.includes('Firebase')) {
+        errorMessage = 'Firebase connection error. Please check your Firebase configuration.'
+      } else if (err.message?.includes('permission')) {
+        errorMessage = 'Permission denied. Please check your Firebase security rules.'
+      } else if (err.message?.includes('network')) {
+        errorMessage = 'Network error. Please check your internet connection.'
+      } else if (err.message?.includes('size') || err.message?.includes('too large')) {
+        errorMessage = 'Content is too large. Please reduce image sizes or content length.'
+      } else if (err.message) {
+        errorMessage = `Failed to update blog post: ${err.message}`
+      }
+      
+      setError(errorMessage)
     } finally {
       setSaving(false)
     }
