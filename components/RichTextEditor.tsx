@@ -1,11 +1,27 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import 'react-quill/dist/quill.snow.css'
 
 // Dynamically import ReactQuill to avoid SSR issues
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+const ReactQuill = dynamic(
+  async () => {
+    const { default: RQ } = await import('react-quill')
+    await import('react-quill/dist/quill.snow.css')
+    return RQ
+  },
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="min-h-[400px] border border-gray-300 rounded-lg p-4 flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#441018] mx-auto mb-2"></div>
+          <p className="text-gray-600 text-sm">Loading editor...</p>
+        </div>
+      </div>
+    )
+  }
+)
 
 interface RichTextEditorProps {
   value: string
@@ -20,6 +36,12 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   placeholder = 'Start writing your blog post...',
   className = ''
 }) => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   // Define the toolbar with all options
   const modules = useMemo(() => ({
     toolbar: {
@@ -69,76 +91,28 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     'clean'
   ]
 
-  return (
-    <>
-      <style jsx global>{`
-        .rich-text-editor-wrapper .ql-container {
-          min-height: 400px;
-          font-size: 16px;
-          font-family: inherit;
-        }
-        .rich-text-editor-wrapper .ql-editor {
-          min-height: 400px;
-        }
-        .rich-text-editor-wrapper .ql-editor.ql-blank::before {
-          font-style: normal;
-          color: #9ca3af;
-        }
-        .rich-text-editor-wrapper .ql-toolbar {
-          border-top: 1px solid #e5e7eb;
-          border-left: 1px solid #e5e7eb;
-          border-right: 1px solid #e5e7eb;
-          border-bottom: none;
-          border-radius: 0.5rem 0.5rem 0 0;
-          background-color: #f9fafb;
-        }
-        .rich-text-editor-wrapper .ql-container {
-          border-bottom: 1px solid #e5e7eb;
-          border-left: 1px solid #e5e7eb;
-          border-right: 1px solid #e5e7eb;
-          border-top: none;
-          border-radius: 0 0 0.5rem 0.5rem;
-          background-color: white;
-        }
-        .rich-text-editor-wrapper .ql-toolbar .ql-stroke {
-          stroke: #374151;
-        }
-        .rich-text-editor-wrapper .ql-toolbar .ql-fill {
-          fill: #374151;
-        }
-        .rich-text-editor-wrapper .ql-toolbar button:hover,
-        .rich-text-editor-wrapper .ql-toolbar button.ql-active {
-          color: #441018;
-        }
-        .rich-text-editor-wrapper .ql-toolbar button:hover .ql-stroke,
-        .rich-text-editor-wrapper .ql-toolbar button.ql-active .ql-stroke {
-          stroke: #441018;
-        }
-        .rich-text-editor-wrapper .ql-toolbar button:hover .ql-fill,
-        .rich-text-editor-wrapper .ql-toolbar button.ql-active .ql-fill {
-          fill: #441018;
-        }
-        .rich-text-editor-wrapper .ql-editor img {
-          max-width: 100%;
-          height: auto;
-          margin: 1rem 0;
-        }
-        .rich-text-editor-wrapper .ql-editor a {
-          color: #441018;
-          text-decoration: underline;
-        }
-      `}</style>
-      <div className={`rich-text-editor-wrapper ${className}`}>
-        <ReactQuill
-          theme="snow"
-          value={value}
-          onChange={onChange}
-          modules={modules}
-          formats={formats}
-          placeholder={placeholder}
-        />
+  if (!mounted) {
+    return (
+      <div className="min-h-[400px] border border-gray-300 rounded-lg p-4 flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#441018] mx-auto mb-2"></div>
+          <p className="text-gray-600 text-sm">Loading editor...</p>
+        </div>
       </div>
-    </>
+    )
+  }
+
+  return (
+    <div className={`rich-text-editor-wrapper ${className}`}>
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={onChange}
+        modules={modules}
+        formats={formats}
+        placeholder={placeholder}
+      />
+    </div>
   )
 }
 
