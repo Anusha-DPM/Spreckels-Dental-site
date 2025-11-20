@@ -33,36 +33,13 @@ export default function BlogPostPage() {
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [selectedDate, setSelectedDate] = useState<string>('')
   const params = useParams()
   const router = useRouter()
   const slug = params.slug as string
 
   useEffect(() => {
     loadPost()
-    loadSelectedDate()
   }, [slug])
-
-  const loadSelectedDate = () => {
-    if (typeof window !== 'undefined') {
-      const storedDate = localStorage.getItem(`blogDate_${slug}`)
-      if (storedDate) {
-        setSelectedDate(storedDate)
-      }
-    }
-  }
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const date = e.target.value
-    setSelectedDate(date)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(`blogDate_${slug}`, date)
-      // Dispatch custom event for same-tab updates
-      window.dispatchEvent(new CustomEvent('localStorageChange', {
-        detail: { key: `blogDate_${slug}`, value: date }
-      }))
-    }
-  }
 
   const loadPost = async () => {
     try {
@@ -206,16 +183,6 @@ export default function BlogPostPage() {
                 </>
               )}
             </div>
-            
-            {/* Selected Date Display */}
-            {selectedDate && (
-              <div className="mt-4 p-3 bg-white/10 rounded-lg">
-                <p className="text-sm text-gray-200 mb-1">Selected Date:</p>
-                <p className="text-lg font-semibold text-white">
-                  {formatDate(selectedDate)}
-                </p>
-              </div>
-            )}
           </motion.div>
         </div>
       </motion.section>
@@ -285,27 +252,6 @@ export default function BlogPostPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              {/* Date Selector */}
-              <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Select Date</h3>
-                <div className="space-y-3">
-                  <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-                  />
-                  {selectedDate && (
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <p className="text-sm text-gray-600 mb-1">Selected Date:</p>
-                      <p className="text-base font-semibold text-gray-900">
-                        {formatDate(selectedDate)}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
               {/* Author Info */}
               {post.author && (
                 <div className="bg-white rounded-lg shadow-sm p-6 mb-8">

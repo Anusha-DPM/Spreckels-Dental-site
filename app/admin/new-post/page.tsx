@@ -281,35 +281,33 @@ export default function NewPost() {
               Content *
             </label>
             {!useSimpleEditor ? (
-              <div className="border border-gray-300 rounded-lg">
-                <ErrorBoundary
-                  fallback={
-                    <div className="p-4 text-center">
-                      <p className="text-red-600 mb-2">Rich text editor failed to load</p>
-                      <button
-                        onClick={() => setUseSimpleEditor(true)}
-                        className="text-blue-600 hover:text-blue-800 underline"
-                      >
-                        Switch to simple editor
-                      </button>
-                    </div>
-                  }
-                >
-                  <RichTextEditor
-                    value={formData.content}
-                    onChange={(value) => {
-                      try {
-                        setFormData(prev => ({ ...prev, content: value }))
-                      } catch (err) {
-                        console.error('Error updating content:', err)
-                        setError('Error updating content. Please try again.')
-                        setUseSimpleEditor(true)
-                      }
-                    }}
-                    placeholder="Start writing your blog post..."
-                  />
-                </ErrorBoundary>
-              </div>
+              <ErrorBoundary
+                fallback={
+                  <div className="p-4 text-center border border-gray-300 rounded-lg">
+                    <p className="text-red-600 mb-2">Rich text editor failed to load</p>
+                    <button
+                      onClick={() => setUseSimpleEditor(true)}
+                      className="text-blue-600 hover:text-blue-800 underline"
+                    >
+                      Switch to simple editor
+                    </button>
+                  </div>
+                }
+              >
+                <RichTextEditor
+                  value={formData.content}
+                  onChange={(value) => {
+                    try {
+                      setFormData(prev => ({ ...prev, content: value }))
+                    } catch (err) {
+                      console.error('Error updating content:', err)
+                      setError('Error updating content. Please try again.')
+                      setUseSimpleEditor(true)
+                    }
+                  }}
+                  placeholder="Start writing your blog post..."
+                />
+              </ErrorBoundary>
             ) : (
               <div>
                 <SimpleTextEditor
