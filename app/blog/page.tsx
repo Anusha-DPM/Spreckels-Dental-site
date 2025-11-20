@@ -330,13 +330,45 @@ export default function BlogPage() {
                 >
                   {/* Image */}
                   {(post.coverImage || post.imageUrl) && (
-                    <div className="relative h-48 overflow-hidden">
-                      <Image
-                        src={post.coverImage || post.imageUrl!}
-                        alt={post.title}
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="relative h-48 overflow-hidden bg-gray-100">
+                      {(() => {
+                        const imageSrc = post.coverImage || post.imageUrl!
+                        // Check if URL is from allowed domains for Next.js Image
+                        const allowedDomains = [
+                          'firebasestorage.googleapis.com',
+                          'storage.googleapis.com',
+                          'images.unsplash.com',
+                          'secure.officite.com',
+                          'images.weserv.nl'
+                        ]
+                        const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
+                        
+                        // Use Next.js Image for allowed domains, regular img for others
+                        if (isAllowedDomain || imageSrc.startsWith('data:')) {
+                          return (
+                            <Image
+                              src={imageSrc}
+                              alt={post.title}
+                              fill
+                              className="object-cover"
+                              unoptimized={imageSrc.startsWith('data:')}
+                            />
+                          )
+                        } else {
+                          // Use regular img tag for external URLs
+                          return (
+                            <img
+                              src={imageSrc}
+                              alt={post.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement
+                                target.style.display = 'none'
+                              }}
+                            />
+                          )
+                        }
+                      })()}
                     </div>
                   )}
 

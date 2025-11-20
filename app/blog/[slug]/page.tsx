@@ -201,13 +201,49 @@ export default function BlogPostPage() {
               {/* Featured Image */}
               {(post.coverImage || post.imageUrl) && (
                 <div className="mb-8">
-                  <div className="relative h-96 rounded-lg overflow-hidden">
-                    <Image
-                      src={post.coverImage || post.imageUrl!}
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                    />
+                  <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
+                    {(() => {
+                      const imageSrc = post.coverImage || post.imageUrl!
+                      // Check if URL is from allowed domains for Next.js Image
+                      const allowedDomains = [
+                        'firebasestorage.googleapis.com',
+                        'storage.googleapis.com',
+                        'images.unsplash.com',
+                        'secure.officite.com',
+                        'images.weserv.nl'
+                      ]
+                      const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
+                      
+                      // Use Next.js Image for allowed domains, regular img for others
+                      if (isAllowedDomain || imageSrc.startsWith('data:')) {
+                        return (
+                          <Image
+                            src={imageSrc}
+                            alt={post.title}
+                            fill
+                            className="object-cover"
+                            unoptimized={imageSrc.startsWith('data:')}
+                          />
+                        )
+                      } else {
+                        // Use regular img tag for external URLs
+                        return (
+                          <img
+                            src={imageSrc}
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                              const parent = target.parentElement
+                              if (parent) {
+                                parent.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Image failed to load. Please check the URL.</p></div>'
+                              }
+                            }}
+                          />
+                        )
+                      }
+                    })()}
                   </div>
                 </div>
               )}
@@ -279,13 +315,38 @@ export default function BlogPostPage() {
                       >
                         <div className="flex items-start space-x-3">
                           {(relatedPost.coverImage || relatedPost.imageUrl) && (
-                            <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                              <Image
-                                src={relatedPost.coverImage || relatedPost.imageUrl!}
-                                alt={relatedPost.title}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-200"
-                              />
+                            <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                              {(() => {
+                                const imageSrc = relatedPost.coverImage || relatedPost.imageUrl!
+                                const allowedDomains = [
+                                  'firebasestorage.googleapis.com',
+                                  'storage.googleapis.com',
+                                  'images.unsplash.com',
+                                  'secure.officite.com',
+                                  'images.weserv.nl'
+                                ]
+                                const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
+                                
+                                if (isAllowedDomain || imageSrc.startsWith('data:')) {
+                                  return (
+                                    <Image
+                                      src={imageSrc}
+                                      alt={relatedPost.title}
+                                      fill
+                                      className="object-cover group-hover:scale-105 transition-transform duration-200"
+                                      unoptimized={imageSrc.startsWith('data:')}
+                                    />
+                                  )
+                                } else {
+                                  return (
+                                    <img
+                                      src={imageSrc}
+                                      alt={relatedPost.title}
+                                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                    />
+                                  )
+                                }
+                              })()}
                             </div>
                           )}
                           <div>
