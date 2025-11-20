@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
@@ -24,11 +24,21 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
   placeholder = 'Start writing your blog post...',
   className = ''
 }) => {
+  const isInternalUpdate = useRef(false)
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
+        },
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: true,
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: true,
         },
       }),
       Image.configure({
@@ -40,6 +50,7 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
+        defaultAlignment: 'left',
       }),
       Underline,
       TextStyle,
@@ -48,7 +59,12 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
     ],
     content: value,
     onUpdate: ({ editor }) => {
+      isInternalUpdate.current = true
       onChange(editor.getHTML())
+      // Reset flag after a short delay
+      setTimeout(() => {
+        isInternalUpdate.current = false
+      }, 100)
     },
     editorProps: {
       attributes: {
@@ -58,10 +74,14 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
     },
   })
 
-  // Update editor content when value prop changes
+  // Update editor content when value prop changes (only if change is external)
   React.useEffect(() => {
-    if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value, { emitUpdate: false })
+    if (editor && !isInternalUpdate.current) {
+      const currentContent = editor.getHTML()
+      // Only update if the value is different and not from internal update
+      if (value !== currentContent) {
+        editor.commands.setContent(value, { emitUpdate: false })
+      }
     }
   }, [value, editor])
 
@@ -109,7 +129,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
       <div className="border-b border-gray-200 bg-gray-50 p-2 flex flex-wrap gap-1 rounded-t-lg">
         {/* Text Formatting */}
         <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleBold().run()
+          }}
+          type="button"
           disabled={!editor.can().chain().focus().toggleBold().run()}
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('bold') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -119,7 +143,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           <strong>B</strong>
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleItalic().run()
+          }}
+          type="button"
           disabled={!editor.can().chain().focus().toggleItalic().run()}
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('italic') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -129,7 +157,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           <em>I</em>
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleUnderline().run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('underline') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -138,7 +170,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           <u>U</u>
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleStrike().run()
+          }}
+          type="button"
           disabled={!editor.can().chain().focus().toggleStrike().run()}
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('strike') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -152,7 +188,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
 
         {/* Headings */}
         <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('heading', { level: 1 }) ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -161,7 +201,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           H1
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('heading', { level: 2 }) ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -170,7 +214,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           H2
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('heading', { level: 3 }) ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -183,7 +231,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
 
         {/* Lists */}
         <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleBulletList().run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('bulletList') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -192,7 +244,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           •
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleOrderedList().run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('orderedList') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -205,7 +261,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
 
         {/* Alignment */}
         <button
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().setTextAlign('left').run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive({ textAlign: 'left' }) ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -214,7 +274,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           ⬅
         </button>
         <button
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().setTextAlign('center').run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive({ textAlign: 'center' }) ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -223,7 +287,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           ↔
         </button>
         <button
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().setTextAlign('right').run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive({ textAlign: 'right' }) ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -236,7 +304,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
 
         {/* Links and Images */}
         <button
-          onClick={setLink}
+          onClick={(e) => {
+            e.preventDefault()
+            setLink()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('link') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -245,7 +317,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           🔗
         </button>
         <button
-          onClick={addImage}
+          onClick={(e) => {
+            e.preventDefault()
+            addImage()
+          }}
+          type="button"
           className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100"
           title="Image"
         >
@@ -256,7 +332,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
 
         {/* Other */}
         <button
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().toggleBlockquote().run()
+          }}
+          type="button"
           className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
             editor.isActive('blockquote') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
@@ -265,14 +345,22 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           "
         </button>
         <button
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().setHorizontalRule().run()
+          }}
+          type="button"
           className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100"
           title="Horizontal Rule"
         >
           ─
         </button>
         <button
-          onClick={() => editor.chain().focus().undo().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().undo().run()
+          }}
+          type="button"
           disabled={!editor.can().chain().focus().undo().run()}
           className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
           title="Undo"
@@ -280,7 +368,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
           ↶
         </button>
         <button
-          onClick={() => editor.chain().focus().redo().run()}
+          onClick={(e) => {
+            e.preventDefault()
+            editor.chain().focus().redo().run()
+          }}
+          type="button"
           disabled={!editor.can().chain().focus().redo().run()}
           className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
           title="Redo"
