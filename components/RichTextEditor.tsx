@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 
 // Dynamically import Jodit to avoid SSR issues
@@ -30,6 +30,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   className = ''
 }) => {
   const [mounted, setMounted] = useState(false)
+  const editorRef = useRef<any>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -38,6 +39,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const config: any = {
     placeholder: placeholder,
     height: 500,
+    readonly: false,
     toolbar: true,
     toolbarButtonSize: 'medium',
     buttons: [
@@ -76,12 +78,19 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     removeEmptyBlocks: true,
     useSearch: true,
     spellcheck: false,
+    disablePlugins: [],
     uploader: {
       insertImageAsBase64URI: true
     },
     style: {
       background: 'white',
       color: '#374151'
+    }
+  }
+
+  const handleChange = (newContent: string) => {
+    if (newContent !== value) {
+      onChange(newContent)
     }
   }
 
@@ -99,10 +108,12 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   return (
     <div className={`rich-text-editor-wrapper ${className}`}>
       <JoditEditor
-        value={value}
+        ref={editorRef}
+        value={value || ''}
         config={config}
-        onBlur={(newContent: string) => onChange(newContent)}
-        onChange={(newContent: string) => onChange(newContent)}
+        onBlur={handleChange}
+        onChange={handleChange}
+        tabIndex={1}
       />
     </div>
   )
