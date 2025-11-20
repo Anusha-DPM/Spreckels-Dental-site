@@ -41,6 +41,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     height: 500,
     readonly: false,
     toolbar: true,
+    toolbarAdaptive: false,
     toolbarButtonSize: 'medium',
     buttons: [
       'bold', 'italic', 'underline', 'strikethrough',
@@ -64,10 +65,35 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       '|',
       'fullsize',
       'selectall',
-      'print',
       '|',
       'source'
     ],
+    controls: {
+      fontsize: {
+        list: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '26', '28', '36', '48', '72']
+      },
+      paragraph: {
+        list: {
+          p: 'Paragraph',
+          h1: 'Heading 1',
+          h2: 'Heading 2',
+          h3: 'Heading 3',
+          h4: 'Heading 4',
+          h5: 'Heading 5',
+          h6: 'Heading 6'
+        }
+      },
+      font: {
+        list: {
+          'Arial,Helvetica,sans-serif': 'Arial',
+          'Georgia,serif': 'Georgia',
+          'Impact,Charcoal,sans-serif': 'Impact',
+          'Tahoma,Geneva,sans-serif': 'Tahoma',
+          'Times New Roman,Times,serif': 'Times New Roman',
+          'Verdana,Geneva,sans-serif': 'Verdana'
+        }
+      }
+    },
     showXPathInStatusbar: false,
     showCharsCounter: false,
     showWordsCounter: false,
@@ -79,6 +105,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     useSearch: true,
     spellcheck: false,
     disablePlugins: [],
+    enablePlugins: ['image', 'link', 'video', 'table', 'list', 'align', 'font', 'color', 'source'],
     uploader: {
       insertImageAsBase64URI: true
     },
