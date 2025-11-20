@@ -78,70 +78,33 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Rich Text Editor (React Quill) Custom Styles */
-.rich-text-editor-wrapper .ql-container {
-  min-height: 400px;
-  font-size: 16px;
-  font-family: inherit;
+/* Rich Text Editor (TinyMCE) Custom Styles */
+.rich-text-editor-wrapper {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
-.rich-text-editor-wrapper .ql-editor {
-  min-height: 400px;
+.rich-text-editor-wrapper .tox-tinymce {
+  border: none !important;
 }
 
-.rich-text-editor-wrapper .ql-editor.ql-blank::before {
-  font-style: normal;
-  color: #9ca3af;
+.rich-text-editor-wrapper .tox-editor-header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.rich-text-editor-wrapper .ql-toolbar {
-  border-top: 1px solid #e5e7eb;
-  border-left: 1px solid #e5e7eb;
-  border-right: 1px solid #e5e7eb;
-  border-bottom: none;
-  border-radius: 0.5rem 0.5rem 0 0;
+.rich-text-editor-wrapper .tox-toolbar,
+.rich-text-editor-wrapper .tox-toolbar__overflow,
+.rich-text-editor-wrapper .tox-toolbar__primary {
   background-color: #f9fafb;
 }
 
-.rich-text-editor-wrapper .ql-container {
-  border-bottom: 1px solid #e5e7eb;
-  border-left: 1px solid #e5e7eb;
-  border-right: 1px solid #e5e7eb;
-  border-top: none;
-  border-radius: 0 0 0.5rem 0.5rem;
+.rich-text-editor-wrapper .tox-edit-area__iframe {
   background-color: white;
 }
 
-.rich-text-editor-wrapper .ql-toolbar .ql-stroke {
-  stroke: #374151;
-}
-
-.rich-text-editor-wrapper .ql-toolbar .ql-fill {
-  fill: #374151;
-}
-
-.rich-text-editor-wrapper .ql-toolbar button:hover,
-.rich-text-editor-wrapper .ql-toolbar button.ql-active {
-  color: #441018;
-}
-
-.rich-text-editor-wrapper .ql-toolbar button:hover .ql-stroke,
-.rich-text-editor-wrapper .ql-toolbar button.ql-active .ql-stroke {
-  stroke: #441018;
-}
-
-.rich-text-editor-wrapper .ql-toolbar button:hover .ql-fill,
-.rich-text-editor-wrapper .ql-toolbar button.ql-active .ql-fill {
-  fill: #441018;
-}
-
-.rich-text-editor-wrapper .ql-editor img {
-  max-width: 100%;
-  height: auto;
-  margin: 1rem 0;
-}
-
-.rich-text-editor-wrapper .ql-editor a {
-  color: #441018;
-  text-decoration: underline;
+.rich-text-editor-wrapper .tox-statusbar {
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
 } 

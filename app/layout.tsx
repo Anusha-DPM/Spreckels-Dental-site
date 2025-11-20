@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import 'react-quill/dist/quill.snow.css'
 
 export const metadata: Metadata = {
   title: 'Spreckels Park Dental - Professional Dental Services',
