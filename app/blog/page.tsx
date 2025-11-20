@@ -33,9 +33,76 @@ export default function BlogPage() {
   const [error, setError] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedDates, setSelectedDates] = useState<Record<string, string>>({})
 
   useEffect(() => {
     loadPosts()
+    loadSelectedDates()
+  }, [])
+
+  const loadSelectedDates = () => {
+    if (typeof window !== 'undefined') {
+      const dates: Record<string, string> = {}
+      posts.forEach(post => {
+        const storedDate = localStorage.getItem(`blogDate_${post.slug}`)
+        if (storedDate) {
+          dates[post.slug] = storedDate
+        }
+      })
+      setSelectedDates(dates)
+    }
+  }
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      loadSelectedDates()
+    }
+  }, [posts])
+
+  // Listen for storage changes to update selected dates in real-time
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleStorageChange = (e: StorageEvent) => {
+        if (e.key && e.key.startsWith('blogDate_')) {
+          const slug = e.key.replace('blogDate_', '')
+          if (e.newValue) {
+            setSelectedDates(prev => ({
+              ...prev,
+              [slug]: e.newValue!
+            }))
+          } else {
+            setSelectedDates(prev => {
+              const updated = { ...prev }
+              delete updated[slug]
+              return updated
+            })
+          }
+        }
+      }
+
+      window.addEventListener('storage', handleStorageChange)
+      
+      // Also listen for custom events (for same-tab updates)
+      const handleCustomStorageChange = (e: Event) => {
+        const customEvent = e as CustomEvent
+        if (customEvent.detail?.key?.startsWith('blogDate_')) {
+          const slug = customEvent.detail.key.replace('blogDate_', '')
+          if (customEvent.detail.value) {
+            setSelectedDates(prev => ({
+              ...prev,
+              [slug]: customEvent.detail.value
+            }))
+          }
+        }
+      }
+
+      window.addEventListener('localStorageChange', handleCustomStorageChange as EventListener)
+
+      return () => {
+        window.removeEventListener('storage', handleStorageChange)
+        window.removeEventListener('localStorageChange', handleCustomStorageChange as EventListener)
+      }
+    }
   }, [])
 
   const loadPosts = async () => {
@@ -313,6 +380,16 @@ export default function BlogPage() {
                         <span>By {post.author}</span>
                       )}
                     </div>
+
+                    {/* Selected Date Display */}
+                    {selectedDates[post.slug] && (
+                      <div className="mt-3 p-2 bg-[#441018]/10 rounded-lg border border-[#441018]/20">
+                        <p className="text-xs text-gray-600 mb-1">Selected Date:</p>
+                        <p className="text-sm font-semibold text-[#441018]">
+                          {formatDate(selectedDates[post.slug])}
+                        </p>
+                      </div>
+                    )}
 
                     {/* Tags */}
                     {post.tags && post.tags.length > 0 && (
