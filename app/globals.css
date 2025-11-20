@@ -78,33 +78,60 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Rich Text Editor (TinyMCE) Custom Styles */
+/* Rich Text Editor (Jodit) Custom Styles */
 .rich-text-editor-wrapper {
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   overflow: hidden;
 }
 
-.rich-text-editor-wrapper .tox-tinymce {
+.rich-text-editor-wrapper .jodit-container {
   border: none !important;
+  border-radius: 0.5rem;
 }
 
-.rich-text-editor-wrapper .tox-editor-header {
+.rich-text-editor-wrapper .jodit-toolbar-editor-collection {
   background-color: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
-.rich-text-editor-wrapper .tox-toolbar,
-.rich-text-editor-wrapper .tox-toolbar__overflow,
-.rich-text-editor-wrapper .tox-toolbar__primary {
-  background-color: #f9fafb;
-}
-
-.rich-text-editor-wrapper .tox-edit-area__iframe {
+.rich-text-editor-wrapper .jodit-workplace {
   background-color: white;
+  border-radius: 0 0 0.5rem 0.5rem;
 }
 
-.rich-text-editor-wrapper .tox-statusbar {
+.rich-text-editor-wrapper .jodit-wysiwyg {
+  background-color: white;
+  min-height: 500px;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 1rem;
+}
+
+.rich-text-editor-wrapper .jodit-statusbar {
   background-color: #f9fafb;
   border-top: 1px solid #e5e7eb;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.rich-text-editor-wrapper .jodit-toolbar-button {
+  color: #374151;
+}
+
+.rich-text-editor-wrapper .jodit-toolbar-button:hover,
+.rich-text-editor-wrapper .jodit-toolbar-button.jodit_active {
+  background-color: #e5e7eb;
+  color: #441018;
+}
+
+.rich-text-editor-wrapper .jodit-wysiwyg img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
+
+.rich-text-editor-wrapper .jodit-wysiwyg a {
+  color: #441018;
+  text-decoration: underline;
 } 
