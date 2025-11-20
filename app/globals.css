@@ -252,4 +252,29 @@ html {
 .prose p + h5,
 .prose p + h6 {
   margin-top: 2rem;
+}
+
+/* Image styles for blog content */
+.prose img,
+.prose .blog-content-image,
+.blog-content-image {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 1.5rem auto !important;
+  border-radius: 0.5rem;
+  display: block !important;
+  object-fit: contain;
+}
+
+.prose img[src^="data:"],
+.prose img[src^="https:"],
+.prose img[src^="http:"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 1.5rem auto !important;
+  border-radius: 0.5rem;
+  display: block !important;
+  object-fit: contain;
 } 

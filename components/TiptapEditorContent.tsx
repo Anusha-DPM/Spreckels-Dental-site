@@ -42,8 +42,11 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
         },
       }),
       Image.configure({
-        inline: true,
+        inline: false,
         allowBase64: true,
+        HTMLAttributes: {
+          class: 'blog-content-image',
+        },
       }),
       Link.configure({
         openOnClick: false,
@@ -103,13 +106,52 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
   }, [editor])
 
-  const addImage = useCallback(() => {
+  const addImage = useCallback(async () => {
     if (!editor) return
 
-    const url = window.prompt('Image URL')
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run()
+    // Create file input element
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (!file) return
+
+      try {
+        // Try to upload via API
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('folder', 'blog-images')
+
+        const response = await fetch('/api/upload-image', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.ok) {
+          const result = await response.json()
+          if (result.url) {
+            editor.chain().focus().setImage({ src: result.url }).run()
+            return
+          }
+        }
+      } catch (error) {
+        console.warn('Image upload failed, using base64:', error)
+      }
+
+      // Fallback to base64 if upload fails
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const base64 = e.target?.result as string
+        if (base64) {
+          editor.chain().focus().setImage({ src: base64 }).run()
+        }
+      }
+      reader.readAsDataURL(file)
     }
+
+    input.click()
   }, [editor])
 
   if (!editor) {
