@@ -41,6 +41,30 @@ export default function BlogPostPage() {
     loadPost()
   }, [slug])
 
+  // Process images in content after render
+  useEffect(() => {
+    if (post && typeof window !== 'undefined') {
+      const contentDiv = document.querySelector('.prose.prose-lg')
+      if (contentDiv) {
+        const images = contentDiv.querySelectorAll('img')
+        images.forEach((img) => {
+          // Add error handling
+          img.onerror = () => {
+            img.style.display = 'none'
+          }
+          // Ensure proper styling
+          if (!img.classList.contains('blog-content-image')) {
+            img.classList.add('blog-content-image')
+          }
+          // Ensure images load properly
+          if (img.src && !img.complete) {
+            img.loading = 'lazy'
+          }
+        })
+      }
+    }
+  }, [post])
+
   const loadPost = async () => {
     try {
       setLoading(true)
@@ -204,7 +228,9 @@ export default function BlogPostPage() {
                   <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
                     {(() => {
                       const imageSrc = post.coverImage || post.imageUrl!
-                      // Check if URL is from allowed domains for Next.js Image
+                      // Check if it's a Firebase Storage URL or other allowed domain
+                      const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
+                                           imageSrc.includes('storage.googleapis.com')
                       const allowedDomains = [
                         'firebasestorage.googleapis.com',
                         'storage.googleapis.com',
@@ -214,8 +240,8 @@ export default function BlogPostPage() {
                       ]
                       const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
                       
-                      // Use Next.js Image for allowed domains, regular img for others
-                      if (isAllowedDomain || imageSrc.startsWith('data:')) {
+                      // Use Next.js Image for Firebase and allowed domains, regular img for others
+                      if (isFirebaseUrl || isAllowedDomain || imageSrc.startsWith('data:')) {
                         return (
                           <Image
                             src={imageSrc}
@@ -223,6 +249,14 @@ export default function BlogPostPage() {
                             fill
                             className="object-cover"
                             unoptimized={imageSrc.startsWith('data:')}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                              const parent = target.parentElement
+                              if (parent) {
+                                parent.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Image failed to load. Please check the URL.</p></div>'
+                              }
+                            }}
                           />
                         )
                       } else {
@@ -261,6 +295,9 @@ export default function BlogPostPage() {
               <div 
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
+                style={{
+                  wordBreak: 'break-word'
+                }}
               />
 
               {/* Tags */}

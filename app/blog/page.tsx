@@ -334,6 +334,9 @@ export default function BlogPage() {
                       {(() => {
                         const imageSrc = post.coverImage || post.imageUrl!
                         // Check if URL is from allowed domains for Next.js Image
+                        // Check if it's a Firebase Storage URL or other allowed domain
+                        const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
+                                             imageSrc.includes('storage.googleapis.com')
                         const allowedDomains = [
                           'firebasestorage.googleapis.com',
                           'storage.googleapis.com',
@@ -343,8 +346,8 @@ export default function BlogPage() {
                         ]
                         const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
                         
-                        // Use Next.js Image for allowed domains, regular img for others
-                        if (isAllowedDomain || imageSrc.startsWith('data:')) {
+                        // Use Next.js Image for Firebase and allowed domains, regular img for others
+                        if (isFirebaseUrl || isAllowedDomain || imageSrc.startsWith('data:')) {
                           return (
                             <Image
                               src={imageSrc}
@@ -352,6 +355,10 @@ export default function BlogPage() {
                               fill
                               className="object-cover"
                               unoptimized={imageSrc.startsWith('data:')}
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement
+                                target.style.display = 'none'
+                              }}
                             />
                           )
                         } else {

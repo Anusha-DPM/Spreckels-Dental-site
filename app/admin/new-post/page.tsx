@@ -133,12 +133,27 @@ export default function NewPost() {
          // Continue with original content if processing fails
        }
 
+       // Extract first image from content if coverImage is not set
+       let finalCoverImage = coverImageUrl
+       if (!finalCoverImage && processedContent) {
+         const parser = new DOMParser()
+         const doc = parser.parseFromString(processedContent, 'text/html')
+         const firstImage = doc.querySelector('img')
+         if (firstImage) {
+           const imageSrc = firstImage.getAttribute('src')
+           if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
+             finalCoverImage = imageSrc
+             console.log('✅ Extracted cover image from content:', finalCoverImage)
+           }
+         }
+       }
+
        const postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'> = {
          title: formData.title.trim(),
          content: processedContent,
          excerpt: formData.excerpt.trim(),
-         coverImage: coverImageUrl,
-         imageUrl: formData.imageUrl.trim(),
+         coverImage: finalCoverImage,
+         imageUrl: formData.imageUrl.trim() || finalCoverImage,
          tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
          categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
          metaTitle: formData.metaTitle.trim() || formData.title.trim(),
