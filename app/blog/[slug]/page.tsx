@@ -93,6 +93,25 @@ export default function BlogPostPage() {
         
         if (fetchedPost) {
           const blogPost = fetchedPost as BlogPost
+          console.log(`📄 Loaded post "${blogPost.title}":`, {
+            id: blogPost.id,
+            coverImage: blogPost.coverImage,
+            imageUrl: blogPost.imageUrl,
+            hasContent: !!blogPost.content,
+            coverImageType: typeof blogPost.coverImage,
+            coverImageLength: blogPost.coverImage?.length || 0
+          })
+          
+          // Validate coverImage URL
+          if (blogPost.coverImage) {
+            const isValidUrl = blogPost.coverImage.startsWith('http') || blogPost.coverImage.startsWith('https')
+            if (!isValidUrl) {
+              console.warn(`⚠️ Invalid coverImage URL for "${blogPost.title}":`, blogPost.coverImage)
+            } else {
+              console.log(`✅ Valid coverImage URL for "${blogPost.title}":`, blogPost.coverImage.substring(0, 100))
+            }
+          }
+          
           // Extract cover image from content if missing
           if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
             const extractedImage = extractFirstImageFromContent(blogPost.content)
@@ -264,6 +283,14 @@ export default function BlogPostPage() {
                   <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
                     {(() => {
                       const imageSrc = post.coverImage || post.imageUrl!
+                      console.log(`🖼️ Rendering featured image for post "${post.title}":`, {
+                        coverImage: post.coverImage,
+                        imageUrl: post.imageUrl,
+                        usingSrc: imageSrc,
+                        hasSrc: !!imageSrc,
+                        srcLength: imageSrc?.length || 0
+                      })
+                      
                       // Check if it's a Firebase Storage URL or other allowed domain
                       const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
                                            imageSrc.includes('storage.googleapis.com')
@@ -285,7 +312,16 @@ export default function BlogPostPage() {
                             fill
                             className="object-cover"
                             unoptimized={imageSrc.startsWith('data:')}
+                            onLoad={() => {
+                              console.log(`✅ Featured image loaded successfully for "${post.title}":`, imageSrc)
+                            }}
                             onError={(e) => {
+                              console.error(`❌ Featured image failed to load for "${post.title}":`, {
+                                imageSrc: imageSrc,
+                                coverImage: post.coverImage,
+                                imageUrl: post.imageUrl,
+                                error: e
+                              })
                               const target = e.target as HTMLImageElement
                               target.style.display = 'none'
                               const parent = target.parentElement
@@ -302,7 +338,16 @@ export default function BlogPostPage() {
                             src={imageSrc}
                             alt={post.title}
                             className="w-full h-full object-cover"
+                            onLoad={() => {
+                              console.log(`✅ Featured image loaded successfully for "${post.title}":`, imageSrc)
+                            }}
                             onError={(e) => {
+                              console.error(`❌ Featured image failed to load for "${post.title}":`, {
+                                imageSrc: imageSrc,
+                                coverImage: post.coverImage,
+                                imageUrl: post.imageUrl,
+                                error: e
+                              })
                               const target = e.target as HTMLImageElement
                               target.style.display = 'none'
                               const parent = target.parentElement

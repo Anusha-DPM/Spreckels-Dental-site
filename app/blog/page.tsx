@@ -135,10 +135,26 @@ export default function BlogPage() {
         const enhancedPosts = fetchedPosts.map(post => {
           const blogPost = post as BlogPost
           console.log(`📄 Post "${blogPost.title}":`, {
+            id: blogPost.id,
             coverImage: blogPost.coverImage,
             imageUrl: blogPost.imageUrl,
-            hasContent: !!blogPost.content
+            hasContent: !!blogPost.content,
+            coverImageType: typeof blogPost.coverImage,
+            coverImageLength: blogPost.coverImage?.length || 0,
+            imageUrlType: typeof blogPost.imageUrl,
+            imageUrlLength: blogPost.imageUrl?.length || 0
           })
+          
+          // Validate coverImage URL
+          if (blogPost.coverImage) {
+            const isValidUrl = blogPost.coverImage.startsWith('http') || blogPost.coverImage.startsWith('https')
+            if (!isValidUrl) {
+              console.warn(`⚠️ Invalid coverImage URL for "${blogPost.title}":`, blogPost.coverImage)
+            } else {
+              console.log(`✅ Valid coverImage URL for "${blogPost.title}":`, blogPost.coverImage.substring(0, 100))
+            }
+          }
+          
           // If no coverImage or imageUrl, try to extract from content
           if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
             const extractedImage = extractFirstImageFromContent(blogPost.content)
@@ -384,6 +400,14 @@ export default function BlogPage() {
                     <div className="relative h-48 overflow-hidden bg-gray-100">
                       {(() => {
                         const imageSrc = post.coverImage || post.imageUrl!
+                        console.log(`🖼️ Rendering image for post "${post.title}":`, {
+                          coverImage: post.coverImage,
+                          imageUrl: post.imageUrl,
+                          usingSrc: imageSrc,
+                          hasSrc: !!imageSrc,
+                          srcLength: imageSrc?.length || 0
+                        })
+                        
                         // Check if URL is from allowed domains for Next.js Image
                         // Check if it's a Firebase Storage URL or other allowed domain
                         const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
@@ -406,7 +430,16 @@ export default function BlogPage() {
                               fill
                               className="object-cover"
                               unoptimized={imageSrc.startsWith('data:')}
+                              onLoad={() => {
+                                console.log(`✅ Image loaded successfully for "${post.title}":`, imageSrc)
+                              }}
                               onError={(e) => {
+                                console.error(`❌ Image failed to load for "${post.title}":`, {
+                                  imageSrc: imageSrc,
+                                  coverImage: post.coverImage,
+                                  imageUrl: post.imageUrl,
+                                  error: e
+                                })
                                 const target = e.target as HTMLImageElement
                                 target.style.display = 'none'
                               }}
@@ -419,7 +452,16 @@ export default function BlogPage() {
                               src={imageSrc}
                               alt={post.title}
                               className="w-full h-full object-cover"
+                              onLoad={() => {
+                                console.log(`✅ Image loaded successfully for "${post.title}":`, imageSrc)
+                              }}
                               onError={(e) => {
+                                console.error(`❌ Image failed to load for "${post.title}":`, {
+                                  imageSrc: imageSrc,
+                                  coverImage: post.coverImage,
+                                  imageUrl: post.imageUrl,
+                                  error: e
+                                })
                                 const target = e.target as HTMLImageElement
                                 target.style.display = 'none'
                               }}
