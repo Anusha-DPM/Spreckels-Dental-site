@@ -49,8 +49,6 @@ export default function EditPost() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState('')
   const [originalPost, setOriginalPost] = useState<BlogPost | null>(null)
   const router = useRouter()
   const params = useParams()
@@ -93,9 +91,6 @@ export default function EditPost() {
         publishDate: blogPost.published ? blogPost.publishDate.split('T')[0] : new Date().toISOString().split('T')[0]
       })
 
-      if (blogPost.coverImage) {
-        setImagePreview(blogPost.coverImage)
-      }
 
     } catch (err) {
       setError('Failed to load post')
@@ -113,14 +108,6 @@ export default function EditPost() {
     }))
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setImageFile(file)
-      setImagePreview(URL.createObjectURL(file))
-    }
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
@@ -128,18 +115,7 @@ export default function EditPost() {
     setSuccess('')
 
     try {
-      let coverImageUrl = formData.coverImage
-
-      // Upload image if file is selected
-      if (imageFile) {
-        try {
-          const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images')
-          coverImageUrl = uploadResult.url
-        } catch (uploadError) {
-          console.warn('Cover image upload failed, continuing without image:', uploadError)
-          coverImageUrl = formData.coverImage || formData.imageUrl || ''
-        }
-      }
+      let coverImageUrl = formData.coverImage || formData.imageUrl || ''
 
       // Process content to upload any base64 images to Firebase
       let processedContent = formData.content
@@ -367,40 +343,23 @@ export default function EditPost() {
             />
           </div>
 
-          {/* Image Upload */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700 mb-2">
-                Cover Image (Upload)
-              </label>
-              <input
-                type="file"
-                id="coverImage"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-              />
-              {imagePreview && (
-                <div className="mt-2">
-                  <img src={imagePreview} alt="Preview" className="h-32 w-auto rounded-lg" />
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
-                Image URL
-              </label>
-              <input
-                type="url"
-                id="imageUrl"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
+          {/* Image URL */}
+          <div>
+            <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
+              Image URL
+            </label>
+            <input
+              type="url"
+              id="imageUrl"
+              name="imageUrl"
+              value={formData.imageUrl}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+              placeholder="https://example.com/image.jpg"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Or upload an image using the image button in the editor above
+            </p>
           </div>
 
           {/* Tags and Categories */}
