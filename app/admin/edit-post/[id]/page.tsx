@@ -150,20 +150,41 @@ export default function EditPost() {
         // Continue with original content if processing fails
       }
 
-      // Extract first image from content if coverImage is not set
+      // Extract first image from content (prioritize content images over file upload)
       let finalCoverImage = coverImageUrl
-      if (!finalCoverImage && processedContent) {
+      if (processedContent) {
         const parser = new DOMParser()
         const doc = parser.parseFromString(processedContent, 'text/html')
-        const firstImage = doc.querySelector('img')
-        if (firstImage) {
-          const imageSrc = firstImage.getAttribute('src')
+        const images = doc.querySelectorAll('img')
+        console.log(`📸 Found ${images.length} image(s) in content`)
+        
+        // Find first valid image URL
+        for (let i = 0; i < images.length; i++) {
+          const img = images[i]
+          const imageSrc = img.getAttribute('src')
+          console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100))
+          
           if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
-            finalCoverImage = imageSrc
-            console.log('✅ Extracted cover image from content:', finalCoverImage)
+            // Prefer content images over file upload if no coverImage was explicitly set
+            if (!coverImageUrl || coverImageUrl === '') {
+              finalCoverImage = imageSrc
+              console.log('✅ Extracted cover image from content:', finalCoverImage)
+              break
+            } else {
+              // If coverImage exists, still log content images for reference
+              console.log('ℹ️ Cover image already set, but found image in content:', imageSrc)
+            }
           }
         }
       }
+      
+      // If still no cover image, use the file upload if available
+      if (!finalCoverImage && coverImageUrl) {
+        finalCoverImage = coverImageUrl
+        console.log('✅ Using uploaded cover image:', finalCoverImage)
+      }
+      
+      console.log('🎯 Final cover image:', finalCoverImage)
 
       const updateData: Partial<BlogPost> = {
         title: formData.title.trim(),

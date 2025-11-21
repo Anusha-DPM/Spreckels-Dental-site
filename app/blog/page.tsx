@@ -105,6 +105,24 @@ export default function BlogPage() {
     }
   }, [])
 
+  const extractFirstImageFromContent = (content: string): string | null => {
+    if (!content) return null
+    try {
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(content, 'text/html')
+      const firstImage = doc.querySelector('img')
+      if (firstImage) {
+        const imageSrc = firstImage.getAttribute('src')
+        if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
+          return imageSrc
+        }
+      }
+    } catch (error) {
+      console.warn('Error extracting image from content:', error)
+    }
+    return null
+  }
+
   const loadPosts = async () => {
     try {
       setLoading(true)
@@ -112,7 +130,20 @@ export default function BlogPage() {
       // Try to get posts from Firebase first
       try {
         const fetchedPosts = await getPublishedBlogPosts()
-        setPosts(fetchedPosts.map(post => post as BlogPost))
+        // Enhance posts with cover images extracted from content if missing
+        const enhancedPosts = fetchedPosts.map(post => {
+          const blogPost = post as BlogPost
+          // If no coverImage or imageUrl, try to extract from content
+          if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
+            const extractedImage = extractFirstImageFromContent(blogPost.content)
+            if (extractedImage) {
+              blogPost.coverImage = extractedImage
+              console.log('✅ Extracted cover image for post:', blogPost.title)
+            }
+          }
+          return blogPost
+        })
+        setPosts(enhancedPosts)
         return
       } catch (firebaseError) {
         console.warn('Firebase not available, checking localStorage:', firebaseError)
@@ -126,7 +157,21 @@ export default function BlogPage() {
          const publishedPosts = localPosts.filter((post: any) => post.published)
          console.log('Published posts:', publishedPosts)
          
-         setPosts(publishedPosts.map((post: any) => post as BlogPost))
+         // Enhance posts with cover images extracted from content if missing
+         const enhancedPosts = publishedPosts.map((post: any) => {
+           const blogPost = post as BlogPost
+           // If no coverImage or imageUrl, try to extract from content
+           if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
+             const extractedImage = extractFirstImageFromContent(blogPost.content)
+             if (extractedImage) {
+               blogPost.coverImage = extractedImage
+               console.log('✅ Extracted cover image for post:', blogPost.title)
+             }
+           }
+           return blogPost
+         })
+         
+         setPosts(enhancedPosts)
          
          if (publishedPosts.length === 0) {
            setError('No published blog posts found. Please create and publish some posts in the admin dashboard.')

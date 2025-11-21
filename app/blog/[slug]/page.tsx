@@ -65,6 +65,24 @@ export default function BlogPostPage() {
     }
   }, [post])
 
+  const extractFirstImageFromContent = (content: string): string | null => {
+    if (!content) return null
+    try {
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(content, 'text/html')
+      const firstImage = doc.querySelector('img')
+      if (firstImage) {
+        const imageSrc = firstImage.getAttribute('src')
+        if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
+          return imageSrc
+        }
+      }
+    } catch (error) {
+      console.warn('Error extracting image from content:', error)
+    }
+    return null
+  }
+
   const loadPost = async () => {
     try {
       setLoading(true)
@@ -74,7 +92,16 @@ export default function BlogPostPage() {
         const fetchedPost = await getBlogPostBySlug(slug)
         
         if (fetchedPost) {
-          setPost(fetchedPost as BlogPost)
+          const blogPost = fetchedPost as BlogPost
+          // Extract cover image from content if missing
+          if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
+            const extractedImage = extractFirstImageFromContent(blogPost.content)
+            if (extractedImage) {
+              blogPost.coverImage = extractedImage
+              console.log('✅ Extracted cover image for post:', blogPost.title)
+            }
+          }
+          setPost(blogPost)
           
           // Load related posts
           const allPosts = await getPublishedBlogPosts()
@@ -95,7 +122,16 @@ export default function BlogPostPage() {
         const foundPost = localPosts.find((post: any) => post.slug === slug && post.published)
         
         if (foundPost) {
-          setPost(foundPost as BlogPost)
+          const blogPost = foundPost as BlogPost
+          // Extract cover image from content if missing
+          if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
+            const extractedImage = extractFirstImageFromContent(blogPost.content)
+            if (extractedImage) {
+              blogPost.coverImage = extractedImage
+              console.log('✅ Extracted cover image for post:', blogPost.title)
+            }
+          }
+          setPost(blogPost)
           
           // Load related posts from localStorage
           const publishedPosts = localPosts.filter((post: any) => post.published && post.id !== foundPost.id)

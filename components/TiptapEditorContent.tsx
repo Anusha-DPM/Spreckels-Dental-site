@@ -132,9 +132,21 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
         if (response.ok) {
           const result = await response.json()
           if (result.url) {
+            console.log('✅ Image uploaded successfully, inserting into editor:', result.url)
             editor.chain().focus().setImage({ src: result.url }).run()
+            // Force update to ensure onChange is called
+            setTimeout(() => {
+              const html = editor.getHTML()
+              console.log('📝 Editor content after image insertion:', html)
+              onChange(html)
+            }, 100)
             return
+          } else {
+            console.warn('⚠️ Upload response missing URL:', result)
           }
+        } else {
+          const errorText = await response.text()
+          console.error('❌ Image upload failed:', response.status, errorText)
         }
       } catch (error) {
         console.warn('Image upload failed, using base64:', error)

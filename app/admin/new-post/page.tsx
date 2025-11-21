@@ -133,20 +133,41 @@ export default function NewPost() {
          // Continue with original content if processing fails
        }
 
-       // Extract first image from content if coverImage is not set
+       // Extract first image from content (prioritize content images over file upload)
        let finalCoverImage = coverImageUrl
-       if (!finalCoverImage && processedContent) {
+       if (processedContent) {
          const parser = new DOMParser()
          const doc = parser.parseFromString(processedContent, 'text/html')
-         const firstImage = doc.querySelector('img')
-         if (firstImage) {
-           const imageSrc = firstImage.getAttribute('src')
+         const images = doc.querySelectorAll('img')
+         console.log(`📸 Found ${images.length} image(s) in content`)
+         
+         // Find first valid image URL
+         for (let i = 0; i < images.length; i++) {
+           const img = images[i]
+           const imageSrc = img.getAttribute('src')
+           console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100))
+           
            if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
-             finalCoverImage = imageSrc
-             console.log('✅ Extracted cover image from content:', finalCoverImage)
+             // Prefer content images over file upload if no coverImage was explicitly set
+             if (!coverImageUrl || coverImageUrl === '') {
+               finalCoverImage = imageSrc
+               console.log('✅ Extracted cover image from content:', finalCoverImage)
+               break
+             } else {
+               // If coverImage exists, still log content images for reference
+               console.log('ℹ️ Cover image already set, but found image in content:', imageSrc)
+             }
            }
          }
        }
+       
+       // If still no cover image, use the file upload if available
+       if (!finalCoverImage && coverImageUrl) {
+         finalCoverImage = coverImageUrl
+         console.log('✅ Using uploaded cover image:', finalCoverImage)
+       }
+       
+       console.log('🎯 Final cover image:', finalCoverImage)
 
        const postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'> = {
          title: formData.title.trim(),
@@ -323,6 +344,18 @@ export default function NewPost() {
                   value={formData.content}
                   onChange={(value) => {
                     try {
+                      console.log('📝 Editor content changed, length:', value.length)
+                      // Check if content contains images
+                      const parser = new DOMParser()
+                      const doc = parser.parseFromString(value, 'text/html')
+                      const images = doc.querySelectorAll('img')
+                      if (images.length > 0) {
+                        console.log(`🖼️ Content contains ${images.length} image(s)`)
+                        images.forEach((img, idx) => {
+                          const src = img.getAttribute('src')
+                          console.log(`  Image ${idx + 1}:`, src?.substring(0, 100))
+                        })
+                      }
                       setFormData(prev => ({ ...prev, content: value }))
                     } catch (err) {
                       console.error('Error updating content:', err)
