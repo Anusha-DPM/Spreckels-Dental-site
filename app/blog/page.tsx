@@ -130,9 +130,15 @@ export default function BlogPage() {
       // Try to get posts from Firebase first
       try {
         const fetchedPosts = await getPublishedBlogPosts()
+        console.log('📥 Fetched posts from database:', fetchedPosts.length)
         // Enhance posts with cover images extracted from content if missing
         const enhancedPosts = fetchedPosts.map(post => {
           const blogPost = post as BlogPost
+          console.log(`📄 Post "${blogPost.title}":`, {
+            coverImage: blogPost.coverImage,
+            imageUrl: blogPost.imageUrl,
+            hasContent: !!blogPost.content
+          })
           // If no coverImage or imageUrl, try to extract from content
           if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
             const extractedImage = extractFirstImageFromContent(blogPost.content)

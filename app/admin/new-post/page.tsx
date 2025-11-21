@@ -136,44 +136,60 @@ export default function NewPost() {
          // Continue with original content if processing fails
        }
 
-       // Prioritize uploaded cover image, then extract from content if needed
-       let finalCoverImage = coverImageUrl
-       
-       // If no cover image was uploaded, try to extract from content
-       if (!finalCoverImage && processedContent) {
-         const parser = new DOMParser()
-         const doc = parser.parseFromString(processedContent, 'text/html')
-         const images = doc.querySelectorAll('img')
-         console.log(`📸 Found ${images.length} image(s) in content`)
-         
-         // Find first valid image URL
-         for (let i = 0; i < images.length; i++) {
-           const img = images[i]
-           const imageSrc = img.getAttribute('src')
-           console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100))
-           
-           if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
-             finalCoverImage = imageSrc
-             console.log('✅ Extracted cover image from content:', finalCoverImage)
-             break
-           }
-         }
-       }
-       
-       // Use imageUrl as final fallback
-       if (!finalCoverImage && formData.imageUrl) {
-         finalCoverImage = formData.imageUrl
-         console.log('✅ Using imageUrl as cover image:', finalCoverImage)
-       }
-       
-       console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage)
+      // Prioritize uploaded cover image - this is the main image for blog main and detail pages
+      let finalCoverImage = coverImageUrl
+      
+      // IMPORTANT: If image was uploaded, use it as cover image (for blog main and detail pages)
+      if (imageFile && coverImageUrl) {
+        finalCoverImage = coverImageUrl
+        console.log('✅ Using uploaded cover image for blog main and detail pages:', finalCoverImage)
+      } else {
+        // If no cover image was uploaded, try to extract from content
+        if (!finalCoverImage && processedContent) {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(processedContent, 'text/html')
+          const images = doc.querySelectorAll('img')
+          console.log(`📸 Found ${images.length} image(s) in content`)
+          
+          // Find first valid image URL
+          for (let i = 0; i < images.length; i++) {
+            const img = images[i]
+            const imageSrc = img.getAttribute('src')
+            console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100))
+            
+            if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
+              finalCoverImage = imageSrc
+              console.log('✅ Extracted cover image from content:', finalCoverImage)
+              break
+            }
+          }
+        }
+        
+        // Use imageUrl as final fallback
+        if (!finalCoverImage && formData.imageUrl) {
+          finalCoverImage = formData.imageUrl
+          console.log('✅ Using imageUrl as cover image:', finalCoverImage)
+        }
+      }
+      
+      console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage)
+       console.log('📋 Post data being saved:', {
+         title: formData.title.trim(),
+         coverImage: finalCoverImage,
+         imageUrl: formData.imageUrl.trim() || finalCoverImage,
+         hasContent: !!processedContent,
+         contentLength: processedContent?.length || 0
+       })
 
+       // IMPORTANT: coverImage will be displayed on:
+       // 1. Blog main page (/blog) - as thumbnail
+       // 2. Blog detail page (/blog/[slug]) - as featured image
        const postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'> = {
          title: formData.title.trim(),
          content: processedContent,
          excerpt: formData.excerpt.trim(),
-         coverImage: finalCoverImage,
-         imageUrl: formData.imageUrl.trim() || finalCoverImage,
+         coverImage: finalCoverImage || '', // DISPLAYS ON BLOG MAIN PAGE AND DETAIL PAGE
+         imageUrl: formData.imageUrl.trim() || finalCoverImage || '', // Fallback for compatibility
          tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
          categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
          metaTitle: formData.metaTitle.trim() || formData.title.trim(),
@@ -186,7 +202,10 @@ export default function NewPost() {
 
              // Try to create blog post
        try {
-         await createBlogPost(postData)
+         console.log('💾 Saving blog post to database with coverImage:', postData.coverImage)
+         const postId = await createBlogPost(postData)
+         console.log('✅ Blog post saved with ID:', postId)
+         console.log('📸 Cover image in saved post:', postData.coverImage)
          setSuccess('Blog post created successfully!')
          
          // Redirect to dashboard after a short delay
