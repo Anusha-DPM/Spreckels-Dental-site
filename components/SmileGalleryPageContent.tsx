@@ -23,6 +23,18 @@ export default function SmileGalleryPageContent() {
         {
           src: '/smile gallery/CopyofCopyofSUEHER1-COLLAGE.avif',
           alt: 'Cosmetic Dentistry Before & After'
+        },
+        {
+          src: '/smile gallery/pristine1-COLLAGE.avif',
+          alt: 'Cosmetic Dentistry Before & After'
+        },
+        {
+          src: '/smile gallery/CopyofCopyofM.avif',
+          alt: 'Cosmetic Dentistry Before & After'
+        },
+        {
+          src: '/smile gallery/CopyofCopyofN.avif',
+          alt: 'Cosmetic Dentistry Before & After'
         }
       ]
     },
@@ -40,23 +52,6 @@ export default function SmileGalleryPageContent() {
         {
           src: '/smile gallery/CopyofCopyofpristine10-COLLAGE.avif',
           alt: 'Dental Implants Before & After'
-        }
-      ]
-    },
-    {
-      title: 'Invisalign',
-      cases: [
-        {
-          src: '/smile gallery/pristine1-COLLAGE.avif',
-          alt: 'Invisalign Before & After'
-        },
-        {
-          src: '/smile gallery/CopyofCopyofM.avif',
-          alt: 'Invisalign Before & After'
-        },
-        {
-          src: '/smile gallery/CopyofCopyofN.avif',
-          alt: 'Invisalign Before & After'
         }
       ]
     }
