@@ -25,12 +25,6 @@ export default function DentalStaffTeamSection() {
       bgColor: "bg-green-200"
     },
     {
-      name: "Cassandra",
-      role: "Treatment Coordinator",
-      image: "/Cassandra.webp",
-      bgColor: "bg-blue-200"
-    },
-    {
       name: "Nicolas (Español)",
       role: "Dental Assistant",
       image: "/Nicolas (Español).webp",
