@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 export default function SimplePRFContent() {
   return (
@@ -30,11 +31,31 @@ export default function SimplePRFContent() {
             </div>
           </motion.div>
 
-          {/* Benefits of PRF */}
+          {/* PRF Image */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="relative w-full h-[400px] sm:h-[500px] lg:h-full min-h-[400px] rounded-2xl overflow-hidden shadow-xl"
+          >
+            <Image
+              src="/PRF.jpeg"
+              alt="Platelet Rich Fibrin Therapy"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
+            />
+          </motion.div>
+        </div>
+
+        {/* Benefits of PRF */}
+        <div className="mt-12 lg:mt-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
             className="space-y-6 text-center lg:text-left"
           >
