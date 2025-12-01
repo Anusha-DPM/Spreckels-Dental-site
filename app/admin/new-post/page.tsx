@@ -65,24 +65,66 @@ export default function NewPost() {
     // Check Firebase connection
     const checkFirebaseConnection = async () => {
       try {
+        // First check server-side status via API
+        try {
+          const diagnosticResponse = await fetch('/api/firebase-diagnostic')
+          const diagnostic = await diagnosticResponse.json()
+          
+          if (!diagnostic.validation?.allPresent) {
+            const missing = diagnostic.validation?.missing || []
+            setError(`Firebase environment variables missing: ${missing.join(', ')}. Please check your .env.local file and restart the server.`)
+            return
+          }
+          
+          if (!diagnostic.firebase?.initialized) {
+            setError(`Firebase initialization failed: ${diagnostic.firebase?.error || 'Unknown error'}. Please check your Firebase configuration and restart the server.`)
+            return
+          }
+          
+          console.log('✅ Server-side Firebase is configured correctly')
+        } catch (apiError) {
+          console.warn('Could not check server-side Firebase status:', apiError)
+        }
+        
+        // Check client-side Firebase
         const { db } = await import('../../../lib/firebase')
         if (!db) {
-          console.error('❌ Firebase db is null - checking environment variables...')
+          console.error('❌ Firebase db is null on client side')
           // Check if environment variables are available on client side
           const hasApiKey = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY
           const hasProjectId = !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
           
           if (!hasApiKey || !hasProjectId) {
-            setError('Firebase environment variables are missing. Please check your .env.local file and restart the server.')
+            setError(`Firebase environment variables are missing on client side. 
+
+CRITICAL: You MUST restart your Next.js server after updating .env.local!
+
+Steps:
+1. Stop server: Ctrl+C in terminal
+2. Start server: npm run dev
+3. Wait for "Ready on http://localhost:3000"
+4. Refresh this page
+
+Visit /api/firebase-diagnostic to check server-side status.`)
           } else {
-            setError('Firebase is not connected. Please check your Firebase configuration and restart the development server.')
+            setError(`Firebase is not initialized on client side, but environment variables are present. 
+
+This might be a configuration issue. Please:
+1. Check browser console for detailed errors
+2. Visit /api/firebase-diagnostic to verify server-side configuration
+3. Restart your development server if you recently updated .env.local`)
           }
         } else {
-          console.log('✅ Firebase connection verified')
+          console.log('✅ Firebase connection verified (client-side)')
         }
       } catch (err: any) {
         console.error('Firebase connection check failed:', err)
-        setError(`Firebase connection failed: ${err?.message || 'Unknown error'}. Please check your configuration and restart the server.`)
+        setError(`Firebase connection check failed: ${err?.message || 'Unknown error'}. 
+
+Please:
+1. Check your .env.local file has all NEXT_PUBLIC_FIREBASE_* variables
+2. Restart your development server
+3. Visit /api/firebase-diagnostic to see detailed status`)
       }
     }
 
@@ -167,10 +209,25 @@ export default function NewPost() {
           
           // Provide more helpful error message for Firebase configuration issues
           if (errorMessage.includes('Firebase Storage is not configured') || errorMessage.includes('Missing environment variables')) {
-            errorMessage = 'Firebase Storage is not configured. Please check your .env.local file and ensure all NEXT_PUBLIC_FIREBASE_* environment variables are set. See firebase-env-template.txt for reference.';
+            errorMessage = `Firebase Storage is not configured. 
+
+CRITICAL: You MUST restart your Next.js server after updating .env.local!
+
+Steps to fix:
+1. Stop your server (Ctrl+C in the terminal)
+2. Start it again: npm run dev
+3. Wait for "Ready on http://localhost:3000"
+4. Try uploading again
+
+If the error persists, visit /api/firebase-diagnostic to see detailed configuration status.
+
+Make sure your .env.local file has all NEXT_PUBLIC_FIREBASE_* variables set.`;
           }
           
-          setError(`Image upload failed: ${errorMessage}. Please try again or use an image URL instead.`);
+          setError(`Image upload failed: ${errorMessage}
+
+💡 Tip: Visit /api/firebase-diagnostic to check your Firebase configuration.
+💡 Or use an image URL instead of uploading a file.`);
           setLoading(false);
           throw new Error(`Image upload failed: ${errorMessage}`);
         }

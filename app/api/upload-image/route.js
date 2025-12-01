@@ -168,10 +168,42 @@ export async function POST(request) {
     
     // Upload to Firebase Storage
     console.log('🚀 Starting upload to Firebase Storage...')
-    const snapshot = await uploadBytes(storageRef, buffer, {
+    console.log('📋 Upload details:', {
+      bucket: firebaseConfig.storageBucket,
+      path: fileName,
+      size: buffer.length,
       contentType: file.type
     })
-    console.log('✅ Upload bytes successful')
+    
+    try {
+      const snapshot = await uploadBytes(storageRef, buffer, {
+        contentType: file.type
+      })
+      console.log('✅ Upload bytes successful')
+    } catch (uploadError) {
+      // Log detailed error information
+      console.error('❌ Upload bytes failed:', uploadError)
+      console.error('Error type:', typeof uploadError)
+      console.error('Error constructor:', uploadError?.constructor?.name)
+      console.error('Error keys:', Object.keys(uploadError || {}))
+      
+      // Try to extract more information
+      if (uploadError?.customData) {
+        console.error('Custom data:', JSON.stringify(uploadError.customData, null, 2))
+      }
+      if (uploadError?.serverResponse) {
+        console.error('Server response:', uploadError.serverResponse)
+      }
+      if (uploadError?.status) {
+        console.error('HTTP status:', uploadError.status)
+      }
+      if (uploadError?.statusText) {
+        console.error('HTTP status text:', uploadError.statusText)
+      }
+      
+      // Re-throw to be caught by outer catch
+      throw uploadError
+    }
     
     // Get download URL
     const downloadURL = await getDownloadURL(snapshot.ref)
@@ -192,18 +224,47 @@ export async function POST(request) {
   } catch (error) {
     console.error('❌ Server-side upload error:', error)
     console.error('Error stack:', error.stack)
-    console.error('Error details:', {
+    console.error('Error type:', typeof error)
+    console.error('Error constructor:', error?.constructor?.name)
+    
+    // Try to extract all possible error information for logging
+    const errorInfo = {
       message: error.message,
       name: error.name,
-      code: error.code,
-      customData: error.customData,
-      status: error.customData?.status,
-      serverResponse: error.customData?.serverResponse
-    })
+      code: error.code
+    }
     
-    // Log full error object for debugging
+    // Check for customData
     if (error.customData) {
+      errorInfo.customData = error.customData
+      errorInfo.status = error.customData?.status
+      errorInfo.serverResponse = error.customData?.serverResponse
       console.error('Custom error data:', JSON.stringify(error.customData, null, 2))
+    } else {
+      console.warn('⚠️ No customData in error object')
+    }
+    
+    // Check for serverResponse directly on error
+    if (error.serverResponse) {
+      errorInfo.serverResponse = error.serverResponse
+      console.error('Server response (direct):', error.serverResponse)
+    }
+    
+    // Check for status directly on error
+    if (error.status) {
+      errorInfo.status = error.status
+      console.error('HTTP status (direct):', error.status)
+    }
+    
+    // Try to get all properties
+    console.error('All error properties:', Object.keys(error))
+    console.error('Error info:', errorInfo)
+    
+    // Try to stringify the entire error (may fail, but worth trying)
+    try {
+      console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    } catch (stringifyError) {
+      console.error('Could not stringify error:', stringifyError)
     }
     
     // Provide more specific error messages
@@ -212,7 +273,7 @@ export async function POST(request) {
     
     // Check for specific Firebase Storage error codes
     if (error.code === 'storage/unknown') {
-      const status = error.customData?.status
+      const status = error.customData?.status || error.status
       if (status === 404) {
         errorMessage = 'Firebase Storage bucket not found'
         errorDetails = `The storage bucket "${firebaseConfig.storageBucket}" was not found. Please verify:
@@ -222,7 +283,23 @@ export async function POST(request) {
 4. The storageBucket value should be in format: "your-project-id.appspot.com"`
       } else if (status === 403) {
         errorMessage = 'Firebase Storage permission denied'
-        errorDetails = 'Check Firebase Storage security rules. The storage rules may be blocking the upload.'
+        errorDetails = 'Check Firebase Storage security rules. The storage rules may be blocking the upload. Visit Firebase Console → Storage → Rules and ensure writes are allowed.'
+      } else if (status === 500 || status === 503) {
+        errorMessage = 'Firebase Storage server error'
+        errorDetails = `Firebase Storage returned a ${status} error. This could mean:
+1. Storage bucket permissions are incorrect
+2. Storage bucket is not properly configured
+3. Firebase Storage service is temporarily unavailable
+4. Check Firebase Console → Storage → Rules to ensure writes are allowed
+5. Verify the storage bucket exists and is accessible`
+      } else if (!error.customData || Object.keys(error.customData).length === 0) {
+        errorMessage = 'Firebase Storage error (empty response)'
+        errorDetails = `Firebase Storage returned an error with no details (status: ${status || 'unknown'}). This usually means:
+1. Storage bucket permissions issue - check Firebase Console → Storage → Rules
+2. Storage bucket doesn't exist or is misconfigured
+3. Network/firewall blocking the request
+4. Verify storageBucket in .env.local: "${firebaseConfig.storageBucket}"
+5. Visit Firebase Console → Storage to verify the bucket exists`
       } else {
         errorMessage = 'Firebase Storage error'
         errorDetails = `Error code: ${error.code}, Status: ${status || 'unknown'}. ${error.message}`

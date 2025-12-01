@@ -185,10 +185,25 @@ export default function EditPost() {
           
           // Provide more helpful error message for Firebase configuration issues
           if (errorMessage.includes('Firebase Storage is not configured') || errorMessage.includes('Missing environment variables')) {
-            errorMessage = 'Firebase Storage is not configured. Please check your .env.local file and ensure all NEXT_PUBLIC_FIREBASE_* environment variables are set. See firebase-env-template.txt for reference.';
+            errorMessage = `Firebase Storage is not configured. 
+
+CRITICAL: You MUST restart your Next.js server after updating .env.local!
+
+Steps to fix:
+1. Stop your server (Ctrl+C in the terminal)
+2. Start it again: npm run dev
+3. Wait for "Ready on http://localhost:3000"
+4. Try uploading again
+
+If the error persists, visit /api/firebase-diagnostic to see detailed configuration status.
+
+Make sure your .env.local file has all NEXT_PUBLIC_FIREBASE_* variables set.`;
           }
           
-          setError(`Image upload failed: ${errorMessage}. Please try again or use an image URL instead.`);
+          setError(`Image upload failed: ${errorMessage}
+
+💡 Tip: Visit /api/firebase-diagnostic to check your Firebase configuration.
+💡 Or use an image URL instead of uploading a file.`);
           setSaving(false);
           throw new Error(`Image upload failed: ${errorMessage}`);
         }
