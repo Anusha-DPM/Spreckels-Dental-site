@@ -91,55 +91,54 @@ export default function NewPost() {
     setSuccess('')
 
     try {
-      let coverImageUrl = formData.coverImage || formData.imageUrl || ''
+      let coverImageUrl = formData.coverImage || formData.imageUrl || '';
 
-             // Validate required fields
-       if (!formData.title.trim()) {
-         throw new Error('Post title is required')
-       }
-       
-       if (!formData.content.trim()) {
-         throw new Error('Post content is required')
-       }
+      // Validate required fields
+      if (!formData.title.trim()) {
+        throw new Error('Post title is required');
+      }
+      
+      if (!formData.content.trim()) {
+        throw new Error('Post content is required');
+      }
 
-       // Process content to upload any base64 images to Firebase
-       let processedContent = formData.content
-       try {
-         processedContent = await processContentImages(formData.content)
-       } catch (contentError) {
-         console.warn('Content image processing failed, using original content:', contentError)
-         // Continue with original content if processing fails
-       }
+      // Process content to upload any base64 images to Firebase
+      let processedContent = formData.content;
+      try {
+        processedContent = await processContentImages(formData.content);
+      } catch (contentError) {
+        console.warn('Content image processing failed, using original content:', contentError);
+        // Continue with original content if processing fails
+      }
 
       // Use cover image URL - this is the main image for blog main and detail pages
-      let finalCoverImage = coverImageUrl
+      let finalCoverImage = coverImageUrl;
       
       // If no cover image URL provided, try to extract from content
       if (!finalCoverImage && processedContent) {
-          const parser = new DOMParser()
-          const doc = parser.parseFromString(processedContent, 'text/html')
-          const images = doc.querySelectorAll('img')
-          console.log(`📸 Found ${images.length} image(s) in content`)
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(processedContent, 'text/html');
+        const images = doc.querySelectorAll('img');
+        console.log(`📸 Found ${images.length} image(s) in content`);
+        
+        // Find first valid image URL
+        for (let i = 0; i < images.length; i++) {
+          const img = images[i];
+          const imageSrc = img.getAttribute('src');
+          console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100));
           
-          // Find first valid image URL
-          for (let i = 0; i < images.length; i++) {
-            const img = images[i]
-            const imageSrc = img.getAttribute('src')
-            console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100))
-            
-            if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
-              finalCoverImage = imageSrc
-              console.log('✅ Extracted cover image from content:', finalCoverImage)
-              break
-            }
+          if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
+            finalCoverImage = imageSrc;
+            console.log('✅ Extracted cover image from content:', finalCoverImage);
+            break;
           }
         }
-        
-        // Use imageUrl as final fallback
-        if (!finalCoverImage && formData.imageUrl) {
-          finalCoverImage = formData.imageUrl
-          console.log('✅ Using imageUrl as cover image:', finalCoverImage)
-        }
+      }
+      
+      // Use imageUrl as final fallback
+      if (!finalCoverImage && formData.imageUrl) {
+        finalCoverImage = formData.imageUrl;
+        console.log('✅ Using imageUrl as cover image:', finalCoverImage);
       }
       
       console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage);
@@ -151,83 +150,83 @@ export default function NewPost() {
         contentLength: processedContent?.length || 0
       });
 
-       // IMPORTANT: coverImage will be displayed on:
-       // 1. Blog main page (/blog) - as thumbnail
-       // 2. Blog detail page (/blog/[slug]) - as featured image
-       const postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'> = {
-         title: formData.title.trim(),
-         content: processedContent,
-         excerpt: formData.excerpt.trim(),
-         coverImage: finalCoverImage || '', // DISPLAYS ON BLOG MAIN PAGE AND DETAIL PAGE
-         imageUrl: formData.imageUrl.trim() || finalCoverImage || '', // Fallback for compatibility
-         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-         categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
-         metaTitle: formData.metaTitle.trim() || formData.title.trim(),
-         metaDescription: formData.metaDescription.trim() || formData.excerpt.trim(),
-         slug: generateSlug(formData.title),
-         published: formData.published,
-         publishDate: formData.published ? formData.publishDate : new Date().toISOString(),
-         author: 'Admin'
-       };
+      // IMPORTANT: coverImage will be displayed on:
+      // 1. Blog main page (/blog) - as thumbnail
+      // 2. Blog detail page (/blog/[slug]) - as featured image
+      const postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'> = {
+        title: formData.title.trim(),
+        content: processedContent,
+        excerpt: formData.excerpt.trim(),
+        coverImage: finalCoverImage || '', // DISPLAYS ON BLOG MAIN PAGE AND DETAIL PAGE
+        imageUrl: formData.imageUrl.trim() || finalCoverImage || '', // Fallback for compatibility
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+        categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
+        metaTitle: formData.metaTitle.trim() || formData.title.trim(),
+        metaDescription: formData.metaDescription.trim() || formData.excerpt.trim(),
+        slug: generateSlug(formData.title),
+        published: formData.published,
+        publishDate: formData.published ? formData.publishDate : new Date().toISOString(),
+        author: 'Admin'
+      };
 
       // Try to create blog post
       try {
-         console.log('💾 Saving blog post to database with coverImage:', postData.coverImage)
-         const postId = await createBlogPost(postData)
-         console.log('✅ Blog post saved with ID:', postId)
-         console.log('📸 Cover image in saved post:', postData.coverImage)
-         setSuccess('Blog post created successfully!')
-         
-         // Redirect to dashboard after a short delay
-         setTimeout(() => {
-           router.push('/admin/dashboard')
-         }, 2000)
-       } catch (dbError: any) {
-         console.error('Database error:', dbError)
-         
-         // If Firebase is not configured, show a temporary success message
-         if (dbError.message?.includes('Firebase') || dbError.message?.includes('not initialized')) {
-           // Save to localStorage as a temporary fallback for testing
-           try {
-             const existingPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
-             const newPost = {
-               ...postData,
-               id: Date.now().toString(),
-               createdAt: new Date().toISOString(),
-               updatedAt: new Date().toISOString()
-             }
-             existingPosts.unshift(newPost)
-             localStorage.setItem('tempBlogPosts', JSON.stringify(existingPosts))
-             
-             setSuccess('Blog post saved locally! (Firebase not configured - using temporary storage)')
-             console.log('Blog post saved to localStorage:', newPost)
-           } catch (localError) {
-             setSuccess('Blog post prepared successfully! (Firebase not configured - post not saved)')
-             console.log('Blog post data that would be saved:', postData)
-           }
-           
-           setTimeout(() => {
-             router.push('/admin/dashboard')
-           }, 3000)
-         } else {
-           throw dbError; // Re-throw other database errors
-         }
-       }
+        console.log('💾 Saving blog post to database with coverImage:', postData.coverImage);
+        const postId = await createBlogPost(postData);
+        console.log('✅ Blog post saved with ID:', postId);
+        console.log('📸 Cover image in saved post:', postData.coverImage);
+        setSuccess('Blog post created successfully!');
+        
+        // Redirect to dashboard after a short delay
+        setTimeout(() => {
+          router.push('/admin/dashboard');
+        }, 2000);
+      } catch (dbError: any) {
+        console.error('Database error:', dbError);
+        
+        // If Firebase is not configured, show a temporary success message
+        if (dbError.message?.includes('Firebase') || dbError.message?.includes('not initialized')) {
+          // Save to localStorage as a temporary fallback for testing
+          try {
+            const existingPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]');
+            const newPost = {
+              ...postData,
+              id: Date.now().toString(),
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            };
+            existingPosts.unshift(newPost);
+            localStorage.setItem('tempBlogPosts', JSON.stringify(existingPosts));
+            
+            setSuccess('Blog post saved locally! (Firebase not configured - using temporary storage)');
+            console.log('Blog post saved to localStorage:', newPost);
+          } catch (localError) {
+            setSuccess('Blog post prepared successfully! (Firebase not configured - post not saved)');
+            console.log('Blog post data that would be saved:', postData);
+          }
+          
+          setTimeout(() => {
+            router.push('/admin/dashboard');
+          }, 3000);
+        } else {
+          throw dbError; // Re-throw other database errors
+        }
+      }
     } catch (err: any) {
-      console.error('Blog post creation error:', err)
+      console.error('Blog post creation error:', err);
       
       // Provide more specific error messages
       if (err.message?.includes('Firebase')) {
-        setError('Firebase connection error. Please check your Firebase configuration in .env.local file.')
+        setError('Firebase connection error. Please check your Firebase configuration in .env.local file.');
       } else if (err.message?.includes('permission')) {
-        setError('Permission denied. Please check your Firebase security rules.')
+        setError('Permission denied. Please check your Firebase security rules.');
       } else if (err.message?.includes('network')) {
-        setError('Network error. Please check your internet connection.')
+        setError('Network error. Please check your internet connection.');
       } else {
-        setError(`Failed to create blog post: ${err.message || 'Unknown error'}`)
+        setError(`Failed to create blog post: ${err.message || 'Unknown error'}`);
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -331,23 +330,23 @@ export default function NewPost() {
                   value={formData.content}
                   onChange={(value) => {
                     try {
-                      console.log('📝 Editor content changed, length:', value.length)
+                      console.log('📝 Editor content changed, length:', value.length);
                       // Check if content contains images
-                      const parser = new DOMParser()
-                      const doc = parser.parseFromString(value, 'text/html')
-                      const images = doc.querySelectorAll('img')
+                      const parser = new DOMParser();
+                      const doc = parser.parseFromString(value, 'text/html');
+                      const images = doc.querySelectorAll('img');
                       if (images.length > 0) {
-                        console.log(`🖼️ Content contains ${images.length} image(s)`)
+                        console.log(`🖼️ Content contains ${images.length} image(s)`);
                         images.forEach((img, idx) => {
-                          const src = img.getAttribute('src')
-                          console.log(`  Image ${idx + 1}:`, src?.substring(0, 100))
-                        })
+                          const src = img.getAttribute('src');
+                          console.log(`  Image ${idx + 1}:`, src?.substring(0, 100));
+                        });
                       }
-                      setFormData(prev => ({ ...prev, content: value }))
+                      setFormData(prev => ({ ...prev, content: value }));
                     } catch (err) {
-                      console.error('Error updating content:', err)
-                      setError('Error updating content. Please try again.')
-                      setUseSimpleEditor(true)
+                      console.error('Error updating content:', err);
+                      setError('Error updating content. Please try again.');
+                      setUseSimpleEditor(true);
                     }
                   }}
                   placeholder="Start writing your blog post..."
