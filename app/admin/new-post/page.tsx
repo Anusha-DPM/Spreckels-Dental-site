@@ -136,14 +136,26 @@ export default function NewPost() {
       // Upload cover image if file is selected (for blog main page and detail page)
       if (imageFile) {
         try {
-          console.log('📤 Uploading cover image file...');
+          console.log('📤 Uploading cover image file to Firebase...', {
+            fileName: imageFile.name,
+            fileSize: imageFile.size,
+            fileType: imageFile.type
+          });
           const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images');
+          
+          if (!uploadResult || !uploadResult.url) {
+            throw new Error('Upload succeeded but no URL returned');
+          }
+          
           coverImageUrl = uploadResult.url;
-          console.log('✅ Cover image uploaded successfully:', coverImageUrl);
-        } catch (uploadError) {
-          console.warn('❌ Cover image upload failed, continuing without image:', uploadError);
-          // Continue without the image upload - use existing coverImage or imageUrl
-          coverImageUrl = formData.coverImage || formData.imageUrl || '';
+          console.log('✅ Cover image uploaded successfully to Firebase:', coverImageUrl);
+          console.log('📊 Upload result:', uploadResult);
+        } catch (uploadError: any) {
+          console.error('❌ Cover image upload failed:', uploadError);
+          const errorMessage = uploadError?.message || 'Failed to upload image to Firebase';
+          setError(`Image upload failed: ${errorMessage}. Please try again or use an image URL instead.`);
+          setLoading(false);
+          throw new Error(`Image upload failed: ${errorMessage}`);
         }
       }
 
@@ -213,8 +225,14 @@ export default function NewPost() {
         coverImage: finalCoverImage,
         imageUrl: formData.imageUrl.trim() || finalCoverImage,
         hasContent: !!processedContent,
-        contentLength: processedContent?.length || 0
+        contentLength: processedContent?.length || 0,
+        hasImageFile: !!imageFile
       });
+
+      // Validate that if imageFile was selected, we have a valid URL
+      if (imageFile && (!finalCoverImage || finalCoverImage.trim() === '')) {
+        throw new Error('Image file was selected but upload failed. Please try uploading again or use an image URL instead.');
+      }
 
       // IMPORTANT: coverImage will be displayed on:
       // 1. Blog main page (/blog) - as thumbnail
