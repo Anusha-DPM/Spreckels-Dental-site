@@ -28,6 +28,7 @@ interface BlogPost {
 }
 
 import { processContentImages } from '../../../../lib/processContentImages'
+import { uploadImageSimple } from '../../../../lib/uploadImageSimple'
 
 export default function EditPost() {
   const [formData, setFormData] = useState({
@@ -48,6 +49,9 @@ export default function EditPost() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState('')
+  const [uploading, setUploading] = useState(false)
   const [originalPost, setOriginalPost] = useState<BlogPost | null>(null)
   const router = useRouter()
   const params = useParams()
@@ -116,6 +120,38 @@ export default function EditPost() {
 
     try {
       let coverImageUrl = formData.imageUrl || formData.coverImage || '';
+
+      // Upload image if file is selected (using simple upload method)
+      if (imageFile) {
+        try {
+          setUploading(true)
+          console.log('📤 Uploading image using simple method...', {
+            fileName: imageFile.name,
+            fileSize: imageFile.size,
+            fileType: imageFile.type
+          });
+          
+          const uploadResult = await uploadImageSimple(imageFile, 'blog-images');
+          
+          if (!uploadResult || !uploadResult.url) {
+            throw new Error('Upload succeeded but no URL returned');
+          }
+          
+          coverImageUrl = uploadResult.url;
+          console.log('✅ Image uploaded successfully:', coverImageUrl);
+          
+          // Update formData with the uploaded URL
+          setFormData(prev => ({ ...prev, imageUrl: coverImageUrl }));
+        } catch (uploadError: any) {
+          console.error('❌ Image upload failed:', uploadError);
+          setError(`Image upload failed: ${uploadError?.message || 'Unknown error'}. You can still use an image URL instead.`);
+          setUploading(false);
+          setSaving(false);
+          return;
+        } finally {
+          setUploading(false)
+        }
+      }
 
       // Process content to upload any base64 images to Firebase
       let processedContent = formData.content;
@@ -359,41 +395,124 @@ export default function EditPost() {
             />
           </div>
 
-          {/* Cover Image URL - for blog main page and detail page */}
-          <div>
-            <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
-              Cover Image URL *
-            </label>
-            <p className="text-xs text-gray-500 mb-2">
-              Enter the URL of the cover image. This image will display on the blog main page and blog detail page.
-            </p>
-            <input
-              type="url"
-              id="imageUrl"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleInputChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-              placeholder="https://example.com/image.jpg"
-            />
-            {formData.imageUrl && (
-              <div className="mt-3">
-                <p className="text-xs text-gray-600 mb-2">Preview:</p>
-                <img 
-                  src={formData.imageUrl} 
-                  alt="Cover preview" 
-                  className="h-48 w-auto rounded-lg border border-gray-200 object-cover" 
-                  onError={(e) => {
-                    console.error('❌ Preview image failed to load');
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
+          {/* Cover Image - Upload or URL */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Upload Option */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Upload Cover Image
+              </label>
+              <p className="text-xs text-gray-500 mb-2">
+                Upload an image file (max 5MB). This image will display on the blog main page and detail page.
+              </p>
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  id="coverImage"
+                  name="coverImage"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={uploading}
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const fileInput = document.getElementById('coverImage') as HTMLInputElement;
+                    if (fileInput) {
+                      fileInput.click();
+                    }
+                  }}
+                  disabled={uploading}
+                  className="inline-flex items-center justify-center w-full px-4 py-2 bg-[#441018] text-white text-sm font-semibold rounded-lg hover:bg-[#5a1a2a] cursor-pointer transition-colors duration-200 border border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                      Choose Image File
+                    </>
+                  )}
+                </button>
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img 
+                      src={imagePreview} 
+                      alt="Preview" 
+                      className="h-32 w-auto rounded-lg border border-gray-200" 
+                      onError={(e) => {
+                        console.error('❌ Preview image failed to load');
+                        setImagePreview('');
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImageFile(null);
+                        setImagePreview('');
+                        const fileInput = document.getElementById('coverImage') as HTMLInputElement;
+                        if (fileInput) {
+                          fileInput.value = '';
+                        }
+                      }}
+                      className="mt-2 text-sm text-red-600 hover:text-red-800"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+                {imageFile && (
+                  <p className="mt-2 text-xs text-gray-600">
+                    Selected: {imageFile.name} ({(imageFile.size / 1024 / 1024).toFixed(2)} MB)
+                  </p>
+                )}
               </div>
-            )}
-            <p className="text-xs text-gray-500 mt-2">
-              💡 Tip: You can also add images using the image button in the editor above
-            </p>
+            </div>
+
+            {/* URL Option */}
+            <div>
+              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                Or Enter Image URL
+              </label>
+              <p className="text-xs text-gray-500 mb-2">
+                Paste an image URL instead of uploading
+              </p>
+              <input
+                type="url"
+                id="imageUrl"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                placeholder="https://example.com/image.jpg"
+              />
+              {formData.imageUrl && !imageFile && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-600 mb-2">Preview:</p>
+                  <img 
+                    src={formData.imageUrl} 
+                    alt="Cover preview" 
+                    className="h-32 w-auto rounded-lg border border-gray-200 object-cover" 
+                    onError={(e) => {
+                      console.error('❌ Preview image failed to load');
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
+              <p className="text-xs text-gray-500 mt-2">
+                💡 Tip: You can also add images using the image button in the editor above
+              </p>
+            </div>
           </div>
 
           {/* Tags and Categories */}
