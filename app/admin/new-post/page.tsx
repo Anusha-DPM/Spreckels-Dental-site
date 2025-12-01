@@ -168,10 +168,10 @@ export default function NewPost() {
          published: formData.published,
          publishDate: formData.published ? formData.publishDate : new Date().toISOString(),
          author: 'Admin'
-       }
+       };
 
-             // Try to create blog post
-       try {
+      // Try to create blog post
+      try {
          console.log('💾 Saving blog post to database with coverImage:', postData.coverImage)
          const postId = await createBlogPost(postData)
          console.log('✅ Blog post saved with ID:', postId)
@@ -210,9 +210,9 @@ export default function NewPost() {
              router.push('/admin/dashboard')
            }, 3000)
          } else {
-           throw dbError // Re-throw other database errors
-        }
-      }
+           throw dbError; // Re-throw other database errors
+         }
+       }
     } catch (err: any) {
       console.error('Blog post creation error:', err)
       
