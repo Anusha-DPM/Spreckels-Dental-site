@@ -89,11 +89,6 @@ export default function EditPost() {
         published: blogPost.published,
         publishDate: blogPost.published ? blogPost.publishDate.split('T')[0] : new Date().toISOString().split('T')[0]
       })
-      
-      // Set image preview if cover image exists
-      if (blogPost.coverImage) {
-        setImagePreview(blogPost.coverImage);
-      }
 
     } catch (err) {
       setError('Failed to load post')
