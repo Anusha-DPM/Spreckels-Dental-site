@@ -33,14 +33,6 @@ export default function OfficeGallerySection() {
       features: ["Private consultations", "Treatment planning", "Digital displays", "Comfortable seating"]
     },
     {
-      src: "/office4.jpg",
-      alt: "Dental office facility",
-      title: "Modern Facility",
-      subtitle: "State-of-the-Art Design",
-      description: "Our modern dental facility combines advanced technology with a welcoming atmosphere to provide the best patient experience.",
-      features: ["Modern design", "Advanced equipment", "Comfortable environment", "Professional care"]
-    },
-    {
       src: "/office5.jpeg",
       alt: "Dental office interior",
       title: "Comfortable Interior",
