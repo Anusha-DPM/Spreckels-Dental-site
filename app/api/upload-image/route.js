@@ -12,18 +12,54 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 }
 
-// Initialize Firebase
-let app
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig)
-} else {
-  app = getApps()[0]
+// Validate Firebase configuration
+const validateFirebaseConfig = () => {
+  const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId']
+  const missingFields = requiredFields.filter(field => !firebaseConfig[field])
+  
+  if (missingFields.length > 0) {
+    console.error('❌ Missing Firebase configuration:', missingFields)
+    return false
+  }
+  return true
 }
 
-const storage = getStorage(app)
+// Initialize Firebase
+let app = null
+let storage = null
+
+try {
+  if (validateFirebaseConfig()) {
+    if (!getApps().length) {
+      app = initializeApp(firebaseConfig)
+      console.log('✅ Firebase initialized in API route')
+    } else {
+      app = getApps()[0]
+    }
+    storage = getStorage(app)
+  } else {
+    console.error('❌ Firebase configuration invalid. Cannot initialize storage.')
+  }
+} catch (error) {
+  console.error('❌ Firebase initialization error:', error)
+  app = null
+  storage = null
+}
 
 export async function POST(request) {
   try {
+    // Check if Firebase Storage is initialized
+    if (!storage) {
+      console.error('❌ Firebase Storage is not initialized')
+      return NextResponse.json(
+        { 
+          error: 'Firebase Storage is not configured. Please check your environment variables.',
+          details: 'Missing or invalid Firebase configuration'
+        },
+        { status: 500 }
+      )
+    }
+
     const formData = await request.formData()
     const file = formData.get('file')
     const folder = formData.get('folder') || 'images'
@@ -91,11 +127,34 @@ export async function POST(request) {
     })
 
   } catch (error) {
-    console.error('Server-side upload error:', error)
+    console.error('❌ Server-side upload error:', error)
+    console.error('Error stack:', error.stack)
+    console.error('Error details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code
+    })
+    
+    // Provide more specific error messages
+    let errorMessage = 'Upload failed'
+    let errorDetails = error.message || 'Unknown error'
+    
+    if (error.message?.includes('storage/')) {
+      errorMessage = 'Firebase Storage error'
+      errorDetails = error.message
+    } else if (error.message?.includes('permission') || error.message?.includes('unauthorized')) {
+      errorMessage = 'Permission denied'
+      errorDetails = 'Check Firebase Storage security rules'
+    } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
+      errorMessage = 'Network error'
+      errorDetails = 'Failed to connect to Firebase Storage'
+    }
+    
     return NextResponse.json(
       { 
-        error: 'Upload failed', 
-        details: error.message 
+        error: errorMessage, 
+        details: errorDetails,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
       },
       { status: 500 }
     )
