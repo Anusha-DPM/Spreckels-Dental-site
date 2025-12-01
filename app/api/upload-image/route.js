@@ -276,11 +276,26 @@ export async function POST(request) {
       const status = error.customData?.status || error.status
       if (status === 404) {
         errorMessage = 'Firebase Storage bucket not found'
-        errorDetails = `The storage bucket "${firebaseConfig.storageBucket}" was not found. Please verify:
-1. The storage bucket name in .env.local matches your Firebase project
-2. Firebase Storage is enabled in your Firebase Console
-3. The bucket exists in your Firebase project
-4. The storageBucket value should be in format: "your-project-id.appspot.com"`
+        const projectId = firebaseConfig.projectId || 'your-project-id'
+        const expectedBucket1 = `${projectId}.appspot.com`
+        const expectedBucket2 = `${projectId}.firebasestorage.app`
+        errorDetails = `The storage bucket "${firebaseConfig.storageBucket || 'not set'}" was not found.
+
+QUICK FIX:
+1. Go to Firebase Console: https://console.firebase.google.com/
+2. Select your project
+3. Go to "Storage" in the left sidebar
+4. If you see "Get started", click it to enable Storage
+5. Copy the EXACT bucket name shown (could be: ${expectedBucket1} or ${expectedBucket2})
+6. Update your .env.local file:
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=sprekels-dental.firebasestorage.app
+7. Restart your server (Ctrl+C, then npm run dev)
+
+IMPORTANT:
+- Bucket name format can be: "project-id.appspot.com" OR "project-id.firebasestorage.app"
+- No gs:// prefix
+- Must match EXACTLY what's shown in Firebase Console
+- Visit /api/firebase-diagnostic to check your current configuration`
       } else if (status === 403) {
         errorMessage = 'Firebase Storage permission denied'
         errorDetails = 'Check Firebase Storage security rules. The storage rules may be blocking the upload. Visit Firebase Console → Storage → Rules and ensure writes are allowed.'
