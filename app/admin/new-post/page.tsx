@@ -140,6 +140,34 @@ Please:
     }))
   }
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0]
+      if (!file) {
+        return
+      }
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select an image file')
+        return
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size must be less than 5MB')
+        return
+      }
+
+      setImageFile(file)
+      const previewUrl = URL.createObjectURL(file)
+      setImagePreview(previewUrl)
+      setError('')
+    } catch (error) {
+      console.error('❌ Error handling image upload:', error)
+      setError('Failed to process image. Please try again.')
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -149,6 +177,38 @@ Please:
 
     try {
       let coverImageUrl = formData.imageUrl || formData.coverImage || '';
+
+      // Upload image if file is selected (using simple upload method)
+      if (imageFile) {
+        try {
+          setUploading(true)
+          console.log('📤 Uploading image using simple method...', {
+            fileName: imageFile.name,
+            fileSize: imageFile.size,
+            fileType: imageFile.type
+          });
+          
+          const uploadResult = await uploadImageSimple(imageFile, 'blog-images');
+          
+          if (!uploadResult || !uploadResult.url) {
+            throw new Error('Upload succeeded but no URL returned');
+          }
+          
+          coverImageUrl = uploadResult.url;
+          console.log('✅ Image uploaded successfully:', coverImageUrl);
+          
+          // Update formData with the uploaded URL
+          setFormData(prev => ({ ...prev, imageUrl: coverImageUrl }));
+        } catch (uploadError: any) {
+          console.error('❌ Image upload failed:', uploadError);
+          setError(`Image upload failed: ${uploadError?.message || 'Unknown error'}. You can still use an image URL instead.`);
+          setUploading(false);
+          setLoading(false);
+          return;
+        } finally {
+          setUploading(false)
+        }
+      }
 
       // Validate required fields
       if (!formData.title.trim()) {
