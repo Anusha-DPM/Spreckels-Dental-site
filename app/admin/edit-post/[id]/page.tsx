@@ -27,7 +27,6 @@ interface BlogPost {
   author?: string
 }
 
-import { uploadImageToFirebase } from '../../../../lib/firebase'
 import { processContentImages } from '../../../../lib/processContentImages'
 
 export default function EditPost() {
@@ -49,8 +48,6 @@ export default function EditPost() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState('')
   const [originalPost, setOriginalPost] = useState<BlogPost | null>(null)
   const router = useRouter()
   const params = useParams()
@@ -115,43 +112,6 @@ export default function EditPost() {
     }))
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      const file = e.target.files?.[0]
-      if (!file) {
-        console.warn('⚠️ No file selected')
-        return
-      }
-
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        setError('Please select an image file')
-        console.error('❌ Invalid file type:', file.type)
-        return
-      }
-
-      // Validate file size (max 10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        setError('Image size must be less than 10MB')
-        console.error('❌ File too large:', file.size)
-        return
-      }
-
-      console.log('📸 Cover image file selected:', {
-        name: file.name,
-        size: file.size,
-        type: file.type
-      })
-
-      setImageFile(file)
-      const previewUrl = URL.createObjectURL(file)
-      setImagePreview(previewUrl)
-      setError('') // Clear any previous errors
-    } catch (error) {
-      console.error('❌ Error handling image upload:', error)
-      setError('Failed to process image. Please try again.')
-    }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -162,20 +122,6 @@ export default function EditPost() {
     try {
       let coverImageUrl = formData.coverImage || formData.imageUrl || ''
 
-      // Upload cover image if file is selected (for blog main page and detail page)
-      if (imageFile) {
-        try {
-          console.log('📤 Uploading cover image file...')
-          const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images')
-          coverImageUrl = uploadResult.url
-          console.log('✅ Cover image uploaded successfully:', coverImageUrl)
-        } catch (uploadError) {
-          console.warn('❌ Cover image upload failed, continuing without image:', uploadError)
-          // Continue without the image upload - use existing coverImage or imageUrl
-          coverImageUrl = formData.coverImage || formData.imageUrl || ''
-        }
-      }
-
       // Process content to upload any base64 images to Firebase
       let processedContent = formData.content
       try {
@@ -185,16 +131,11 @@ export default function EditPost() {
         // Continue with original content if processing fails
       }
 
-      // Prioritize uploaded cover image - this is the main image for blog main and detail pages
+      // Use cover image URL - this is the main image for blog main and detail pages
       let finalCoverImage = coverImageUrl
       
-      // IMPORTANT: If image was uploaded, use it as cover image (for blog main and detail pages)
-      if (imageFile && coverImageUrl) {
-        finalCoverImage = coverImageUrl
-        console.log('✅ Using uploaded cover image for blog main and detail pages:', finalCoverImage)
-      } else {
-        // If no cover image was uploaded, try to extract from content
-        if (!finalCoverImage && processedContent) {
+      // If no cover image URL provided, try to extract from content
+      if (!finalCoverImage && processedContent) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(processedContent, 'text/html')
           const images = doc.querySelectorAll('img')
@@ -407,81 +348,26 @@ export default function EditPost() {
             />
           </div>
 
-          {/* Cover Image Upload - for blog main page and detail page */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700 mb-2">
-                Cover Image (Upload) *
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                This image will display on the blog main page and blog detail page
-              </p>
-              <div className="relative">
-                <input
-                  type="file"
-                  id="coverImage"
-                  name="coverImage"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#441018] file:text-white hover:file:bg-[#5a1a2a] file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-                  style={{ display: 'block' }}
-                />
-              </div>
-              {imagePreview && (
-                <div className="mt-2">
-                  <img 
-                    src={imagePreview} 
-                    alt="Preview" 
-                    className="h-32 w-auto rounded-lg border border-gray-200" 
-                    onError={(e) => {
-                      console.error('❌ Preview image failed to load')
-                      setImagePreview('')
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setImageFile(null)
-                      setImagePreview('')
-                      // Reset the file input
-                      const fileInput = document.getElementById('coverImage') as HTMLInputElement
-                      if (fileInput) {
-                        fileInput.value = ''
-                      }
-                    }}
-                    className="mt-2 text-sm text-red-600 hover:text-red-800"
-                  >
-                    Remove image
-                  </button>
-                </div>
-              )}
-              {imageFile && (
-                <p className="mt-2 text-xs text-gray-600">
-                  Selected: {imageFile.name} ({(imageFile.size / 1024 / 1024).toFixed(2)} MB)
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
-                Image URL (Alternative)
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                Or enter an image URL instead of uploading
-              </p>
-              <input
-                type="url"
-                id="imageUrl"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                You can also upload images using the image button in the editor above
-              </p>
-            </div>
+          {/* Cover Image URL - for blog main page and detail page */}
+          <div>
+            <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
+              Cover Image URL *
+            </label>
+            <p className="text-xs text-gray-500 mb-2">
+              Enter the image URL. This image will display on the blog main page and blog detail page
+            </p>
+            <input
+              type="url"
+              id="imageUrl"
+              name="imageUrl"
+              value={formData.imageUrl}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+              placeholder="https://example.com/image.jpg"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              You can also add images using the image button in the editor above
+            </p>
           </div>
 
           {/* Tags and Categories */}
