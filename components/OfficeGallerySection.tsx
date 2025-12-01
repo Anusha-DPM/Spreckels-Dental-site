@@ -31,6 +31,46 @@ export default function OfficeGallerySection() {
       subtitle: "Personalized Care Planning",
       description: "Private consultation areas where we discuss your treatment plans, answer questions, and ensure you're fully informed about your dental care journey.",
       features: ["Private consultations", "Treatment planning", "Digital displays", "Comfortable seating"]
+    },
+    {
+      src: "/office4.jpg",
+      alt: "Dental office facility",
+      title: "Modern Facility",
+      subtitle: "State-of-the-Art Design",
+      description: "Our modern dental facility combines advanced technology with a welcoming atmosphere to provide the best patient experience.",
+      features: ["Modern design", "Advanced equipment", "Comfortable environment", "Professional care"]
+    },
+    {
+      src: "/office5.jpeg",
+      alt: "Dental office interior",
+      title: "Comfortable Interior",
+      subtitle: "Patient-Focused Design",
+      description: "Every detail of our office interior is designed with patient comfort and relaxation in mind.",
+      features: ["Comfortable seating", "Relaxing atmosphere", "Modern decor", "Patient amenities"]
+    },
+    {
+      src: "/office6.jpg",
+      alt: "Dental treatment area",
+      title: "Treatment Area",
+      subtitle: "Advanced Care Spaces",
+      description: "Our treatment areas are equipped with the latest dental technology to ensure precise and comfortable procedures.",
+      features: ["Advanced equipment", "Comfortable chairs", "Modern technology", "Sterile environment"]
+    },
+    {
+      src: "/office7.jpg",
+      alt: "Dental office space",
+      title: "Professional Space",
+      subtitle: "Excellence in Design",
+      description: "Experience our professionally designed office space that reflects our commitment to excellence in dental care.",
+      features: ["Professional design", "Modern facilities", "Comfortable environment", "Quality care"]
+    },
+    {
+      src: "/office8.jpg",
+      alt: "Dental office environment",
+      title: "Welcoming Environment",
+      subtitle: "Comfort & Care",
+      description: "Our office environment is designed to make every visit comfortable, relaxing, and stress-free for our patients.",
+      features: ["Welcoming atmosphere", "Comfortable spaces", "Modern amenities", "Patient care"]
     }
   ]
 
@@ -92,7 +132,11 @@ export default function OfficeGallerySection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            className="space-y-4 sm:space-y-6 max-h-[500px] lg:max-h-[600px] overflow-y-auto pr-2"
+            style={{
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#441018 #f3f4f6'
+            }}
           >
             {officeImages.map((image, index) => (
               <motion.div
@@ -137,6 +181,56 @@ export default function OfficeGallerySection() {
             ))}
           </motion.div>
         </div>
+
+        {/* Additional Office Images Gallery */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="mb-12 sm:mb-16 lg:mb-20"
+        >
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-[24px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-4">
+              Explore Our <span className="text-[#441018]">Complete Facility</span>
+            </h3>
+            <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto">
+              Take a virtual tour of our entire office space, from reception to treatment rooms
+            </p>
+          </div>
+          
+          {/* Responsive Image Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            {officeImages.slice(3).map((image, index) => (
+              <motion.div
+                key={index + 3}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
+                onClick={() => setActiveImage(index + 3)}
+              >
+                <div className="relative aspect-square w-full">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Overlay Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <h4 className="text-white text-[18px] sm:text-xl font-semibold mb-2">{image.title}</h4>
+                    <p className="text-gray-200 text-[14px] sm:text-base">{image.subtitle}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Features Grid */}
         <motion.div 

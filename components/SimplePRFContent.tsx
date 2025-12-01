@@ -73,8 +73,25 @@ export default function SimplePRFContent() {
               </div>
             </div>
 
+            {/* PRF2 Image */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="mt-8 relative w-full h-[300px] sm:h-[400px] lg:h-[450px] rounded-2xl overflow-hidden shadow-xl"
+            >
+              <Image
+                src="/prf2.jpeg"
+                alt="Platelet Rich Fibrin Therapy Process"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 100vw"
+              />
+            </motion.div>
+
             {/* Call to Action */}
-            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 text-center">
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 text-center mt-8">
               <h3 className="text-[22px] sm:text-xl font-semibold text-gray-900 mb-4">
                 Experience Advanced Healing
               </h3>

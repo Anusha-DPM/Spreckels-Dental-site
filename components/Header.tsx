@@ -616,25 +616,37 @@ export default function Header() {
                     {/* About Us */}
                     <li>
                       <div className="relative">
-                        <button
-                          onClick={() => toggleDropdown('About Us')}
-                          onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('About Us'))}
-                          className="w-full flex items-center justify-between px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
-                          aria-expanded={expandedItems.includes('About Us')}
-                          aria-controls="about-dropdown"
-                        >
-                          ABOUT US
-                          <motion.svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            animate={{ rotate: expandedItems.includes('About Us') ? 90 : 0 }}
-                            transition={{ duration: 0.2 }}
+                        <div className="w-full flex items-center justify-between">
+                          <Link
+                            href="/about"
+                            className="flex-1 px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                            onClick={closeMenu}
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </motion.svg>
-                        </button>
+                            ABOUT US
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleDropdown('About Us')
+                            }}
+                            onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('About Us'))}
+                            className="px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200"
+                            aria-expanded={expandedItems.includes('About Us')}
+                            aria-controls="about-dropdown"
+                            aria-label="Toggle About Us submenu"
+                          >
+                            <motion.svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              animate={{ rotate: expandedItems.includes('About Us') ? 90 : 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </motion.svg>
+                          </button>
+                        </div>
                         <AnimatePresence>
                           {expandedItems.includes('About Us') && (
                             <motion.ul
@@ -665,25 +677,37 @@ export default function Header() {
                     {/* Services */}
                     <li>
                       <div className="relative">
-                        <button
-                          onClick={() => toggleDropdown('Services')}
-                          onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Services'))}
-                          className="w-full flex items-center justify-between px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
-                          aria-expanded={expandedItems.includes('Services')}
-                          aria-controls="services-dropdown"
-                        >
-                          SERVICES
-                          <motion.svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            animate={{ rotate: expandedItems.includes('Services') ? 90 : 0 }}
-                            transition={{ duration: 0.2 }}
+                        <div className="w-full flex items-center justify-between">
+                          <Link
+                            href="/services"
+                            className="flex-1 px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200 font-semibold text-base tracking-wide"
+                            onClick={closeMenu}
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </motion.svg>
-                        </button>
+                            SERVICES
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleDropdown('Services')
+                            }}
+                            onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Services'))}
+                            className="px-3 py-4 text-white hover:text-gray-200 transition-colors duration-200"
+                            aria-expanded={expandedItems.includes('Services')}
+                            aria-controls="services-dropdown"
+                            aria-label="Toggle Services submenu"
+                          >
+                            <motion.svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              animate={{ rotate: expandedItems.includes('Services') ? 90 : 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </motion.svg>
+                          </button>
+                        </div>
                         <AnimatePresence>
                           {expandedItems.includes('Services') && (
                             <motion.ul
@@ -768,25 +792,37 @@ export default function Header() {
                               {/* Patient Education */}
                               <li>
                                 <div className="relative">
-                                  <button
-                                    onClick={() => toggleDropdown('Patient Education')}
-                                    onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Patient Education'))}
-                                    className="w-full flex items-center justify-between px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
-                                    aria-expanded={expandedItems.includes('Patient Education')}
-                                    aria-controls="patient-education-dropdown"
-                                  >
-                                    Patient Education
-                                    <motion.svg
-                                      className="w-4 h-4"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                      animate={{ rotate: expandedItems.includes('Patient Education') ? 90 : 0 }}
-                                      transition={{ duration: 0.2 }}
+                                  <div className="w-full flex items-center justify-between">
+                                    <Link
+                                      href="/patient-education"
+                                      className="flex-1 px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                      onClick={closeMenu}
                                     >
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </motion.svg>
-                                  </button>
+                                      Patient Education
+                                    </Link>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        toggleDropdown('Patient Education')
+                                      }}
+                                      onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('Patient Education'))}
+                                      className="px-3 py-2 text-gray-300 hover:text-white transition-colors duration-200"
+                                      aria-expanded={expandedItems.includes('Patient Education')}
+                                      aria-controls="patient-education-dropdown"
+                                      aria-label="Toggle Patient Education submenu"
+                                    >
+                                      <motion.svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        animate={{ rotate: expandedItems.includes('Patient Education') ? 90 : 0 }}
+                                        transition={{ duration: 0.2 }}
+                                      >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                      </motion.svg>
+                                    </button>
+                                  </div>
                                   <AnimatePresence>
                                     {expandedItems.includes('Patient Education') && (
                                       <motion.ul
