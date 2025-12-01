@@ -123,46 +123,46 @@ export default function EditPost() {
       let coverImageUrl = formData.coverImage || formData.imageUrl || ''
 
       // Process content to upload any base64 images to Firebase
-      let processedContent = formData.content
+      let processedContent = formData.content;
       try {
-        processedContent = await processContentImages(formData.content)
+        processedContent = await processContentImages(formData.content);
       } catch (contentError) {
-        console.warn('Content image processing failed, using original content:', contentError)
+        console.warn('Content image processing failed, using original content:', contentError);
         // Continue with original content if processing fails
       }
 
       // Use cover image URL - this is the main image for blog main and detail pages
-      let finalCoverImage = coverImageUrl
+      let finalCoverImage = coverImageUrl;
       
       // If no cover image URL provided, try to extract from content
       if (!finalCoverImage && processedContent) {
-          const parser = new DOMParser()
-          const doc = parser.parseFromString(processedContent, 'text/html')
-          const images = doc.querySelectorAll('img')
-          console.log(`📸 Found ${images.length} image(s) in content`)
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(processedContent, 'text/html');
+          const images = doc.querySelectorAll('img');
+          console.log(`📸 Found ${images.length} image(s) in content`);
           
           // Find first valid image URL
           for (let i = 0; i < images.length; i++) {
-            const img = images[i]
-            const imageSrc = img.getAttribute('src')
-            console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100))
+            const img = images[i];
+            const imageSrc = img.getAttribute('src');
+            console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100));
             
             if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
-              finalCoverImage = imageSrc
-              console.log('✅ Extracted cover image from content:', finalCoverImage)
-              break
+              finalCoverImage = imageSrc;
+              console.log('✅ Extracted cover image from content:', finalCoverImage);
+              break;
             }
           }
         }
         
         // Use imageUrl as final fallback
         if (!finalCoverImage && formData.imageUrl) {
-          finalCoverImage = formData.imageUrl
-          console.log('✅ Using imageUrl as cover image:', finalCoverImage)
+          finalCoverImage = formData.imageUrl;
+          console.log('✅ Using imageUrl as cover image:', finalCoverImage);
         }
       }
       
-      console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage)
+      console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage);
 
       // IMPORTANT: coverImage will be displayed on:
       // 1. Blog main page (/blog) - as thumbnail
@@ -180,37 +180,37 @@ export default function EditPost() {
         slug: generateSlug(formData.title),
         published: formData.published,
         publishDate: formData.published ? formData.publishDate : new Date().toISOString()
-      }
+      };
 
-      await updateBlogPost(postId, updateData)
-      setSuccess('Blog post updated successfully!')
+      await updateBlogPost(postId, updateData);
+      setSuccess('Blog post updated successfully!');
       
       // Redirect to dashboard after a short delay
       setTimeout(() => {
-        router.push('/admin/dashboard')
-      }, 2000)
+        router.push('/admin/dashboard');
+      }, 2000);
 
     } catch (err: any) {
-      console.error('Blog post update error:', err)
+      console.error('Blog post update error:', err);
       
       // Provide more specific error messages
-      let errorMessage = 'Failed to update blog post. Please try again.'
+      let errorMessage = 'Failed to update blog post. Please try again.';
       
       if (err.message?.includes('Firebase')) {
-        errorMessage = 'Firebase connection error. Please check your Firebase configuration.'
+        errorMessage = 'Firebase connection error. Please check your Firebase configuration.';
       } else if (err.message?.includes('permission')) {
-        errorMessage = 'Permission denied. Please check your Firebase security rules.'
+        errorMessage = 'Permission denied. Please check your Firebase security rules.';
       } else if (err.message?.includes('network')) {
-        errorMessage = 'Network error. Please check your internet connection.'
+        errorMessage = 'Network error. Please check your internet connection.';
       } else if (err.message?.includes('size') || err.message?.includes('too large')) {
-        errorMessage = 'Content is too large. Please reduce image sizes or content length.'
+        errorMessage = 'Content is too large. Please reduce image sizes or content length.';
       } else if (err.message) {
-        errorMessage = `Failed to update blog post: ${err.message}`
+        errorMessage = `Failed to update blog post: ${err.message}`;
       }
       
-      setError(errorMessage)
+      setError(errorMessage);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 
