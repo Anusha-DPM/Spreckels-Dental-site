@@ -67,11 +67,22 @@ export default function NewPost() {
       try {
         const { db } = await import('../../../lib/firebase')
         if (!db) {
-          setError('Firebase is not connected. Please check your .env.local configuration.')
+          console.error('❌ Firebase db is null - checking environment variables...')
+          // Check if environment variables are available on client side
+          const hasApiKey = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY
+          const hasProjectId = !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+          
+          if (!hasApiKey || !hasProjectId) {
+            setError('Firebase environment variables are missing. Please check your .env.local file and restart the server.')
+          } else {
+            setError('Firebase is not connected. Please check your Firebase configuration and restart the development server.')
+          }
+        } else {
+          console.log('✅ Firebase connection verified')
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Firebase connection check failed:', err)
-        setError('Firebase connection failed. Please check your configuration.')
+        setError(`Firebase connection failed: ${err?.message || 'Unknown error'}. Please check your configuration and restart the server.`)
       }
     }
 
