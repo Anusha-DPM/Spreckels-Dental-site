@@ -116,11 +116,40 @@ export default function EditPost() {
   }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
+    try {
+      const file = e.target.files?.[0]
+      if (!file) {
+        console.warn('⚠️ No file selected')
+        return
+      }
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select an image file')
+        console.error('❌ Invalid file type:', file.type)
+        return
+      }
+
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        setError('Image size must be less than 10MB')
+        console.error('❌ File too large:', file.size)
+        return
+      }
+
+      console.log('📸 Cover image file selected:', {
+        name: file.name,
+        size: file.size,
+        type: file.type
+      })
+
       setImageFile(file)
-      setImagePreview(URL.createObjectURL(file))
-      console.log('📸 Cover image file selected:', file.name)
+      const previewUrl = URL.createObjectURL(file)
+      setImagePreview(previewUrl)
+      setError('') // Clear any previous errors
+    } catch (error) {
+      console.error('❌ Error handling image upload:', error)
+      setError('Failed to process image. Please try again.')
     }
   }
 
@@ -387,17 +416,49 @@ export default function EditPost() {
               <p className="text-xs text-gray-500 mb-2">
                 This image will display on the blog main page and blog detail page
               </p>
-              <input
-                type="file"
-                id="coverImage"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-              />
+              <div className="relative">
+                <input
+                  type="file"
+                  id="coverImage"
+                  name="coverImage"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#441018] file:text-white hover:file:bg-[#5a1a2a] file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                  style={{ display: 'block' }}
+                />
+              </div>
               {imagePreview && (
                 <div className="mt-2">
-                  <img src={imagePreview} alt="Preview" className="h-32 w-auto rounded-lg border border-gray-200" />
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    className="h-32 w-auto rounded-lg border border-gray-200" 
+                    onError={(e) => {
+                      console.error('❌ Preview image failed to load')
+                      setImagePreview('')
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setImageFile(null)
+                      setImagePreview('')
+                      // Reset the file input
+                      const fileInput = document.getElementById('coverImage') as HTMLInputElement
+                      if (fileInput) {
+                        fileInput.value = ''
+                      }
+                    }}
+                    className="mt-2 text-sm text-red-600 hover:text-red-800"
+                  >
+                    Remove image
+                  </button>
                 </div>
+              )}
+              {imageFile && (
+                <p className="mt-2 text-xs text-gray-600">
+                  Selected: {imageFile.name} ({(imageFile.size / 1024 / 1024).toFixed(2)} MB)
+                </p>
               )}
             </div>
 
