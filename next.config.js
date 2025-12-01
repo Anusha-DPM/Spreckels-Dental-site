@@ -45,6 +45,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'smb.ibsrv.net',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Allow all HTTPS images (for external URLs)
     dangerouslyAllowSVG: true,

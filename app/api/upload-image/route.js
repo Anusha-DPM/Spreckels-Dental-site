@@ -38,22 +38,40 @@ const validateFirebaseConfig = () => {
 let app = null
 let storage = null
 let configValidation = null
+let initError = null
 
 try {
   configValidation = validateFirebaseConfig()
+  console.log('🔍 Firebase config validation:', {
+    valid: configValidation.valid,
+    missingFields: configValidation.missingFields,
+    hasApiKey: !!firebaseConfig.apiKey,
+    hasProjectId: !!firebaseConfig.projectId,
+    hasStorageBucket: !!firebaseConfig.storageBucket
+  })
+  
   if (configValidation.valid) {
     if (!getApps().length) {
       app = initializeApp(firebaseConfig)
       console.log('✅ Firebase initialized in API route')
     } else {
       app = getApps()[0]
+      console.log('✅ Using existing Firebase app')
     }
     storage = getStorage(app)
+    console.log('✅ Firebase Storage initialized successfully')
   } else {
     console.error('❌ Firebase configuration invalid. Cannot initialize storage.')
+    console.error('Missing fields:', configValidation.missingFields)
   }
 } catch (error) {
   console.error('❌ Firebase initialization error:', error)
+  console.error('Error details:', {
+    message: error.message,
+    code: error.code,
+    stack: error.stack
+  })
+  initError = error
   app = null
   storage = null
 }
@@ -74,15 +92,24 @@ export async function POST(request) {
       if (missingVars.length > 0) {
         errorMessage = `Firebase Storage is not configured. Missing environment variables: ${missingVars.join(', ')}`
         errorDetails = `Please create a .env.local file in your project root with the following variables:\n${missingVars.map(v => `${v}=your-value-here`).join('\n')}\n\nSee firebase-env-template.txt for reference.`
+      } else if (initError) {
+        // If we have an initialization error, show it
+        errorMessage = 'Firebase initialization failed'
+        errorDetails = `Firebase failed to initialize: ${initError.message}. Please check your Firebase configuration values in .env.local and ensure they are correct.`
+        console.error('Initialization error details:', {
+          message: initError.message,
+          code: initError.code
+        })
       } else {
-        errorDetails = 'Firebase initialization failed. Please check your Firebase configuration and ensure all environment variables are set correctly.'
+        errorDetails = 'Firebase initialization failed. Please check your Firebase configuration and ensure all environment variables are set correctly. Make sure you have restarted your Next.js development server after updating .env.local'
       }
       
       return NextResponse.json(
         { 
           error: errorMessage,
           details: errorDetails,
-          missingEnvVars: missingVars
+          missingEnvVars: missingVars,
+          initError: initError ? initError.message : null
         },
         { status: 500 }
       )
@@ -119,24 +146,32 @@ export async function POST(request) {
       fileName: file.name,
       fileSize: file.size,
       fileType: file.type,
-      folder: folder
+      folder: folder,
+      storageBucket: firebaseConfig.storageBucket
     })
 
     // Generate unique filename
     const timestamp = Date.now()
     const fileName = `${folder}/${timestamp}-${file.name}`
     
+    console.log('📁 Upload path:', fileName)
+    console.log('🪣 Storage bucket:', firebaseConfig.storageBucket)
+    
     // Create storage reference
     const storageRef = ref(storage, fileName)
+    console.log('📤 Storage reference created:', storageRef.fullPath)
     
     // Convert file to buffer
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
+    console.log('📦 Buffer created, size:', buffer.length)
     
     // Upload to Firebase Storage
+    console.log('🚀 Starting upload to Firebase Storage...')
     const snapshot = await uploadBytes(storageRef, buffer, {
       contentType: file.type
     })
+    console.log('✅ Upload bytes successful')
     
     // Get download URL
     const downloadURL = await getDownloadURL(snapshot.ref)
@@ -160,14 +195,39 @@ export async function POST(request) {
     console.error('Error details:', {
       message: error.message,
       name: error.name,
-      code: error.code
+      code: error.code,
+      customData: error.customData,
+      status: error.customData?.status,
+      serverResponse: error.customData?.serverResponse
     })
+    
+    // Log full error object for debugging
+    if (error.customData) {
+      console.error('Custom error data:', JSON.stringify(error.customData, null, 2))
+    }
     
     // Provide more specific error messages
     let errorMessage = 'Upload failed'
     let errorDetails = error.message || 'Unknown error'
     
-    if (error.message?.includes('storage/')) {
+    // Check for specific Firebase Storage error codes
+    if (error.code === 'storage/unknown') {
+      const status = error.customData?.status
+      if (status === 404) {
+        errorMessage = 'Firebase Storage bucket not found'
+        errorDetails = `The storage bucket "${firebaseConfig.storageBucket}" was not found. Please verify:
+1. The storage bucket name in .env.local matches your Firebase project
+2. Firebase Storage is enabled in your Firebase Console
+3. The bucket exists in your Firebase project
+4. The storageBucket value should be in format: "your-project-id.appspot.com"`
+      } else if (status === 403) {
+        errorMessage = 'Firebase Storage permission denied'
+        errorDetails = 'Check Firebase Storage security rules. The storage rules may be blocking the upload.'
+      } else {
+        errorMessage = 'Firebase Storage error'
+        errorDetails = `Error code: ${error.code}, Status: ${status || 'unknown'}. ${error.message}`
+      }
+    } else if (error.message?.includes('storage/')) {
       errorMessage = 'Firebase Storage error'
       errorDetails = error.message
     } else if (error.message?.includes('permission') || error.message?.includes('unauthorized')) {
@@ -182,6 +242,8 @@ export async function POST(request) {
       { 
         error: errorMessage, 
         details: errorDetails,
+        code: error.code,
+        status: error.customData?.status,
         stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
       },
       { status: 500 }
