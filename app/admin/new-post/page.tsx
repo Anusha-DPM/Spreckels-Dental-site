@@ -29,7 +29,7 @@ interface BlogPost {
   author?: string
 }
 import { processContentImages } from '../../../lib/processContentImages'
-import { uploadImageSimple } from '../../../lib/uploadImageSimple'
+import { uploadImageToFirebase } from '../../../lib/firebase'
 
 export default function NewPost() {
   const [formData, setFormData] = useState({
@@ -178,24 +178,24 @@ Please:
     try {
       let coverImageUrl = formData.imageUrl || formData.coverImage || '';
 
-      // Upload image if file is selected (using simple upload method)
+      // Upload image if file is selected (using Firebase Storage)
       if (imageFile) {
         try {
           setUploading(true)
-          console.log('📤 Uploading image using simple method...', {
+          console.log('📤 Uploading image to Firebase Storage...', {
             fileName: imageFile.name,
             fileSize: imageFile.size,
             fileType: imageFile.type
           });
           
-          const uploadResult = await uploadImageSimple(imageFile, 'blog-images');
+          const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images');
           
           if (!uploadResult || !uploadResult.url) {
             throw new Error('Upload succeeded but no URL returned');
           }
           
           coverImageUrl = uploadResult.url;
-          console.log('✅ Image uploaded successfully:', coverImageUrl);
+          console.log('✅ Image uploaded successfully to Firebase:', coverImageUrl);
           
           // Update formData with the uploaded URL
           setFormData(prev => ({ ...prev, imageUrl: coverImageUrl }));
