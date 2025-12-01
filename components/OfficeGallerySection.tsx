@@ -107,13 +107,14 @@ export default function OfficeGallerySection() {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
               <Image
                 src={officeImages[activeImage].src}
                 alt={officeImages[activeImage].alt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
+                priority={activeImage < 3}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
               
@@ -211,7 +212,7 @@ export default function OfficeGallerySection() {
                 className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
                 onClick={() => setActiveImage(index + 3)}
               >
-                <div className="relative aspect-square w-full">
+                <div className="relative aspect-square w-full bg-gray-100">
                   <Image
                     src={image.src}
                     alt={image.alt}

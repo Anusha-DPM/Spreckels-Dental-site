@@ -81,7 +81,7 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
+    <header className="fixed top-0 left-0 right-0 z-[100] bg-white border-b border-gray-100">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4 lg:py-5">
           {/* Logo - Left Side */}
@@ -103,10 +103,10 @@ export default function Header() {
           </motion.div>
 
           {/* Mobile Menu Button - Right Side (Mobile Only) */}
-          <div className="md:hidden">
+          <div className="md:hidden relative z-[101]">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
+              className="text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 -mr-2"
               aria-label="Toggle mobile menu"
               aria-expanded={isMenuOpen}
             >
@@ -574,7 +574,7 @@ export default function Header() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+                className="fixed inset-0 bg-black bg-opacity-50 z-[90] md:hidden"
                 onClick={closeMenu}
               />
               
@@ -584,7 +584,7 @@ export default function Header() {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
-                className="fixed top-0 left-0 w-80 max-w-[85vw] h-full bg-[#441018] z-50 md:hidden shadow-2xl"
+                className="fixed top-0 left-0 w-80 max-w-[85vw] h-full bg-[#441018] z-[100] md:hidden shadow-2xl"
               >
                 {/* Close Button */}
                 <div className="flex justify-end p-4">
