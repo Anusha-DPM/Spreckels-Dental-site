@@ -14,22 +14,34 @@ const firebaseConfig = {
 
 // Validate Firebase configuration
 const validateFirebaseConfig = () => {
-  const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId']
-  const missingFields = requiredFields.filter(field => !firebaseConfig[field])
+  const requiredFields = [
+    { key: 'apiKey', envVar: 'NEXT_PUBLIC_FIREBASE_API_KEY' },
+    { key: 'authDomain', envVar: 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN' },
+    { key: 'projectId', envVar: 'NEXT_PUBLIC_FIREBASE_PROJECT_ID' },
+    { key: 'storageBucket', envVar: 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET' },
+    { key: 'messagingSenderId', envVar: 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID' },
+    { key: 'appId', envVar: 'NEXT_PUBLIC_FIREBASE_APP_ID' }
+  ]
+  const missingFields = requiredFields.filter(field => !firebaseConfig[field.key])
   
   if (missingFields.length > 0) {
-    console.error('❌ Missing Firebase configuration:', missingFields)
-    return false
+    const missingEnvVars = missingFields.map(f => f.envVar).join(', ')
+    console.error('❌ Missing Firebase configuration:', missingFields.map(f => f.key))
+    console.error('❌ Missing environment variables:', missingEnvVars)
+    console.error('💡 Please create a .env.local file with these variables. See firebase-env-template.txt for reference.')
+    return { valid: false, missingFields: missingFields.map(f => f.envVar) }
   }
-  return true
+  return { valid: true, missingFields: [] }
 }
 
 // Initialize Firebase
 let app = null
 let storage = null
+let configValidation = null
 
 try {
-  if (validateFirebaseConfig()) {
+  configValidation = validateFirebaseConfig()
+  if (configValidation.valid) {
     if (!getApps().length) {
       app = initializeApp(firebaseConfig)
       console.log('✅ Firebase initialized in API route')
@@ -51,10 +63,26 @@ export async function POST(request) {
     // Check if Firebase Storage is initialized
     if (!storage) {
       console.error('❌ Firebase Storage is not initialized')
+      
+      // Get missing fields information
+      const validation = configValidation || validateFirebaseConfig()
+      const missingVars = validation.missingFields || []
+      
+      let errorMessage = 'Firebase Storage is not configured.'
+      let errorDetails = 'Missing or invalid Firebase configuration'
+      
+      if (missingVars.length > 0) {
+        errorMessage = `Firebase Storage is not configured. Missing environment variables: ${missingVars.join(', ')}`
+        errorDetails = `Please create a .env.local file in your project root with the following variables:\n${missingVars.map(v => `${v}=your-value-here`).join('\n')}\n\nSee firebase-env-template.txt for reference.`
+      } else {
+        errorDetails = 'Firebase initialization failed. Please check your Firebase configuration and ensure all environment variables are set correctly.'
+      }
+      
       return NextResponse.json(
         { 
-          error: 'Firebase Storage is not configured. Please check your environment variables.',
-          details: 'Missing or invalid Firebase configuration'
+          error: errorMessage,
+          details: errorDetails,
+          missingEnvVars: missingVars
         },
         { status: 500 }
       )

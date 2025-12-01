@@ -181,7 +181,13 @@ export default function EditPost() {
           console.log('📊 Upload result:', uploadResult);
         } catch (uploadError: any) {
           console.error('❌ Cover image upload failed:', uploadError);
-          const errorMessage = uploadError?.message || 'Failed to upload image to Firebase';
+          let errorMessage = uploadError?.message || 'Failed to upload image to Firebase';
+          
+          // Provide more helpful error message for Firebase configuration issues
+          if (errorMessage.includes('Firebase Storage is not configured') || errorMessage.includes('Missing environment variables')) {
+            errorMessage = 'Firebase Storage is not configured. Please check your .env.local file and ensure all NEXT_PUBLIC_FIREBASE_* environment variables are set. See firebase-env-template.txt for reference.';
+          }
+          
           setError(`Image upload failed: ${errorMessage}. Please try again or use an image URL instead.`);
           setSaving(false);
           throw new Error(`Image upload failed: ${errorMessage}`);
@@ -279,8 +285,12 @@ export default function EditPost() {
       // Provide more specific error messages
       let errorMessage = 'Failed to update blog post. Please try again.';
       
-      if (err.message?.includes('Firebase')) {
-        errorMessage = 'Firebase connection error. Please check your Firebase configuration.';
+      if (err.message?.includes('Firebase') || err.message?.includes('Firebase Storage is not configured')) {
+        if (err.message?.includes('Missing environment variables')) {
+          errorMessage = err.message;
+        } else {
+          errorMessage = 'Firebase connection error. Please check your Firebase configuration in .env.local file. Ensure all NEXT_PUBLIC_FIREBASE_* environment variables are set.';
+        }
       } else if (err.message?.includes('permission')) {
         errorMessage = 'Permission denied. Please check your Firebase security rules.';
       } else if (err.message?.includes('network')) {

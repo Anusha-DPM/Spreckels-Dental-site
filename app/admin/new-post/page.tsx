@@ -163,7 +163,13 @@ export default function NewPost() {
           console.log('📊 Upload result:', uploadResult);
         } catch (uploadError: any) {
           console.error('❌ Cover image upload failed:', uploadError);
-          const errorMessage = uploadError?.message || 'Failed to upload image to Firebase';
+          let errorMessage = uploadError?.message || 'Failed to upload image to Firebase';
+          
+          // Provide more helpful error message for Firebase configuration issues
+          if (errorMessage.includes('Firebase Storage is not configured') || errorMessage.includes('Missing environment variables')) {
+            errorMessage = 'Firebase Storage is not configured. Please check your .env.local file and ensure all NEXT_PUBLIC_FIREBASE_* environment variables are set. See firebase-env-template.txt for reference.';
+          }
+          
           setError(`Image upload failed: ${errorMessage}. Please try again or use an image URL instead.`);
           setLoading(false);
           throw new Error(`Image upload failed: ${errorMessage}`);
@@ -311,8 +317,12 @@ export default function NewPost() {
       console.error('Blog post creation error:', err);
       
       // Provide more specific error messages
-      if (err.message?.includes('Firebase')) {
-        setError('Firebase connection error. Please check your Firebase configuration in .env.local file.');
+      if (err.message?.includes('Firebase') || err.message?.includes('Firebase Storage is not configured')) {
+        if (err.message?.includes('Missing environment variables')) {
+          setError(err.message);
+        } else {
+          setError('Firebase connection error. Please check your Firebase configuration in .env.local file. Ensure all NEXT_PUBLIC_FIREBASE_* environment variables are set.');
+        }
       } else if (err.message?.includes('permission')) {
         setError('Permission denied. Please check your Firebase security rules.');
       } else if (err.message?.includes('network')) {
