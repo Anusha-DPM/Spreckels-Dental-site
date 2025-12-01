@@ -166,10 +166,21 @@ export default function NewPost() {
       }
 
       // Use cover image URL - this is the main image for blog main and detail pages
-      let finalCoverImage = coverImageUrl;
+      // PRIORITY: 1. Uploaded file URL, 2. formData.imageUrl, 3. Extract from content
+      let finalCoverImage = '';
       
-      // If no cover image URL provided, try to extract from content
-      if (!finalCoverImage && processedContent) {
+      // Priority 1: Use uploaded image URL if available (from file upload)
+      if (coverImageUrl && coverImageUrl.trim() !== '' && (coverImageUrl.startsWith('http') || coverImageUrl.startsWith('https'))) {
+        finalCoverImage = coverImageUrl.trim();
+        console.log('✅ Using uploaded cover image URL:', finalCoverImage);
+      }
+      // Priority 2: Use imageUrl from form if no uploaded image
+      else if (formData.imageUrl && formData.imageUrl.trim() !== '' && (formData.imageUrl.startsWith('http') || formData.imageUrl.startsWith('https'))) {
+        finalCoverImage = formData.imageUrl.trim();
+        console.log('✅ Using form imageUrl as cover image:', finalCoverImage);
+      }
+      // Priority 3: Try to extract from content if no URL provided
+      else if (processedContent) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(processedContent, 'text/html');
         const images = doc.querySelectorAll('img');
@@ -189,13 +200,14 @@ export default function NewPost() {
         }
       }
       
-      // Use imageUrl as final fallback
-      if (!finalCoverImage && formData.imageUrl) {
-        finalCoverImage = formData.imageUrl;
-        console.log('✅ Using imageUrl as cover image:', finalCoverImage);
-      }
-      
       console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage);
+      console.log('📊 Image source priority check:', {
+        hasUploadedImage: !!(coverImageUrl && coverImageUrl.trim() !== ''),
+        uploadedImageUrl: coverImageUrl,
+        hasFormImageUrl: !!(formData.imageUrl && formData.imageUrl.trim() !== ''),
+        formImageUrl: formData.imageUrl,
+        finalCoverImage: finalCoverImage
+      });
       console.log('📋 Post data being saved:', {
         title: formData.title.trim(),
         coverImage: finalCoverImage,
