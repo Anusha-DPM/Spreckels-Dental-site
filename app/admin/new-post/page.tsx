@@ -142,14 +142,14 @@ export default function NewPost() {
         }
       }
       
-      console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage)
-       console.log('📋 Post data being saved:', {
-         title: formData.title.trim(),
-         coverImage: finalCoverImage,
-         imageUrl: formData.imageUrl.trim() || finalCoverImage,
-         hasContent: !!processedContent,
-         contentLength: processedContent?.length || 0
-       })
+      console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage);
+      console.log('📋 Post data being saved:', {
+        title: formData.title.trim(),
+        coverImage: finalCoverImage,
+        imageUrl: formData.imageUrl.trim() || finalCoverImage,
+        hasContent: !!processedContent,
+        contentLength: processedContent?.length || 0
+      });
 
        // IMPORTANT: coverImage will be displayed on:
        // 1. Blog main page (/blog) - as thumbnail
@@ -211,9 +211,8 @@ export default function NewPost() {
            }, 3000)
          } else {
            throw dbError // Re-throw other database errors
-         }
-       }
-
+        }
+      }
     } catch (err: any) {
       console.error('Blog post creation error:', err)
       
