@@ -90,10 +90,6 @@ export default function EditPost() {
         publishDate: blogPost.published ? blogPost.publishDate.split('T')[0] : new Date().toISOString().split('T')[0]
       })
       
-      // Set image preview if cover image exists
-      if (blogPost.coverImage) {
-        setImagePreview(blogPost.coverImage)
-      }
 
 
     } catch (err) {
@@ -136,30 +132,29 @@ export default function EditPost() {
       
       // If no cover image URL provided, try to extract from content
       if (!finalCoverImage && processedContent) {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(processedContent, 'text/html');
-          const images = doc.querySelectorAll('img');
-          console.log(`📸 Found ${images.length} image(s) in content`);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(processedContent, 'text/html');
+        const images = doc.querySelectorAll('img');
+        console.log(`📸 Found ${images.length} image(s) in content`);
+        
+        // Find first valid image URL
+        for (let i = 0; i < images.length; i++) {
+          const img = images[i];
+          const imageSrc = img.getAttribute('src');
+          console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100));
           
-          // Find first valid image URL
-          for (let i = 0; i < images.length; i++) {
-            const img = images[i];
-            const imageSrc = img.getAttribute('src');
-            console.log(`🔍 Checking image ${i + 1}:`, imageSrc?.substring(0, 100));
-            
-            if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
-              finalCoverImage = imageSrc;
-              console.log('✅ Extracted cover image from content:', finalCoverImage);
-              break;
-            }
+          if (imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('https'))) {
+            finalCoverImage = imageSrc;
+            console.log('✅ Extracted cover image from content:', finalCoverImage);
+            break;
           }
         }
-        
-        // Use imageUrl as final fallback
-        if (!finalCoverImage && formData.imageUrl) {
-          finalCoverImage = formData.imageUrl;
-          console.log('✅ Using imageUrl as cover image:', finalCoverImage);
-        }
+      }
+      
+      // Use imageUrl as final fallback
+      if (!finalCoverImage && formData.imageUrl) {
+        finalCoverImage = formData.imageUrl;
+        console.log('✅ Using imageUrl as cover image:', finalCoverImage);
       }
       
       console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage);
