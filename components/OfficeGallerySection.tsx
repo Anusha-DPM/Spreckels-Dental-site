@@ -9,22 +9,6 @@ export default function OfficeGallerySection() {
 
   const officeImages = [
     {
-      src: "/office1.webp",
-      alt: "Modern dental office reception area",
-      title: "Welcoming Reception",
-      subtitle: "First Impression Matters",
-      description: "Step into our beautifully designed reception area where comfort meets professionalism. Our welcoming space is designed to put you at ease from the moment you arrive.",
-      features: ["Comfortable seating", "Refreshment station", "WiFi access", "Reading materials"]
-    },
-    {
-      src: "/office2.webp",
-      alt: "State-of-the-art dental treatment room",
-      title: "Advanced Treatment Rooms",
-      subtitle: "Cutting-Edge Technology",
-      description: "Experience dental care in our modern treatment rooms equipped with the latest technology and designed for your comfort and safety.",
-      features: ["Digital X-rays", "Intraoral cameras", "Comfortable chairs", "Entertainment options"]
-    },
-    {
       src: "/office3.webp",
       alt: "Dental office consultation area",
       title: "Consultation Space",
@@ -106,7 +90,7 @@ export default function OfficeGallerySection() {
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
-                priority={activeImage < 3}
+                priority={activeImage < 2}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
               
@@ -194,15 +178,15 @@ export default function OfficeGallerySection() {
           
           {/* Responsive Image Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {officeImages.slice(3).map((image, index) => (
+            {officeImages.slice(1).map((image, index) => (
               <motion.div
-                key={index + 3}
+                key={index + 1}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
-                onClick={() => setActiveImage(index + 3)}
+                onClick={() => setActiveImage(index + 1)}
               >
                 <div className="relative aspect-square w-full bg-gray-100">
                   <Image
