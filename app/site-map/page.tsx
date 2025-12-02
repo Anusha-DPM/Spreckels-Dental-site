@@ -7,7 +7,7 @@ export default function SiteMap() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="bg-[#441018] pt-24 pb-16 lg:pt-24 lg:pb-20">
+      <section className="bg-[#441018] pt-[160px] pb-16 lg:pt-[160px] lg:pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
