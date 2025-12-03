@@ -182,13 +182,20 @@ Please:
       if (imageFile) {
         try {
           setUploading(true)
+          setError('') // Clear any previous errors
           console.log('📤 Uploading image to Firebase Storage...', {
             fileName: imageFile.name,
             fileSize: imageFile.size,
             fileType: imageFile.type
           });
           
-          const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images');
+          // Add timeout to prevent infinite loading
+          const uploadPromise = uploadImageToFirebase(imageFile, 'blog-images');
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Upload timeout: The upload took too long. Please try again with a smaller image.')), 60000)
+          );
+          
+          const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any;
           
           if (!uploadResult || !uploadResult.url) {
             throw new Error('Upload succeeded but no URL returned');
@@ -210,10 +217,12 @@ Please:
           console.error('❌ Image upload failed:', uploadError);
           console.error('❌ Upload error details:', {
             message: uploadError?.message,
+            code: uploadError?.code,
             stack: uploadError?.stack,
             errorData: uploadError?.errorData
           });
-          setError(`Image upload failed: ${uploadError?.message || 'Unknown error'}. You can still use an image URL instead.`);
+          const errorMessage = uploadError?.message || 'Unknown error';
+          setError(`Image upload failed: ${errorMessage}. You can still use an image URL instead.`);
           setUploading(false);
           setLoading(false);
           return;
@@ -245,6 +254,7 @@ Please:
       let finalCoverImage = '';
       
       // Priority 1: Use uploaded image URL if available (from file upload)
+      // This is the most important - if user uploaded a file, use that URL
       if (coverImageUrl && coverImageUrl.trim() !== '' && (coverImageUrl.startsWith('http') || coverImageUrl.startsWith('https'))) {
         finalCoverImage = coverImageUrl.trim();
         console.log('✅ Using uploaded cover image URL:', finalCoverImage);
@@ -275,6 +285,10 @@ Please:
         }
       }
       
+      // Ensure we use the uploaded URL if it exists (even if formData wasn't updated yet)
+      // This ensures the uploaded image URL is always saved to the database
+      const finalImageUrl = coverImageUrl || formData.imageUrl.trim() || finalCoverImage || '';
+      
       console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage);
       console.log('📊 Image source priority check:', {
         hasUploadedImage: !!(coverImageUrl && coverImageUrl.trim() !== ''),
@@ -282,12 +296,13 @@ Please:
         hasFormImageUrl: !!(formData.imageUrl && formData.imageUrl.trim() !== ''),
         formImageUrl: formData.imageUrl,
         finalCoverImage: finalCoverImage,
+        finalImageUrl: finalImageUrl,
         imageFileSelected: !!imageFile
       });
       console.log('📋 Post data being saved:', {
         title: formData.title.trim(),
         coverImage: finalCoverImage,
-        imageUrl: formData.imageUrl.trim() || finalCoverImage,
+        imageUrl: finalImageUrl,
         hasContent: !!processedContent,
         contentLength: processedContent?.length || 0,
       });
@@ -299,16 +314,16 @@ Please:
         throw new Error('Image upload failed: No image URL was obtained from the upload. Please try uploading again or use an image URL instead.');
       }
 
-
       // IMPORTANT: coverImage will be displayed on:
       // 1. Blog main page (/blog) - as thumbnail
       // 2. Blog detail page (/blog/[slug]) - as featured image
+      
       const postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'> = {
         title: formData.title.trim(),
         content: processedContent,
         excerpt: formData.excerpt.trim(),
         coverImage: finalCoverImage || '', // DISPLAYS ON BLOG MAIN PAGE AND DETAIL PAGE
-        imageUrl: formData.imageUrl.trim() || finalCoverImage || '', // Fallback for compatibility
+        imageUrl: finalImageUrl, // Always use the uploaded URL if available - saved to Firestore database
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
         metaTitle: formData.metaTitle.trim() || formData.title.trim(),
@@ -318,6 +333,13 @@ Please:
         publishDate: formData.published ? formData.publishDate : new Date().toISOString(),
         author: 'Admin'
       };
+      
+      console.log('💾 Final post data with image URLs:', {
+        coverImage: postData.coverImage,
+        imageUrl: postData.imageUrl,
+        hasCoverImage: !!postData.coverImage,
+        hasImageUrl: !!postData.imageUrl
+      });
 
       // Try to create blog post
       try {
@@ -471,6 +493,7 @@ Please:
               value={formData.title}
               onChange={handleInputChange}
               required
+              suppressHydrationWarning
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
               placeholder="Enter your post title..."
             />
@@ -657,6 +680,7 @@ Please:
                 name="imageUrl"
                 value={formData.imageUrl}
                 onChange={handleInputChange}
+                suppressHydrationWarning
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                 placeholder="https://example.com/image.jpg"
               />
@@ -692,6 +716,7 @@ Please:
                 name="tags"
                 value={formData.tags}
                 onChange={handleInputChange}
+                suppressHydrationWarning
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                 placeholder="tag1, tag2, tag3"
               />
@@ -708,6 +733,7 @@ Please:
                 name="categories"
                 value={formData.categories}
                 onChange={handleInputChange}
+                suppressHydrationWarning
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                 placeholder="category1, category2"
               />
@@ -729,6 +755,7 @@ Please:
                   name="metaTitle"
                   value={formData.metaTitle}
                   onChange={handleInputChange}
+                  suppressHydrationWarning
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                   placeholder="SEO title for search engines"
                 />
@@ -780,6 +807,7 @@ Please:
                     name="publishDate"
                     value={formData.publishDate}
                     onChange={handleInputChange}
+                    suppressHydrationWarning
                     className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                   />
                 </div>

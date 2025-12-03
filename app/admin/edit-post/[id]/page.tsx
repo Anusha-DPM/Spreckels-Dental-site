@@ -236,6 +236,10 @@ export default function EditPost() {
         }
       }
       
+      // Ensure we use the uploaded URL if it exists (even if formData wasn't updated yet)
+      // This ensures the uploaded image URL is always saved to the database
+      const finalImageUrl = coverImageUrl || formData.imageUrl.trim() || finalCoverImage || '';
+      
       console.log('🎯 Final cover image for blog main and detail pages:', finalCoverImage);
       console.log('📊 Image source priority check:', {
         hasUploadedImage: !!(coverImageUrl && coverImageUrl.trim() !== ''),
@@ -243,6 +247,7 @@ export default function EditPost() {
         hasFormImageUrl: !!(formData.imageUrl && formData.imageUrl.trim() !== ''),
         formImageUrl: formData.imageUrl,
         finalCoverImage: finalCoverImage,
+        finalImageUrl: finalImageUrl,
         imageFileSelected: !!imageFile
       });
       
@@ -253,7 +258,6 @@ export default function EditPost() {
         throw new Error('Image upload failed: No image URL was obtained from the upload. Please try uploading again or use an image URL instead.');
       }
 
-
       // IMPORTANT: coverImage will be displayed on:
       // 1. Blog main page (/blog) - as thumbnail
       // 2. Blog detail page (/blog/[slug]) - as featured image
@@ -262,7 +266,7 @@ export default function EditPost() {
         content: processedContent,
         excerpt: formData.excerpt.trim(),
         coverImage: finalCoverImage || '', // DISPLAYS ON BLOG MAIN PAGE AND DETAIL PAGE
-        imageUrl: formData.imageUrl.trim() || finalCoverImage || '', // Fallback for compatibility
+        imageUrl: finalImageUrl, // Always use the uploaded URL if available - saved to Firestore database
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
         metaTitle: formData.metaTitle.trim() || formData.title.trim(),
@@ -427,6 +431,7 @@ export default function EditPost() {
               value={formData.title}
               onChange={handleInputChange}
               required
+              suppressHydrationWarning
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
               placeholder="Enter your post title..."
             />
@@ -557,6 +562,7 @@ export default function EditPost() {
                 name="imageUrl"
                 value={formData.imageUrl}
                 onChange={handleInputChange}
+                suppressHydrationWarning
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                 placeholder="https://example.com/image.jpg"
               />
@@ -592,6 +598,7 @@ export default function EditPost() {
                 name="tags"
                 value={formData.tags}
                 onChange={handleInputChange}
+                suppressHydrationWarning
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                 placeholder="tag1, tag2, tag3"
               />
@@ -608,6 +615,7 @@ export default function EditPost() {
                 name="categories"
                 value={formData.categories}
                 onChange={handleInputChange}
+                suppressHydrationWarning
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                 placeholder="category1, category2"
               />
@@ -629,6 +637,7 @@ export default function EditPost() {
                   name="metaTitle"
                   value={formData.metaTitle}
                   onChange={handleInputChange}
+                  suppressHydrationWarning
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                   placeholder="SEO title for search engines"
                 />
@@ -680,6 +689,7 @@ export default function EditPost() {
                     name="publishDate"
                     value={formData.publishDate}
                     onChange={handleInputChange}
+                    suppressHydrationWarning
                     className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                   />
                 </div>

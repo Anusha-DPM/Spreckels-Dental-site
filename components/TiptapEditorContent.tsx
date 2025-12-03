@@ -27,6 +27,7 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
   const isInternalUpdate = useRef(false)
 
   const editor = useEditor({
+    immediatelyRender: false, // Fix SSR hydration mismatch
     extensions: [
       StarterKit.configure({
         heading: {
