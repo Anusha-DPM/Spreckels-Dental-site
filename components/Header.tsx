@@ -61,11 +61,37 @@ export default function Header() {
   ]
 
   const toggleDropdown = (itemName: string) => {
-    setExpandedItems(prev => 
-      prev.includes(itemName) 
-        ? prev.filter(item => item !== itemName)
-        : [...prev, itemName]
-    )
+    setExpandedItems(prev => {
+      // Define top-level dropdowns that are mutually exclusive
+      const topLevelDropdowns = ['About Us', 'Services', 'Resources']
+      
+      // If the clicked item is already open, close it
+      if (prev.includes(itemName)) {
+        // If closing Resources, also close Patient Education (nested item)
+        if (itemName === 'Resources') {
+          return prev.filter(item => item !== itemName && item !== 'Patient Education')
+        }
+        // If closing any other item, just remove it
+        return prev.filter(item => item !== itemName)
+      }
+      
+      // If clicking a top-level dropdown, close all other top-level dropdowns
+      if (topLevelDropdowns.includes(itemName)) {
+        // Close all top-level dropdowns, then open the clicked one
+        // Patient Education should close when opening About Us or Services
+        return [itemName]
+      }
+      
+      // If clicking Patient Education (nested under Resources), close other top-levels but keep Resources
+      if (itemName === 'Patient Education') {
+        // Remove all top-level dropdowns except Resources, then add Patient Education
+        // Resources must be open for Patient Education to be open
+        return ['Resources', itemName]
+      }
+      
+      // Default: just add the item
+      return [...prev, itemName]
+    })
   }
 
   const closeMenu = () => {
