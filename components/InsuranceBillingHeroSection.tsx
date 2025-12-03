@@ -24,13 +24,13 @@ export default function InsuranceBillingHeroSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
                 href="/contact"
-                className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
+                className="px-8 py-4 bg-white text-[#441018] border border-white rounded-lg font-semibold hover:bg-transparent hover:text-white hover:border-white transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
               >
                 Check Coverage
               </a>
               <a 
                 href="/contact"
-                className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg白色 hover:text-[#441018] transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
+                className="px-8 py-4 bg-transparent text-white border border-white rounded-lg font-semibold hover:bg-white hover:text-black hover:border-white transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
               >
                 Contact Us
               </a>

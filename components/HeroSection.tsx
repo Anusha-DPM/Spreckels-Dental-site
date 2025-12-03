@@ -41,13 +41,13 @@ export default function HeroSection() {
             >
               <a 
                 href="https://spreckels-dental-site.vercel.app/appointment-request"
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base cursor-pointer inline-block text-center"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white hover:border-white transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base cursor-pointer inline-block text-center"
               >
                 Book Appointment
               </a>
               <a 
                 href="/contact"
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white border border-white rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold font-heading text-sm sm:text-base cursor-pointer inline-block text-center"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white border border-white rounded-lg hover:bg-[#441018] hover:text-white hover:border-white transition-colors duration-200 font-semibold font-heading text-sm sm:text-base cursor-pointer inline-block text-center"
               >
                 Learn More
               </a>

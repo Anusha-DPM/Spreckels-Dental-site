@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function SmileGalleryHero() {
   return (
-    <section className="relative pt-[200px] pb-12 sm:pb-16 lg:pb-20 xl:pb-32" style={{ backgroundColor: '#441018' }}>
+    <section className="relative pt-[200px] pb-12 sm:pb-16 lg:pb-[53px]" style={{ backgroundColor: '#441018' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -69,7 +69,7 @@ export default function AboutUsSection() {
               <div className="flex justify-center md:justify-start">
                 <a 
                   href="/dental-staff"
-                  className="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block text-[15px] sm:text-base"
+                  className="bg-[#441018] text-white border border-[#441018] px-8 py-3 rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold font-heading cursor-pointer inline-block text-[15px] sm:text-base"
                 >
                 Learn More
                 </a>

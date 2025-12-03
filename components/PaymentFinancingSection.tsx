@@ -136,7 +136,7 @@ export default function PaymentFinancingSection() {
             </p>
             <a 
               href="/contact"
-              className="px-8 py-3 bg-white text-[#441018] rounded-lg font-bold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
+              className="px-8 py-3 bg-white text-[#441018] border border-white rounded-lg font-bold hover:bg-transparent hover:text-white hover:border-white transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
               Contact Our Office
             </a>

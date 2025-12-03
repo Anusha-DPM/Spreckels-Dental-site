@@ -226,7 +226,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
             >
               <Link
                 href="/blog"
-                className="inline-flex items-center px-8 py-3 bg-[#441018] text-white font-semibold rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 text-[15px] sm:text-base"
+                className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-[#441018] text-white border border-[#441018] rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base"
               >
                 View All Posts
                 <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

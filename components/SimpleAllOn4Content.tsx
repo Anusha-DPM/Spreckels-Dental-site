@@ -22,9 +22,10 @@ export default function SimpleAllOn4Content() {
       title: "Implant Denture",
       image: "/hybrid denture.jpg",
       description: [
-        "Includes two implants and an implant retained denture"
+        "Includes two implants and an implant retained denture",
+      
       ],
-      details: "Book a consultation for more details.",
+      details: "Book a consultation for more details.",                     
       buttonText: "BOOK YOUR FREE CONSULTATION TODAY"
     },
     {
@@ -71,14 +72,16 @@ export default function SimpleAllOn4Content() {
             >
               {/* Price and Title */}
               <div className="p-6 text-center border-b border-gray-100">
-                {service.price && (
-                  <div className="text-[27px] sm:text-3xl font-bold text-orange-500 mb-2">
-                    {service.price}
+                {service.price ? (
+                  <div className="text-[27px] sm:text-3xl font-bold whitespace-nowrap">
+                    <span className="text-black">{service.price}</span>{' '}
+                    <span className="text-orange-500">{service.title}</span>
+                  </div>
+                ) : (
+                  <div className="text-[27px] sm:text-3xl font-bold text-orange-500">
+                    {service.title}
                   </div>
                 )}
-                <div className={`font-semibold text-[22px] sm:text-lg ${service.price ? 'text-gray-900' : 'text-orange-500'}`}>
-                  {service.title}
-                </div>
               </div>
 
               {/* Service Image */}
@@ -104,7 +107,11 @@ export default function SimpleAllOn4Content() {
                 </div>
                 
                 {service.details && (
-                  <div className="mb-6">
+                  <div className={
+                    Array.isArray(service.details) 
+                      ? (service.details.length === 2 ? "mb-14" : "mb-6")
+                      : "mb-12"
+                  }>
                     {Array.isArray(service.details) ? (
                       <div className="space-y-1">
                         {service.details.map((detail, detailIndex) => (
