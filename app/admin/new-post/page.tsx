@@ -196,11 +196,23 @@ Please:
           
           coverImageUrl = uploadResult.url;
           console.log('✅ Image uploaded successfully to Firebase:', coverImageUrl);
+          console.log('🔍 Upload result:', uploadResult);
+          
+          // Validate the URL
+          if (!coverImageUrl || !coverImageUrl.startsWith('http')) {
+            throw new Error(`Invalid URL returned: ${coverImageUrl}`);
+          }
           
           // Update formData with the uploaded URL
           setFormData(prev => ({ ...prev, imageUrl: coverImageUrl }));
+          console.log('✅ FormData updated with image URL:', coverImageUrl);
         } catch (uploadError: any) {
           console.error('❌ Image upload failed:', uploadError);
+          console.error('❌ Upload error details:', {
+            message: uploadError?.message,
+            stack: uploadError?.stack,
+            errorData: uploadError?.errorData
+          });
           setError(`Image upload failed: ${uploadError?.message || 'Unknown error'}. You can still use an image URL instead.`);
           setUploading(false);
           setLoading(false);
@@ -269,7 +281,8 @@ Please:
         uploadedImageUrl: coverImageUrl,
         hasFormImageUrl: !!(formData.imageUrl && formData.imageUrl.trim() !== ''),
         formImageUrl: formData.imageUrl,
-        finalCoverImage: finalCoverImage
+        finalCoverImage: finalCoverImage,
+        imageFileSelected: !!imageFile
       });
       console.log('📋 Post data being saved:', {
         title: formData.title.trim(),
@@ -278,6 +291,13 @@ Please:
         hasContent: !!processedContent,
         contentLength: processedContent?.length || 0,
       });
+      
+      // Validate that if imageFile was selected, we have a coverImage URL
+      if (imageFile && !finalCoverImage) {
+        console.error('⚠️ WARNING: Image file was selected but no cover image URL was obtained!');
+        console.error('⚠️ This means the upload may have failed silently or the URL was not properly set.');
+        throw new Error('Image upload failed: No image URL was obtained from the upload. Please try uploading again or use an image URL instead.');
+      }
 
 
       // IMPORTANT: coverImage will be displayed on:
@@ -301,11 +321,26 @@ Please:
 
       // Try to create blog post
       try {
-        console.log('💾 Saving blog post to database with coverImage:', postData.coverImage);
+        console.log('💾 Saving blog post to database...');
+        console.log('💾 Post data:', {
+          title: postData.title,
+          coverImage: postData.coverImage,
+          imageUrl: postData.imageUrl,
+          slug: postData.slug,
+          hasCoverImage: !!postData.coverImage,
+          coverImageLength: postData.coverImage?.length || 0
+        });
         const postId = await createBlogPost(postData);
         console.log('✅ Blog post saved with ID:', postId);
         console.log('📸 Cover image in saved post:', postData.coverImage);
-        setSuccess('Blog post created successfully!');
+        console.log('📸 Image URL in saved post:', postData.imageUrl);
+        
+        if (imageFile && !postData.coverImage) {
+          console.warn('⚠️ WARNING: Image was uploaded but coverImage is empty in saved post!');
+          setSuccess('Blog post created successfully, but image may not have been saved. Please check the post and re-upload the image if needed.');
+        } else {
+          setSuccess('Blog post created successfully!');
+        }
         
         // Redirect to dashboard after a short delay
         setTimeout(() => {
