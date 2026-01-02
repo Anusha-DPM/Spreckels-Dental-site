@@ -25,6 +25,12 @@ interface BlogPost {
   createdAt: string
   updatedAt: string
   author?: string
+  keyword?: string
+  canonicalUrl?: string
+  jsonLdSchema?: string
+  breadcrumbActive?: string
+  faqSchema?: string
+  medicalConditionSchema?: string
 }
 
 import { processContentImages } from '../../../../lib/processContentImages'
@@ -41,6 +47,12 @@ export default function EditPost() {
     categories: '',
     metaTitle: '',
     metaDescription: '',
+    keyword: '',
+    canonicalUrl: '',
+    jsonLdSchema: '',
+    breadcrumbActive: '',
+    faqSchema: '',
+    medicalConditionSchema: '',
     published: false,
     publishDate: new Date().toISOString().split('T')[0]
   })
@@ -90,6 +102,12 @@ export default function EditPost() {
         categories: blogPost.categories?.join(', ') || '',
         metaTitle: blogPost.metaTitle || '',
         metaDescription: blogPost.metaDescription || '',
+        keyword: blogPost.keyword || '',
+        canonicalUrl: blogPost.canonicalUrl || '',
+        jsonLdSchema: blogPost.jsonLdSchema || '',
+        breadcrumbActive: blogPost.breadcrumbActive || '',
+        faqSchema: blogPost.faqSchema || '',
+        medicalConditionSchema: blogPost.medicalConditionSchema || '',
         published: blogPost.published,
         publishDate: blogPost.published ? blogPost.publishDate.split('T')[0] : new Date().toISOString().split('T')[0]
       })
@@ -261,20 +279,51 @@ export default function EditPost() {
       // IMPORTANT: coverImage will be displayed on:
       // 1. Blog main page (/blog) - as thumbnail
       // 2. Blog detail page (/blog/[slug]) - as featured image
-      const updateData: Partial<BlogPost> = {
-        title: formData.title.trim(),
-        content: processedContent,
-        excerpt: formData.excerpt.trim(),
-        coverImage: finalCoverImage || '', // DISPLAYS ON BLOG MAIN PAGE AND DETAIL PAGE
-        imageUrl: finalImageUrl, // Always use the uploaded URL if available - saved to Firestore database
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        categories: formData.categories.split(',').map(cat => cat.trim()).filter(cat => cat),
-        metaTitle: formData.metaTitle.trim() || formData.title.trim(),
-        metaDescription: formData.metaDescription.trim() || formData.excerpt.trim(),
-        slug: generateSlug(formData.title),
-        published: formData.published,
+      const updateData: any = {
+        title: formData.title?.trim() || '',
+        content: processedContent || '',
+        excerpt: formData.excerpt?.trim() || '',
+        coverImage: finalCoverImage || '',
+        imageUrl: finalImageUrl || '',
+        tags: (formData.tags || '').split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag),
+        categories: (formData.categories || '').split(',').map((cat: string) => cat.trim()).filter((cat: string) => cat),
+        metaTitle: (formData.metaTitle?.trim() || formData.title?.trim() || ''),
+        metaDescription: (formData.metaDescription?.trim() || formData.excerpt?.trim() || ''),
+        slug: generateSlug(formData.title || ''),
+        published: formData.published || false,
         publishDate: formData.published ? formData.publishDate : new Date().toISOString()
       };
+
+      // Only include optional SEO fields if they have values
+      const keyword = formData.keyword?.trim();
+      if (keyword) {
+        updateData.keyword = keyword;
+      }
+      
+      const canonicalUrl = formData.canonicalUrl?.trim();
+      if (canonicalUrl) {
+        updateData.canonicalUrl = canonicalUrl;
+      }
+      
+      const jsonLdSchema = formData.jsonLdSchema?.trim();
+      if (jsonLdSchema) {
+        updateData.jsonLdSchema = jsonLdSchema;
+      }
+      
+      const breadcrumbActive = formData.breadcrumbActive?.trim();
+      if (breadcrumbActive) {
+        updateData.breadcrumbActive = breadcrumbActive;
+      }
+      
+      const faqSchema = formData.faqSchema?.trim();
+      if (faqSchema) {
+        updateData.faqSchema = faqSchema;
+      }
+      
+      const medicalConditionSchema = formData.medicalConditionSchema?.trim();
+      if (medicalConditionSchema) {
+        updateData.medicalConditionSchema = medicalConditionSchema;
+      }
 
       console.log('💾 Updating blog post in database...');
       console.log('💾 Update data:', {
@@ -656,6 +705,108 @@ export default function EditPost() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
                   placeholder="Brief description for search engines"
                 />
+              </div>
+
+              <div>
+                <label htmlFor="keyword" className="block text-sm font-medium text-gray-700 mb-2">
+                  Keyword
+                </label>
+                <input
+                  type="text"
+                  id="keyword"
+                  name="keyword"
+                  value={formData.keyword}
+                  onChange={handleInputChange}
+                  suppressHydrationWarning
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                  placeholder="Primary keyword for SEO"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="canonicalUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                  Canonical URL
+                </label>
+                <input
+                  type="url"
+                  id="canonicalUrl"
+                  name="canonicalUrl"
+                  value={formData.canonicalUrl}
+                  onChange={handleInputChange}
+                  suppressHydrationWarning
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                  placeholder="https://example.com/canonical-url"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Schema Markup */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Schema Markup (Script Fields)</h3>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="jsonLdSchema" className="block text-sm font-medium text-gray-700 mb-2">
+                  JSON-LD Schema
+                </label>
+                <textarea
+                  id="jsonLdSchema"
+                  name="jsonLdSchema"
+                  value={formData.jsonLdSchema}
+                  onChange={handleInputChange}
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
+                  placeholder="Paste your JSON-LD schema script code here..."
+                />
+                <p className="text-xs text-gray-500 mt-1">Paste your JSON-LD schema script code</p>
+              </div>
+
+              <div>
+                <label htmlFor="breadcrumbActive" className="block text-sm font-medium text-gray-700 mb-2">
+                  Breadcrumb Active Schema
+                </label>
+                <textarea
+                  id="breadcrumbActive"
+                  name="breadcrumbActive"
+                  value={formData.breadcrumbActive}
+                  onChange={handleInputChange}
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
+                  placeholder="Paste your breadcrumb schema script code here..."
+                />
+                <p className="text-xs text-gray-500 mt-1">Paste your breadcrumb schema script code</p>
+              </div>
+
+              <div>
+                <label htmlFor="faqSchema" className="block text-sm font-medium text-gray-700 mb-2">
+                  FAQ Schema
+                </label>
+                <textarea
+                  id="faqSchema"
+                  name="faqSchema"
+                  value={formData.faqSchema}
+                  onChange={handleInputChange}
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
+                  placeholder="Paste your FAQ schema script code here..."
+                />
+                <p className="text-xs text-gray-500 mt-1">Paste your FAQ schema script code</p>
+              </div>
+
+              <div>
+                <label htmlFor="medicalConditionSchema" className="block text-sm font-medium text-gray-700 mb-2">
+                  Medical Condition Schema
+                </label>
+                <textarea
+                  id="medicalConditionSchema"
+                  name="medicalConditionSchema"
+                  value={formData.medicalConditionSchema}
+                  onChange={handleInputChange}
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
+                  placeholder="Paste your medical condition schema script code here..."
+                />
+                <p className="text-xs text-gray-500 mt-1">Paste your medical condition schema script code</p>
               </div>
             </div>
           </div>
