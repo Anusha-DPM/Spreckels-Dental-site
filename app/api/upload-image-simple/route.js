@@ -39,6 +39,11 @@ export async function POST(request) {
       folder: folder
     })
 
+    // Generate unique filename first (needed for fallback)
+    const timestamp = Date.now()
+    const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+    const fileName = `${timestamp}-${sanitizedFileName}`
+
     // Create uploads directory outside public folder for security
     // Store in .next/uploads or a private uploads folder
     const baseUploadsDir = join(process.cwd(), 'uploads')
@@ -51,14 +56,44 @@ export async function POST(request) {
       // First ensure the base uploads directory exists
       if (!existsSync(baseUploadsDir)) {
         console.log('📁 Base uploads directory does not exist, creating...')
-        await mkdir(baseUploadsDir, { recursive: true })
-        console.log('✅ Created base uploads directory:', baseUploadsDir)
+        try {
+          await mkdir(baseUploadsDir, { recursive: true, mode: 0o755 })
+          console.log('✅ Created base uploads directory:', baseUploadsDir)
+        } catch (baseError) {
+          console.error('❌ Failed to create base directory:', baseError)
+          // Try alternative: use public/uploads as fallback
+          const fallbackDir = join(process.cwd(), 'public', 'uploads', folder)
+          console.log('⚠️ Trying fallback location:', fallbackDir)
+          const fallbackBase = join(process.cwd(), 'public', 'uploads')
+          if (!existsSync(fallbackBase)) {
+            await mkdir(fallbackBase, { recursive: true, mode: 0o755 })
+          }
+          if (!existsSync(fallbackDir)) {
+            await mkdir(fallbackDir, { recursive: true, mode: 0o755 })
+          }
+          // Use fallback directory
+          const filePath = join(fallbackDir, fileName)
+          const arrayBuffer = await file.arrayBuffer()
+          const buffer = Buffer.from(arrayBuffer)
+          await writeFile(filePath, buffer)
+          const publicUrl = `/uploads/${folder}/${fileName}`
+          const origin = request.headers.get('origin') || 
+                         request.headers.get('host') ? `http://${request.headers.get('host')}` : ''
+          const absoluteUrl = origin ? `${origin}${publicUrl}` : publicUrl
+          return NextResponse.json({
+            success: true,
+            url: absoluteUrl,
+            path: `uploads/${folder}/${fileName}`,
+            fileName: file.name,
+            originalSize: file.size
+          })
+        }
       }
       
       // Then create the folder-specific directory
       if (!existsSync(uploadsDir)) {
         console.log('📁 Directory does not exist, creating...')
-        await mkdir(uploadsDir, { recursive: true })
+        await mkdir(uploadsDir, { recursive: true, mode: 0o755 })
         console.log('✅ Created uploads directory:', uploadsDir)
       } else {
         console.log('✅ Uploads directory already exists:', uploadsDir)
@@ -76,15 +111,44 @@ export async function POST(request) {
         code: mkdirError.code,
         errno: mkdirError.errno,
         path: mkdirError.path,
-        syscall: mkdirError.syscall
+        syscall: mkdirError.syscall,
+        stack: mkdirError.stack
       })
-      throw new Error(`Failed to create uploads directory: ${mkdirError.message}. Code: ${mkdirError.code || 'unknown'}`)
+      
+      // Try fallback to public/uploads
+      try {
+        console.log('⚠️ Attempting fallback to public/uploads...')
+        const fallbackDir = join(process.cwd(), 'public', 'uploads', folder)
+        const fallbackBase = join(process.cwd(), 'public', 'uploads')
+        if (!existsSync(fallbackBase)) {
+          await mkdir(fallbackBase, { recursive: true, mode: 0o755 })
+        }
+        if (!existsSync(fallbackDir)) {
+          await mkdir(fallbackDir, { recursive: true, mode: 0o755 })
+        }
+        const filePath = join(fallbackDir, fileName)
+        const arrayBuffer = await file.arrayBuffer()
+        const buffer = Buffer.from(arrayBuffer)
+        await writeFile(filePath, buffer)
+        const publicUrl = `/uploads/${folder}/${fileName}`
+        const origin = request.headers.get('origin') || 
+                       request.headers.get('host') ? `http://${request.headers.get('host')}` : ''
+        const absoluteUrl = origin ? `${origin}${publicUrl}` : publicUrl
+        console.log('✅ Successfully saved to fallback location:', filePath)
+        return NextResponse.json({
+          success: true,
+          url: absoluteUrl,
+          path: `uploads/${folder}/${fileName}`,
+          fileName: file.name,
+          originalSize: file.size
+        })
+      } catch (fallbackError) {
+        console.error('❌ Fallback also failed:', fallbackError)
+        throw new Error(`Failed to create uploads directory: ${mkdirError.message}. Code: ${mkdirError.code || 'unknown'}. Fallback also failed: ${fallbackError.message}`)
+      }
     }
 
-    // Generate unique filename
-    const timestamp = Date.now()
-    const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-    const fileName = `${timestamp}-${sanitizedFileName}`
+    // File name already generated above, now create file path
     const filePath = join(uploadsDir, fileName)
 
     // Convert file to buffer and save
