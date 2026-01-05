@@ -39,8 +39,9 @@ export async function POST(request) {
       folder: folder
     })
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', folder)
+    // Create uploads directory outside public folder for security
+    // Store in .next/uploads or a private uploads folder
+    const uploadsDir = join(process.cwd(), 'uploads', folder)
     if (!existsSync(uploadsDir)) {
       await mkdir(uploadsDir, { recursive: true })
       console.log('✅ Created uploads directory:', uploadsDir)
@@ -57,18 +58,24 @@ export async function POST(request) {
     const buffer = Buffer.from(arrayBuffer)
     await writeFile(filePath, buffer)
 
-    // Generate public URL
-    const publicUrl = `/uploads/${folder}/${fileName}`
+    // Generate protected URL that goes through API route
+    const protectedUrl = `/api/images/${folder}/${fileName}`
+    
+    // Get the origin from the request headers for absolute URL
+    const origin = request.headers.get('origin') || 
+                   request.headers.get('host') ? `http://${request.headers.get('host')}` : ''
+    const absoluteUrl = origin ? `${origin}${protectedUrl}` : protectedUrl
 
     console.log('✅ Image uploaded successfully:', {
       fileName: fileName,
-      publicUrl: publicUrl,
+      protectedUrl: protectedUrl,
+      absoluteUrl: absoluteUrl,
       filePath: filePath
     })
 
     return NextResponse.json({
       success: true,
-      url: publicUrl,
+      url: absoluteUrl,
       path: `uploads/${folder}/${fileName}`,
       fileName: file.name,
       originalSize: file.size
