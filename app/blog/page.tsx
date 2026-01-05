@@ -539,9 +539,7 @@ export default function BlogPage() {
                     {/* Meta */}
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>{formatDate(post.publishDate)}</span>
-                      {post.author && (
-                        <span>By {post.author}</span>
-                      )}
+                      <span>Spreckels Park Dental</span>
                     </div>
 
                     {/* Selected Date Display */}

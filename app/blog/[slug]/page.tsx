@@ -255,12 +255,6 @@ export default function BlogPostPage() {
 
             <div className="flex items-center text-gray-200 text-lg">
               <span>{formatDate(post.publishDate)}</span>
-              {post.author && (
-                <>
-                  <span className="mx-3">•</span>
-                  <span>By {post.author}</span>
-                </>
-              )}
             </div>
           </motion.div>
         </div>
