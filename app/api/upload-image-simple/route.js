@@ -41,11 +41,21 @@ export async function POST(request) {
 
     // Create uploads directory outside public folder for security
     // Store in .next/uploads or a private uploads folder
-    const uploadsDir = join(process.cwd(), 'uploads', folder)
+    const baseUploadsDir = join(process.cwd(), 'uploads')
+    const uploadsDir = join(baseUploadsDir, folder)
     console.log('📁 Target uploads directory:', uploadsDir)
     console.log('📁 Current working directory:', process.cwd())
+    console.log('📁 Base uploads directory:', baseUploadsDir)
     
     try {
+      // First ensure the base uploads directory exists
+      if (!existsSync(baseUploadsDir)) {
+        console.log('📁 Base uploads directory does not exist, creating...')
+        await mkdir(baseUploadsDir, { recursive: true })
+        console.log('✅ Created base uploads directory:', baseUploadsDir)
+      }
+      
+      // Then create the folder-specific directory
       if (!existsSync(uploadsDir)) {
         console.log('📁 Directory does not exist, creating...')
         await mkdir(uploadsDir, { recursive: true })
@@ -53,9 +63,22 @@ export async function POST(request) {
       } else {
         console.log('✅ Uploads directory already exists:', uploadsDir)
       }
+      
+      // Verify the directory was created and is writable
+      if (!existsSync(uploadsDir)) {
+        throw new Error(`Directory was not created: ${uploadsDir}`)
+      }
+      
     } catch (mkdirError) {
       console.error('❌ Failed to create uploads directory:', mkdirError)
-      throw new Error(`Failed to create uploads directory: ${mkdirError.message}`)
+      console.error('Error details:', {
+        message: mkdirError.message,
+        code: mkdirError.code,
+        errno: mkdirError.errno,
+        path: mkdirError.path,
+        syscall: mkdirError.syscall
+      })
+      throw new Error(`Failed to create uploads directory: ${mkdirError.message}. Code: ${mkdirError.code || 'unknown'}`)
     }
 
     // Generate unique filename
