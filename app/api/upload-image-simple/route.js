@@ -42,9 +42,20 @@ export async function POST(request) {
     // Create uploads directory outside public folder for security
     // Store in .next/uploads or a private uploads folder
     const uploadsDir = join(process.cwd(), 'uploads', folder)
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true })
-      console.log('✅ Created uploads directory:', uploadsDir)
+    console.log('📁 Target uploads directory:', uploadsDir)
+    console.log('📁 Current working directory:', process.cwd())
+    
+    try {
+      if (!existsSync(uploadsDir)) {
+        console.log('📁 Directory does not exist, creating...')
+        await mkdir(uploadsDir, { recursive: true })
+        console.log('✅ Created uploads directory:', uploadsDir)
+      } else {
+        console.log('✅ Uploads directory already exists:', uploadsDir)
+      }
+    } catch (mkdirError) {
+      console.error('❌ Failed to create uploads directory:', mkdirError)
+      throw new Error(`Failed to create uploads directory: ${mkdirError.message}`)
     }
 
     // Generate unique filename
@@ -85,13 +96,32 @@ export async function POST(request) {
     console.error('❌ Simple upload error:', error)
     console.error('Error details:', {
       message: error.message,
-      stack: error.stack
+      stack: error.stack,
+      name: error.name,
+      code: error.code
     })
+
+    // Provide more specific error messages
+    let errorMessage = 'Upload failed'
+    let errorDetails = error.message || 'Unknown error occurred'
+    
+    // Check for specific error types
+    if (error.code === 'EACCES' || error.message.includes('permission denied') || error.message.includes('EACCES')) {
+      errorMessage = 'Permission denied'
+      errorDetails = 'Cannot write to uploads directory. Please check folder permissions.'
+    } else if (error.code === 'ENOENT' || error.message.includes('ENOENT')) {
+      errorMessage = 'Directory not found'
+      errorDetails = 'Uploads directory could not be created. Please check disk space and permissions.'
+    } else if (error.message.includes('ENOSPC')) {
+      errorMessage = 'No space left'
+      errorDetails = 'Not enough disk space to save the file.'
+    }
 
     return NextResponse.json(
       { 
-        error: 'Upload failed', 
-        details: error.message
+        error: errorMessage, 
+        details: errorDetails,
+        code: error.code
       },
       { status: 500 }
     )
