@@ -13,10 +13,15 @@ const firebaseConfig = {
 }
 
 export async function GET() {
+  // Check if we're on Vercel
+  const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV
+  
   const diagnostic = {
     timestamp: new Date().toISOString(),
     environment: {
       nodeEnv: process.env.NODE_ENV,
+      isVercel: isVercel,
+      vercelEnv: process.env.VERCEL_ENV || null,
       hasEnvFile: true // Assuming .env.local exists if we're here
     },
     envVars: {

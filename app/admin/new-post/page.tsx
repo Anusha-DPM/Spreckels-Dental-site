@@ -267,12 +267,22 @@ Please:
             name: uploadError?.name
           });
           
+          // Check if we're on Vercel
+          const isVercel = typeof window !== 'undefined' && (
+            window.location.hostname.includes('vercel.app') ||
+            window.location.hostname.includes('vercel.com')
+          );
+          
           // Provide more helpful error messages
           let errorMessage = uploadError?.message || 'Unknown error';
           let errorDetails = '';
           
           if (errorMessage.includes('Firebase Storage') || errorMessage.includes('storage')) {
-            errorDetails = '\n\nTroubleshooting steps:\n1. Check your .env.local file has NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET set correctly\n2. Visit /api/firebase-diagnostic to see your current configuration\n3. Verify Firebase Storage is enabled in Firebase Console\n4. Check Storage rules allow writes\n5. Restart your server after updating .env.local';
+            if (isVercel) {
+              errorDetails = '\n\nTroubleshooting steps for Vercel:\n1. Go to your Vercel project → Settings → Environment Variables\n2. Add all NEXT_PUBLIC_FIREBASE_* environment variables\n3. Enable them for Production, Preview, and Development\n4. Redeploy your application after adding variables\n5. Visit /api/firebase-diagnostic on your Vercel deployment to verify configuration\n6. Verify Firebase Storage is enabled in Firebase Console\n7. Check Storage rules allow writes\n\nSee VERCEL_FIREBASE_SETUP.md for detailed instructions.';
+            } else {
+              errorDetails = '\n\nTroubleshooting steps:\n1. Check your .env.local file has NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET set correctly\n2. Visit /api/firebase-diagnostic to see your current configuration\n3. Verify Firebase Storage is enabled in Firebase Console\n4. Check Storage rules allow writes\n5. Restart your server after updating .env.local';
+            }
           } else if (errorMessage.includes('timeout')) {
             errorDetails = '\n\nTry uploading a smaller image or check your internet connection.';
           } else if (errorMessage.includes('permission') || errorMessage.includes('unauthorized')) {
