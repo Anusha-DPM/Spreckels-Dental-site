@@ -125,7 +125,8 @@ export async function POST(request) {
           error: errorMessage,
           details: errorDetails,
           missingEnvVars: missingVars,
-          initError: initError ? initError.message : null
+          initError: initError ? initError.message : null,
+          requiresFirebaseOnly: isVercel // Flag to tell client not to try local storage fallback
         },
         { status: 500 }
       )
