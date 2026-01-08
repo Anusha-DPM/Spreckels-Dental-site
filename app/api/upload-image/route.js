@@ -86,22 +86,38 @@ export async function POST(request) {
       const validation = configValidation || validateFirebaseConfig()
       const missingVars = validation.missingFields || []
       
+      // Check if we're on Vercel
+      const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV
+      
       let errorMessage = 'Firebase Storage is not configured.'
       let errorDetails = 'Missing or invalid Firebase configuration'
       
       if (missingVars.length > 0) {
         errorMessage = `Firebase Storage is not configured. Missing environment variables: ${missingVars.join(', ')}`
-        errorDetails = `Please create a .env.local file in your project root with the following variables:\n${missingVars.map(v => `${v}=your-value-here`).join('\n')}\n\nSee firebase-env-template.txt for reference.`
+        
+        if (isVercel) {
+          errorDetails = `Firebase Storage is required on Vercel (local file storage is not available).\n\nPlease add the following environment variables in Vercel:\n1. Go to your Vercel project → Settings → Environment Variables\n2. Add these variables:\n${missingVars.map(v => `   ${v}=your-value-here`).join('\n')}\n3. Enable them for Production, Preview, and Development\n4. Redeploy your application\n\nSee VERCEL_FIREBASE_SETUP.md for detailed instructions.`
+        } else {
+          errorDetails = `Please create a .env.local file in your project root with the following variables:\n${missingVars.map(v => `${v}=your-value-here`).join('\n')}\n\nSee firebase-env-template.txt for reference.`
+        }
       } else if (initError) {
         // If we have an initialization error, show it
         errorMessage = 'Firebase initialization failed'
-        errorDetails = `Firebase failed to initialize: ${initError.message}. Please check your Firebase configuration values in .env.local and ensure they are correct.`
+        if (isVercel) {
+          errorDetails = `Firebase failed to initialize: ${initError.message}. Please check your Firebase configuration values in Vercel Environment Variables and ensure they are correct. After updating, redeploy your application.`
+        } else {
+          errorDetails = `Firebase failed to initialize: ${initError.message}. Please check your Firebase configuration values in .env.local and ensure they are correct.`
+        }
         console.error('Initialization error details:', {
           message: initError.message,
           code: initError.code
         })
       } else {
-        errorDetails = 'Firebase initialization failed. Please check your Firebase configuration and ensure all environment variables are set correctly. Make sure you have restarted your Next.js development server after updating .env.local'
+        if (isVercel) {
+          errorDetails = 'Firebase initialization failed. Please check your Firebase configuration in Vercel Environment Variables and ensure all environment variables are set correctly. After updating, redeploy your application. See VERCEL_FIREBASE_SETUP.md for instructions.'
+        } else {
+          errorDetails = 'Firebase initialization failed. Please check your Firebase configuration and ensure all environment variables are set correctly. Make sure you have restarted your Next.js development server after updating .env.local'
+        }
       }
       
       return NextResponse.json(
