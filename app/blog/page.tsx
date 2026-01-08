@@ -397,124 +397,42 @@ export default function BlogPage() {
                 >
                   {/* Image */}
                   {(() => {
+                    // Use the same simple approach as dashboard - just use coverImage directly
                     const imageSrc = post.coverImage || post.imageUrl
-                    // Validate image URL - must be non-empty and valid URL
-                    if (!imageSrc || imageSrc.trim() === '' || (!imageSrc.startsWith('http') && !imageSrc.startsWith('https') && !imageSrc.startsWith('data:'))) {
+                    
+                    if (!imageSrc || imageSrc.trim() === '') {
                       return null
                     }
                     
-                    console.log(`🖼️ Rendering image for post "${post.title}":`, {
-                      coverImage: post.coverImage,
-                      imageUrl: post.imageUrl,
-                      usingSrc: imageSrc,
-                      hasSrc: !!imageSrc,
-                      srcLength: imageSrc?.length || 0
-                    })
-                    
-                    // Check if it's a localhost URL (local API route)
-                    const isLocalhostUrl = imageSrc.includes('localhost') || imageSrc.includes('127.0.0.1') || imageSrc.startsWith('/api/')
-                    
-                    // Check if URL is from allowed domains for Next.js Image
-                    const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
-                                         imageSrc.includes('storage.googleapis.com') ||
-                                         imageSrc.includes('firebasestorage.app')
-                    const allowedDomains = [
-                      'firebasestorage.googleapis.com',
-                      'storage.googleapis.com',
-                      'firebasestorage.app',
-                      'images.unsplash.com',
-                      'secure.officite.com',
-                      'images.weserv.nl'
-                    ]
-                    const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
-                    
-                    // For localhost URLs and Firebase URLs, use regular img tag to avoid Next.js Image issues
-                    // Next.js Image can have issues with Firebase Storage URLs and localhost URLs
-                    if (isLocalhostUrl || isFirebaseUrl || isAllowedDomain) {
-                      return (
-                        <div className="relative h-48 overflow-hidden bg-gray-100">
-                          <img
-                            src={imageSrc}
-                            alt={post.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                            crossOrigin="anonymous"
-                            onLoad={() => {
-                              console.log(`✅ Image loaded successfully for "${post.title}":`, imageSrc)
-                            }}
-                            onError={(e) => {
-                              console.error(`❌ Image failed to load for "${post.title}":`, {
-                                imageSrc: imageSrc,
-                                coverImage: post.coverImage,
-                                imageUrl: post.imageUrl,
-                                error: e,
-                                imageElement: e.target
-                              })
-                              // Try to get more details about the error
-                              const target = e.target as HTMLImageElement
-                              console.error('Failed image details:', {
-                                src: target.src,
-                                naturalWidth: target.naturalWidth,
-                                naturalHeight: target.naturalHeight,
-                                complete: target.complete
-                              })
-                              target.style.display = 'none'
-                            }}
-                          />
-                        </div>
-                      )
-                    } else if (imageSrc.startsWith('data:')) {
-                      // Use Next.js Image for data URLs
-                      return (
-                        <div className="relative h-48 overflow-hidden bg-gray-100">
-                          <Image
-                            src={imageSrc}
-                            alt={post.title}
-                            fill
-                            className="object-cover"
-                            unoptimized={true}
-                            onLoad={() => {
-                              console.log(`✅ Image loaded successfully for "${post.title}":`, imageSrc)
-                            }}
-                            onError={(e) => {
-                              console.error(`❌ Image failed to load for "${post.title}":`, {
-                                imageSrc: imageSrc,
-                                coverImage: post.coverImage,
-                                imageUrl: post.imageUrl,
-                                error: e
-                              })
-                              const target = e.target as HTMLImageElement
-                              target.style.display = 'none'
-                            }}
-                          />
-                        </div>
-                      )
-                    } else {
-                      // Use regular img tag for other external URLs
-                      return (
-                        <div className="relative h-48 overflow-hidden bg-gray-100">
-                          <img
-                            src={imageSrc}
-                            alt={post.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                            onLoad={() => {
-                              console.log(`✅ Image loaded successfully for "${post.title}":`, imageSrc)
-                            }}
-                            onError={(e) => {
-                              console.error(`❌ Image failed to load for "${post.title}":`, {
-                                imageSrc: imageSrc,
-                                coverImage: post.coverImage,
-                                imageUrl: post.imageUrl,
-                                error: e
-                              })
-                              const target = e.target as HTMLImageElement
-                              target.style.display = 'none'
-                            }}
-                          />
-                        </div>
-                      )
+                    // Convert relative API URLs to absolute URLs (for Vercel compatibility)
+                    let finalImageSrc = imageSrc
+                    if (imageSrc.startsWith('/api/')) {
+                      finalImageSrc = typeof window !== 'undefined' 
+                        ? `${window.location.origin}${imageSrc}`
+                        : imageSrc
                     }
+                    
+                    // Use simple img tag like dashboard does - works for all URL types
+                    return (
+                      <div className="relative h-48 overflow-hidden bg-gray-100">
+                        <img
+                          src={finalImageSrc}
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          crossOrigin="anonymous"
+                          onError={(e) => {
+                            console.error(`❌ Image failed to load for "${post.title}":`, {
+                              imageSrc: finalImageSrc,
+                              coverImage: post.coverImage,
+                              imageUrl: post.imageUrl
+                            })
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                          }}
+                        />
+                      </div>
+                    )
                   })()}
 
                   {/* Content */}

@@ -148,20 +148,61 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
                 whileHover={{ y: -5 }}
               >
                 {/* Image */}
-                {(post.coverImage || post.imageUrl) && (
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={post.coverImage || post.imageUrl!}
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                      onError={(e) => {
-                        console.warn('🖼️ Image failed to load:', post.coverImage || post.imageUrl)
-                        e.currentTarget.style.display = 'none'
-                      }}
-                    />
-                  </div>
-                )}
+                {(() => {
+                  const imageSrc = post.coverImage || post.imageUrl
+                  if (!imageSrc || imageSrc.trim() === '') {
+                    return null
+                  }
+                  
+                  // Check if it's a localhost URL or Firebase URL - use regular img tag
+                  const isLocalhostUrl = imageSrc.includes('localhost') || imageSrc.includes('127.0.0.1') || imageSrc.startsWith('/api/')
+                  const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
+                                       imageSrc.includes('storage.googleapis.com') ||
+                                       imageSrc.includes('firebasestorage.app')
+                  
+                  if (isLocalhostUrl || isFirebaseUrl) {
+                    return (
+                      <div className="relative h-48 overflow-hidden bg-gray-100">
+                        <img
+                          src={imageSrc}
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          crossOrigin="anonymous"
+                          onError={(e) => {
+                            console.warn('🖼️ Image failed to load:', imageSrc)
+                            const target = e.currentTarget
+                            target.style.display = 'none'
+                            const parent = target.parentElement
+                            if (parent) {
+                              parent.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-200 text-gray-400"><p class="text-xs">Image unavailable</p></div>'
+                            }
+                          }}
+                        />
+                      </div>
+                    )
+                  }
+                  
+                  return (
+                    <div className="relative h-48 overflow-hidden bg-gray-100">
+                      <Image
+                        src={imageSrc}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                        onError={(e) => {
+                          console.warn('🖼️ Image failed to load:', imageSrc)
+                          const target = e.currentTarget
+                          target.style.display = 'none'
+                          const parent = target.parentElement
+                          if (parent) {
+                            parent.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-200 text-gray-400"><p class="text-xs">Image unavailable</p></div>'
+                          }
+                        }}
+                      />
+                    </div>
+                  )
+                })()}
 
                 {/* Content */}
                 <div className="p-6">

@@ -274,141 +274,43 @@ export default function BlogPostPage() {
               {/* Featured Image */}
               {(() => {
                 const imageSrc = post.coverImage || post.imageUrl
-                // Validate image URL - must be non-empty and valid URL
-                if (!imageSrc || imageSrc.trim() === '' || (!imageSrc.startsWith('http') && !imageSrc.startsWith('https') && !imageSrc.startsWith('data:'))) {
+                
+                // Use the same simple approach as dashboard - just use coverImage directly
+                if (!imageSrc || imageSrc.trim() === '') {
                   return null
                 }
                 
-                console.log(`🖼️ Rendering featured image for post "${post.title}":`, {
-                  coverImage: post.coverImage,
-                  imageUrl: post.imageUrl,
-                  usingSrc: imageSrc,
-                  hasSrc: !!imageSrc,
-                  srcLength: imageSrc?.length || 0
-                })
-                
-                // Check if it's a localhost URL (local API route)
-                const isLocalhostUrl = imageSrc.includes('localhost') || imageSrc.includes('127.0.0.1') || imageSrc.startsWith('/api/')
-                
-                // Check if it's a Firebase Storage URL or other allowed domain
-                const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
-                                     imageSrc.includes('storage.googleapis.com') ||
-                                     imageSrc.includes('firebasestorage.app')
-                const allowedDomains = [
-                  'firebasestorage.googleapis.com',
-                  'storage.googleapis.com',
-                  'firebasestorage.app',
-                  'images.unsplash.com',
-                  'secure.officite.com',
-                  'images.weserv.nl'
-                ]
-                const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
-                
-                // For localhost URLs and Firebase URLs, use regular img tag to avoid Next.js Image issues
-                // Next.js Image can have issues with Firebase Storage URLs and localhost URLs
-                if (isLocalhostUrl || isFirebaseUrl || isAllowedDomain) {
-                  return (
-                    <div className="mb-8">
-                      <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
-                        <img
-                          src={imageSrc}
-                          alt={post.title}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                          crossOrigin="anonymous"
-                          onLoad={() => {
-                            console.log(`✅ Featured image loaded successfully for "${post.title}":`, imageSrc)
-                          }}
-                          onError={(e) => {
-                            console.error(`❌ Featured image failed to load for "${post.title}":`, {
-                              imageSrc: imageSrc,
-                              coverImage: post.coverImage,
-                              imageUrl: post.imageUrl,
-                              error: e,
-                              imageElement: e.target
-                            })
-                            // Try to get more details about the error
-                            const target = e.target as HTMLImageElement
-                            console.error('Failed image details:', {
-                              src: target.src,
-                              naturalWidth: target.naturalWidth,
-                              naturalHeight: target.naturalHeight,
-                              complete: target.complete
-                            })
-                            target.style.display = 'none'
-                            const parent = target.parentElement
-                            if (parent) {
-                              parent.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Image failed to load. Please check the URL.</p><p class="text-xs mt-2 text-gray-500">URL: ' + imageSrc.substring(0, 80) + '...</p></div>'
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )
-                } else if (imageSrc.startsWith('data:')) {
-                  // Use Next.js Image for data URLs
-                  return (
-                    <div className="mb-8">
-                      <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
-                        <Image
-                          src={imageSrc}
-                          alt={post.title}
-                          fill
-                          className="object-cover"
-                          unoptimized={true}
-                          onLoad={() => {
-                            console.log(`✅ Featured image loaded successfully for "${post.title}":`, imageSrc)
-                          }}
-                          onError={(e) => {
-                            console.error(`❌ Featured image failed to load for "${post.title}":`, {
-                              imageSrc: imageSrc,
-                              coverImage: post.coverImage,
-                              imageUrl: post.imageUrl,
-                              error: e
-                            })
-                            const target = e.target as HTMLImageElement
-                            target.style.display = 'none'
-                            const parent = target.parentElement
-                            if (parent) {
-                              parent.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Image failed to load. Please check the URL.</p></div>'
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )
-                } else {
-                  // Use regular img tag for other external URLs
-                  return (
-                    <div className="mb-8">
-                      <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
-                        <img
-                          src={imageSrc}
-                          alt={post.title}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                          onLoad={() => {
-                            console.log(`✅ Featured image loaded successfully for "${post.title}":`, imageSrc)
-                          }}
-                          onError={(e) => {
-                            console.error(`❌ Featured image failed to load for "${post.title}":`, {
-                              imageSrc: imageSrc,
-                              coverImage: post.coverImage,
-                              imageUrl: post.imageUrl,
-                              error: e
-                            })
-                            const target = e.target as HTMLImageElement
-                            target.style.display = 'none'
-                            const parent = target.parentElement
-                            if (parent) {
-                              parent.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p>Image failed to load. Please check the URL.</p></div>'
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )
+                // Convert relative API URLs to absolute URLs (for Vercel compatibility)
+                let finalImageSrc = imageSrc
+                if (imageSrc.startsWith('/api/')) {
+                  finalImageSrc = typeof window !== 'undefined' 
+                    ? `${window.location.origin}${imageSrc}`
+                    : imageSrc
                 }
+                
+                // Use simple img tag like dashboard does - works for all URL types
+                return (
+                  <div className="mb-8">
+                    <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
+                      <img
+                        src={finalImageSrc}
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        crossOrigin="anonymous"
+                        onError={(e) => {
+                          console.error(`❌ Featured image failed to load for "${post.title}":`, {
+                            imageSrc: finalImageSrc,
+                            coverImage: post.coverImage,
+                            imageUrl: post.imageUrl
+                          })
+                          const target = e.target as HTMLImageElement
+                          target.style.display = 'none'
+                        }}
+                      />
+                    </div>
+                  </div>
+                )
               })()}
 
               {/* Excerpt */}
@@ -481,25 +383,24 @@ export default function BlogPostPage() {
                       >
                         <div className="flex items-start space-x-3">
                           {(() => {
+                            // Use simple approach like dashboard
                             const imageSrc = relatedPost.coverImage || relatedPost.imageUrl
-                            if (!imageSrc || imageSrc.trim() === '' || (!imageSrc.startsWith('http') && !imageSrc.startsWith('https') && !imageSrc.startsWith('data:'))) {
+                            if (!imageSrc || imageSrc.trim() === '') {
                               return null
                             }
                             
-                            const allowedDomains = [
-                              'firebasestorage.googleapis.com',
-                              'storage.googleapis.com',
-                              'images.unsplash.com',
-                              'secure.officite.com',
-                              'images.weserv.nl'
-                            ]
-                            const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
+                            // Convert relative API URLs to absolute URLs
+                            let finalImageSrc = imageSrc
+                            if (imageSrc.startsWith('/api/')) {
+                              finalImageSrc = typeof window !== 'undefined' 
+                                ? `${window.location.origin}${imageSrc}`
+                                : imageSrc
+                            }
                             
-                            // Use regular img tag for all URLs to avoid Next.js Image issues with Firebase
                             return (
                               <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
                                 <img
-                                  src={imageSrc}
+                                  src={finalImageSrc}
                                   alt={relatedPost.title}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                                   loading="lazy"
