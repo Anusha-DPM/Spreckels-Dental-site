@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Custom gradient backgrounds */
+.hero-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.cta-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Rich Text Editor (Tiptap) Custom Styles */
+.rich-text-editor-wrapper {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.rich-text-editor-wrapper .ProseMirror {
+  outline: none;
+  min-height: 500px;
+  padding: 1rem;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.rich-text-editor-wrapper .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #9ca3af;
+  pointer-events: none;
+  height: 0;
+}
+
+.rich-text-editor-wrapper .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+}
+
+.rich-text-editor-wrapper .ProseMirror a {
+  color: #441018;
+  text-decoration: underline;
+}
+
+.rich-text-editor-wrapper .ProseMirror a:hover {
+  color: #5a1a2a;
+}
+
+.rich-text-editor-wrapper .ProseMirror h1,
+.rich-text-editor-wrapper .ProseMirror h2,
+.rich-text-editor-wrapper .ProseMirror h3,
+.rich-text-editor-wrapper .ProseMirror h4,
+.rich-text-editor-wrapper .ProseMirror h5,
+.rich-text-editor-wrapper .ProseMirror h6 {
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.rich-text-editor-wrapper .ProseMirror h1 {
+  font-size: 2rem;
+}
+
+.rich-text-editor-wrapper .ProseMirror h2 {
+  font-size: 1.5rem;
+}
+
+.rich-text-editor-wrapper .ProseMirror h3 {
+  font-size: 1.25rem;
+}
+
+.rich-text-editor-wrapper .ProseMirror ul,
+.rich-text-editor-wrapper .ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+  list-style-position: outside;
+}
+
+.rich-text-editor-wrapper .ProseMirror ul {
+  list-style-type: disc;
+}
+
+.rich-text-editor-wrapper .ProseMirror ol {
+  list-style-type: decimal;
+}
+
+.rich-text-editor-wrapper .ProseMirror li {
+  margin: 0.25rem 0;
+  padding-left: 0.5rem;
+}
+
+.rich-text-editor-wrapper .ProseMirror p {
+  margin: 1rem 0;
+}
+
+.rich-text-editor-wrapper .ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.rich-text-editor-wrapper .ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+.rich-text-editor-wrapper .ProseMirror blockquote {
+  border-left: 4px solid #441018;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* Blog Content Display Styles */
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+  list-style-position: outside;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  margin: 0.5rem 0;
+  padding-left: 0.5rem;
+}
+
+.prose p {
+  margin: 1.25rem 0;
+}
+
+.prose p:first-child {
+  margin-top: 0;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.prose h1:first-child,
+.prose h2:first-child,
+.prose h3:first-child,
+.prose h4:first-child,
+.prose h5:first-child,
+.prose h6:first-child {
+  margin-top: 0;
+}
+
+.prose h1 + p,
+.prose h2 + p,
+.prose h3 + p,
+.prose h4 + p,
+.prose h5 + p,
+.prose h6 + p {
+  margin-top: 0.75rem;
+}
+
+.prose p + h1,
+.prose p + h2,
+.prose p + h3,
+.prose p + h4,
+.prose p + h5,
+.prose p + h6 {
+  margin-top: 2rem;
+}
+
+/* Image styles for blog content */
+.prose img,
+.prose .blog-content-image,
+.blog-content-image {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 1.5rem auto !important;
+  border-radius: 0.5rem;
+  display: block !important;
+  object-fit: contain;
+}
+
+.prose img[src^="data:"],
+.prose img[src^="https:"],
+.prose img[src^="http:"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 1.5rem auto !important;
+  border-radius: 0.5rem;
+  display: block !important;
+  object-fit: contain;
+} 
