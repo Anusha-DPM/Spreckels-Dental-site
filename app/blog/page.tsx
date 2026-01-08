@@ -411,21 +411,26 @@ export default function BlogPage() {
                       srcLength: imageSrc?.length || 0
                     })
                     
+                    // Check if it's a localhost URL (local API route)
+                    const isLocalhostUrl = imageSrc.includes('localhost') || imageSrc.includes('127.0.0.1') || imageSrc.startsWith('/api/')
+                    
                     // Check if URL is from allowed domains for Next.js Image
                     const isFirebaseUrl = imageSrc.includes('firebasestorage.googleapis.com') || 
-                                         imageSrc.includes('storage.googleapis.com')
+                                         imageSrc.includes('storage.googleapis.com') ||
+                                         imageSrc.includes('firebasestorage.app')
                     const allowedDomains = [
                       'firebasestorage.googleapis.com',
                       'storage.googleapis.com',
+                      'firebasestorage.app',
                       'images.unsplash.com',
                       'secure.officite.com',
                       'images.weserv.nl'
                     ]
                     const isAllowedDomain = allowedDomains.some(domain => imageSrc.includes(domain))
                     
-                    // For Firebase URLs, use regular img tag to avoid Next.js Image issues
-                    // Next.js Image can have issues with Firebase Storage URLs
-                    if (isFirebaseUrl || isAllowedDomain) {
+                    // For localhost URLs and Firebase URLs, use regular img tag to avoid Next.js Image issues
+                    // Next.js Image can have issues with Firebase Storage URLs and localhost URLs
+                    if (isLocalhostUrl || isFirebaseUrl || isAllowedDomain) {
                       return (
                         <div className="relative h-48 overflow-hidden bg-gray-100">
                           <img
@@ -433,6 +438,7 @@ export default function BlogPage() {
                             alt={post.title}
                             className="w-full h-full object-cover"
                             loading="lazy"
+                            crossOrigin="anonymous"
                             onLoad={() => {
                               console.log(`✅ Image loaded successfully for "${post.title}":`, imageSrc)
                             }}
@@ -441,9 +447,17 @@ export default function BlogPage() {
                                 imageSrc: imageSrc,
                                 coverImage: post.coverImage,
                                 imageUrl: post.imageUrl,
-                                error: e
+                                error: e,
+                                imageElement: e.target
                               })
+                              // Try to get more details about the error
                               const target = e.target as HTMLImageElement
+                              console.error('Failed image details:', {
+                                src: target.src,
+                                naturalWidth: target.naturalWidth,
+                                naturalHeight: target.naturalHeight,
+                                complete: target.complete
+                              })
                               target.style.display = 'none'
                             }}
                           />

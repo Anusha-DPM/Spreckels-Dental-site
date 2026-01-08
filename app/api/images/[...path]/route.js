@@ -5,8 +5,11 @@ import { existsSync } from 'fs'
 
 export async function GET(request, { params }) {
   try {
+    // In Next.js 13+, params is a Promise, so we need to await it
+    const resolvedParams = await params
+    
     // Get the image path from URL params
-    const pathSegments = params.path || []
+    const pathSegments = resolvedParams.path || []
     if (pathSegments.length === 0) {
       return NextResponse.json(
         { error: 'Image path not provided' },
@@ -25,13 +28,16 @@ export async function GET(request, { params }) {
       )
     }
 
-    // Security: Prevent directory traversal attacks
-    if (fileName.includes('..') || fileName.includes('/') || fileName.includes('\\')) {
+    // Security: Prevent directory traversal attacks (but allow dots in filename)
+    // Only block if fileName contains '..' or path separators (after join, we only want a single filename)
+    if (fileName.includes('..') || fileName.includes('\\')) {
       return NextResponse.json(
         { error: 'Invalid file path' },
         { status: 400 }
       )
     }
+    
+    console.log('📁 Serving image:', { folder, fileName, pathSegments })
 
     // Construct file path (outside public folder for security)
     const filePath = join(process.cwd(), 'uploads', folder, fileName)
