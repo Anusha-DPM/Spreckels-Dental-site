@@ -273,20 +273,33 @@ Please:
             window.location.hostname.includes('vercel.com')
           );
           
-          // Provide more helpful error messages
-          let errorMessage = uploadError?.message || 'Unknown error';
-          let errorDetails = '';
+          // Extract detailed error information from API response
+          const errorData = uploadError?.errorData || {};
+          const errorCode = errorData.code || uploadError?.code || 'unknown';
+          const errorStatus = errorData.status || 'unknown';
+          const errorName = errorData.errorName || uploadError?.name || 'Error';
           
-          if (errorMessage.includes('Firebase Storage') || errorMessage.includes('storage')) {
+          // Provide more helpful error messages with detailed information
+          let errorMessage = uploadError?.message || errorData.error || 'Unknown error';
+          let errorDetails = errorData.details || '';
+          
+          // If we have detailed error info from the API, use it
+          if (errorData.error && errorData.details) {
+            errorMessage = errorData.error;
+            errorDetails = errorData.details;
+          } else if (errorMessage.includes('Firebase Storage') || errorMessage.includes('storage') || errorCode?.startsWith('storage/')) {
             if (isVercel) {
-              errorDetails = '\n\nTroubleshooting steps for Vercel:\n1. Go to your Vercel project → Settings → Environment Variables\n2. Add all NEXT_PUBLIC_FIREBASE_* environment variables\n3. Enable them for Production, Preview, and Development\n4. Redeploy your application after adding variables\n5. Visit /api/firebase-diagnostic on your Vercel deployment to verify configuration\n6. Verify Firebase Storage is enabled in Firebase Console\n7. Check Storage rules allow writes\n\nSee VERCEL_FIREBASE_SETUP.md for detailed instructions.';
+              errorDetails = `\n\nError Code: ${errorCode}\nHTTP Status: ${errorStatus}\n\nTroubleshooting steps for Vercel:\n1. Visit /api/test-firebase-storage on your Vercel deployment to test connectivity\n2. Go to your Vercel project → Settings → Environment Variables\n3. Verify all NEXT_PUBLIC_FIREBASE_* environment variables are set\n4. Enable them for Production, Preview, and Development\n5. Redeploy your application after adding variables\n6. Visit /api/firebase-diagnostic on your Vercel deployment to verify configuration\n7. Verify Firebase Storage is enabled in Firebase Console\n8. Check Storage rules allow writes\n9. Check Vercel function logs for detailed error information\n\nSee VERCEL_UPLOAD_DEBUG.md for detailed debugging steps.`;
             } else {
-              errorDetails = '\n\nTroubleshooting steps:\n1. Check your .env.local file has NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET set correctly\n2. Visit /api/firebase-diagnostic to see your current configuration\n3. Verify Firebase Storage is enabled in Firebase Console\n4. Check Storage rules allow writes\n5. Restart your server after updating .env.local';
+              errorDetails = `\n\nError Code: ${errorCode}\nHTTP Status: ${errorStatus}\n\nTroubleshooting steps:\n1. Visit /api/test-firebase-storage to test connectivity\n2. Check your .env.local file has NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET set correctly\n3. Visit /api/firebase-diagnostic to see your current configuration\n4. Verify Firebase Storage is enabled in Firebase Console\n5. Check Storage rules allow writes\n6. Restart your server after updating .env.local`;
             }
           } else if (errorMessage.includes('timeout')) {
-            errorDetails = '\n\nTry uploading a smaller image or check your internet connection.';
-          } else if (errorMessage.includes('permission') || errorMessage.includes('unauthorized')) {
-            errorDetails = '\n\nCheck Firebase Storage security rules in Firebase Console. For development, rules should allow read/write access.';
+            errorDetails = `\n\nError Code: ${errorCode}\n\nTry uploading a smaller image or check your internet connection.`;
+          } else if (errorMessage.includes('permission') || errorMessage.includes('unauthorized') || errorStatus === '403') {
+            errorDetails = `\n\nError Code: ${errorCode}\nHTTP Status: ${errorStatus}\n\nCheck Firebase Storage security rules in Firebase Console. For development, rules should allow read/write access.`;
+          } else if (errorCode !== 'unknown' || errorStatus !== 'unknown') {
+            // Include error code and status if available
+            errorDetails = `\n\nError Code: ${errorCode}\nHTTP Status: ${errorStatus}\n\n${isVercel ? 'Visit /api/test-firebase-storage on your Vercel deployment to get detailed error information. Check Vercel function logs for more details.' : 'Visit /api/test-firebase-storage to get detailed error information.'}`;
           }
           
           setError(`Image upload failed: ${errorMessage}${errorDetails}\n\nYou can still use an image URL instead by pasting a URL in the "Image URL" field.`);

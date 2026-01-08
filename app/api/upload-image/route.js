@@ -189,13 +189,25 @@ export async function POST(request) {
       bucket: firebaseConfig.storageBucket,
       path: fileName,
       size: buffer.length,
+      contentType: file.type,
+      isVercel: process.env.VERCEL === '1' || !!process.env.VERCEL_ENV,
+      vercelEnv: process.env.VERCEL_ENV || 'not-vercel'
+    })
+    
+    // Add timeout for Vercel (max 10 seconds for upload)
+    const uploadPromise = uploadBytes(storageRef, buffer, {
       contentType: file.type
     })
     
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error('Upload timeout: The upload took longer than 10 seconds. This may be a network issue or Firebase Storage connectivity problem.'))
+      }, 10000)
+    })
+    
+    let snapshot
     try {
-      const snapshot = await uploadBytes(storageRef, buffer, {
-        contentType: file.type
-      })
+      snapshot = await Promise.race([uploadPromise, timeoutPromise])
       console.log('✅ Upload bytes successful')
     } catch (uploadError) {
       // Log detailed error information
@@ -218,16 +230,53 @@ export async function POST(request) {
         console.error('HTTP status text:', uploadError.statusText)
       }
       
-      // Re-throw to be caught by outer catch
-      throw uploadError
+      // Enhanced error extraction for Vercel debugging
+      const enhancedError = {
+        message: uploadError?.message || 'Unknown upload error',
+        code: uploadError?.code || 'unknown',
+        name: uploadError?.name || 'Error',
+        customData: uploadError?.customData || null,
+        serverResponse: uploadError?.serverResponse || null,
+        status: uploadError?.status || uploadError?.customData?.status || null,
+        statusText: uploadError?.statusText || null,
+        stack: uploadError?.stack || null
+      }
+      
+      console.error('📊 Enhanced error info:', JSON.stringify(enhancedError, null, 2))
+      
+      // Re-throw with enhanced error info
+      const errorToThrow = new Error(enhancedError.message)
+      errorToThrow.code = enhancedError.code
+      errorToThrow.customData = enhancedError.customData
+      errorToThrow.serverResponse = enhancedError.serverResponse
+      errorToThrow.status = enhancedError.status
+      errorToThrow.statusText = enhancedError.statusText
+      throw errorToThrow
     }
     
-    // Get download URL
-    const downloadURL = await getDownloadURL(snapshot.ref)
+    // Get download URL with timeout
+    let downloadURL
+    try {
+      const urlPromise = getDownloadURL(snapshot.ref)
+      const urlTimeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => {
+          reject(new Error('Get download URL timeout: Failed to get download URL after 5 seconds'))
+        }, 5000)
+      })
+      
+      downloadURL = await Promise.race([urlPromise, urlTimeoutPromise])
+      console.log('✅ Download URL retrieved successfully')
+    } catch (urlError) {
+      console.error('❌ Failed to get download URL:', urlError)
+      // Even if URL retrieval fails, the file was uploaded, so we can construct the URL manually
+      // But this is a fallback - prefer the actual download URL
+      throw new Error(`Upload succeeded but failed to get download URL: ${urlError.message}`)
+    }
     
     console.log('Server-side upload successful:', {
       fileName: fileName,
-      downloadURL: downloadURL
+      downloadURL: downloadURL,
+      path: fileName
     })
 
     return NextResponse.json({
@@ -287,11 +336,25 @@ export async function POST(request) {
     // Provide more specific error messages
     let errorMessage = 'Upload failed'
     let errorDetails = error.message || 'Unknown error'
+    const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV
+    
+    // Extract error details for better debugging
+    const errorCode = error.code || 'unknown'
+    const errorStatus = error.customData?.status || error.status || 'unknown'
+    const errorName = error.name || 'Error'
+    
+    console.error('🔍 Error analysis:', {
+      code: errorCode,
+      status: errorStatus,
+      name: errorName,
+      message: error.message,
+      hasCustomData: !!error.customData,
+      isVercel: isVercel
+    })
     
     // Check for specific Firebase Storage error codes
-    if (error.code === 'storage/unknown') {
-      const status = error.customData?.status || error.status
-      if (status === 404) {
+    if (errorCode === 'storage/unknown') {
+      if (errorStatus === 404) {
         errorMessage = 'Firebase Storage bucket not found'
         const projectId = firebaseConfig.projectId || 'your-project-id'
         const expectedBucket1 = `${projectId}.appspot.com`
@@ -304,56 +367,84 @@ QUICK FIX:
 3. Go to "Storage" in the left sidebar
 4. If you see "Get started", click it to enable Storage
 5. Copy the EXACT bucket name shown (could be: ${expectedBucket1} or ${expectedBucket2})
-6. Update your .env.local file:
+6. ${isVercel ? 'Update your Vercel environment variables' : 'Update your .env.local file'}:
    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=sprekels-dental.firebasestorage.app
-7. Restart your server (Ctrl+C, then npm run dev)
+${isVercel ? '7. Redeploy your Vercel application' : '7. Restart your server (Ctrl+C, then npm run dev)'}
 
 IMPORTANT:
 - Bucket name format can be: "project-id.appspot.com" OR "project-id.firebasestorage.app"
 - No gs:// prefix
 - Must match EXACTLY what's shown in Firebase Console
 - Visit /api/firebase-diagnostic to check your current configuration`
-      } else if (status === 403) {
+      } else if (errorStatus === 403) {
         errorMessage = 'Firebase Storage permission denied'
-        errorDetails = 'Check Firebase Storage security rules. The storage rules may be blocking the upload. Visit Firebase Console → Storage → Rules and ensure writes are allowed.'
-      } else if (status === 500 || status === 503) {
+        errorDetails = `Firebase Storage returned 403 Forbidden. This means:
+1. Storage security rules are blocking the upload
+2. Visit Firebase Console → Storage → Rules
+3. For testing, use: allow read, write: if true;
+4. Click "Publish" to save the rules
+5. ${isVercel ? 'No redeploy needed - rules take effect immediately' : 'Try uploading again'}`
+      } else if (errorStatus === 500 || errorStatus === 503) {
         errorMessage = 'Firebase Storage server error'
-        errorDetails = `Firebase Storage returned a ${status} error. This could mean:
+        errorDetails = `Firebase Storage returned a ${errorStatus} error. This could mean:
 1. Storage bucket permissions are incorrect
 2. Storage bucket is not properly configured
 3. Firebase Storage service is temporarily unavailable
 4. Check Firebase Console → Storage → Rules to ensure writes are allowed
-5. Verify the storage bucket exists and is accessible`
+5. Verify the storage bucket exists and is accessible
+6. ${isVercel ? 'Check Vercel function logs for more details' : 'Check server logs for more details'}`
       } else if (!error.customData || Object.keys(error.customData).length === 0) {
         errorMessage = 'Firebase Storage error (empty response)'
-        errorDetails = `Firebase Storage returned an error with no details (status: ${status || 'unknown'}). This usually means:
+        errorDetails = `Firebase Storage returned an error with no details (status: ${errorStatus}). This usually means:
 1. Storage bucket permissions issue - check Firebase Console → Storage → Rules
 2. Storage bucket doesn't exist or is misconfigured
 3. Network/firewall blocking the request
-4. Verify storageBucket in .env.local: "${firebaseConfig.storageBucket}"
-5. Visit Firebase Console → Storage to verify the bucket exists`
+4. Verify storageBucket ${isVercel ? 'in Vercel environment variables' : 'in .env.local'}: "${firebaseConfig.storageBucket}"
+5. Visit Firebase Console → Storage to verify the bucket exists
+6. ${isVercel ? 'Check Vercel deployment logs for detailed error information' : 'Check server console for detailed error information'}`
       } else {
         errorMessage = 'Firebase Storage error'
-        errorDetails = `Error code: ${error.code}, Status: ${status || 'unknown'}. ${error.message}`
+        errorDetails = `Error code: ${errorCode}, Status: ${errorStatus}. ${error.message}`
       }
-    } else if (error.message?.includes('storage/')) {
-      errorMessage = 'Firebase Storage error'
-      errorDetails = error.message
+    } else if (errorCode?.startsWith('storage/')) {
+      errorMessage = `Firebase Storage error: ${errorCode}`
+      errorDetails = `${error.message}\n\nError code: ${errorCode}\nStatus: ${errorStatus}`
+    } else if (error.message?.includes('timeout')) {
+      errorMessage = 'Upload timeout'
+      errorDetails = `The upload took too long to complete. This may be due to:
+1. Large file size - try compressing the image
+2. Slow network connection
+3. Firebase Storage service issues
+4. ${isVercel ? 'Vercel function timeout limits' : 'Server timeout limits'}`
     } else if (error.message?.includes('permission') || error.message?.includes('unauthorized')) {
       errorMessage = 'Permission denied'
-      errorDetails = 'Check Firebase Storage security rules'
+      errorDetails = `Permission error: ${error.message}\n\nCheck Firebase Storage security rules in Firebase Console → Storage → Rules`
     } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
       errorMessage = 'Network error'
-      errorDetails = 'Failed to connect to Firebase Storage'
+      errorDetails = `Network error: ${error.message}\n\nFailed to connect to Firebase Storage. Check your internet connection and Firebase service status.`
+    } else {
+      // Generic error - include all available information
+      errorMessage = `Upload failed: ${errorName}`
+      errorDetails = `Error: ${error.message}\nCode: ${errorCode}\nStatus: ${errorStatus}\n\n${isVercel ? 'Check Vercel function logs for more details. Visit your Vercel dashboard → Deployments → View Function Logs.' : 'Check server console for more details.'}`
     }
     
     return NextResponse.json(
       { 
         error: errorMessage, 
         details: errorDetails,
-        code: error.code,
-        status: error.customData?.status,
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        code: error.code || errorCode,
+        status: error.customData?.status || errorStatus,
+        errorName: error.name || errorName,
+        isVercel: isVercel,
+        vercelEnv: process.env.VERCEL_ENV || null,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+        // Include raw error info for debugging (only in development)
+        rawError: process.env.NODE_ENV === 'development' ? {
+          message: error.message,
+          code: error.code,
+          customData: error.customData,
+          serverResponse: error.serverResponse
+        } : undefined
       },
       { status: 500 }
     )
