@@ -5,9 +5,9 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function DentalImplantsMantecaCAFAQSPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const faqSections = [
     {
@@ -159,8 +159,31 @@ export default function DentalImplantsMantecaCAFAQSPage() {
     return index + faqIndex
   }
 
+  // Initialize with first item of each section open
+  const [openIndices, setOpenIndices] = useState<Set<number>>(() => {
+    const indices = new Set<number>()
+    faqSections.forEach((section, sectionIndex) => {
+      if (section.faqs.length > 0) {
+        let index = 0
+        for (let i = 0; i < sectionIndex; i++) {
+          index += faqSections[i].faqs.length
+        }
+        indices.add(index)
+      }
+    })
+    return indices
+  })
+
   const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index)
+    setOpenIndices(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(index)) {
+        newSet.delete(index)
+      } else {
+        newSet.add(index)
+      }
+      return newSet
+    })
   }
   const relatedArticles = [
     {
@@ -216,112 +239,78 @@ export default function DentalImplantsMantecaCAFAQSPage() {
       {/* Why Choose Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12 sm:mb-16"
-          >
-            <h2 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 font-heading mb-4 sm:mb-6">
-              Why Choose Spreckels Park Dental for Dental Implants?
-            </h2>
-            <p className="text-[16px] sm:text-lg text-gray-700 leading-relaxed font-sans max-w-3xl mx-auto">
-              Our goal is to restore your smile with comfort, stability, and long-term success.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
-            {/* Doctor Info Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left Side - Doctor Image */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-lg border border-gray-100"
+              className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl"
             >
-              <div className="mb-6">
-                <div className="inline-block px-4 py-2 bg-primary-100 rounded-full mb-4">
-                  <span className="text-sm font-semibold text-primary-700 uppercase tracking-wide">Expert Leadership</span>
-                </div>
-                <h3 className="text-[22px] sm:text-2xl font-semibold text-gray-900 font-heading mb-3">
-                  Dr. Rujul G. Parikh
-                </h3>
-                <p className="text-[16px] text-gray-600 font-sans mb-4" style={{ color: '#656565' }}>
-                  DDS, FICOI, AFAAID
-                </p>
-                <p className="text-[16px] text-gray-700 leading-relaxed font-sans">
-                  With more than <strong>24 years of experience</strong> and advanced training in implant dentistry, 
-                  Dr. Parikh brings exceptional expertise to every patient.
-                </p>
-              </div>
+              <Image
+                src="/Rujul.jpeg"
+                alt="Dr. Rujul G. Parikh - Expert Implant Dentist"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
             </motion.div>
 
-            {/* Features Grid */}
+            {/* Right Side - Doctor Info */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
+              className="space-y-6"
             >
-              {[
-                {
-                  icon: (
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              <div>
+                <h2 className="text-[24px] sm:text-[28px] md:text-3xl font-normal text-gray-900 font-heading mb-3 sm:mb-4">
+                  Why Choose Spreckels Park Dental for Dental Implants?
+                </h2>
+              
+              </div>
+              
+              <div>
+                <p className="text-[15px] sm:text-[16px] text-gray-700 leading-relaxed font-sans">
+                  Spreckels Park Dental is led by <strong>Dr. Rujul G. Parikh, DDS, FICOI, AFAAID</strong>, 
+                  a dentist with more than <strong>24 years of experience</strong> and advanced training in implant dentistry. 
+                  Our office offers:
+                </p>
+                <br></br>
+                <ul className="space-y-3 sm:space-y-4">
+                  <li className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-primary-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                  ),
-                  title: 'Advanced Technology',
-                  description: '3D imaging & precision planning'
-                },
-                {
-                  icon: (
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    <span className="text-[15px] sm:text-[16px] text-gray-700 font-sans">Advanced implant technology and 3D imaging</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-primary-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                  ),
-                  title: 'Complete Care',
-                  description: 'From extraction to restoration'
-                },
-                {
-                  icon: (
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <span className="text-[15px] sm:text-[16px] text-gray-700 font-sans">Comprehensive care from extractions to final restoration</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-primary-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                  ),
-                  title: 'Flexible Financing',
-                  description: 'Multiple payment options'
-                },
-                {
-                  icon: (
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    <span className="text-[15px] sm:text-[16px] text-gray-700 font-sans">Flexible financing options</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-primary-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                  ),
-                  title: 'Patient-Focused',
-                  description: 'Transparent & personalized'
-                }
-              ].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-white rounded-xl p-4 sm:p-5 md:p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-primary-200 transition-all duration-300"
-                >
-                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary-50 text-primary-600 mb-3 sm:mb-4">
-                    {feature.icon}
-                  </div>
-                  <h4 className="text-[16px] sm:text-[18px] font-semibold text-gray-900 mb-2 font-heading">
-                    {feature.title}
-                  </h4>
-                  <p className="text-[13px] sm:text-[14px] text-gray-600 font-sans" style={{ color: '#656565' }}>
-                    {feature.description}
-                  </p>
-                </motion.div>
-              ))}
+                    <span className="text-[15px] sm:text-[16px] text-gray-700 font-sans">A patient-focused, transparent approach to treatment planning</span>
+                  </li>
+                </ul>
+                <br></br>
+                <p className="text-[16px] sm:text-lg text-gray-700 leading-relaxed font-sans mb-5">
+                  Our goal is to restore your smile with comfort, stability, and long-term success.
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -345,7 +334,7 @@ export default function DentalImplantsMantecaCAFAQSPage() {
                 <div className="space-y-4">
                   {section.faqs.map((faq, faqIndex) => {
                     const globalIndex = getGlobalIndex(sectionIndex, faqIndex)
-                    const isOpen = openIndex === globalIndex
+                    const isOpen = openIndices.has(globalIndex)
                     
                     return (
                       <motion.div
