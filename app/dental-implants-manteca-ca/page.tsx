@@ -328,7 +328,7 @@ export default function DentalImplantsMantecaCAFAQSPage() {
       </section>
 
       {/* Content Section */}
-      <section className="py-8 sm:py-10 lg:py-12">
+      <section className="pb-8 sm:pb-10 lg:pb-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -337,7 +337,7 @@ export default function DentalImplantsMantecaCAFAQSPage() {
           >
             {/* Render FAQs by Section */}
             {faqSections.map((section, sectionIndex) => (
-              <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-8 sm:mt-10 md:mt-12' : ''}>
+              <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-8 sm:mt-10 md:mt-12' : 'pt-0'}>
                 <h2 className="text-[22px] sm:text-[27px] md:text-3xl font-normal text-gray-900 font-heading mb-4 sm:mb-6">
                   {section.title}
                 </h2>
