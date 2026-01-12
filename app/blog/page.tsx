@@ -250,7 +250,7 @@ export default function BlogPage() {
       <div className="min-h-screen bg-gray-50">
              {/* Hero Section */}
       <motion.section 
-        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-[140px] pb-12 sm:pb-16 lg:pb-20"
+        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-[140px] pb-12 sm:pb-16 lg:pt-[180px] lg:pb-20"
          initial={{ opacity: 0, y: -20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.6 }}
