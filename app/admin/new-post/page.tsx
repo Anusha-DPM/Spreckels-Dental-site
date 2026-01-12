@@ -181,12 +181,12 @@ export default function NewPost() {
           
           const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any;
           
-          if (!uploadResult || !uploadResult.url) {
+          if (!uploadResult) {
             console.error('❌ Upload result is invalid:', uploadResult);
             throw new Error('Upload succeeded but no URL returned. The upload may have failed silently. Please check your Firebase Storage configuration and try again.');
           }
           
-          coverImageUrl = uploadResult.url;
+          coverImageUrl = uploadResult;
           console.log('✅ Image uploaded successfully to Firebase:', coverImageUrl);
           console.log('🔍 Upload result:', uploadResult);
           

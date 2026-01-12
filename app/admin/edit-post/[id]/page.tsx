@@ -178,11 +178,11 @@ export default function EditPost() {
           
           const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images');
           
-          if (!uploadResult || !uploadResult.url) {
+          if (!uploadResult) {
             throw new Error('Upload succeeded but no URL returned');
           }
           
-          coverImageUrl = uploadResult.url;
+          coverImageUrl = uploadResult;
           console.log('✅ Image uploaded successfully to Firebase:', coverImageUrl);
           console.log('🔍 Upload result:', uploadResult);
           
