@@ -176,7 +176,13 @@ export default function EditPost() {
             fileType: imageFile.type
           });
           
-          const uploadResult = await uploadImageToFirebase(imageFile, 'blog-images');
+          // Add timeout to prevent infinite loading (3 minutes for larger images)
+          const uploadPromise = uploadImageToFirebase(imageFile, 'blog-images');
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Upload timeout: The upload took too long. Please try again with a smaller image or check your internet connection.')), 180000)
+          );
+          
+          const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any;
           
           if (!uploadResult) {
             throw new Error('Upload succeeded but no URL returned');
