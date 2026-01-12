@@ -88,29 +88,63 @@ export default function AdminDashboard() {
   }
 
   const handleDeletePost = async (postId: string) => {
+    if (!postId) {
+      setError('Invalid post ID. Cannot delete post.')
+      console.error('❌ Delete failed: postId is undefined or empty')
+      return
+    }
+
     try {
+      let firebaseDeleted = false
+      let deletionError: any = null
+      
       // Try Firebase first
       try {
         await deleteBlogPost(postId)
-      } catch (firebaseError) {
-        console.warn('Firebase delete failed, using localStorage:', firebaseError)
+        firebaseDeleted = true
+        console.log('✅ Successfully deleted from Firebase:', postId)
+      } catch (firebaseError: any) {
+        deletionError = firebaseError
+        console.error('❌ Firebase delete failed:', firebaseError)
+        // Don't set error here - we'll try localStorage fallback first
       }
       
-      // Update localStorage
+      // Update localStorage (fallback or backup)
       try {
         const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
         const updatedPosts = localPosts.filter((post: any) => post.id !== postId)
         localStorage.setItem('tempBlogPosts', JSON.stringify(updatedPosts))
+        console.log('✅ Updated localStorage after deletion')
       } catch (localError) {
-        console.error('Error updating localStorage:', localError)
+        console.error('❌ Error updating localStorage:', localError)
       }
       
-      setPosts(posts.filter(post => post.id !== postId))
+      // Update local state immediately for better UX
+      const updatedPosts = posts.filter(post => post.id !== postId)
+      setPosts(updatedPosts)
       setShowDeleteModal(false)
       setSelectedPost(null)
-    } catch (err) {
-      setError('Failed to delete post')
-      console.error(err)
+      
+      // If Firebase deletion failed, show error but continue
+      if (!firebaseDeleted && deletionError) {
+        setError(`Post removed from local view, but Firebase deletion failed: ${deletionError.message || 'Unknown error'}. Please check your Firebase configuration.`)
+        // Still reload to sync with Firebase (in case it was actually deleted)
+        setTimeout(async () => {
+          await loadPosts()
+        }, 1000)
+      } else {
+        // Clear any previous errors on success
+        setError('')
+        
+        // Reload posts from Firebase if Firebase deletion was successful
+        // This ensures the UI is in sync with the database
+        if (firebaseDeleted) {
+          await loadPosts()
+        }
+      }
+    } catch (err: any) {
+      setError(`Failed to delete post: ${err.message || 'Unknown error'}`)
+      console.error('❌ Delete error:', err)
     }
   }
 
