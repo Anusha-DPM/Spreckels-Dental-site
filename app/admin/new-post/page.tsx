@@ -149,28 +149,16 @@ export default function NewPost() {
             fileType: imageFile.type
           });
           
-          // First, check Firebase Storage configuration
+          // Check Firebase Storage is initialized (check directly in firebase.js)
           try {
-            const diagnosticResponse = await fetch('/api/firebase-diagnostic');
-            const diagnostic = await diagnosticResponse.json();
-            
-            if (!diagnostic.firebase?.storageInitialized) {
-              const storageError = diagnostic.firebase?.storageError || 'Storage not initialized';
-              const storageCode = diagnostic.firebase?.storageCode || 'unknown';
-              console.error('❌ Firebase Storage not initialized:', storageError);
-              throw new Error(`Firebase Storage is not configured: ${storageError} (code: ${storageCode}). Please check your .env.local file and ensure NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET is set correctly. Visit /api/firebase-diagnostic for details.`);
+            const { storage } = await import('../../../lib/firebase');
+            if (!storage) {
+              throw new Error('Firebase Storage is not initialized. Please check your .env.local file and ensure all NEXT_PUBLIC_FIREBASE_* variables are set correctly.');
             }
-            
-            if (!diagnostic.validation?.allPresent) {
-              const missing = diagnostic.validation?.missing || [];
-              console.error('❌ Missing Firebase environment variables:', missing);
-              throw new Error(`Missing Firebase configuration: ${missing.join(', ')}. Please check your .env.local file and restart the server.`);
-            }
-            
             console.log('✅ Firebase Storage configuration verified');
           } catch (configError: any) {
-            console.error('❌ Firebase configuration check failed:', configError);
-            // If diagnostic check fails, continue anyway - the upload will fail with a better error
+            console.error('❌ Firebase Storage check failed:', configError);
+            throw new Error(`Firebase Storage is not configured: ${configError.message || 'Unknown error'}. Please check your .env.local file and restart the server.`);
           }
           
           // Add timeout to prevent infinite loading (increased to 3 minutes for larger images)
@@ -188,7 +176,9 @@ export default function NewPost() {
           
           coverImageUrl = uploadResult;
           console.log('✅ Image uploaded successfully to Firebase:', coverImageUrl);
-          console.log('🔍 Upload result:', uploadResult);
+          console.log('🔍 Upload result type:', typeof uploadResult);
+          console.log('🔍 Upload result length:', uploadResult?.length || 0);
+          console.log('🔍 Upload result preview:', uploadResult?.substring(0, 100) || 'N/A');
           
           // Validate the URL format
           if (!coverImageUrl || typeof coverImageUrl !== 'string' || coverImageUrl.trim() === '') {
@@ -202,7 +192,7 @@ export default function NewPost() {
           }
           
           // Update formData with the uploaded URL
-          setFormData(prev => ({ ...prev, imageUrl: coverImageUrl }));
+          setFormData(prev => ({ ...prev, imageUrl: coverImageUrl, coverImage: coverImageUrl }));
           console.log('✅ FormData updated with image URL:', coverImageUrl);
           console.log('✅ Upload completed successfully - URL is valid and ready to save');
         } catch (uploadError: any) {

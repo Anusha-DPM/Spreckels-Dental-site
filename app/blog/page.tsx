@@ -422,15 +422,19 @@ export default function BlogPage() {
                           alt={post.title}
                           className="w-full h-full object-cover"
                           loading="lazy"
-                          crossOrigin="anonymous"
                           onError={(e) => {
                             console.error(`❌ Image failed to load for "${post.title}":`, {
                               imageSrc: finalImageSrc,
                               coverImage: post.coverImage,
-                              imageUrl: post.imageUrl
+                              imageUrl: post.imageUrl,
+                              imageSrcType: typeof finalImageSrc,
+                              imageSrcLength: finalImageSrc?.length || 0
                             })
                             const target = e.target as HTMLImageElement
                             target.style.display = 'none'
+                          }}
+                          onLoad={() => {
+                            console.log(`✅ Image loaded successfully for "${post.title}":`, finalImageSrc.substring(0, 100))
                           }}
                         />
                       </div>
