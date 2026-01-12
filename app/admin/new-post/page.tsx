@@ -156,15 +156,22 @@ export default function NewPost() {
               throw new Error('Firebase Storage is not initialized. Please check your .env.local file and ensure all NEXT_PUBLIC_FIREBASE_* variables are set correctly.');
             }
             console.log('✅ Firebase Storage configuration verified');
+            console.log('📦 Storage bucket:', process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
           } catch (configError: any) {
             console.error('❌ Firebase Storage check failed:', configError);
             throw new Error(`Firebase Storage is not configured: ${configError.message || 'Unknown error'}. Please check your .env.local file and restart the server.`);
           }
           
-          // Add timeout to prevent infinite loading (increased to 3 minutes for larger images)
+          // Add timeout to prevent infinite loading (2 minutes should be enough for even large images)
+          console.log('⏱️ Starting upload with 2 minute timeout...');
+          const uploadStartTime = Date.now();
           const uploadPromise = uploadImageToFirebase(imageFile, 'blog-images');
           const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Upload timeout: The upload took too long. Please try again with a smaller image or check your internet connection.')), 180000)
+            setTimeout(() => {
+              const elapsed = Date.now() - uploadStartTime;
+              console.error(`❌ Upload timeout after ${(elapsed / 1000).toFixed(2)}s`);
+              reject(new Error('Upload timeout: The upload took too long. This might be a Firebase Storage configuration issue. Please check your Firebase Storage rules and network connection.'));
+            }, 120000) // 2 minutes
           );
           
           const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any;
