@@ -65,6 +65,7 @@ export default function NewPost() {
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
@@ -162,16 +163,23 @@ export default function NewPost() {
             throw new Error(`Firebase Storage is not configured: ${configError.message || 'Unknown error'}. Please check your .env.local file and restart the server.`);
           }
           
-          // Add timeout to prevent infinite loading (2 minutes should be enough for even large images)
-          console.log('⏱️ Starting upload with 2 minute timeout...');
+          // Add timeout to prevent infinite loading (90 seconds should be enough for most images)
+          console.log('⏱️ Starting upload with 90 second timeout...');
           const uploadStartTime = Date.now();
-          const uploadPromise = uploadImageToFirebase(imageFile, 'blog-images');
+          setUploadProgress(0);
+          
+          // Upload with progress tracking
+          const uploadPromise = uploadImageToFirebase(imageFile, 'blog-images', (progress) => {
+            setUploadProgress(progress);
+            console.log(`📊 Upload progress: ${progress.toFixed(1)}%`);
+          });
+          
           const timeoutPromise = new Promise((_, reject) => 
             setTimeout(() => {
               const elapsed = Date.now() - uploadStartTime;
               console.error(`❌ Upload timeout after ${(elapsed / 1000).toFixed(2)}s`);
               reject(new Error('Upload timeout: The upload took too long. This might be a Firebase Storage configuration issue. Please check your Firebase Storage rules and network connection.'));
-            }, 120000) // 2 minutes
+            }, 90000) // 90 seconds (reduced from 2 minutes)
           );
           
           const uploadResult = await Promise.race([uploadPromise, timeoutPromise]) as any;
@@ -253,6 +261,7 @@ export default function NewPost() {
           return;
         } finally {
           setUploading(false)
+          setUploadProgress(0)
         }
       }
 
@@ -683,13 +692,23 @@ export default function NewPost() {
                   className="inline-flex items-center justify-center w-full px-4 py-2 bg-[#441018] text-white text-sm font-semibold rounded-lg hover:bg-[#5a1a2a] cursor-pointer transition-colors duration-200 border border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {uploading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Uploading...
-                    </>
+                    <div className="w-full">
+                      <div className="flex items-center justify-center mb-2">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span className="text-sm">Uploading... {uploadProgress > 0 ? `${Math.round(uploadProgress)}%` : ''}</span>
+                      </div>
+                      {uploadProgress > 0 && (
+                        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                          <div 
+                            className="bg-white h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${uploadProgress}%` }}
+                          ></div>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <>
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

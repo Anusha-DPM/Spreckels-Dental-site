@@ -99,7 +99,10 @@ export default function BlogPostPage() {
             imageUrl: blogPost.imageUrl,
             hasContent: !!blogPost.content,
             coverImageType: typeof blogPost.coverImage,
-            coverImageLength: blogPost.coverImage?.length || 0
+            coverImageLength: blogPost.coverImage?.length || 0,
+            imageUrlType: typeof blogPost.imageUrl,
+            imageUrlLength: blogPost.imageUrl?.length || 0,
+            allFields: Object.keys(blogPost)
           })
           
           // Validate coverImage URL
@@ -109,6 +112,19 @@ export default function BlogPostPage() {
               console.warn(`⚠️ Invalid coverImage URL for "${blogPost.title}":`, blogPost.coverImage)
             } else {
               console.log(`✅ Valid coverImage URL for "${blogPost.title}":`, blogPost.coverImage.substring(0, 100))
+              console.log(`🔗 Full coverImage URL:`, blogPost.coverImage)
+            }
+          } else {
+            console.warn(`⚠️ No coverImage for "${blogPost.title}"`)
+          }
+          
+          // Validate imageUrl
+          if (blogPost.imageUrl) {
+            const isValidUrl = blogPost.imageUrl.startsWith('http') || blogPost.imageUrl.startsWith('https')
+            if (!isValidUrl) {
+              console.warn(`⚠️ Invalid imageUrl for "${blogPost.title}":`, blogPost.imageUrl)
+            } else {
+              console.log(`✅ Valid imageUrl for "${blogPost.title}":`, blogPost.imageUrl.substring(0, 100))
             }
           }
           
@@ -120,6 +136,12 @@ export default function BlogPostPage() {
               console.log('✅ Extracted cover image for post:', blogPost.title)
             }
           }
+          
+          // Ensure we have at least one image source
+          if (!blogPost.coverImage && !blogPost.imageUrl) {
+            console.error(`❌ No image source found for post "${blogPost.title}"`)
+          }
+          
           setPost(blogPost)
           
           // Load related posts
@@ -273,19 +295,68 @@ export default function BlogPostPage() {
             >
               {/* Featured Image */}
               {(() => {
-                const imageSrc = post.coverImage || post.imageUrl
+                // Try coverImage first, then imageUrl, then extract from content
+                let imageSrc = post.coverImage || post.imageUrl || ''
+                
+                // If still no image, try extracting from content
+                if (!imageSrc && post.content) {
+                  const extracted = extractFirstImageFromContent(post.content)
+                  if (extracted) {
+                    imageSrc = extracted
+                    console.log(`✅ Using extracted image from content for "${post.title}"`)
+                  }
+                }
+                
+                console.log(`🖼️ Rendering featured image for post "${post.title}":`, {
+                  coverImage: post.coverImage,
+                  imageUrl: post.imageUrl,
+                  usingSrc: imageSrc,
+                  hasSrc: !!imageSrc,
+                  srcLength: imageSrc?.length || 0,
+                  srcType: typeof imageSrc,
+                  postKeys: Object.keys(post)
+                })
                 
                 // Use the same simple approach as dashboard - just use coverImage directly
                 if (!imageSrc || imageSrc.trim() === '') {
-                  return null
+                  console.warn(`⚠️ No image source for post "${post.title}"`)
+                  console.warn(`⚠️ Post data:`, { coverImage: post.coverImage, imageUrl: post.imageUrl, hasContent: !!post.content })
+                  return (
+                    <div className="mb-8">
+                      <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <div className="text-center text-gray-400">
+                          <svg className="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                          </svg>
+                          <p className="text-sm">No image available</p>
+                        </div>
+                      </div>
+                    </div>
+                  )
                 }
                 
                 // Convert relative API URLs to absolute URLs (for Vercel compatibility)
-                let finalImageSrc = imageSrc
-                if (imageSrc.startsWith('/api/')) {
+                let finalImageSrc = imageSrc.trim()
+                if (finalImageSrc.startsWith('/api/')) {
                   finalImageSrc = typeof window !== 'undefined' 
-                    ? `${window.location.origin}${imageSrc}`
-                    : imageSrc
+                    ? `${window.location.origin}${finalImageSrc}`
+                    : finalImageSrc
+                }
+                
+                // Validate URL format
+                if (!finalImageSrc.startsWith('http://') && !finalImageSrc.startsWith('https://') && !finalImageSrc.startsWith('data:')) {
+                  console.error(`❌ Invalid image URL format for "${post.title}":`, finalImageSrc)
+                  console.error(`❌ Original imageSrc:`, imageSrc)
+                  return (
+                    <div className="mb-8">
+                      <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <div className="text-center text-gray-400">
+                          <p className="text-sm">Invalid image URL</p>
+                          <p className="text-xs mt-1 text-gray-500">Check console for details</p>
+                        </div>
+                      </div>
+                    </div>
+                  )
                 }
                 
                 // Use simple img tag like dashboard does - works for all URL types
@@ -296,20 +367,42 @@ export default function BlogPostPage() {
                         src={finalImageSrc}
                         alt={post.title}
                         className="w-full h-full object-cover"
-                        loading="lazy"
+                        loading="eager"
+                        style={{ display: 'block' }}
                         onError={(e) => {
                           console.error(`❌ Featured image failed to load for "${post.title}":`, {
                             imageSrc: finalImageSrc,
                             coverImage: post.coverImage,
                             imageUrl: post.imageUrl,
                             imageSrcType: typeof finalImageSrc,
-                            imageSrcLength: finalImageSrc?.length || 0
+                            imageSrcLength: finalImageSrc?.length || 0,
+                            error: 'Image load failed - check URL accessibility and CORS settings',
+                            fullUrl: finalImageSrc
                           })
+                          
+                          // Try to test the URL
+                          fetch(finalImageSrc, { method: 'HEAD', mode: 'no-cors' })
+                            .then(() => console.log('✅ URL is accessible (no-cors)'))
+                            .catch((err) => console.error('❌ URL test failed:', err))
+                          
                           const target = e.target as HTMLImageElement
-                          target.style.display = 'none'
+                          // Don't hide immediately - show error message
+                          const parent = target.parentElement
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class="flex flex-col items-center justify-center h-full text-gray-400 p-4">
+                                <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-sm">Image unavailable</p>
+                                <p class="text-xs mt-1 text-gray-500">Check console for details</p>
+                              </div>
+                            `
+                          }
                         }}
                         onLoad={() => {
                           console.log(`✅ Featured image loaded successfully for "${post.title}":`, finalImageSrc.substring(0, 100))
+                          console.log(`✅ Full image URL:`, finalImageSrc)
                         }}
                       />
                     </div>
@@ -389,16 +482,22 @@ export default function BlogPostPage() {
                           {(() => {
                             // Use simple approach like dashboard
                             const imageSrc = relatedPost.coverImage || relatedPost.imageUrl
+                            
                             if (!imageSrc || imageSrc.trim() === '') {
                               return null
                             }
                             
                             // Convert relative API URLs to absolute URLs
-                            let finalImageSrc = imageSrc
-                            if (imageSrc.startsWith('/api/')) {
+                            let finalImageSrc = imageSrc.trim()
+                            if (finalImageSrc.startsWith('/api/')) {
                               finalImageSrc = typeof window !== 'undefined' 
-                                ? `${window.location.origin}${imageSrc}`
-                                : imageSrc
+                                ? `${window.location.origin}${finalImageSrc}`
+                                : finalImageSrc
+                            }
+                            
+                            // Validate URL format
+                            if (!finalImageSrc.startsWith('http://') && !finalImageSrc.startsWith('https://') && !finalImageSrc.startsWith('data:')) {
+                              return null
                             }
                             
                             return (
@@ -408,6 +507,10 @@ export default function BlogPostPage() {
                                   alt={relatedPost.title}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                                   loading="lazy"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement
+                                    target.style.display = 'none'
+                                  }}
                                 />
                               </div>
                             )

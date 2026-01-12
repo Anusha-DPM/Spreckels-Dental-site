@@ -402,16 +402,32 @@ export default function BlogPage() {
                     // Use the same simple approach as dashboard - just use coverImage directly
                     const imageSrc = post.coverImage || post.imageUrl
                     
+                    console.log(`🖼️ Rendering image for post "${post.title}":`, {
+                      coverImage: post.coverImage,
+                      imageUrl: post.imageUrl,
+                      usingSrc: imageSrc,
+                      hasSrc: !!imageSrc,
+                      srcLength: imageSrc?.length || 0,
+                      srcType: typeof imageSrc
+                    })
+                    
                     if (!imageSrc || imageSrc.trim() === '') {
+                      console.warn(`⚠️ No image source for post "${post.title}"`)
                       return null
                     }
                     
                     // Convert relative API URLs to absolute URLs (for Vercel compatibility)
-                    let finalImageSrc = imageSrc
-                    if (imageSrc.startsWith('/api/')) {
+                    let finalImageSrc = imageSrc.trim()
+                    if (finalImageSrc.startsWith('/api/')) {
                       finalImageSrc = typeof window !== 'undefined' 
-                        ? `${window.location.origin}${imageSrc}`
-                        : imageSrc
+                        ? `${window.location.origin}${finalImageSrc}`
+                        : finalImageSrc
+                    }
+                    
+                    // Validate URL format
+                    if (!finalImageSrc.startsWith('http://') && !finalImageSrc.startsWith('https://') && !finalImageSrc.startsWith('data:')) {
+                      console.error(`❌ Invalid image URL format for "${post.title}":`, finalImageSrc)
+                      return null
                     }
                     
                     // Use simple img tag like dashboard does - works for all URL types
@@ -428,10 +444,16 @@ export default function BlogPage() {
                               coverImage: post.coverImage,
                               imageUrl: post.imageUrl,
                               imageSrcType: typeof finalImageSrc,
-                              imageSrcLength: finalImageSrc?.length || 0
+                              imageSrcLength: finalImageSrc?.length || 0,
+                              error: 'Image load failed - check URL accessibility and CORS settings'
                             })
                             const target = e.target as HTMLImageElement
                             target.style.display = 'none'
+                            // Show placeholder
+                            const parent = target.parentElement
+                            if (parent) {
+                              parent.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400 text-sm">Image unavailable</div>'
+                            }
                           }}
                           onLoad={() => {
                             console.log(`✅ Image loaded successfully for "${post.title}":`, finalImageSrc.substring(0, 100))
