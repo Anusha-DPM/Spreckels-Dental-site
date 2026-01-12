@@ -46,15 +46,15 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
       setLoading(true)
       console.log('🔄 Loading blog posts...')
       
-      // Try to get posts from Firebase first
+      // Get posts from Firebase
       try {
-        console.log('🔥 Attempting Firebase fetch...')
+        console.log('🔥 Loading blog posts from Firebase...')
         const fetchedPosts = await getLatestBlogPosts(limit)
-        console.log('✅ Firebase posts fetched:', fetchedPosts)
+        console.log('✅ Posts fetched:', fetchedPosts)
         setPosts(fetchedPosts.map(post => post as BlogPost))
         return
-      } catch (firebaseError) {
-        console.warn('⚠️ Firebase not available, checking localStorage:', firebaseError)
+      } catch (error) {
+        console.warn('⚠️ Error loading posts:', error)
       }
       
       // Fallback to localStorage if Firebase fails

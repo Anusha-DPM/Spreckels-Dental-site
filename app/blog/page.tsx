@@ -131,6 +131,7 @@ export default function BlogPage() {
       try {
         const fetchedPosts = await getPublishedBlogPosts()
         console.log('📥 Fetched posts from database:', fetchedPosts.length)
+        
         // Enhance posts with cover images extracted from content if missing
         const enhancedPosts = fetchedPosts.map(post => {
           const blogPost = post as BlogPost
@@ -166,42 +167,43 @@ export default function BlogPage() {
           return blogPost
         })
         setPosts(enhancedPosts)
+        
+        if (enhancedPosts.length === 0) {
+          setError('No published blog posts found. Please create and publish some posts in the admin dashboard.')
+        }
         return
       } catch (firebaseError) {
         console.warn('Firebase not available, checking localStorage:', firebaseError)
       }
       
-             // Fallback to localStorage if Firebase fails
-       try {
-         const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
-         console.log('Found local posts:', localPosts)
-         
-         const publishedPosts = localPosts.filter((post: any) => post.published)
-         console.log('Published posts:', publishedPosts)
-         
-         // Enhance posts with cover images extracted from content if missing
-         const enhancedPosts = publishedPosts.map((post: any) => {
-           const blogPost = post as BlogPost
-           // If no coverImage or imageUrl, try to extract from content
-           if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
-             const extractedImage = extractFirstImageFromContent(blogPost.content)
-             if (extractedImage) {
-               blogPost.coverImage = extractedImage
-               console.log('✅ Extracted cover image for post:', blogPost.title)
-             }
-           }
-           return blogPost
-         })
-         
-         setPosts(enhancedPosts)
-         
-         if (publishedPosts.length === 0) {
-           setError('No published blog posts found. Please create and publish some posts in the admin dashboard.')
-         }
-       } catch (localError) {
-         console.error('Error loading from localStorage:', localError)
-         setError('Failed to load blog posts from local storage')
-       }
+      // Fallback to localStorage if Firebase fails
+      try {
+        const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+        const publishedPosts = localPosts.filter((post: any) => post.published === true)
+        
+        // Enhance posts with cover images extracted from content if missing
+        const enhancedPosts = publishedPosts.map((post: any) => {
+          const blogPost = post as BlogPost
+          
+          // If no coverImage or imageUrl, try to extract from content
+          if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
+            const extractedImage = extractFirstImageFromContent(blogPost.content)
+            if (extractedImage) {
+              blogPost.coverImage = extractedImage
+            }
+          }
+          return blogPost
+        })
+        
+        setPosts(enhancedPosts)
+        
+        if (enhancedPosts.length === 0) {
+          setError('No published blog posts found. Please create and publish some posts in the admin dashboard.')
+        }
+      } catch (localError) {
+        console.error('Error loading from localStorage:', localError)
+        setError('Failed to load blog posts from local storage')
+      }
     } catch (err) {
       setError('Failed to load blog posts')
       console.error(err)

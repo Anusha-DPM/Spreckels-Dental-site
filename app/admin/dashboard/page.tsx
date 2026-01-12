@@ -59,6 +59,10 @@ export default function AdminDashboard() {
       try {
         const fetchedPosts = await getBlogPosts()
         setPosts(fetchedPosts.map(post => post as BlogPost))
+        
+        if (fetchedPosts.length === 0) {
+          setError('No blog posts found. Create your first post!')
+        }
         return
       } catch (firebaseError) {
         console.warn('Firebase not available, checking localStorage:', firebaseError)
@@ -96,7 +100,6 @@ export default function AdminDashboard() {
 
     try {
       let firebaseDeleted = false
-      let deletionError: any = null
       
       // Try Firebase first
       try {
@@ -104,9 +107,7 @@ export default function AdminDashboard() {
         firebaseDeleted = true
         console.log('✅ Successfully deleted from Firebase:', postId)
       } catch (firebaseError: any) {
-        deletionError = firebaseError
-        console.error('❌ Firebase delete failed:', firebaseError)
-        // Don't set error here - we'll try localStorage fallback first
+        console.warn('Firebase delete failed, using localStorage:', firebaseError)
       }
       
       // Update localStorage (fallback or backup)
@@ -126,9 +127,8 @@ export default function AdminDashboard() {
       setSelectedPost(null)
       
       // If Firebase deletion failed, show error but continue
-      if (!firebaseDeleted && deletionError) {
-        setError(`Post removed from local view, but Firebase deletion failed: ${deletionError.message || 'Unknown error'}. Please check your Firebase configuration.`)
-        // Still reload to sync with Firebase (in case it was actually deleted)
+      if (!firebaseDeleted) {
+        setError('Post removed from local view, but Firebase deletion failed. Please check your Firebase configuration.')
         setTimeout(async () => {
           await loadPosts()
         }, 1000)
@@ -137,7 +137,6 @@ export default function AdminDashboard() {
         setError('')
         
         // Reload posts from Firebase if Firebase deletion was successful
-        // This ensures the UI is in sync with the database
         if (firebaseDeleted) {
           await loadPosts()
         }
@@ -182,6 +181,7 @@ export default function AdminDashboard() {
       ))
       setShowPublishModal(false)
       setSelectedPost(null)
+      setError('') // Clear any previous errors
     } catch (err) {
       setError('Failed to publish post')
       console.error(err)

@@ -142,12 +142,12 @@ export default function BlogPostPage() {
         
         if (foundPost) {
           const blogPost = foundPost as BlogPost
+          
           // Extract cover image from content if missing
           if (!blogPost.coverImage && !blogPost.imageUrl && blogPost.content) {
             const extractedImage = extractFirstImageFromContent(blogPost.content)
             if (extractedImage) {
               blogPost.coverImage = extractedImage
-              console.log('✅ Extracted cover image for post:', blogPost.title)
             }
           }
           setPost(blogPost)

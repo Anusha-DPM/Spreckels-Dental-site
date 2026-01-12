@@ -78,69 +78,17 @@ export default function NewPost() {
     // Check Firebase connection
     const checkFirebaseConnection = async () => {
       try {
-        // First check server-side status via API
-        try {
-          const diagnosticResponse = await fetch('/api/firebase-diagnostic')
-          const diagnostic = await diagnosticResponse.json()
-          
-          if (!diagnostic.validation?.allPresent) {
-            const missing = diagnostic.validation?.missing || []
-            setError(`Firebase environment variables missing: ${missing.join(', ')}. Please check your .env.local file and restart the server.`)
-            return
-          }
-          
-          if (!diagnostic.firebase?.initialized) {
-            setError(`Firebase initialization failed: ${diagnostic.firebase?.error || 'Unknown error'}. Please check your Firebase configuration and restart the server.`)
-            return
-          }
-          
-          console.log('✅ Server-side Firebase is configured correctly')
-        } catch (apiError) {
-          console.warn('Could not check server-side Firebase status:', apiError)
-        }
-        
-        // Check client-side Firebase
         const { db } = await import('../../../lib/firebase')
         if (!db) {
-          console.error('❌ Firebase db is null on client side')
-          // Check if environment variables are available on client side
-          const hasApiKey = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY
-          const hasProjectId = !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
-          
-          if (!hasApiKey || !hasProjectId) {
-            setError(`Firebase environment variables are missing on client side. 
-
-CRITICAL: You MUST restart your Next.js server after updating .env.local!
-
-Steps:
-1. Stop server: Ctrl+C in terminal
-2. Start server: npm run dev
-3. Wait for "Ready on http://localhost:3000"
-4. Refresh this page
-
-Visit /api/firebase-diagnostic to check server-side status.`)
-          } else {
-            setError(`Firebase is not initialized on client side, but environment variables are present. 
-
-This might be a configuration issue. Please:
-1. Check browser console for detailed errors
-2. Visit /api/firebase-diagnostic to verify server-side configuration
-3. Restart your development server if you recently updated .env.local`)
-          }
+          setError('Firebase is not initialized. Please check your Firebase configuration.')
         } else {
-          console.log('✅ Firebase connection verified (client-side)')
+          console.log('✅ Firebase connection verified')
         }
       } catch (err: any) {
         console.error('Firebase connection check failed:', err)
-        setError(`Firebase connection check failed: ${err?.message || 'Unknown error'}. 
-
-Please:
-1. Check your .env.local file has all NEXT_PUBLIC_FIREBASE_* variables
-2. Restart your development server
-3. Visit /api/firebase-diagnostic to see detailed status`)
+        setError(`Firebase connection check failed: ${err?.message || 'Unknown error'}`)
       }
     }
-
     checkFirebaseConnection()
   }, [router])
 
