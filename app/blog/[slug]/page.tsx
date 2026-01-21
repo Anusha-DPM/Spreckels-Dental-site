@@ -236,6 +236,55 @@ export default function BlogPostPage() {
 
   return (
     <Layout>
+      <style jsx global>{`
+        .blog-content {
+          font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+        
+        .blog-content * {
+          font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+        
+        .blog-content p,
+        .blog-content span,
+        .blog-content div,
+        .blog-content li,
+        .blog-content ul,
+        .blog-content ol,
+        .blog-content h1,
+        .blog-content h2,
+        .blog-content h3,
+        .blog-content h4,
+        .blog-content h5,
+        .blog-content h6 {
+          font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+        
+        .blog-content h1 {
+          font-weight: 700 !important;
+        }
+        
+        .blog-content h2 {
+          font-weight: 700 !important;
+        }
+        
+        .blog-content h3 {
+          font-weight: 600 !important;
+        }
+        
+        .blog-content h4 {
+          font-weight: 600 !important;
+        }
+        
+        .blog-content h5,
+        .blog-content h6 {
+          font-weight: 500 !important;
+        }
+        
+        .blog-content p {
+          font-weight: 400 !important;
+        }
+      `}</style>
       <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <motion.section 
@@ -421,12 +470,8 @@ export default function BlogPostPage() {
 
               {/* Content */}
               <div 
-                className="prose prose-lg max-w-none"
+                className="prose prose-lg max-w-none blog-content"
                 dangerouslySetInnerHTML={{ __html: post.content }}
-                style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  wordBreak: 'break-word'
-                }}
               />
 
               {/* Tags */}
