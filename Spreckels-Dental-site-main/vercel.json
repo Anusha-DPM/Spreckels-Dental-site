@@ -1,0 +1,39 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "env": {
+    "NEXT_PUBLIC_FIREBASE_API_KEY": "AIzaSyCiFKu8E-PrnbO7gahgkDfwE1Fr0Bm8mhA",
+    "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "sprekels-dental.firebaseapp.com",
+    "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "sprekels-dental",
+    "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET": "sprekels-dental.firebasestorage.app",
+    "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "173155929949",
+    "NEXT_PUBLIC_FIREBASE_APP_ID": "1:173155929949:web:359c3b007042384111e2b4"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/firebase-test",
+      "destination": "/firebase-test"
+    }
+  ]
+} 
