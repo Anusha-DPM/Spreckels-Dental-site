@@ -239,7 +239,7 @@ export default function BlogPostPage() {
       <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <motion.section 
-        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-[140px] pb-20"
+        className="bg-gradient-to-r from-[#441018] to-[#5a1a2a] text-white pt-[180px] pb-20"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -413,7 +413,7 @@ export default function BlogPostPage() {
               {/* Excerpt */}
               {post.excerpt && (
                 <div className="mb-8 p-6 bg-gray-50 rounded-lg">
-                  <p className="text-xl text-gray-700 italic">
+                  <p className="text-xl text-gray-700 italic" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     {post.excerpt}
                   </p>
                 </div>
@@ -424,6 +424,7 @@ export default function BlogPostPage() {
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
                 style={{
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
                   wordBreak: 'break-word'
                 }}
               />
