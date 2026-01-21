@@ -284,6 +284,28 @@ export default function BlogPostPage() {
         .blog-content p {
           font-weight: 400 !important;
         }
+        
+        /* Mobile center alignment */
+        @media (max-width: 768px) {
+          .blog-content,
+          .blog-content p,
+          .blog-content h1,
+          .blog-content h2,
+          .blog-content h3,
+          .blog-content h4,
+          .blog-content h5,
+          .blog-content h6,
+          .blog-content li,
+          .blog-content div {
+            text-align: center !important;
+          }
+          
+          .blog-content ul,
+          .blog-content ol {
+            display: inline-block !important;
+            text-align: left !important;
+          }
+        }
       `}</style>
       <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -295,6 +317,7 @@ export default function BlogPostPage() {
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
+            className="text-center md:text-left"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -308,7 +331,7 @@ export default function BlogPostPage() {
             
             {/* Categories */}
             {post.categories && post.categories.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
                 {post.categories.map(category => (
                   <span
                     key={category}
@@ -320,11 +343,11 @@ export default function BlogPostPage() {
               </div>
             )}
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="text-[27px] md:text-5xl font-bold mb-6 leading-tight">
               {post.title}
             </h1>
 
-            <div className="flex items-center text-gray-200 text-lg">
+            <div className="flex items-center justify-center md:justify-start text-gray-200 text-lg">
               <span>{formatDate(post.publishDate)}</span>
             </div>
           </motion.div>
@@ -462,7 +485,7 @@ export default function BlogPostPage() {
               {/* Excerpt */}
               {post.excerpt && (
                 <div className="mb-8 p-6 bg-gray-50 rounded-lg">
-                  <p className="text-xl text-gray-700 italic" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  <p className="text-xl text-gray-700 italic text-center md:text-left" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     {post.excerpt}
                   </p>
                 </div>
@@ -476,9 +499,9 @@ export default function BlogPostPage() {
 
               {/* Tags */}
               {post.tags && post.tags.length > 0 && (
-                <div className="mt-8 pt-8 border-t border-gray-200">
+                <div className="mt-8 pt-8 border-t border-gray-200 text-center md:text-left">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                     {post.tags.map(tag => (
                       <span
                         key={tag}
