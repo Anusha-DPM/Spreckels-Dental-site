@@ -41,9 +41,30 @@ export default function BlogPostPage() {
     loadPost()
   }, [slug])
 
-  // Process images in content after render
+  // Process images in content after render and remove bio paragraph under image
   useEffect(() => {
     if (post && typeof window !== 'undefined') {
+      // Find the article element that contains the image and excerpt
+      const article = document.querySelector('article.lg\\:col-span-2')
+      if (article) {
+        // Find the featured image container (the div with mb-8 class that contains the image)
+        const imageContainer = article.querySelector('div.mb-8')
+        if (imageContainer) {
+          // Find the next sibling element after the image container
+          let nextElement = imageContainer.nextElementSibling
+          
+          // Check if the next element is the excerpt div with the bio text
+          if (nextElement) {
+            const text = nextElement.textContent || ''
+            if (text.includes('Dr. Rujul G. Parikh DDS has dedicated over 25 years') && 
+                text.includes('Spreckels Park Dental in Manteca')) {
+              nextElement.remove()
+            }
+          }
+        }
+      }
+      
+      // Also process images in content
       const contentDiv = document.querySelector('.prose.prose-lg')
       if (contentDiv) {
         const images = contentDiv.querySelectorAll('img')
@@ -483,7 +504,7 @@ export default function BlogPostPage() {
               })()}
 
               {/* Excerpt */}
-              {post.excerpt && (
+              {post.excerpt && !post.excerpt.includes('Dr. Rujul G. Parikh DDS has dedicated over 25 years') && (
                 <div className="mb-8 p-6 bg-gray-50 rounded-lg">
                   <p className="text-xl text-gray-700 italic text-center md:text-left" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     {post.excerpt}
