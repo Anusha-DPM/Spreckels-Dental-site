@@ -12,6 +12,7 @@ export default function Header() {
   const [isAboutOpen, setIsAboutOpen] = useState(false)
   const [isMoreOpen, setIsMoreOpen] = useState(false)
   const [isPatientEducationOpen, setIsPatientEducationOpen] = useState(false)
+  const [isDentalImplantsOpen, setIsDentalImplantsOpen] = useState(false)
   const [expandedItems, setExpandedItems] = useState<string[]>([])
 
   const navItems = [
@@ -31,15 +32,22 @@ export default function Header() {
   const servicesItems = [
     { name: 'General & Cosmetic Dentistry', href: '/general-cosmetic-dentistry' },
     { name: 'Sedation Dentistry', href: '/services/sedation-dentistry' },
-    { name: 'Dental Implants', href: '/dental-implants' },
+    {
+      name: 'Dental Implants',
+      href: '/dental-implants',
+      hasSubmenu: true,
+      subItems: [
+        { name: 'Dental Implants in Manteca', href: '/dental-implants-manteca-ca' }
+      ]
+    },
     { name: 'All-on-4® Implant Dentures', href: '/all-on-4-implant-dentures' },
     { name: 'Platelet Rich Fibrin Therapy', href: '/services/platelet-rich-fibrin-therapy' },
     { name: 'Orthodontics', href: '/services/orthodontics' },
   ]
 
   const moreItems = [
-    { 
-      name: 'Patient Education', 
+    {
+      name: 'Patient Education',
       href: '/patient-education',
       hasSubmenu: true,
       subItems: [
@@ -64,7 +72,7 @@ export default function Header() {
     setExpandedItems(prev => {
       // Define top-level dropdowns that are mutually exclusive
       const topLevelDropdowns = ['About Us', 'Services', 'Resources']
-      
+
       // If the clicked item is already open, close it
       if (prev.includes(itemName)) {
         // If closing Resources, also close Patient Education (nested item)
@@ -74,21 +82,21 @@ export default function Header() {
         // If closing any other item, just remove it
         return prev.filter(item => item !== itemName)
       }
-      
+
       // If clicking a top-level dropdown, close all other top-level dropdowns
       if (topLevelDropdowns.includes(itemName)) {
         // Close all top-level dropdowns, then open the clicked one
         // Patient Education should close when opening About Us or Services
         return [itemName]
       }
-      
+
       // If clicking Patient Education (nested under Resources), close other top-levels but keep Resources
       if (itemName === 'Patient Education') {
         // Remove all top-level dropdowns except Resources, then add Patient Education
         // Resources must be open for Patient Education to be open
         return ['Resources', itemName]
       }
-      
+
       // Default: just add the item
       return [...prev, itemName]
     })
@@ -161,7 +169,7 @@ export default function Header() {
                 Home
               </Link>
             </motion.div>
-            
+
             {/* About Us Dropdown */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -180,7 +188,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </Link>
-              
+
               {isAboutOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -202,7 +210,7 @@ export default function Header() {
                 </motion.div>
               )}
             </motion.div>
-            
+
             {/* Services Dropdown */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -221,7 +229,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </Link>
-              
+
               {isServicesOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -233,20 +241,60 @@ export default function Header() {
                 >
                   {servicesItems.map((item) => (
                     <div key={item.name} className="relative">
-                      <Link
-                        href={item.href}
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium"
-                      >
-                        {item.name}
-                      </Link>
+                      {/* @ts-ignore - Adding hasSubmenu property gracefully */}
+                      {item.hasSubmenu ? (
+                        <div
+                          className="relative"
+                          onMouseEnter={() => setIsDentalImplantsOpen(true)}
+                          onMouseLeave={() => setIsDentalImplantsOpen(false)}
+                        >
+                          <div className="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium">
+                            <Link href={item.href} className="flex-1">
+                              {item.name}
+                            </Link>
+                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                          {/* @ts-ignore */}
+                          {isDentalImplantsOpen && item.subItems && (
+                            <motion.div
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 10 }}
+                              className="absolute left-full top-0 ml-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                              onMouseEnter={() => setIsDentalImplantsOpen(true)}
+                              onMouseLeave={() => setIsDentalImplantsOpen(false)}
+                            >
+                              {/* @ts-ignore */}
+                              {item.subItems.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  href={subItem.href}
+                                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-sm"
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </div>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium"
+                        >
+                          {item.name}
+                        </Link>
+                      )}
                     </div>
                   ))}
                 </motion.div>
               )}
             </motion.div>
-            
 
-            
+
+
             {/* Blog */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -260,7 +308,7 @@ export default function Header() {
                 Blog
               </Link>
             </motion.div>
-            
+
             {/* Resources Dropdown */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -279,7 +327,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </Link>
-              
+
               {isMoreOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -339,9 +387,9 @@ export default function Header() {
                 </motion.div>
               )}
             </motion.div>
-            
 
-            
+
+
             {/* Contact Us */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -372,7 +420,7 @@ export default function Header() {
                 Home
               </Link>
             </motion.div>
-            
+
             {/* About Us Dropdown for Tablet */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -391,7 +439,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </Link>
-              
+
               {isAboutOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -413,7 +461,7 @@ export default function Header() {
                 </motion.div>
               )}
             </motion.div>
-            
+
             {/* Services Dropdown for Tablet */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -432,7 +480,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </Link>
-              
+
               {isServicesOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -444,20 +492,60 @@ export default function Header() {
                 >
                   {servicesItems.map((item) => (
                     <div key={item.name} className="relative">
-                      <Link
-                        href={item.href}
-                        className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
-                      >
-                        {item.name}
-                      </Link>
+                      {/* @ts-ignore */}
+                      {item.hasSubmenu ? (
+                        <div
+                          className="relative"
+                          onMouseEnter={() => setIsDentalImplantsOpen(true)}
+                          onMouseLeave={() => setIsDentalImplantsOpen(false)}
+                        >
+                          <div className="flex items-center justify-between px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs">
+                            <Link href={item.href} className="flex-1">
+                              {item.name}
+                            </Link>
+                            <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                          {/* @ts-ignore */}
+                          {isDentalImplantsOpen && item.subItems && (
+                            <motion.div
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 10 }}
+                              className="absolute left-full top-0 ml-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                              onMouseEnter={() => setIsDentalImplantsOpen(true)}
+                              onMouseLeave={() => setIsDentalImplantsOpen(false)}
+                            >
+                              {/* @ts-ignore */}
+                              {item.subItems.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  href={subItem.href}
+                                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </div>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="block px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-[#441018] transition-colors duration-200 font-medium text-xs"
+                        >
+                          {item.name}
+                        </Link>
+                      )}
                     </div>
                   ))}
                 </motion.div>
               )}
             </motion.div>
-            
 
-            
+
+
             {/* Blog */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -471,7 +559,7 @@ export default function Header() {
                 Blog
               </Link>
             </motion.div>
-            
+
             {/* Resources Dropdown for Tablet */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -490,7 +578,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </Link>
-              
+
               {isMoreOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -548,7 +636,7 @@ export default function Header() {
                 </motion.div>
               )}
             </motion.div>
-            
+
             {/* Contact Us */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -603,7 +691,7 @@ export default function Header() {
                 className="fixed inset-0 bg-black bg-opacity-50 z-[105] md:hidden"
                 onClick={closeMenu}
               />
-              
+
               {/* Side Menu */}
               <motion.div
                 initial={{ x: '-100%' }}
@@ -746,13 +834,73 @@ export default function Header() {
                             >
                               {servicesItems.map((item) => (
                                 <li key={item.name}>
-                                  <Link
-                                    href={item.href}
-                                    className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
-                                    onClick={closeMenu}
-                                  >
-                                    {item.name}
-                                  </Link>
+                                  {/* @ts-ignore */}
+                                  {item.hasSubmenu ? (
+                                    <div className="relative">
+                                      <div className="w-full flex items-center justify-between">
+                                        <Link
+                                          href={item.href}
+                                          className="flex-1 block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                          onClick={closeMenu}
+                                        >
+                                          {item.name}
+                                        </Link>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation()
+                                            // Handling inner dropdown for mobile - simplified for now by just toggling
+                                            // Since the state is global, using isDentalImplantsOpen might clash if used improperly in mobile context
+                                            // But for now, we'll assume simple toggle logic or just make it expanded.
+                                            setIsDentalImplantsOpen(!isDentalImplantsOpen)
+                                          }}
+                                          className="px-2 py-2 text-gray-300 hover:text-white"
+                                        >
+                                          <motion.svg
+                                            className="w-4 h-4"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            animate={{ rotate: isDentalImplantsOpen ? 180 : 0 }} // Simplified rotation
+                                          >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                          </motion.svg>
+                                        </button>
+                                      </div>
+
+                                      <AnimatePresence>
+                                        {/* @ts-ignore */}
+                                        {isDentalImplantsOpen && item.subItems && (
+                                          <motion.ul
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            className="bg-[#3a0d14] overflow-hidden" // Slightly darker background for nested
+                                          >
+                                            {/* @ts-ignore */}
+                                            {item.subItems.map((subItem) => (
+                                              <li key={subItem.name}>
+                                                <Link
+                                                  href={subItem.href}
+                                                  className="block px-10 py-2 text-gray-400 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                                  onClick={closeMenu}
+                                                >
+                                                  {subItem.name}
+                                                </Link>
+                                              </li>
+                                            ))}
+                                          </motion.ul>
+                                        )}
+                                      </AnimatePresence>
+                                    </div>
+                                  ) : (
+                                    <Link
+                                      href={item.href}
+                                      className="block px-6 py-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm"
+                                      onClick={closeMenu}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  )}
                                 </li>
                               ))}
                             </motion.ul>
