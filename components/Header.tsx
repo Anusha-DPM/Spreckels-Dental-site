@@ -37,7 +37,7 @@ export default function Header() {
       href: '/dental-implants',
       hasSubmenu: true,
       subItems: [
-        { name: 'Dental Implants in Manteca', href: '/dental-implants-manteca-ca' }
+        { name: 'Dental Implants & All-on-4® FAQs', href: '/dental-implants-manteca-ca' }
       ]
     },
     { name: 'All-on-4® Implant Dentures', href: '/all-on-4-implant-dentures' },
