@@ -23,7 +23,7 @@ export default function HeroSection() {
             >
               BUILD A BRIGHTER SMILE
             </motion.h1>
-            
+
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -32,20 +32,20 @@ export default function HeroSection() {
             >
               Experience exceptional dental care with our expert team. We provide comprehensive dental services to help you achieve a healthy, beautiful smile that lasts a lifetime.
             </motion.p>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              <a 
+              <a
                 href="https://spreckels-dental-site.vercel.app/appointment-request"
                 className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white hover:border-white transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base cursor-pointer inline-block text-center"
               >
                 Book Appointment
               </a>
-              <a 
+              <a
                 href="/contact"
                 className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white border border-white rounded-lg hover:bg-[#441018] hover:text-white hover:border-white transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base cursor-pointer inline-block text-center"
               >
@@ -55,7 +55,7 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
-      
+
       {/* Right Side - Full Image */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
@@ -64,7 +64,7 @@ export default function HeroSection() {
         className="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen overflow-hidden"
       >
         <Image
-          src="/hero- home.jpeg"
+          src="/hero-home.webp"
           alt="Professional dental care and smiling patient"
           fill
           className="object-cover object-top"
