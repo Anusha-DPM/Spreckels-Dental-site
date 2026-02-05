@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import {
   Layout,
   HeroSection,
@@ -14,6 +15,11 @@ import {
   LatestBlogPosts,
   CTASection
 } from '../components'
+
+export const metadata: Metadata = {
+  title: 'Spreckels Park Dental | Comprehensive Dental Care',
+  description: 'Spreckels Park Dental provides comprehensive dental care including preventive, restorative, cosmetic, and patient-focused oral health services.',
+}
 
 export default function Home() {
   return (
