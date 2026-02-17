@@ -3,8 +3,8 @@ import { Layout } from '@/components'
 import PatientEducationClient from '@/components/PatientEducationClient'
 
 export const metadata: Metadata = {
-  title: 'Patient Education Library | Spreckels Park Dental',
-  description: 'Explore our comprehensive library of dental health articles, procedures, and oral care tips to make informed decisions about your oral health.',
+  title: 'Patient Education Resources | Spreckels Park Dental',
+  description: 'Access patient education articles covering oral health, dental procedures, hygiene tips, and treatment information in one place.',
 }
 
 export default function PatientEducation() {

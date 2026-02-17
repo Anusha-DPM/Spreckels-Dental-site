@@ -3,8 +3,8 @@ import { Layout } from '@/components'
 import PatientEducationCategoryClient from '@/components/PatientEducationCategoryClient'
 
 export const metadata: Metadata = {
-  title: 'Cosmetic & General Dentistry | Patient Education',
-  description: 'Learn about common cosmetic and general dental procedures including bonding, bridges, crowns, and fillings at Spreckels Park Dental.',
+  title: 'Cosmetic Dentistry Education | Spreckels Park Dental',
+  description: 'Understand cosmetic and general dentistry procedures including veneers, bonding, and smile care through patient education resources.',
 }
 
 export default function CosmeticGeneralDentistry() {
