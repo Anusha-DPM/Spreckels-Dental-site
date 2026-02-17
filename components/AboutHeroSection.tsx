@@ -33,13 +33,13 @@ export default function AboutHeroSection() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <a 
-                href="https://spreckels-dental-site.vercel.app/appointment-request"
+                href="/appointment-request"
                 className="px-8 py-3 bg-white text-gray-900 border-2 border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-medium text-center text-[15px] sm:text-base"
               >
                 Schedule Consultation
               </a>
               <a 
-                href="https://spreckels-dental-site.vercel.app/dental-staff"
+                href="/dental-staff"
                 className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-medium text-center text-[15px] sm:text-base"
               >
                 Meet Our Team

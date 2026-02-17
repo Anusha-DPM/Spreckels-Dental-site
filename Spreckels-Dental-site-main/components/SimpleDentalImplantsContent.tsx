@@ -123,7 +123,7 @@ export default function SimpleDentalImplantsContent() {
 
                 {/* CTA Button */}
                 <a 
-                  href="https://spreckels-dental-site.vercel.app/appointment-request"
+                  href="/appointment-request"
                   className="w-full bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold text-[15px] sm:text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
                   style={{ backgroundColor: '#f97316' }}
                 >

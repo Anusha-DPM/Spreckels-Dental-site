@@ -41,7 +41,7 @@ export default function SimpleAllOn4CTA() {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
           >
             <a 
-              href="https://spreckels-dental-site.vercel.app/appointment-request"
+              href="/appointment-request"
               className="px-8 py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
               Schedule Consultation

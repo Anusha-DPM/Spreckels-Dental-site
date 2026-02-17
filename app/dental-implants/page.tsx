@@ -8,7 +8,7 @@ import {
 } from '../../components'
 
 export const metadata: Metadata = {
-  title: 'Dental Implants | Spreckels Park Dental Services',
+  title: 'Dental Implants | Spreckels Park Dental',
   description: 'Dental implants at Spreckels Park Dental offer a long-term approach to replacing missing teeth while supporting function and appearance.',
 }
 

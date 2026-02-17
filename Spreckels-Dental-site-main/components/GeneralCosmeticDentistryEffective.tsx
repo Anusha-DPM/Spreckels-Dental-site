@@ -54,7 +54,7 @@ export default function GeneralCosmeticDentistryEffective() {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <a 
-                  href="https://spreckels-dental-site.vercel.app/appointment-request"
+                  href="/appointment-request"
                   className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg font-semibold hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer inline-block"
                 >
                   Book Appointment

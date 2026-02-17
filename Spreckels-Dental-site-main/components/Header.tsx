@@ -558,7 +558,7 @@ export default function Header() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="px-3 lg:px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-[#441018] transition-colors duration-200 font-medium font-heading text-sm lg:text-base"
             >
-              <Link href="https://spreckels-dental-site.vercel.app/appointment-request" className="text-white hover:text-white">
+              <Link href="/appointment-request" className="text-white hover:text-white">
                 Appointment Request
               </Link>
             </motion.button>
