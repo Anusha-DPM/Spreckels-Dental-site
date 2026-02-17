@@ -20,7 +20,7 @@ export default function SimpleAllOn4Hero() {
           >
             Advanced All-on-4® Implant Denture Solutions
           </motion.div>
-          
+
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -29,30 +29,30 @@ export default function SimpleAllOn4Hero() {
           >
             All-on-4® Implant Dentures
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-[16px] sm:text-xl text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed"
           >
-            Transform your smile with All-on-4® implant dentures. 
+            Transform your smile with All-on-4® implant dentures.
             Get a full arch of teeth supported by just four strategic implants for a permanent, natural-looking solution.
           </motion.p>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <a 
-                              href="https://spreckels-dental-site.vercel.app/appointment-request"
+            <a
+              href="/appointment-request"
               className="px-8 py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-[#441018] hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
               Schedule Consultation
             </a>
-            <a 
+            <a
               href="/contact"
               className="px-8 py-4 bg-transparent text-white border border-white rounded-lg hover:bg-white hover:text-red-800 transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
