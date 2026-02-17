@@ -474,7 +474,7 @@ export default function DentalImplantsMantecaCAFAQSPage() {
               </p>
             </div>
             <a 
-              href="https://spreckels-dental-site.vercel.app/appointment-request"
+              href="/appointment-request"
               className="mt-4 sm:mt-6 inline-block px-6 sm:px-8 py-3 sm:py-4 bg-white text-red-800 border border-red-800 rounded-lg hover:bg-red-50 transition-colors duration-200 font-semibold cursor-pointer text-center text-[14px] sm:text-[15px] md:text-base w-full sm:w-auto"
             >
               Schedule Your Free Consultation
@@ -530,3 +530,4 @@ export default function DentalImplantsMantecaCAFAQSPage() {
     </main>
   )
 }
+

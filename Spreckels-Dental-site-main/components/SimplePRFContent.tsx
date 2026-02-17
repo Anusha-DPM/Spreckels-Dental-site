@@ -82,7 +82,7 @@ export default function SimplePRFContent() {
                 Join hundreds of satisfied patients who have benefited from our PRF therapy procedures.
               </p>
               <a 
-                href="https://spreckels-dental-site.vercel.app/appointment-request"
+                href="/appointment-request"
                 className="block w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold text-[15px] sm:text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 text-center cursor-pointer"
               >
                 Schedule Your PRF Consultation

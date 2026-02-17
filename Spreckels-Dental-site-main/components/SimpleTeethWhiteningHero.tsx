@@ -61,7 +61,7 @@ export default function SimpleTeethWhiteningHero() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <a 
-                              href="https://spreckels-dental-site.vercel.app/appointment-request"
+                              href="/appointment-request"
               className="px-8 py-4 bg-white text-gray-900 border border-white rounded-lg hover:bg-transparent hover:text-white transition-colors duration-200 font-semibold cursor-pointer inline-block text-center text-[15px] sm:text-base"
             >
               BOOK A CONSULTATION

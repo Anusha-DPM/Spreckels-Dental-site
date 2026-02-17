@@ -42,7 +42,7 @@ Parking is provided in front of office & parking lot is located in the rear alle
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                 <a 
-                  href="https://spreckels-dental-site.vercel.app/appointment-request"
+                  href="/appointment-request"
                   className="bg-white text-[#441018] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
                 >
                   Book Appointment

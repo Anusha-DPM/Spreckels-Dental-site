@@ -29,7 +29,7 @@ export default function NewOutgridAppSection() {
             {/* Download App Button */}
             <div className="flex justify-center md:justify-start">
               <a 
-                href="https://spreckels-dental-site.vercel.app/appointment-request"
+                href="/appointment-request"
                 className="bg-gray-100 text-black px-6 py-3 rounded-md font-medium hover:bg-[#441018] hover:text-white transition-colors duration-200 cursor-pointer inline-block text-[15px] sm:text-base"
               >
              Book Appointment

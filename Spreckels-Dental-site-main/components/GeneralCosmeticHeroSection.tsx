@@ -23,7 +23,7 @@ export default function GeneralCosmeticHeroSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="https://spreckels-dental-site.vercel.app/appointment-request"
+                href="/appointment-request"
                 className="px-8 py-4 bg-white text-[#441018] rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 cursor-pointer inline-block text-center text-[15px] sm:text-base"
               >
                 Book Appointment

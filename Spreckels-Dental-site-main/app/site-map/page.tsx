@@ -102,7 +102,7 @@ export default function SiteMap() {
                 {/* Appointment Request */}
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    <a href="https://spreckels-dental-site.vercel.app/appointment-request" className="hover:text-[#441018] transition-colors">Appointment Request</a>
+                    <a href="/appointment-request" className="hover:text-[#441018] transition-colors">Appointment Request</a>
                   </h3>
                 </div>
 

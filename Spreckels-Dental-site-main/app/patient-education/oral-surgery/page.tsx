@@ -208,7 +208,7 @@ export default function OralSurgeryPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="https://spreckels-dental-site.vercel.app/appointment-request"
+                href="/appointment-request"
                 className="px-8 py-4 bg-[#441018] text-white border-2 border-white rounded-lg hover:bg-[#5a1a2a] transition-colors duration-200 font-semibold cursor-pointer inline-block text-center"
               >
                 Schedule Consultation
