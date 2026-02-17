@@ -23,9 +23,9 @@ export default function SimpleAllOn4Content() {
       image: "/hybrid denture.jpg",
       description: [
         "Includes two implants and an implant retained denture",
-      
+
       ],
-      details: "Book a consultation for more details.",                     
+      details: "Book a consultation for more details.",
       buttonText: "BOOK YOUR FREE CONSULTATION TODAY"
     },
     {
@@ -105,10 +105,10 @@ export default function SimpleAllOn4Content() {
                     </p>
                   ))}
                 </div>
-                
+
                 {service.details && (
                   <div className={
-                    Array.isArray(service.details) 
+                    Array.isArray(service.details)
                       ? (service.details.length === 2 ? "mb-14" : "mb-6")
                       : "mb-12"
                   }>
@@ -129,8 +129,8 @@ export default function SimpleAllOn4Content() {
                 )}
 
                 {/* CTA Button */}
-                <a 
-                  href="https://spreckels-dental-site.vercel.app/appointment-request"
+                <a
+                  href="/appointment-request"
                   className="w-full bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold text-[15px] sm:text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors duration-200 inline-block text-center cursor-pointer"
                   style={{ backgroundColor: '#f97316' }}
                 >
