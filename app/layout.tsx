@@ -5,6 +5,13 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.centralvalleydentist.com'),
   title: 'Spreckels Park Dental - Professional Dental Services',
   description: 'Professional dental services and consultations. Experience exceptional dental care with our expert team.',
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
+  },
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
@@ -26,4 +33,3 @@ export default function RootLayout({
     </html>
   )
 }
- 

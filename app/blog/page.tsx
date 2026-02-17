@@ -5,8 +5,8 @@ import BlogListingClient from '../../components/BlogListingClient'
 import { BlogPost } from '../../types/blog'
 
 export const metadata: Metadata = {
-  title: 'Blog | Spreckels Park Dental',
-  description: 'Stay informed about dental health, latest treatments, and tips for maintaining your beautiful smile with our dental blog.',
+  title: 'Dental Blog & Oral Health Articles | Spreckels Park Dental',
+  description: 'Read the Spreckels Park Dental blog for oral health tips, dental topics, and helpful information for patients and families.',
 }
 
 export default async function BlogPage() {

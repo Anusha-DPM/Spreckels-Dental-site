@@ -3,8 +3,8 @@ import { Layout } from '@/components'
 import PatientEducationCategoryClient from '@/components/PatientEducationCategoryClient'
 
 export const metadata: Metadata = {
-  title: 'Emergency Dental Care | Patient Education',
-  description: 'Learn how to handle dental emergencies, including gum emergencies, orthodontic issues, tooth pain, and traumatic injuries at Spreckels Park Dental.',
+  title: 'Dental Emergency Care Education | Spreckels Park Dental',
+  description: 'Learn how to respond to dental emergencies including tooth pain, injuries, and urgent oral care situations through patient education.',
 }
 
 export default function EmergencyCare() {

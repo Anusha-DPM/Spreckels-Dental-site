@@ -3,8 +3,8 @@ import { Layout } from '@/components'
 import PatientEducationImplantClient from '@/components/PatientEducationImplantClient'
 
 export const metadata: Metadata = {
-  title: 'Implant Dentistry | Patient Education',
-  description: 'Learn about dental implants, the gold standard for tooth replacement. Understand the process, benefits, and advanced technology used at Spreckels Park Dental.',
+  title: 'Implant Dentistry Education | Spreckels Park Dental',
+  description: 'Learn how dental implants work, treatment steps, and aftercare guidance through detailed implant dentistry education resources.',
 }
 
 export default function ImplantDentistryPage() {
