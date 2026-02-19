@@ -5,11 +5,12 @@ import BlogPostClient from '../../../components/BlogPostClient'
 import { BlogPost } from '../../../types/blog'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlogPostBySlug(params.slug) as BlogPost | null
+  const { slug } = await params
+  const post = await getBlogPostBySlug(slug) as BlogPost | null
 
   if (!post) {
     return {
@@ -30,7 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const post = await getBlogPostBySlug(params.slug) as BlogPost | null
+  const { slug } = await params
+  const post = await getBlogPostBySlug(slug) as BlogPost | null
 
   if (!post) {
     // We can't use useRouter here as it's a server component. 

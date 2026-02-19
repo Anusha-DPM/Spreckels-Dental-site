@@ -25,7 +25,8 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                     if (nextElement) {
                         const text = nextElement.textContent || ''
                         if (text.includes('Dr. Rujul G. Parikh DDS has dedicated over 25 years') &&
-                            text.includes('Spreckels Park Dental in Manteca')) {
+                            text.includes('Spreckels Park Dental in Manteca') &&
+                            !nextElement.classList.contains('prose')) { // Check to ensure we don't remove the content div
                             nextElement.remove()
                         }
                     }
