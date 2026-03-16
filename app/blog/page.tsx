@@ -10,8 +10,15 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  // Fetch posts on the server
-  const posts = await getPublishedBlogPosts() as BlogPost[]
+  // Fetch posts on the server when possible.
+  // If Firebase env vars aren't configured, fall back to client-side loading
+  // (BlogListingClient will attempt Firebase/localStorage).
+  let posts: BlogPost[] = []
+  try {
+    posts = await getPublishedBlogPosts() as BlogPost[]
+  } catch (e) {
+    console.error('Failed to load published blog posts on server:', e)
+  }
 
   // Pass to client component for search/filter logic
   return <BlogListingClient initialPosts={posts} />

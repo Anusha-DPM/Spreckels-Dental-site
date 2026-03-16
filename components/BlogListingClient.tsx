@@ -5,13 +5,14 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Layout from './Layout'
 import { BlogPost } from '../types/blog'
+import { getPublishedBlogPosts } from '../lib/blogDatabase'
 
 interface BlogListingClientProps {
     initialPosts: BlogPost[]
 }
 
 export default function BlogListingClient({ initialPosts }: BlogListingClientProps) {
-    const [posts] = useState<BlogPost[]>(initialPosts)
+    const [posts, setPosts] = useState<BlogPost[]>(initialPosts)
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
     const [selectedDates, setSelectedDates] = useState<Record<string, string>>({})
@@ -29,6 +30,33 @@ export default function BlogListingClient({ initialPosts }: BlogListingClientPro
         }
     }, [posts])
 
+    useEffect(() => {
+        const loadIfNeeded = async () => {
+            if (initialPosts.length > 0) return
+
+            // Try Firebase on the client first
+            try {
+                const fetched = await getPublishedBlogPosts()
+                setPosts((fetched || []) as BlogPost[])
+                return
+            } catch (e) {
+                console.warn('Client Firebase fetch failed, trying localStorage fallback:', e)
+            }
+
+            // Fallback: localStorage (used by blog editor tooling)
+            try {
+                const localPosts = JSON.parse(localStorage.getItem('tempBlogPosts') || '[]')
+                const publishedPosts = (localPosts || [])
+                    .filter((post: any) => post?.published === true)
+                    .sort((a: any, b: any) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
+                setPosts(publishedPosts as BlogPost[])
+            } catch (e) {
+                console.warn('localStorage blog fallback failed:', e)
+            }
+        }
+
+        loadIfNeeded()
+    }, [initialPosts])
     const categories = Array.from(new Set(posts.flatMap(post => post.categories || [])))
 
     const filteredPosts = posts.filter(post => {
