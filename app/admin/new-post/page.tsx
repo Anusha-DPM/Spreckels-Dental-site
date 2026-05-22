@@ -331,10 +331,10 @@ export default function NewPost() {
         postData.keyword = keyword;
       }
       
-      const canonicalUrl = formData.canonicalUrl?.trim();
-      if (canonicalUrl) {
-        postData.canonicalUrl = canonicalUrl;
-      }
+      const postSlug = generateSlug(formData.title || '');
+      postData.canonicalUrl =
+        formData.canonicalUrl?.trim() ||
+        `https://www.centralvalleydentist.com/blog/${postSlug}`;
       
       const jsonLdSchema = formData.jsonLdSchema?.trim();
       if (jsonLdSchema) {

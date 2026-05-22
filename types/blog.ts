@@ -9,6 +9,8 @@ export interface BlogPost {
     categories: string[]
     metaTitle: string
     metaDescription: string
+    canonicalUrl?: string
+    keyword?: string
     slug: string
     published: boolean
     publishDate: string

@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { cache } from 'react'
 import { Metadata } from 'next'
-import { getBlogPostBySlug, getPublishedBlogPosts } from '../../../lib/blogDatabase'
+import { getPublishedBlogPosts } from '../../../lib/blogDatabase'
+import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
+import { sanitizeBlogHtml, getBlogCanonicalUrl } from '../../../lib/sanitizeBlogHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
 import { BlogPost } from '../../../types/blog'
 
@@ -8,36 +10,58 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
+const getCachedPublishedBlogPosts = cache(async () => getPublishedBlogPosts())
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = await getBlogPostBySlug(slug) as BlogPost | null
+  const post = await getCachedBlogPostBySlug(slug) as BlogPost | null
 
   if (!post) {
     return {
       title: 'Post Not Found | Spreckels Park Dental',
-      description: 'The requested blog post could not be found.'
+      description: 'The requested blog post could not be found.',
+      robots: { index: false, follow: false },
     }
   }
 
+  const title = post.metaTitle || post.title
+  const description = post.metaDescription || post.excerpt || ''
+  const canonical = getBlogCanonicalUrl(slug, post.canonicalUrl)
+
   return {
-    title: post.metaTitle || post.title,
-    description: post.metaDescription || post.excerpt,
+    title,
+    description,
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+    alternates: {
+      canonical,
+    },
     openGraph: {
-      title: post.metaTitle || post.title,
-      description: post.metaDescription || post.excerpt,
+      title,
+      description,
+      url: canonical,
+      type: 'article',
       images: post.coverImage ? [{ url: post.coverImage }] : [],
-    }
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: post.coverImage ? [post.coverImage] : [],
+    },
   }
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = await getBlogPostBySlug(slug) as BlogPost | null
+  const post = await getCachedBlogPostBySlug(slug) as BlogPost | null
 
   if (!post) {
-    // We can't use useRouter here as it's a server component. 
-    // For now, we'll just handle it in the client component or show a simple error if needed.
-    // However, BlogPostClient expects a post, so we should handle null here.
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -48,11 +72,19 @@ export default async function BlogPostPage({ params }: Props) {
     )
   }
 
-  const allPosts = await getPublishedBlogPosts()
+  const sanitizedPost: BlogPost = {
+    ...post,
+    content: sanitizeBlogHtml(post.content),
+  }
+
+  const allPosts = await getCachedPublishedBlogPosts()
   const relatedPosts = allPosts
     .filter(p => p.id !== post.id)
     .slice(0, 3)
-    .map(p => p as BlogPost)
+    .map(p => ({
+      ...(p as BlogPost),
+      content: sanitizeBlogHtml((p as BlogPost).content),
+    }))
 
-  return <BlogPostClient post={post} relatedPosts={relatedPosts} />
+  return <BlogPostClient post={sanitizedPost} relatedPosts={relatedPosts} />
 }

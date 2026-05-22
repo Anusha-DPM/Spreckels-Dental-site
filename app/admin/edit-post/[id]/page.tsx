@@ -320,10 +320,9 @@ export default function EditPost() {
         updateData.keyword = keyword;
       }
       
-      const canonicalUrl = formData.canonicalUrl?.trim();
-      if (canonicalUrl) {
-        updateData.canonicalUrl = canonicalUrl;
-      }
+      updateData.canonicalUrl =
+        formData.canonicalUrl?.trim() ||
+        `https://www.centralvalleydentist.com/blog/${updateData.slug}`;
       
       const jsonLdSchema = formData.jsonLdSchema?.trim();
       if (jsonLdSchema) {

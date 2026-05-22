@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ensure SEO metadata (title, description, robots, canonical) is rendered in <head>
+  // for crawlers and audit tools, not streamed into <body>.
+  htmlLimitedBots: /.*/,
   images: {
     unoptimized: false,
     remotePatterns: [
