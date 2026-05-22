@@ -152,8 +152,8 @@ export default function BlogListingClient({ initialPosts }: BlogListingClientPro
                                             </div>
                                         )}
                                         <div className="p-6">
-                                            <h2 className="text-xl font-semibold mb-3 line-clamp-2">
-                                                <Link href={`/blog/${post.slug}`} className="hover:text-[#441018]">{post.title}</Link>
+                                            <h2 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
+                                                <Link href={`/blog/${post.slug}`} className="text-gray-900 hover:text-[#441018] transition-colors duration-200">{post.title}</Link>
                                             </h2>
                                             {post.excerpt && <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>}
                                             <div className="flex items-center justify-between text-sm text-gray-500">

@@ -120,7 +120,7 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                                     ))}
                                 </div>
                             )}
-                            <h1 className="text-[27px] md:text-5xl font-bold mb-6 leading-tight">{post.title}</h1>
+                            <h1 className="text-[27px] md:text-5xl font-bold text-white mb-6 leading-tight">{post.title}</h1>
                             <div className="flex items-center justify-center md:justify-start text-gray-200 text-lg">
                                 <span>{formatDate(post.publishDate)}</span>
                             </div>
@@ -180,7 +180,7 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                                     </div>
                                 )}
 
-                                <div className="prose prose-lg max-w-none blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+                                <div className="prose prose-lg prose-gray max-w-none blog-content text-gray-900" dangerouslySetInnerHTML={{ __html: post.content }} />
 
                                 {post.tags && post.tags.length > 0 && (
                                     <div className="mt-8 pt-8 border-t border-gray-200 text-center md:text-left">
