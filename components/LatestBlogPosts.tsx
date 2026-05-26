@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getLatestBlogPosts } from '../lib/blogDatabase'
-import { getHomepageExcerpt, normalizeBlogAuthor, normalizeBlogPostForDisplay } from '../lib/blogDisplayUtils'
+import { getHomepageExcerpt, normalizeBlogPostForDisplay } from '../lib/blogDisplayUtils'
 
 // Define BlogPost type locally since it's not exported from the JS file
 interface BlogPost {
@@ -243,9 +243,8 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
                   })()}
 
                   {/* Meta */}
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <div className="text-sm text-gray-500 mb-4">
                     <span>{formatDate(post.publishDate)}</span>
-                    <span>By {normalizeBlogAuthor(post.author)}</span>
                   </div>
 
                   {/* Read More */}
