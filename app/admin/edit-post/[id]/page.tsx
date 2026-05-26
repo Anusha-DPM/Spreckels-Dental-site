@@ -323,6 +323,12 @@ export default function EditPost() {
       updateData.canonicalUrl =
         formData.canonicalUrl?.trim() ||
         `https://www.centralvalleydentist.com/blog/${updateData.slug}`;
+
+      const existingAuthor = originalPost?.author?.trim()
+      updateData.author =
+        !existingAuthor || existingAuthor === 'Spreckels Park Dental'
+          ? 'Admin'
+          : existingAuthor
       
       const jsonLdSchema = formData.jsonLdSchema?.trim();
       if (jsonLdSchema) {

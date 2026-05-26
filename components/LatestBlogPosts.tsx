@@ -93,6 +93,14 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
     }
   }
 
+  const getDisplayAuthor = (author?: string) => {
+    const normalized = author?.trim()
+    if (!normalized || normalized === 'Spreckels Park Dental') {
+      return 'Admin'
+    }
+    return normalized
+  }
+
   // Add error boundary for the entire component
   try {
     if (loading) {
@@ -240,9 +248,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
                   {/* Meta */}
                   <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                     <span>{formatDate(post.publishDate)}</span>
-                    {post.author && (
-                      <span>By {post.author}</span>
-                    )}
+                    <span>By {getDisplayAuthor(post.author)}</span>
                   </div>
 
                   {/* Read More */}
