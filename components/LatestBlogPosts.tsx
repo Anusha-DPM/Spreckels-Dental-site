@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getLatestBlogPosts } from '../lib/blogDatabase'
+import { getHomepageExcerpt, normalizeBlogAuthor, normalizeBlogPostForDisplay } from '../lib/blogDisplayUtils'
 
 // Define BlogPost type locally since it's not exported from the JS file
 interface BlogPost {
@@ -51,7 +52,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
         console.log('🔥 Loading blog posts from Firebase...')
         const fetchedPosts = await getLatestBlogPosts(limit)
         console.log('✅ Posts fetched:', fetchedPosts)
-        setPosts(fetchedPosts.map(post => post as BlogPost))
+        setPosts(fetchedPosts.map(post => normalizeBlogPostForDisplay(post) as BlogPost))
         return
       } catch (error) {
         console.warn('⚠️ Error loading posts:', error)
@@ -67,7 +68,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
           .sort((a: any, b: any) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
           .slice(0, limit)
         console.log('📝 Published posts:', publishedPosts.length)
-        setPosts(publishedPosts.map((post: any) => post as BlogPost))
+        setPosts(publishedPosts.map((post: any) => normalizeBlogPostForDisplay(post) as BlogPost))
       } catch (localError) {
         console.error('❌ Error loading from localStorage:', localError)
         setError('Failed to load blog posts from local storage')
@@ -91,14 +92,6 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
       console.warn('📅 Date formatting error:', error)
       return 'Invalid Date'
     }
-  }
-
-  const getDisplayAuthor = (author?: string) => {
-    const normalized = author?.trim()
-    if (!normalized || normalized === 'Spreckels Park Dental') {
-      return 'Admin'
-    }
-    return normalized
   }
 
   // Add error boundary for the entire component
@@ -238,17 +231,21 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
                     </Link>
                   </h3>
 
-                  {/* Excerpt */}
-                  {post.excerpt && (
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
+                  {/* Excerpt — hide default Dr. Parikh / practice bio boilerplate */}
+                  {(() => {
+                    const excerpt = getHomepageExcerpt(post.excerpt, post.content)
+                    if (!excerpt) return null
+                    return (
+                      <p className="text-gray-600 mb-4 line-clamp-3">
+                        {excerpt}
+                      </p>
+                    )
+                  })()}
 
                   {/* Meta */}
                   <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                     <span>{formatDate(post.publishDate)}</span>
-                    <span>By {getDisplayAuthor(post.author)}</span>
+                    <span>By {normalizeBlogAuthor(post.author)}</span>
                   </div>
 
                   {/* Read More */}
