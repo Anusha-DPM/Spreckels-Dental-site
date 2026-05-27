@@ -15,17 +15,17 @@ export default function DentalStaffTeamSection() {
     {
       name: "Carolina RDH (Español)",
       role: "Registered Dental Hygienist",
-      image: "/Carolina RDH (Español).webp",
+      image: "/Carolina RDH2.jpeg",
       bgColor: "bg-pink-200"
     },
     {
       name: "Donna",
       role: "Office Manager/Treatment Coordinator",
-      image: "/Donna.webp",
+      image: "/donna2.jpeg",
       bgColor: "bg-green-200"
     },
     {
-      name: "Nicolas (Español)",
+      name: "Priya",
       role: "Dental Assistant",
       image: "/Priya.jpg",
       bgColor: "bg-yellow-200"
@@ -34,6 +34,12 @@ export default function DentalStaffTeamSection() {
       name: "Raquel (Español)",
       role: "Dental Assistant",
       image: "/Raquel (Español)2.jpg",
+      bgColor: "bg-green-200"
+    },
+    {
+      name: "Serena",
+      role: "Dental Assistant",
+      image: "/Serena.jpeg",
       bgColor: "bg-green-200"
     }
   ]
