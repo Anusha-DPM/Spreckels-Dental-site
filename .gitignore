@@ -31,5 +31,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Local duplicates and debug artifacts
+Spreckels-Dental-site-main/
+blog_detail_fetch.html
+blog_listing.html
+debug_post_data.json
+server_log.txt
+server_log_cmd.txt
+
 # Uploaded files (local storage - outside public folder for security)
 uploads/
