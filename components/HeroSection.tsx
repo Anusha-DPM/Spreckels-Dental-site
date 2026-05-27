@@ -71,7 +71,7 @@ export default function HeroSection() {
           priority
           quality={95}
           sizes="(max-width: 1024px) 100vw, 50vw"
-          style={{ objectFit: 'cover', objectPosition: 'center top' }}
+          style={{ objectFit: 'cover', objectPosition: 'top center' }}
         />
       </motion.div>
     </section>
