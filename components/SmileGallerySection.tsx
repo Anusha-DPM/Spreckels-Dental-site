@@ -15,7 +15,7 @@ export default function SmileGallerySection() {
       alt: 'Smile Gallery - Beautiful Smile Makeover'
     },
     {
-      src: '/smile gallery/CopyofCopyofJOSUERUIZ1-COLLAGE.avif',
+      src: '/smile gallery/CopyofCopyofN.avif',
       alt: 'Smile Gallery - Complete Smile Restoration'
     }
   ]

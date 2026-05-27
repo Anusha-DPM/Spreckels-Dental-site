@@ -27,13 +27,13 @@ export default function DentalStaffTeamSection() {
     {
       name: "Nicolas (Español)",
       role: "Dental Assistant",
-      image: "/Nicolas (Español).webp",
+      image: "/Priya.jpg",
       bgColor: "bg-yellow-200"
     },
     {
       name: "Raquel (Español)",
       role: "Dental Assistant",
-      image: "/Raquel (Español).webp",
+      image: "/Raquel (Español)2.jpg",
       bgColor: "bg-green-200"
     }
   ]

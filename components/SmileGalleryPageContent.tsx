@@ -42,10 +42,6 @@ export default function SmileGalleryPageContent() {
       title: 'Dental Implants',
       cases: [
         {
-          src: '/smile gallery/CopyofCopyofJOSUERUIZ1-COLLAGE.avif',
-          alt: 'Dental Implants Before & After'
-        },
-        {
           src: '/smile gallery/CopyofCopyofMICAHP1-COLLAGE.avif',
           alt: 'Dental Implants Before & After'
         },
