@@ -55,7 +55,7 @@ export default function MissionSection() {
           >
             <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px]">
               <Image
-                src="/Shivli Arora.jpeg"
+                src="/Shivli Arora.jpg"
                 alt="Dr. Shivli Arora DDS - Professional dental care"
                 fill
                 className="object-cover object-center rounded-xl"
