@@ -31,8 +31,8 @@ export default function DentalStaffTeamSection() {
       bgColor: "bg-yellow-200"
     },
     {
-      name: "Raquel (Español)",
-      role: "Dental Assistant",
+      name: "",
+      role: "",
       image: "/Raquel (Español)2.jpg",
       bgColor: "bg-green-200"
     },

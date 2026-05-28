@@ -8,14 +8,7 @@ export default function OfficeGallerySection() {
   const [activeImage, setActiveImage] = useState(0)
 
   const officeImages = [
-    {
-      src: "/office3.webp",
-      alt: "Dental office consultation area",
-      title: "Consultation Space",
-      subtitle: "Personalized Care Planning",
-      description: "Private consultation areas where we discuss your treatment plans, answer questions, and ensure you're fully informed about your dental care journey.",
-      features: ["Private consultations", "Treatment planning", "Digital displays", "Comfortable seating"]
-    },
+    
     {
       src: "/office5.jpeg",
       alt: "Dental office interior",
