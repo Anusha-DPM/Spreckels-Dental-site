@@ -34,7 +34,7 @@ He is happily married with three children, and he likes to play table tennis and
     {
       name: "Dr. Shivli Arora DDS",
       text: "Working alongside Dr. Parikh, I bring nearly 10 years of clinical experience with a passion for cosmetic dentistry. We focus on providing personalized care that meets each patient's unique needs.",
-      avatar: "/doctor-2.webp",
+      avatar: "/Shivli Arora.jpg",
       nameColor: "text-blue-600",
       avatarPosition: 'right',
       fullBio: `Dentist in Manteca & Stockton, CA
