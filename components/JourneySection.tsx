@@ -23,7 +23,7 @@ export default function JourneySection() {
     {
       name: "Dr. Shivli Arora DDS",
       text: "Our approach combines cutting-edge technology with compassionate care. We believe every patient deserves personalized treatment that addresses their unique needs and concerns.",
-      avatar: "/doctor-2.webp",
+      avatar: "/Shivli Arora.jpg",
       nameColor: "text-blue-600",
       avatarPosition: 'right'
     }

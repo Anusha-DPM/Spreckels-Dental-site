@@ -152,55 +152,7 @@ export default function OfficeGallerySection() {
           </motion.div>
         </div>
 
-        {/* Additional Office Images Gallery */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="mb-12 sm:mb-16 lg:mb-20"
-        >
-          <div className="text-center mb-8 sm:mb-12">
-            <h3 className="text-[27px] sm:text-3xl lg:text-4xl font-normal text-gray-900 mb-4">
-              Explore Our <span className="text-[#441018]">Complete Facility</span>
-            </h3>
-            <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto">
-              Take a virtual tour of our entire office space, from reception to treatment rooms
-            </p>
-          </div>
-          
-          {/* Responsive Image Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {officeImages.slice(1).map((image, index) => (
-              <motion.div
-                key={index + 1}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
-                onClick={() => setActiveImage(index + 1)}
-              >
-                <div className="relative aspect-square w-full bg-gray-100">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
-                  {/* Overlay Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <h4 className="text-white text-[18px] sm:text-xl font-semibold mb-2">{image.title}</h4>
-                    <p className="text-gray-200 text-[14px] sm:text-base">{image.subtitle}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+       
 
         {/* Features Grid */}
         <motion.div 
