@@ -1,65 +1,10 @@
 'use client'
 
-import { useKeenSlider } from 'keen-slider/react'
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import 'keen-slider/keen-slider.min.css'
+import VideoTestimonialFeature from './VideoTestimonialFeature'
+import { PATIENT_VIDEO_TESTIMONIALS_HEADING } from './videoTestimonialsShared'
 
 export default function VideoTestimonialsPageContent() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [loaded, setLoaded] = useState(false)
-  const videos = [
-    {
-      src: '/video 1.MOV',
-      title: 'Patient Testimonial',
-      description: 'Watch this patient share their experience with our dental care'
-    },
-    {
-      src: '/video 2.MOV',
-      title: 'Patient Testimonial',
-      description: 'Learn about this patient\'s journey to a better smile'
-    },
-    {
-      src: '/video 2.MOV',
-      title: 'Patient Testimonial',
-      description: 'Discover how we helped improve this patient\'s oral health'
-    }
-  ]
-
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-    initial: 0,
-    loop: true,
-    mode: 'snap',
-    slides: {
-      perView: 3,
-      spacing: 20,
-    },
-    breakpoints: {
-      '(max-width: 1024px)': {
-        slides: {
-          perView: 2,
-          spacing: 15,
-        },
-      },
-      '(max-width: 768px)': {
-        slides: {
-          perView: 1,
-          spacing: 15,
-        },
-      },
-    },
-    created() {
-      setLoaded(true)
-    },
-    slideChanged(slider) {
-      setCurrentSlide(slider.track.details.rel)
-    },
-  })
-
-  const goToSlide = (index: number) => {
-    instanceRef.current?.moveToIdx(index)
-  }
-
   const reviews = [
     {
       id: 1,
@@ -90,108 +35,10 @@ export default function VideoTestimonialsPageContent() {
 
   return (
     <>
-      {/* Videos Section */}
-      <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-8 sm:mb-12 lg:mb-16"
-          >
-            <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
-              Patient Video Testimonials
-            </h2>
-            <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed" style={{ color: '#656565' }}>
-              Watch real patients share their stories and experiences with our dental care services.
-            </p>
-          </motion.div>
-
-          <div className="relative">
-            {/* Navigation Arrows */}
-            {loaded && instanceRef.current && (
-              <>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    instanceRef.current?.prev()
-                  }}
-                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 hover:scale-110"
-                  aria-label="Previous video"
-                >
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    instanceRef.current?.next()
-                  }}
-                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 hover:scale-110"
-                  aria-label="Next video"
-                >
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </>
-            )}
-
-            {/* Carousel Container */}
-            <div ref={sliderRef} className="keen-slider">
-              {videos.map((video, index) => (
-                <div key={index} className="keen-slider__slide">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.2 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col items-center px-2"
-                  >
-                    <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-black hover:shadow-2xl transition-shadow duration-300 mb-4">
-                      <video
-                        controls
-                        className="w-full h-auto max-h-[400px] sm:max-h-[450px] lg:max-h-[500px]"
-                        preload="metadata"
-                      >
-                        <source src={video.src} type="video/quicktime" />
-                        <source src={video.src} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                    <div className="text-center">
-                      <h3 className="text-[22px] sm:text-lg font-semibold text-gray-900 mb-2 font-heading">
-                        {video.title}
-                      </h3>
-                      <p className="text-[16px] text-gray-600" style={{ color: '#656565' }}>
-                        {video.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
-              ))}
-            </div>
-
-            {/* Dots Indicator */}
-            {loaded && instanceRef.current && (
-              <div className="flex justify-center mt-6 sm:mt-8 gap-2">
-                {videos.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    className={`h-2 sm:h-3 rounded-full transition-all duration-300 ${
-                      currentSlide === index ? 'w-8 sm:w-10 bg-[#441018]' : 'w-2 sm:w-3 bg-gray-300'
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+      <VideoTestimonialFeature
+        title={PATIENT_VIDEO_TESTIMONIALS_HEADING}
+        eyebrow="Patient Stories"
+      />
 
       {/* Reviews Section */}
       <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-gradient-to-b from-gray-50 to-white">
@@ -239,7 +86,7 @@ export default function VideoTestimonialsPageContent() {
                   </svg>
                 </div>
                 <blockquote className="text-gray-700 mb-4 leading-relaxed" style={{ color: '#656565', fontSize: '16px' }}>
-                  "{review.quote}"
+                  &ldquo;{review.quote}&rdquo;
                 </blockquote>
                 <div className="text-gray-900 font-semibold font-heading">
                   – {review.author}
@@ -252,4 +99,3 @@ export default function VideoTestimonialsPageContent() {
     </>
   )
 }
-

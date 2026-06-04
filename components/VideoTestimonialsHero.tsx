@@ -36,7 +36,7 @@ export default function VideoTestimonialsHero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-[16px] sm:text-xl text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed"
           >
-            Hear from our patients about their experiences at Spreckels Park Dental. See real stories of transformation and satisfaction.
+            Hear directly from our patients as they share their experiences, treatment journeys, and smile transformations. These real stories highlight the quality care, personalized attention, and lasting results that make our practice a trusted choice for dental care.
           </motion.p>
         </motion.div>
       </div>
