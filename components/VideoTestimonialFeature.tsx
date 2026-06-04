@@ -35,7 +35,7 @@ function FeaturedVideoPlayer({
   onPlayClick,
   onPlayingChange,
 }: {
-  videoRef: RefObject<HTMLVideoElement | null>
+  videoRef: RefObject<HTMLVideoElement>
   isPlaying: boolean
   onPlayClick: () => void
   onPlayingChange: (playing: boolean) => void
