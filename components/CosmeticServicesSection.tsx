@@ -6,7 +6,8 @@ export default function CosmeticServicesSection() {
   const services = [
     { name: 'Bonding', description: 'to repair small chips or cracks' },
     { name: 'Teeth Whitening', description: 'to brighten a faded or discolored smile' },
-    { name: 'Veneers', description: 'for repairing larger chips and cracks, and reshaping teeth' }
+    { name: 'Veneers', description: 'for repairing larger chips and cracks, and reshaping teeth' },
+    { name: 'Full mouth restoration', description: 'Full mouth restoration restores the health, function, and appearance of your entire smile.' }
   ]
 
   return (
