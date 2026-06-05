@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import {
   Layout,
   ContactHeroSection,
-  ContactMapSection
+  ContactFormSection,
 } from '../../components'
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export default function Contact() {
   return (
     <Layout>
       <ContactHeroSection />
-      <ContactMapSection />
+      <ContactFormSection />
     </Layout>
   )
-} 
+}
