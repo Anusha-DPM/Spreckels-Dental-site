@@ -33,11 +33,13 @@ function FeaturedVideoPlayer({
   isPlaying,
   onPlayClick,
   onPlayingChange,
+  onVideoError,
 }: {
   videoRef: RefObject<HTMLVideoElement>
   isPlaying: boolean
   onPlayClick: () => void
   onPlayingChange: (playing: boolean) => void
+  onVideoError: () => void
 }) {
   return (
     <div className="mx-auto flex w-full flex-col justify-center lg:ml-auto lg:mr-0 lg:h-full">
@@ -46,16 +48,18 @@ function FeaturedVideoPlayer({
           <div className="relative w-full aspect-video">
             <video
               ref={videoRef}
+              src={VIDEO_TESTIMONIAL_SRC}
               playsInline
               preload="metadata"
               controls={isPlaying}
               onPlay={() => onPlayingChange(true)}
               onPause={() => onPlayingChange(false)}
               onEnded={() => onPlayingChange(false)}
+              onError={onVideoError}
               className="absolute inset-0 h-full w-full object-contain"
               title="Spreckels Park Dental patient testimonial"
             >
-              <source src={VIDEO_TESTIMONIAL_SRC} type="video/quicktime" />
+              <source src={VIDEO_TESTIMONIAL_SRC} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 
@@ -111,12 +115,21 @@ export default function VideoTestimonialFeature({
   const handlePlayClick = async () => {
     const video = videoRef.current
     if (!video) return
+
+    if (video.error) {
+      video.load()
+    }
+
     try {
       await video.play()
       setIsPlaying(true)
     } catch {
-      setIsPlaying(true)
+      setIsPlaying(false)
     }
+  }
+
+  const handleVideoError = () => {
+    setIsPlaying(false)
   }
 
   return (
@@ -164,6 +177,7 @@ export default function VideoTestimonialFeature({
               isPlaying={isPlaying}
               onPlayClick={handlePlayClick}
               onPlayingChange={setIsPlaying}
+              onVideoError={handleVideoError}
             />
           </motion.div>
 
