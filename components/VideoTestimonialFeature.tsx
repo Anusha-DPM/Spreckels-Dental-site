@@ -31,12 +31,14 @@ function QuoteMark({ className }: { className?: string }) {
 function FeaturedVideoPlayer({
   videoRef,
   isPlaying,
+  isLoading,
   onPlayClick,
   onPlayingChange,
   onVideoError,
 }: {
   videoRef: RefObject<HTMLVideoElement>
   isPlaying: boolean
+  isLoading: boolean
   onPlayClick: () => void
   onPlayingChange: (playing: boolean) => void
   onVideoError: () => void
@@ -50,7 +52,7 @@ function FeaturedVideoPlayer({
               ref={videoRef}
               src={VIDEO_TESTIMONIAL_SRC}
               playsInline
-              preload="metadata"
+              preload="none"
               controls={isPlaying}
               onPlay={() => onPlayingChange(true)}
               onPause={() => onPlayingChange(false)}
@@ -67,7 +69,8 @@ function FeaturedVideoPlayer({
               <button
                 type="button"
                 onClick={onPlayClick}
-                className="absolute inset-0 z-10 flex items-center justify-center focus:outline-none focus-visible:ring-4 focus-visible:ring-[#441018]/40"
+                disabled={isLoading}
+                className="absolute inset-0 z-10 flex items-center justify-center focus:outline-none focus-visible:ring-4 focus-visible:ring-[#441018]/40 disabled:cursor-wait"
                 aria-label="Play patient testimonial video"
               >
                 <div
@@ -92,7 +95,7 @@ function FeaturedVideoPlayer({
                     </span>
                   </span>
                   <span className="rounded-full bg-white/95 px-5 py-2 text-sm font-semibold text-[#441018] shadow-md">
-                    Play Patient Story
+                    {isLoading ? 'Loading video...' : 'Play Patient Story'}
                   </span>
                 </div>
               </button>
@@ -111,25 +114,54 @@ export default function VideoTestimonialFeature({
 }: VideoTestimonialFeatureProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const waitForVideoReady = (video: HTMLVideoElement) =>
+    new Promise<void>((resolve, reject) => {
+      if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+        resolve()
+        return
+      }
+
+      const onReady = () => {
+        cleanup()
+        resolve()
+      }
+      const onError = () => {
+        cleanup()
+        reject(new Error('Video failed to load'))
+      }
+      const cleanup = () => {
+        video.removeEventListener('canplay', onReady)
+        video.removeEventListener('error', onError)
+      }
+
+      video.addEventListener('canplay', onReady)
+      video.addEventListener('error', onError)
+      video.preload = 'auto'
+      video.load()
+    })
 
   const handlePlayClick = async () => {
     const video = videoRef.current
-    if (!video) return
+    if (!video || isLoading) return
 
-    if (video.error) {
-      video.load()
-    }
+    setIsLoading(true)
 
     try {
+      await waitForVideoReady(video)
       await video.play()
       setIsPlaying(true)
     } catch {
       setIsPlaying(false)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleVideoError = () => {
     setIsPlaying(false)
+    setIsLoading(false)
   }
 
   return (
@@ -175,6 +207,7 @@ export default function VideoTestimonialFeature({
             <FeaturedVideoPlayer
               videoRef={videoRef}
               isPlaying={isPlaying}
+              isLoading={isLoading}
               onPlayClick={handlePlayClick}
               onPlayingChange={setIsPlaying}
               onVideoError={handleVideoError}
