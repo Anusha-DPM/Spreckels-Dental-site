@@ -5,17 +5,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 function GalleryLabel({
-  children,
+  label,
   className = '',
 }: {
-  children: 'Before' | 'After'
+  label: 'Before' | 'After'
   className?: string
 }) {
   return (
     <span
       className={`absolute z-10 rounded-md bg-[#441018] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-lg ring-1 ring-white/20 sm:px-3 sm:py-1.5 sm:text-xs md:text-sm ${className}`}
     >
-      {children}
+      {label}
     </span>
   )
 }
@@ -81,8 +81,8 @@ export default function SmileGallerySection() {
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
-                <GalleryLabel className="top-3 left-3 sm:top-4 sm:left-4">Before</GalleryLabel>
-                <GalleryLabel className="top-3 right-3 sm:top-4 sm:right-4">After</GalleryLabel>
+                <GalleryLabel label="Before" className="top-3 left-3 sm:top-4 sm:left-4" />
+                <GalleryLabel label="After" className="top-3 right-3 sm:top-4 sm:right-4" />
               </div>
             </motion.div>
           ))}

@@ -26,17 +26,17 @@ type GalleryCategory = {
 }
 
 function GalleryLabel({
-  children,
+  label,
   className = '',
 }: {
-  children: 'Before' | 'After'
+  label: 'Before' | 'After'
   className?: string
 }) {
   return (
     <span
       className={`absolute z-10 rounded-md bg-[#441018] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-lg ring-1 ring-white/20 sm:px-3 sm:py-1.5 sm:text-xs md:text-sm ${className}`}
     >
-      {children}
+      {label}
     </span>
   )
 }
@@ -69,8 +69,8 @@ function CollageGalleryCard({
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
 
-        <GalleryLabel className="top-3 left-3 sm:top-4 sm:left-4">Before</GalleryLabel>
-        <GalleryLabel className="top-3 right-3 sm:top-4 sm:right-4">After</GalleryLabel>
+        <GalleryLabel label="Before" className="top-3 left-3 sm:top-4 sm:left-4" />
+        <GalleryLabel label="After" className="top-3 right-3 sm:top-4 sm:right-4" />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
@@ -128,7 +128,7 @@ function ComparisonGalleryCard({
               className="object-cover group-hover:scale-110 transition-transform duration-700"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
             />
-            <GalleryLabel className="top-3 left-3 sm:top-4 sm:left-4">Before</GalleryLabel>
+            <GalleryLabel label="Before" className="top-3 left-3 sm:top-4 sm:left-4" />
           </div>
           <div className="relative h-full overflow-hidden">
             <Image
@@ -138,7 +138,7 @@ function ComparisonGalleryCard({
               className="object-cover group-hover:scale-110 transition-transform duration-700"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
             />
-            <GalleryLabel className="top-3 left-3 sm:top-4 sm:left-4">After</GalleryLabel>
+            <GalleryLabel label="After" className="top-3 left-3 sm:top-4 sm:left-4" />
           </div>
         </div>
 
