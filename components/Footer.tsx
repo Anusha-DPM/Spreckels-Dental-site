@@ -13,16 +13,9 @@ const servicesLinks = [
 ]
 
 const quickLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'About Us', href: '/about' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Contact Us', href: '/contact' },
-  { name: 'Smile Gallery', href: '/smile-gallery' },
-  { name: 'Video Testimonials', href: '/video-testimonials' },
-  { name: 'Dental Staff', href: '/dental-staff' },
-  { name: 'Office', href: '/office' },
-  { name: 'Patient Education', href: '/patient-education' },
-  { name: 'Insurance & Billing', href: '/insurance-billing' },
+  { name: 'Privacy Policy', href: '/privacy-policy' },
+  { name: 'Disclaimer', href: '/disclaimer' },
+  { name: 'Site Map', href: '/sitemap.xml' },
 ]
 
 function FooterLinkList({
@@ -56,7 +49,6 @@ export default function Footer() {
     <footer style={{ backgroundColor: '#111827' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-          {/* Column 1 — Logo & Social */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <Image
@@ -96,13 +88,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2 — Services */}
           <FooterLinkList title="Services" links={servicesLinks} />
-
-          {/* Column 3 — Quick Links */}
           <FooterLinkList title="Quick Links" links={quickLinks} />
 
-          {/* Column 4 — Address & Hours */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold text-white mb-4 font-heading">Address</h3>
             <address className="not-italic text-sm sm:text-base text-gray-300 leading-relaxed mb-6">
@@ -130,18 +118,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-700 pt-8 mt-10 lg:mt-12">
           <p className="text-gray-400 text-xs sm:text-sm text-center leading-relaxed">
-            Copyright © 2026 Spreckels Park Dental. All Rights Reserved. |{' '}
-            <Link href="/privacy-policy" className="text-white hover:text-gray-300 transition-colors">
-              Privacy Policy
-            </Link>
-            {' | '}
-            <Link href="/disclaimer" className="text-white hover:text-gray-300 transition-colors">
-              Disclaimer
-            </Link>
-            {' | '}
-            <Link href="/sitemap.xml" className="text-white hover:text-gray-300 transition-colors">
-              Site Map
-            </Link>
+            Copyright © 2026 Spreckels Park Dental. All Rights Reserved.
           </p>
         </div>
       </div>

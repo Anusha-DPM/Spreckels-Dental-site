@@ -14,26 +14,18 @@ export default function SmileGallerySection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-8 sm:mb-12 lg:mb-16"
+          className="text-center mb-8 sm:mb-10 lg:mb-12"
         >
-          <div className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
-            Gallery
-          </div>
-          <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 lg:mb-6 font-heading leading-tight">
+          <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-3 font-heading leading-tight">
             Smile Gallery
           </h2>
-          <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8" style={{ color: '#656565' }}>
-            See the amazing transformations we&apos;ve created for our patients. Each smile tells a story of confidence, health, and happiness.
+          <div className="w-16 h-0.5 bg-gray-300 mx-auto mb-3" />
+          <p className="text-sm sm:text-base text-gray-500 uppercase tracking-wide">
+            Before and After
           </p>
-          <Link
-            href="/smile-gallery"
-            className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-[#441018] text-white border border-[#441018] rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base"
-          >
-            View Full Gallery
-          </Link>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10">
           {SMILE_GALLERY_PREVIEW_IMAGES.map((image, index) => (
             <motion.div
               key={image.src}
@@ -43,7 +35,7 @@ export default function SmileGallerySection() {
               viewport={{ once: true }}
               className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full"
             >
-              <div className="relative aspect-[3/4] sm:aspect-[4/3] lg:aspect-[4/3] w-full min-h-[400px] sm:min-h-[500px]">
+              <div className="relative aspect-[3/4] sm:aspect-[4/3] lg:aspect-[4/3] w-full min-h-[280px] sm:min-h-[400px] lg:min-h-[500px]">
                 <Image
                   src={image.src}
                   alt={image.alt}
@@ -55,6 +47,21 @@ export default function SmileGallerySection() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="text-center"
+        >
+          <Link
+            href="/smile-gallery"
+            className="inline-block px-8 sm:px-10 py-3.5 sm:py-4 bg-[#441018] text-white border border-[#441018] rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold font-heading text-sm sm:text-base uppercase tracking-wide"
+          >
+            View Full Gallery
+          </Link>
+        </motion.div>
       </div>
     </section>
   )
