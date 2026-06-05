@@ -12,7 +12,7 @@ export default function ContactFormSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 lg:p-10 ring-1 ring-gray-100 w-full min-w-0 overflow-hidden"
+          className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 lg:p-10 ring-1 ring-gray-100 w-full min-w-0"
         >
           <AppointmentRequestForm variant="contact" />
         </motion.div>
