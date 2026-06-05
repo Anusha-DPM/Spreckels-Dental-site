@@ -1,42 +1,20 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
 import Link from 'next/link'
-import Script from 'next/script'
-import { useEffect, useState } from 'react'
+import AppointmentRequestForm from './AppointmentRequestForm'
 
 export default function Footer() {
-  const [scriptLoaded, setScriptLoaded] = useState(false)
-
-  useEffect(() => {
-    // Check if script is already loaded
-    if (document.querySelector('script[src="https://link.digitalpresencematters.com/js/form_embed.js"]')) {
-      setScriptLoaded(true)
-    }
-  }, [])
-
   return (
     <>
-      <Script
-        src="https://link.digitalpresencematters.com/js/form_embed.js"
-        strategy="lazyOnload"
-        onLoad={() => setScriptLoaded(true)}
-      />
       <footer style={{ backgroundColor: '#111827' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-          {/* Main Content - Two Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-8">
-
-            {/* Left Column - Contact Us */}
             <div className="text-left">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6">
                 Contact Us
               </h2>
 
               <div className="space-y-6">
-                {/* Address */}
                 <div>
                   <div className="text-base font-semibold text-white mb-2">Address</div>
                   <div className="text-base text-white">
@@ -44,7 +22,6 @@ export default function Footer() {
                   </div>
                 </div>
 
-                {/* Phone */}
                 <div>
                   <div className="text-base font-semibold text-white mb-2">Phone</div>
                   <a href="tel:+12098251030" className="text-base text-white hover:text-gray-300 transition-colors">
@@ -52,7 +29,6 @@ export default function Footer() {
                   </a>
                 </div>
 
-                {/* Office Hours */}
                 <div>
                   <div className="text-base font-semibold text-white mb-3">Office Hours</div>
                   <ul className="space-y-2">
@@ -87,7 +63,6 @@ export default function Footer() {
                   </ul>
                 </div>
 
-                {/* Follow Us */}
                 <div>
                   <div className="text-base font-semibold text-white mb-3">FOLLOW US</div>
                   <div className="flex space-x-4">
@@ -106,34 +81,8 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Right Column - Request An Appointment Form */}
             <div className="text-left">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6">
-                Request An Appointment
-              </h2>
-
-              <div className="w-full rounded-lg" style={{ height: '700px', minHeight: '700px' }}>
-                <iframe
-                  src="https://link.digitalpresencematters.com/widget/form/PPE5tyRGLABGSWtnGQQf"
-                  style={{ width: '100%', height: '100%', border: 'none', borderRadius: '3px', display: 'block' }}
-                  id="inline-PPE5tyRGLABGSWtnGQQf"
-                  data-layout="{'id':'INLINE'}"
-                  data-trigger-type="alwaysShow"
-                  data-trigger-value=""
-                  data-activation-type="alwaysActivated"
-                  data-activation-value=""
-                  data-deactivation-type="neverDeactivate"
-                  data-deactivation-value=""
-                  data-form-name="website footer form "
-                  data-height="700"
-                  data-layout-iframe-id="inline-PPE5tyRGLABGSWtnGQQf"
-                  data-form-id="PPE5tyRGLABGSWtnGQQf"
-                  title="website footer form "
-                  allow="forms"
-                  loading="lazy"
-                  scrolling="yes"
-                />
-              </div>
+              <AppointmentRequestForm variant="footer" />
             </div>
           </div>
 
