@@ -42,3 +42,4 @@ server_log_cmd.txt
 # Uploaded files (local storage - outside public folder for security)
 uploads/
 *.mp4
+*.mp4
