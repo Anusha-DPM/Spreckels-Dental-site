@@ -1,4 +1,4 @@
-export const VIDEO_TESTIMONIAL_SRC = '/video 1.mov'
+export const VIDEO_TESTIMONIAL_SRC = '/video%201.MOV'
 
 export const VIDEO_TESTIMONIAL_HEADING = 'Video Testimonials'
 

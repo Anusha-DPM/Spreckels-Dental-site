@@ -56,7 +56,7 @@ function FeaturedVideoPlayer({
               className="absolute inset-0 h-full w-full object-contain"
               title="Spreckels Park Dental patient testimonial"
             >
-              <source src={VIDEO_TESTIMONIAL_SRC} type="video/mp4" />
+              <source src={VIDEO_TESTIMONIAL_SRC} type="video/quicktime" />
               Your browser does not support the video tag.
             </video>
 
