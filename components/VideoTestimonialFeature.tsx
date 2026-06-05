@@ -10,7 +10,6 @@ import {
 
 interface VideoTestimonialFeatureProps {
   title: string
-  eyebrow?: string
   showViewAllButton?: boolean
   className?: string
 }
@@ -41,8 +40,8 @@ function FeaturedVideoPlayer({
   onPlayingChange: (playing: boolean) => void
 }) {
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col justify-center lg:ml-auto lg:mr-0 lg:h-full">
-      <div className="group relative flex w-full flex-col justify-center rounded-2xl sm:rounded-[1.75rem] p-1.5 sm:p-2 bg-gradient-to-br from-[#441018]/15 via-[#441018]/5 to-transparent shadow-[0_20px_50px_-12px_rgba(68,16,24,0.35)] hover:shadow-[0_28px_60px_-10px_rgba(68,16,24,0.45)] transition-shadow duration-500 ring-1 ring-[#441018]/10">
+    <div className="mx-auto flex w-full flex-col justify-center lg:ml-auto lg:mr-0 lg:h-full">
+      <div className="group relative flex w-full flex-col justify-center rounded-2xl sm:rounded-[1.75rem] p-1.5 sm:p-2 bg-gradient-to-br from-[#441018]/15 via-[#441018]/5 to-transparent shadow-[0_20px_50px_-12px_rgba(68,16,24,0.35)] hover:shadow-[0_28px_60px_-10px_rgba(68,16,24,0.45)] hover:-translate-y-0.5 transition-all duration-500 ring-1 ring-[#441018]/10">
         <div className="relative w-full overflow-hidden rounded-xl sm:rounded-3xl bg-black ring-1 ring-gray-200/80">
           <div className="relative w-full aspect-video">
             <video
@@ -103,7 +102,6 @@ function FeaturedVideoPlayer({
 
 export default function VideoTestimonialFeature({
   title,
-  eyebrow = 'Testimonials',
   showViewAllButton = false,
   className = '',
 }: VideoTestimonialFeatureProps) {
@@ -152,14 +150,30 @@ export default function VideoTestimonialFeature({
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-stretch">
-          {/* Left — copy (matches video column height on desktop) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-stretch">
+          {/* Video first on mobile, ~75% width on desktop */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="order-1 lg:col-span-8 flex lg:h-full lg:min-h-0"
+          >
+            <FeaturedVideoPlayer
+              videoRef={videoRef}
+              isPlaying={isPlaying}
+              onPlayClick={handlePlayClick}
+              onPlayingChange={setIsPlaying}
+            />
+          </motion.div>
+
+          {/* Copy beside video on desktop */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="order-2 lg:order-1 lg:col-span-5 relative flex lg:h-full lg:min-h-0"
+            className="order-2 lg:col-span-4 relative flex lg:h-full lg:min-h-0"
           >
             <QuoteMark className="absolute -top-4 -left-2 w-20 h-20 text-[#441018]/[0.06] hidden lg:block" aria-hidden="true" />
 
@@ -176,10 +190,6 @@ export default function VideoTestimonialFeature({
                   Patient Story
                 </span>
               </div>
-
-              <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
-                {eyebrow}
-              </p>
 
               <h2 className="text-[27px] sm:text-2xl md:text-3xl lg:text-[2rem] xl:text-4xl font-normal text-gray-900 font-heading leading-tight mb-5 sm:mb-6">
                 {title}
@@ -215,22 +225,6 @@ export default function VideoTestimonialFeature({
                 </Link>
               )}
             </div>
-          </motion.div>
-
-          {/* Right — video (same max-w-5xl; aspect-video on mobile, fills column on desktop) */}
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="order-1 lg:order-2 lg:col-span-7 flex lg:h-full lg:min-h-0"
-          >
-            <FeaturedVideoPlayer
-              videoRef={videoRef}
-              isPlaying={isPlaying}
-              onPlayClick={handlePlayClick}
-              onPlayingChange={setIsPlaying}
-            />
           </motion.div>
         </div>
       </div>

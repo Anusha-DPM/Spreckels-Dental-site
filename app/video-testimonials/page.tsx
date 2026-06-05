@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import {
   Layout,
   VideoTestimonialsHero,
+  FeaturedVideoTestimonialSection,
   VideoTestimonialsPageContent
 } from '../../components'
 
@@ -14,6 +15,7 @@ export default function VideoTestimonialsPage() {
   return (
     <Layout>
       <VideoTestimonialsHero />
+      <FeaturedVideoTestimonialSection />
       <VideoTestimonialsPageContent />
     </Layout>
   )

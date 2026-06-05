@@ -1,8 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import VideoTestimonialFeature from './VideoTestimonialFeature'
-import { PATIENT_VIDEO_TESTIMONIALS_HEADING } from './videoTestimonialsShared'
 
 export default function VideoTestimonialsPageContent() {
   const reviews = [
@@ -34,14 +32,7 @@ export default function VideoTestimonialsPageContent() {
   ]
 
   return (
-    <>
-      <VideoTestimonialFeature
-        title={PATIENT_VIDEO_TESTIMONIALS_HEADING}
-        eyebrow="Patient Stories"
-      />
-
-      {/* Reviews Section */}
-      <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -96,6 +87,5 @@ export default function VideoTestimonialsPageContent() {
           </div>
         </div>
       </section>
-    </>
   )
 }

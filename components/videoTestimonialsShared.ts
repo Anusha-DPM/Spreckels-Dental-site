@@ -1,8 +1,6 @@
-export const VIDEO_TESTIMONIAL_SRC = '/video%201.MOV'
+export const VIDEO_TESTIMONIAL_SRC = '/video1.mov'
 
 export const VIDEO_TESTIMONIAL_HEADING = 'Video Testimonials'
 
 export const VIDEO_TESTIMONIAL_DESCRIPTION =
-  'Hear from our patients about their experiences at Spreckels Park Dental. See real stories of transformation and satisfaction.'
-
-export const PATIENT_VIDEO_TESTIMONIALS_HEADING = 'Patient Video Testimonials'
+  'Hear directly from our patients as they share their experiences, treatment journeys, and smile transformations. These real stories highlight the quality care, personalized attention, and lasting results that make our practice a trusted choice for dental care.'

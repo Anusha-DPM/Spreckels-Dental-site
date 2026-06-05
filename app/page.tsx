@@ -11,7 +11,7 @@ import {
   MissionSection,
   FeaturesSection,
   NewOutgridAppSection,
-  VideoTestimonialsSection,
+  FeaturedVideoTestimonialSection,
   LatestBlogPosts,
   CTASection
 } from '../components'
@@ -34,7 +34,7 @@ export default function Home() {
       <SmileGallerySection />
       <InfoStatsSection />
       <NewOutgridAppSection />
-      <VideoTestimonialsSection />
+      <FeaturedVideoTestimonialSection showViewAllButton />
       <LatestBlogPosts />
       <CTASection />
     </Layout>
