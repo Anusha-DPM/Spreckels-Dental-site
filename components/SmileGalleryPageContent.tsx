@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 const GALLERY_IMAGES = Array.from({ length: 11 }, (_, index) => ({
   src: `/${index + 1}.png`,
-  alt: `Smile Gallery Before & After ${index + 1}`,
+  alt: `Smile Gallery ${index + 1}`,
 }))
 
 function GalleryLabel({
@@ -52,31 +52,6 @@ function GalleryCard({
 
         <GalleryLabel label="Before" className="top-3 left-3 sm:top-4 sm:left-4" />
         <GalleryLabel label="After" className="top-3 right-3 sm:top-4 sm:right-4" />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 transition-transform duration-500">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-white/90 text-xs font-medium uppercase tracking-wider mb-1">
-              Before & After
-            </p>
-            <p className="text-white text-[22px] sm:text-lg font-semibold font-heading">
-              Smile Transformation
-            </p>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
-        </div>
       </div>
     </motion.div>
   )

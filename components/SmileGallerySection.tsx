@@ -4,35 +4,19 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 
-function GalleryLabel({
-  label,
-  className = '',
-}: {
-  label: 'Before' | 'After'
-  className?: string
-}) {
-  return (
-    <span
-      className={`absolute z-10 rounded-md bg-[#441018] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-lg ring-1 ring-white/20 sm:px-3 sm:py-1.5 sm:text-xs md:text-sm ${className}`}
-    >
-      {label}
-    </span>
-  )
-}
-
 export default function SmileGallerySection() {
   const galleryImages = [
     {
       src: '/1.png',
-      alt: 'Smile Gallery Before & After 1',
+      alt: 'Smile Gallery 1',
     },
     {
       src: '/2.png',
-      alt: 'Smile Gallery Before & After 2',
+      alt: 'Smile Gallery 2',
     },
     {
       src: '/3.png',
-      alt: 'Smile Gallery Before & After 3',
+      alt: 'Smile Gallery 3',
     },
   ]
 
@@ -53,9 +37,9 @@ export default function SmileGallerySection() {
             Smile Gallery
           </h2>
           <p className="text-[16px] sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8" style={{ color: '#656565' }}>
-            See the amazing transformations we've created for our patients. Each smile tells a story of confidence, health, and happiness.
+            See the amazing transformations we&apos;ve created for our patients. Each smile tells a story of confidence, health, and happiness.
           </p>
-          <Link 
+          <Link
             href="/smile-gallery"
             className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-[#441018] text-white border border-[#441018] rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold font-heading text-[15px] sm:text-base"
           >
@@ -66,7 +50,7 @@ export default function SmileGallerySection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {galleryImages.map((image, index) => (
             <motion.div
-              key={index}
+              key={image.src}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
@@ -81,8 +65,6 @@ export default function SmileGallerySection() {
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
-                <GalleryLabel label="Before" className="top-3 left-3 sm:top-4 sm:left-4" />
-                <GalleryLabel label="After" className="top-3 right-3 sm:top-4 sm:right-4" />
               </div>
             </motion.div>
           ))}
@@ -91,4 +73,3 @@ export default function SmileGallerySection() {
     </section>
   )
 }
-
