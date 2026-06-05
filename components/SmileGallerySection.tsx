@@ -23,17 +23,17 @@ function GalleryLabel({
 export default function SmileGallerySection() {
   const galleryImages = [
     {
-      src: '/smile gallery/pristine1-COLLAGE.avif',
-      alt: 'Smile Gallery - Pristine Smile Transformation'
+      src: '/1.png',
+      alt: 'Smile Gallery Before & After 1',
     },
     {
-      src: '/smile gallery/CopyofCopyofM.avif',
-      alt: 'Smile Gallery - Beautiful Smile Makeover'
+      src: '/2.png',
+      alt: 'Smile Gallery Before & After 2',
     },
     {
-      src: '/smile gallery/CopyofCopyofN.avif',
-      alt: 'Smile Gallery - Complete Smile Restoration'
-    }
+      src: '/3.png',
+      alt: 'Smile Gallery Before & After 3',
+    },
   ]
 
   return (
