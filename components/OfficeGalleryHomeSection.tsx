@@ -1,10 +1,44 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { useKeenSlider } from 'keen-slider/react'
+import 'keen-slider/keen-slider.min.css'
 import { OFFICE_GALLERY_HOME_IMAGES } from './officeGalleryImages'
 
 export default function OfficeGalleryHomeSection() {
+  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
+    loop: true,
+    mode: 'snap',
+    slides: {
+      perView: 4,
+      spacing: 24,
+    },
+    breakpoints: {
+      '(max-width: 1024px)': {
+        slides: {
+          perView: 2,
+          spacing: 20,
+        },
+      },
+      '(max-width: 640px)': {
+        slides: {
+          perView: 1,
+          spacing: 16,
+        },
+      },
+    },
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      instanceRef.current?.next()
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [instanceRef])
+
   return (
     <section className="py-8 sm:py-10 lg:py-12 xl:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,28 +57,31 @@ export default function OfficeGalleryHomeSection() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {OFFICE_GALLERY_HOME_IMAGES.map((image, index) => (
-            <motion.div
-              key={image.src}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="relative overflow-hidden rounded-xl shadow-lg"
-            >
-              <div className="relative aspect-[3/4] w-full min-h-[200px] sm:min-h-[280px] lg:min-h-[320px]">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
-                />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="overflow-hidden"
+        >
+          <div ref={sliderRef} className="keen-slider">
+            {OFFICE_GALLERY_HOME_IMAGES.map((image) => (
+              <div key={image.src} className="keen-slider__slide">
+                <div className="relative overflow-hidden rounded-xl shadow-lg">
+                  <div className="relative aspect-[3/4] w-full min-h-[200px] sm:min-h-[280px] lg:min-h-[320px]">
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
+                </div>
               </div>
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )
