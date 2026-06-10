@@ -1,3 +1,5 @@
+const { securityHeaders } = require('./lib/securityHeaders')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Ensure SEO metadata (title, description, robots, canonical) is rendered in <head>
@@ -80,6 +82,14 @@ const nextConfig = {
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ]
   },
 }
 

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getPublishedBlogPosts } from '@/lib/blogDatabase'
+import { normalizeAsciiUrl, toAsciiSlug } from '@/lib/sanitizeBlogHtml'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.centralvalleydentist.com'
@@ -9,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     try {
         const posts = await getPublishedBlogPosts()
         blogEntries = posts.map((post: any) => ({
-            url: `${baseUrl}/blog/${post.slug}`,
+            url: normalizeAsciiUrl(`${baseUrl}/blog/${toAsciiSlug(post.slug) || post.slug}`),
             lastModified: new Date(post.updatedAt || post.publishDate || new Date()),
             priority: 0.7,
         }))

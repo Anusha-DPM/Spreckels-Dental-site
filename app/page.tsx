@@ -8,9 +8,8 @@ import {
   TestimonialSection,
   ServicesSection,
   SmileGallerySection,
+  OfficeGalleryHomeSection,
   MissionSection,
-  FeaturesSection,
-  NewOutgridAppSection,
   FeaturedVideoTestimonialSection,
   LatestBlogPosts,
   CTASection
@@ -28,13 +27,12 @@ export default function Home() {
       <TrustedBySection />
       <AboutUsSection />
       <MissionSection />
-      <FeaturesSection />
       <TestimonialSection />
+      <FeaturedVideoTestimonialSection showViewAllButton />
       <ServicesSection />
       <SmileGallerySection />
+      <OfficeGalleryHomeSection />
       <InfoStatsSection />
-      <NewOutgridAppSection />
-      <FeaturedVideoTestimonialSection showViewAllButton />
       <LatestBlogPosts />
       <CTASection />
     </Layout>

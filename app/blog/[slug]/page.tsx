@@ -2,7 +2,7 @@ import React, { cache } from 'react'
 import { Metadata } from 'next'
 import { getPublishedBlogPosts } from '../../../lib/blogDatabase'
 import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
-import { sanitizeBlogHtml, getBlogCanonicalUrl } from '../../../lib/sanitizeBlogHtml'
+import { sanitizeBlogHtml, getBlogCanonicalUrl, toAsciiSlug } from '../../../lib/sanitizeBlogHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
 import { BlogPost } from '../../../types/blog'
 
@@ -11,6 +11,19 @@ interface Props {
 }
 
 const getCachedPublishedBlogPosts = cache(async () => getPublishedBlogPosts())
+
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  try {
+    const posts = await getPublishedBlogPosts()
+    return posts.map((post: { slug: string }) => ({
+      slug: toAsciiSlug(post.slug) || post.slug,
+    }))
+  } catch {
+    return []
+  }
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
