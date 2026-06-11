@@ -92,6 +92,15 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
             display: inline-block !important;
             text-align: left !important;
           }
+          .blog-content table,
+          .blog-content table td,
+          .blog-content table th,
+          .blog-content table p {
+            text-align: left !important;
+          }
+          .blog-content .tableWrapper {
+            text-align: left !important;
+          }
         }
       `}</style>
             <div className="min-h-screen bg-gray-50">
