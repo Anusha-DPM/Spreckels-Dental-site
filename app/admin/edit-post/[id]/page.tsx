@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import RichTextEditor from '../../../../components/RichTextEditor'
+import RichTextEditor, { type RichTextEditorHandle } from '../../../../components/RichTextEditor'
 import { getBlogPostById, updateBlogPost, generateSlug } from '../../../../lib/blogDatabase'
 
 // Define BlogPost type locally since it's not exported from the JS file
@@ -66,6 +66,7 @@ export default function EditPost() {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [originalPost, setOriginalPost] = useState<BlogPost | null>(null)
+  const editorRef = useRef<RichTextEditorHandle>(null)
   const router = useRouter()
   const params = useParams()
   const postId = params.id as string
@@ -230,10 +231,13 @@ export default function EditPost() {
         }
       }
 
+      // Flush latest editor HTML so table cells and other edits are not lost on save
+      const latestContent = editorRef.current?.getHTML() ?? formData.content
+
       // Process content to upload any base64 images to Firebase
-      let processedContent = formData.content;
+      let processedContent = latestContent;
       try {
-        processedContent = await processContentImages(formData.content);
+        processedContent = await processContentImages(latestContent);
       } catch (contentError) {
         console.warn('Content image processing failed, using original content:', contentError);
         // Continue with original content if processing fails
@@ -361,6 +365,16 @@ export default function EditPost() {
       
       await updateBlogPost(postId, updateData);
       console.log('✅ Blog post updated successfully');
+
+      try {
+        await fetch('/api/revalidate-blog', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug: updateData.slug }),
+        })
+      } catch (revalidateError) {
+        console.warn('Blog cache revalidation failed:', revalidateError)
+      }
       console.log('📸 Cover image in updated post:', updateData.coverImage);
       console.log('📸 Image URL in updated post:', updateData.imageUrl);
       
@@ -517,6 +531,7 @@ export default function EditPost() {
               Content *
             </label>
             <RichTextEditor
+              ref={editorRef}
               value={formData.content}
               onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
               placeholder="Start writing your blog post..."

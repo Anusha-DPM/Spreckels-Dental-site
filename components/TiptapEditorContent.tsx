@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef, forwardRef } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
@@ -12,6 +12,10 @@ import Color from '@tiptap/extension-color'
 import FontFamily from '@tiptap/extension-font-family'
 import { TableKit } from '@tiptap/extension-table'
 
+export interface RichTextEditorHandle {
+  getHTML: () => string
+}
+
 interface RichTextEditorProps {
   value: string
   onChange: (value: string) => void
@@ -19,12 +23,12 @@ interface RichTextEditorProps {
   className?: string
 }
 
-const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
+const TiptapEditorContent = forwardRef<RichTextEditorHandle, RichTextEditorProps>(function TiptapEditorContent({
   value,
   onChange,
   placeholder = 'Start writing your blog post...',
   className = ''
-}) => {
+}, ref) {
   const isInternalUpdate = useRef(false)
 
   const editor = useEditor({
@@ -64,6 +68,7 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
       TableKit.configure({
         table: {
           resizable: true,
+          renderWrapper: true,
           HTMLAttributes: {
             class: 'blog-table',
           },
@@ -74,7 +79,13 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
     onUpdate: ({ editor }) => {
       isInternalUpdate.current = true
       onChange(editor.getHTML())
-      // Reset flag after a short delay
+      setTimeout(() => {
+        isInternalUpdate.current = false
+      }, 100)
+    },
+    onBlur: ({ editor }) => {
+      isInternalUpdate.current = true
+      onChange(editor.getHTML())
       setTimeout(() => {
         isInternalUpdate.current = false
       }, 100)
@@ -97,6 +108,10 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
       }
     }
   }, [value, editor])
+
+  useImperativeHandle(ref, () => ({
+    getHTML: () => editor?.getHTML() ?? value,
+  }), [editor, value])
 
   const setLink = useCallback(() => {
     if (!editor) return
@@ -541,7 +556,7 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
       </div>
     </div>
   )
-}
+})
 
 export default TiptapEditorContent
 

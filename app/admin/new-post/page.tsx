@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import RichTextEditor from '../../../components/RichTextEditor'
+import RichTextEditor, { type RichTextEditorHandle } from '../../../components/RichTextEditor'
 import SimpleTextEditor from '../../../components/SimpleTextEditor'
 import ErrorBoundary from '../../../components/ErrorBoundary'
 import { createBlogPost, generateSlug } from '../../../lib/blogDatabase'
@@ -66,6 +66,7 @@ export default function NewPost() {
   const [imagePreview, setImagePreview] = useState('')
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const editorRef = useRef<RichTextEditorHandle>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -215,14 +216,16 @@ export default function NewPost() {
         throw new Error('Post title is required');
       }
       
-      if (!formData.content.trim()) {
+      const latestContent = editorRef.current?.getHTML() ?? formData.content
+
+      if (!latestContent.trim()) {
         throw new Error('Post content is required');
       }
 
       // Process content to upload any base64 images to Firebase
-      let processedContent = formData.content;
+      let processedContent = latestContent;
       try {
-        processedContent = await processContentImages(formData.content);
+        processedContent = await processContentImages(latestContent);
       } catch (contentError) {
         console.warn('Content image processing failed, using original content:', contentError);
         // Continue with original content if processing fails
@@ -376,6 +379,16 @@ export default function NewPost() {
         });
         const postId = await createBlogPost(postData);
         console.log('✅ Blog post saved with ID:', postId);
+
+        try {
+          await fetch('/api/revalidate-blog', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: postData.slug }),
+          })
+        } catch (revalidateError) {
+          console.warn('Blog cache revalidation failed:', revalidateError)
+        }
         console.log('📸 Cover image in saved post:', postData.coverImage);
         console.log('📸 Image URL in saved post:', postData.imageUrl);
         
@@ -541,6 +554,7 @@ export default function NewPost() {
                 }
               >
                 <RichTextEditor
+                  ref={editorRef}
                   value={formData.content}
                   onChange={(value) => {
                     try {

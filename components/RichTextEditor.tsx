@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
+import type { RichTextEditorHandle } from './TiptapEditorContent'
 
-// Dynamically import Tiptap components to avoid SSR issues
 const TiptapEditorContent = dynamic(
   () => import('./TiptapEditorContent'),
-  { 
+  {
     ssr: false,
     loading: () => (
       <div className="min-h-[500px] border border-gray-300 rounded-lg p-4 flex items-center justify-center bg-gray-50">
@@ -26,12 +26,12 @@ interface RichTextEditorProps {
   className?: string
 }
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({
+const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(function RichTextEditor({
   value,
   onChange,
   placeholder = 'Start writing your blog post...',
   className = ''
-}) => {
+}, ref) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -51,12 +51,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   return (
     <TiptapEditorContent
+      ref={ref}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
       className={className}
     />
   )
-}
+})
 
 export default RichTextEditor
+export type { RichTextEditorHandle }

@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { getPublishedBlogPosts } from '../../../lib/blogDatabase'
 import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
 import { sanitizeBlogHtml, getBlogCanonicalUrl, toAsciiSlug } from '../../../lib/sanitizeBlogHtml'
+import { normalizeBlogTableHtml } from '../../../lib/normalizeBlogTableHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
 import { BlogPost } from '../../../types/blog'
 
@@ -85,9 +86,12 @@ export default async function BlogPostPage({ params }: Props) {
     )
   }
 
+  const prepareBlogContent = (html: string) =>
+    normalizeBlogTableHtml(sanitizeBlogHtml(html))
+
   const sanitizedPost: BlogPost = {
     ...post,
-    content: sanitizeBlogHtml(post.content),
+    content: prepareBlogContent(post.content),
   }
 
   const allPosts = await getCachedPublishedBlogPosts()
@@ -96,7 +100,7 @@ export default async function BlogPostPage({ params }: Props) {
     .slice(0, 3)
     .map(p => ({
       ...(p as BlogPost),
-      content: sanitizeBlogHtml((p as BlogPost).content),
+      content: prepareBlogContent((p as BlogPost).content),
     }))
 
   return <BlogPostClient post={sanitizedPost} relatedPosts={relatedPosts} />

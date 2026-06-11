@@ -282,9 +282,10 @@ html {
 .prose table,
 .blog-content table {
   border-collapse: collapse;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100%;
   margin: 1.5rem 0;
-  table-layout: fixed;
+  table-layout: auto !important;
 }
 
 .rich-text-editor-wrapper .ProseMirror table td,
@@ -355,4 +356,25 @@ html {
   display: table-cell !important;
   white-space: normal;
   text-align: left;
+}
+
+/* Override Tailwind Typography row-only borders; use full cell grid */
+.prose table tbody tr,
+.blog-content table tbody tr {
+  border-bottom: none !important;
+}
+
+.prose table td p,
+.prose table th p,
+.blog-content table td p,
+.blog-content table th p {
+  margin: 0 !important;
+}
+
+.prose table td strong,
+.prose table th strong,
+.blog-content table td strong,
+.blog-content table th strong {
+  font-weight: 600;
+  color: inherit;
 } 
