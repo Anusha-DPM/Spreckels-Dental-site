@@ -174,12 +174,6 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                                     )
                                 })()}
 
-                                {post.excerpt && !post.excerpt.includes('Dr. Rujul G. Parikh DDS has dedicated over 25 years') && (
-                                    <div className="mb-8 p-6 bg-gray-50 rounded-lg">
-                                        <p className="text-xl text-gray-700 italic text-center md:text-left">{post.excerpt}</p>
-                                    </div>
-                                )}
-
                                 <div className="prose prose-lg prose-gray max-w-none blog-content text-gray-900" dangerouslySetInnerHTML={{ __html: post.content }} />
 
                                 {post.tags && post.tags.length > 0 && (
