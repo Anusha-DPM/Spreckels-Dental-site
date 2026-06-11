@@ -10,6 +10,7 @@ import Underline from '@tiptap/extension-underline'
 import { TextStyle } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import FontFamily from '@tiptap/extension-font-family'
+import { TableKit } from '@tiptap/extension-table'
 
 interface RichTextEditorProps {
   value: string
@@ -60,6 +61,14 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
       TextStyle,
       Color,
       FontFamily,
+      TableKit.configure({
+        table: {
+          resizable: true,
+          HTMLAttributes: {
+            class: 'blog-table',
+          },
+        },
+      }),
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -165,6 +174,20 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
     }
 
     input.click()
+  }, [editor])
+
+  const insertTable = useCallback(() => {
+    if (!editor) return
+
+    const rowsInput = window.prompt('Number of rows', '3')
+    const colsInput = window.prompt('Number of columns', '3')
+
+    if (rowsInput === null || colsInput === null) return
+
+    const rows = Math.min(Math.max(parseInt(rowsInput, 10) || 3, 1), 20)
+    const cols = Math.min(Math.max(parseInt(colsInput, 10) || 3, 1), 10)
+
+    editor.chain().focus().insertTable({ rows, cols, withHeaderRow: false }).run()
   }, [editor])
 
   if (!editor) {
@@ -354,6 +377,82 @@ const TiptapEditorContent: React.FC<RichTextEditorProps> = ({
         >
           ➡
         </button>
+
+        <div className="w-px h-6 bg-gray-300 mx-1" />
+
+        {/* Table */}
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            insertTable()
+          }}
+          type="button"
+          className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+            editor.isActive('table') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+          }`}
+          title="Insert Table"
+        >
+          Table
+        </button>
+        {editor.isActive('table') && (
+          <>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                editor.chain().focus().addRowAfter().run()
+              }}
+              type="button"
+              className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100"
+              title="Add Row"
+            >
+              + Row
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                editor.chain().focus().addColumnAfter().run()
+              }}
+              type="button"
+              className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100"
+              title="Add Column"
+            >
+              + Col
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                editor.chain().focus().deleteRow().run()
+              }}
+              type="button"
+              className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100"
+              title="Delete Row"
+            >
+              − Row
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                editor.chain().focus().deleteColumn().run()
+              }}
+              type="button"
+              className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100"
+              title="Delete Column"
+            >
+              − Col
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                editor.chain().focus().deleteTable().run()
+              }}
+              type="button"
+              className="px-3 py-1.5 rounded text-sm font-medium transition-colors bg-white text-gray-700 hover:bg-gray-100"
+              title="Delete Table"
+            >
+              Delete Table
+            </button>
+          </>
+        )}
 
         <div className="w-px h-6 bg-gray-300 mx-1" />
 
