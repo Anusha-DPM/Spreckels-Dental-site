@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Layout from './Layout'
+import BlogImage from './BlogImage'
 import { BlogPost } from '../types/blog'
 import { getPublishedBlogPosts } from '../lib/blogDatabase'
 
@@ -148,7 +149,13 @@ export default function BlogListingClient({ initialPosts }: BlogListingClientPro
                                     >
                                         {(post.coverImage || post.imageUrl) && (
                                             <div className="relative h-48 bg-gray-100">
-                                                <img src={post.coverImage || post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
+                                                <BlogImage
+                                                    src={post.coverImage || post.imageUrl || ''}
+                                                    alt={post.title}
+                                                    className="object-cover"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                    fill
+                                                />
                                             </div>
                                         )}
                                         <div className="p-6">

@@ -69,7 +69,7 @@ export default function HeroSection() {
           fill
           className="object-cover object-top"
           priority
-          quality={95}
+          quality={80}
           sizes="(max-width: 1024px) 100vw, 50vw"
           style={{ objectFit: 'cover', objectPosition: 'top center' }}
         />

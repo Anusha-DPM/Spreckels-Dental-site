@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import JsonLd from '../components/JsonLd'
 import { dentistSchema } from '../lib/dentistSchema'
+import { SITE_LANG, SITE_URL } from '../lib/siteSeo'
 import './globals.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.centralvalleydentist.com'),
+  metadataBase: new URL(SITE_URL),
   title: 'Spreckels Park Dental - Professional Dental Services',
   description: 'Professional dental services and consultations. Experience exceptional dental care with our expert team.',
   robots: {
@@ -22,6 +23,13 @@ export const metadata: Metadata = {
   verification: {
     google: 'Wridp05slnEXWXgSos5uepSV0x9zBFYwRFJCoo1sDtU',
   },
+  alternates: {
+    languages: {
+      [SITE_LANG]: './',
+      en: './',
+      'x-default': './',
+    },
+  },
 }
 
 export default function RootLayout({
@@ -30,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang={SITE_LANG}>
       <head>
         <JsonLd data={dentistSchema} />
       </head>

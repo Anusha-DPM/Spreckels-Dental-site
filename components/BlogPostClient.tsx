@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import Layout from './Layout'
+import BlogImage from './BlogImage'
 import { BlogPost } from '../types/blog'
 
 interface BlogPostClientProps {
@@ -172,11 +173,13 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                                     return (
                                         <div className="mb-8">
                                             <div className="relative h-96 rounded-lg overflow-hidden bg-gray-100">
-                                                <img
+                                                <BlogImage
                                                     src={imageSrc}
                                                     alt={post.title}
-                                                    className="w-full h-full object-cover"
-                                                    loading="eager"
+                                                    className="object-cover"
+                                                    priority
+                                                    sizes="(max-width: 1024px) 100vw, 66vw"
+                                                    fill
                                                 />
                                             </div>
                                         </div>
@@ -223,10 +226,12 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                                                     <div className="flex items-start space-x-3">
                                                         {(relatedPost.coverImage || relatedPost.imageUrl) && (
                                                             <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
-                                                                <img
-                                                                    src={relatedPost.coverImage || relatedPost.imageUrl}
+                                                                <BlogImage
+                                                                    src={relatedPost.coverImage || relatedPost.imageUrl || ''}
                                                                     alt={relatedPost.title}
-                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                                                    className="object-cover group-hover:scale-105 transition-transform duration-200"
+                                                                    sizes="64px"
+                                                                    fill
                                                                 />
                                                             </div>
                                                         )}

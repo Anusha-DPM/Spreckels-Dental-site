@@ -7,6 +7,7 @@ import { normalizeBlogTableHtml } from '../../../lib/normalizeBlogTableHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
 import JsonLd from '../../../components/JsonLd'
 import { collectBlogSchemas } from '../../../lib/parseJsonLdSchema'
+import { getRelativeLanguageAlternates } from '../../../lib/siteSeo'
 import { BlogPost } from '../../../types/blog'
 
 interface Props {
@@ -54,9 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'max-image-preview': 'large',
       'max-video-preview': -1,
     },
-    alternates: {
-      canonical,
-    },
+    alternates: getRelativeLanguageAlternates(canonical),
     openGraph: {
       title,
       description,
