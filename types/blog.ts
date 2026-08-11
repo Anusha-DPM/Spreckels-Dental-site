@@ -17,4 +17,8 @@ export interface BlogPost {
     createdAt: string
     updatedAt: string
     author?: string
+    jsonLdSchema?: string
+    breadcrumbActive?: string
+    faqSchema?: string
+    medicalConditionSchema?: string
 }

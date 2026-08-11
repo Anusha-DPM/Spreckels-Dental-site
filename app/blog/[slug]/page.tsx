@@ -5,6 +5,8 @@ import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
 import { sanitizeBlogHtml, getBlogCanonicalUrl, toAsciiSlug } from '../../../lib/sanitizeBlogHtml'
 import { normalizeBlogTableHtml } from '../../../lib/normalizeBlogTableHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
+import JsonLd from '../../../components/JsonLd'
+import { collectBlogSchemas } from '../../../lib/parseJsonLdSchema'
 import { BlogPost } from '../../../types/blog'
 
 interface Props {
@@ -103,5 +105,12 @@ export default async function BlogPostPage({ params }: Props) {
       content: prepareBlogContent((p as BlogPost).content),
     }))
 
-  return <BlogPostClient post={sanitizedPost} relatedPosts={relatedPosts} />
+  const blogSchemas = collectBlogSchemas(post)
+
+  return (
+    <>
+      {blogSchemas.length > 0 && <JsonLd data={blogSchemas} />}
+      <BlogPostClient post={sanitizedPost} relatedPosts={relatedPosts} />
+    </>
+  )
 }
