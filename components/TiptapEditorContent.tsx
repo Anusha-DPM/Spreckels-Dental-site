@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useImperativeHandle, useRef, forwardRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef, useState, forwardRef } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
@@ -11,6 +11,7 @@ import { TextStyle } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import FontFamily from '@tiptap/extension-font-family'
 import { TableKit } from '@tiptap/extension-table'
+import { RawHtml } from './tiptap/RawHtmlExtension'
 
 export interface RichTextEditorHandle {
   getHTML: () => string
@@ -30,6 +31,8 @@ const TiptapEditorContent = forwardRef<RichTextEditorHandle, RichTextEditorProps
   className = ''
 }, ref) {
   const isInternalUpdate = useRef(false)
+  const [codeModalOpen, setCodeModalOpen] = useState(false)
+  const [codeDraft, setCodeDraft] = useState('')
 
   const editor = useEditor({
     immediatelyRender: false, // Fix SSR hydration mismatch
@@ -74,6 +77,7 @@ const TiptapEditorContent = forwardRef<RichTextEditorHandle, RichTextEditorProps
           },
         },
       }),
+      RawHtml,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -204,6 +208,27 @@ const TiptapEditorContent = forwardRef<RichTextEditorHandle, RichTextEditorProps
 
     editor.chain().focus().insertTable({ rows, cols, withHeaderRow: false }).run()
   }, [editor])
+
+  const openCodeModal = useCallback(() => {
+    setCodeDraft('')
+    setCodeModalOpen(true)
+  }, [])
+
+  const insertCodeBlock = useCallback(() => {
+    if (!editor) return
+    const trimmed = codeDraft.trim()
+    if (!trimmed) {
+      setCodeModalOpen(false)
+      return
+    }
+    // Store the user's code as-is; normalize only for preview/display on the public page
+    editor.chain().focus().insertRawHtml(trimmed).run()
+    setCodeModalOpen(false)
+    setCodeDraft('')
+    setTimeout(() => {
+      onChange(editor.getHTML())
+    }, 50)
+  }, [editor, codeDraft, onChange])
 
   if (!editor) {
     return (
@@ -496,6 +521,19 @@ const TiptapEditorContent = forwardRef<RichTextEditorHandle, RichTextEditorProps
         >
           🖼️
         </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            openCodeModal()
+          }}
+          type="button"
+          className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+            editor.isActive('rawHtml') ? 'bg-[#441018] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+          }`}
+          title="Insert HTML / CSS / JavaScript / JSON-LD"
+        >
+          Code
+        </button>
 
         <div className="w-px h-6 bg-gray-300 mx-1" />
 
@@ -554,6 +592,57 @@ const TiptapEditorContent = forwardRef<RichTextEditorHandle, RichTextEditorProps
       <div className="border border-gray-200 border-t-0 rounded-b-lg bg-white">
         <EditorContent editor={editor} />
       </div>
+
+      {codeModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="body-code-modal-title"
+          onClick={() => setCodeModalOpen(false)}
+        >
+          <div
+            className="w-full max-w-2xl rounded-lg bg-white shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="border-b border-gray-200 px-4 py-3">
+              <h3 id="body-code-modal-title" className="text-lg font-semibold text-gray-900">
+                Insert Code
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">
+                Paste HTML, CSS, JavaScript, JSON, or JSON-LD. Saved in the blog body and shown on this post only.
+              </p>
+            </div>
+            <div className="p-4">
+              <textarea
+                value={codeDraft}
+                onChange={(e) => setCodeDraft(e.target.value)}
+                rows={14}
+                autoFocus
+                className="w-full rounded-lg border border-gray-300 p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#441018]"
+                placeholder={'Examples:\n<div>...</div>\n<style>.x{color:red}</style>\n<script>...</script>\n{"@context":"https://schema.org",...}'}
+              />
+            </div>
+            <div className="flex justify-end gap-2 border-t border-gray-200 px-4 py-3">
+              <button
+                type="button"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                onClick={() => setCodeModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="rounded-lg bg-[#441018] px-4 py-2 text-sm font-medium text-white hover:bg-[#5a1a22] disabled:opacity-50"
+                disabled={!codeDraft.trim()}
+                onClick={insertCodeBlock}
+              >
+                Insert Code
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 })

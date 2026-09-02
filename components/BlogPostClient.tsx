@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import Layout from './Layout'
 import BlogImage from './BlogImage'
+import BlogBodyContent from './BlogBodyContent'
 import { BlogPost } from '../types/blog'
 
 interface BlogPostClientProps {
@@ -186,7 +187,10 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                                     )
                                 })()}
 
-                                <div className="prose prose-lg prose-gray max-w-none blog-content text-gray-900" dangerouslySetInnerHTML={{ __html: post.content }} />
+                                <BlogBodyContent
+                                    html={post.content}
+                                    className="prose prose-lg prose-gray max-w-none blog-content text-gray-900"
+                                />
 
                                 {post.tags && post.tags.length > 0 && (
                                     <div className="mt-8 pt-8 border-t border-gray-200 text-center md:text-left">
