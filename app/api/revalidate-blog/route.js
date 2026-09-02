@@ -5,13 +5,17 @@ export async function POST(request) {
   try {
     const body = await request.json()
     const slug = body?.slug?.trim()
+    const previousSlug = body?.previousSlug?.trim()
 
     revalidatePath('/blog')
     if (slug) {
       revalidatePath(`/blog/${slug}`)
     }
+    if (previousSlug && previousSlug !== slug) {
+      revalidatePath(`/blog/${previousSlug}`)
+    }
 
-    return NextResponse.json({ revalidated: true, slug: slug || null })
+    return NextResponse.json({ revalidated: true, slug: slug || null, previousSlug: previousSlug || null })
   } catch (error) {
     console.error('Blog revalidation failed:', error)
     return NextResponse.json({ error: 'Revalidation failed' }, { status: 500 })

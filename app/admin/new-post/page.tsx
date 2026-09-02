@@ -47,6 +47,7 @@ import { uploadImageToCloudinary } from '../../../lib/cloudinary'
 export default function NewPost() {
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
     content: '',
     excerpt: '',
     coverImage: '',
@@ -326,6 +327,7 @@ export default function NewPost() {
       // 2. Blog detail page (/blog/[slug]) - as featured image
       
       // Build post data object
+      const savedSlug = generateSlug(formData.slug?.trim() || formData.title || '')
       const postData: any = {
         title: formData.title?.trim() || '',
         content: processedContent || '',
@@ -336,7 +338,7 @@ export default function NewPost() {
         categories: (formData.categories || '').split(',').map((cat: string) => cat.trim()).filter((cat: string) => cat),
         metaTitle: (formData.metaTitle?.trim() || formData.title?.trim() || ''),
         metaDescription: (formData.metaDescription?.trim() || formData.excerpt?.trim() || ''),
-        slug: generateSlug(formData.title || ''),
+        slug: savedSlug,
         published: formData.published || false,
         publishDate: formData.published ? formData.publishDate : new Date().toISOString(),
         author: 'Admin'
@@ -348,10 +350,9 @@ export default function NewPost() {
         postData.keyword = keyword;
       }
       
-      const postSlug = generateSlug(formData.title || '');
       postData.canonicalUrl =
         formData.canonicalUrl?.trim() ||
-        `https://www.centralvalleydentist.com/blog/${postSlug}`;
+        `https://www.centralvalleydentist.com/blog/${savedSlug}`;
       
       const jsonLdSchema = formData.jsonLdSchema?.trim();
       if (jsonLdSchema) {
@@ -555,6 +556,26 @@ export default function NewPost() {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
               placeholder="Enter your post title..."
             />
+          </div>
+
+          {/* Slug */}
+          <div>
+            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-2">
+              Slug
+            </label>
+            <input
+              type="text"
+              id="slug"
+              name="slug"
+              value={formData.slug}
+              onChange={handleInputChange}
+              suppressHydrationWarning
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+              placeholder="blog-url-slug"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Used for the blog URL: /blog/{formData.slug || generateSlug(formData.title || '') || 'your-slug'}
+            </p>
           </div>
 
           {/* Content */}
