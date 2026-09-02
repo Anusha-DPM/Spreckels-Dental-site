@@ -5,6 +5,7 @@ import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
 import { sanitizeBlogHtml, getBlogCanonicalUrl, toAsciiSlug } from '../../../lib/sanitizeBlogHtml'
 import { normalizeBlogTableHtml } from '../../../lib/normalizeBlogTableHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
+import BlogCustomCode from '../../../components/BlogCustomCode'
 import JsonLd from '../../../components/JsonLd'
 import { collectBlogSchemas } from '../../../lib/parseJsonLdSchema'
 import { getRelativeLanguageAlternates } from '../../../lib/siteSeo'
@@ -44,6 +45,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = post.metaTitle || post.title
   const description = post.metaDescription || post.excerpt || ''
   const canonical = getBlogCanonicalUrl(slug, post.canonicalUrl)
+  const ogTitle = post.ogTitle?.trim() || title
+  const ogDescription = post.ogDescription?.trim() || description
+  const ogUrl = post.ogUrl?.trim() || canonical
+  const twitterTitle = post.twitterTitle?.trim() || title
+  const twitterDescription = post.twitterDescription?.trim() || description
+  const twitterCard =
+    post.twitterCard?.trim() === 'summary' ? 'summary' : 'summary_large_image'
 
   return {
     title,
@@ -57,16 +65,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: getRelativeLanguageAlternates(canonical),
     openGraph: {
-      title,
-      description,
-      url: canonical,
+      title: ogTitle,
+      description: ogDescription,
+      url: ogUrl,
       type: 'article',
       images: post.coverImage ? [{ url: post.coverImage }] : [],
     },
     twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
+      card: twitterCard,
+      title: twitterTitle,
+      description: twitterDescription,
       images: post.coverImage ? [post.coverImage] : [],
     },
   }
@@ -109,6 +117,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <>
       {blogSchemas.length > 0 && <JsonLd data={blogSchemas} />}
+      {post.customCode?.trim() ? <BlogCustomCode code={post.customCode} /> : null}
       <BlogPostClient post={sanitizedPost} relatedPosts={relatedPosts} />
     </>
   )

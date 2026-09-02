@@ -33,6 +33,13 @@ interface BlogPost {
   breadcrumbActive?: string
   faqSchema?: string
   medicalConditionSchema?: string
+  customCode?: string
+  ogTitle?: string
+  ogDescription?: string
+  ogUrl?: string
+  twitterCard?: string
+  twitterTitle?: string
+  twitterDescription?: string
 }
 import { processContentImages } from '../../../lib/processContentImages'
 import { uploadImageToCloudinary } from '../../../lib/cloudinary'
@@ -54,6 +61,13 @@ export default function NewPost() {
     breadcrumbActive: '',
     faqSchema: '',
     medicalConditionSchema: '',
+    customCode: '',
+    ogTitle: '',
+    ogDescription: '',
+    ogUrl: '',
+    twitterCard: 'summary_large_image',
+    twitterTitle: '',
+    twitterDescription: '',
     published: false,
     publishDate: new Date().toISOString().split('T')[0]
   })
@@ -94,7 +108,7 @@ export default function NewPost() {
     checkFirebaseConnection()
   }, [router])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
     setFormData(prev => ({
       ...prev,
@@ -358,6 +372,15 @@ export default function NewPost() {
       if (medicalConditionSchema) {
         postData.medicalConditionSchema = medicalConditionSchema;
       }
+
+      // Always persist custom code + social meta so clearing fields works
+      postData.customCode = formData.customCode?.trim() || '';
+      postData.ogTitle = formData.ogTitle?.trim() || '';
+      postData.ogDescription = formData.ogDescription?.trim() || '';
+      postData.ogUrl = formData.ogUrl?.trim() || '';
+      postData.twitterCard = formData.twitterCard?.trim() || 'summary_large_image';
+      postData.twitterTitle = formData.twitterTitle?.trim() || '';
+      postData.twitterDescription = formData.twitterDescription?.trim() || '';
       
       console.log('💾 Final post data with image URLs:', {
         coverImage: postData.coverImage,
@@ -853,6 +876,122 @@ export default function NewPost() {
                   placeholder="https://example.com/canonical-url"
                 />
               </div>
+
+              <div className="border-t border-gray-200 pt-4 mt-2">
+                <h4 className="text-sm font-semibold text-gray-900 mb-3">Open Graph &amp; Twitter</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="ogTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                      og:title
+                    </label>
+                    <input
+                      type="text"
+                      id="ogTitle"
+                      name="ogTitle"
+                      value={formData.ogTitle}
+                      onChange={handleInputChange}
+                      suppressHydrationWarning
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                      placeholder="Defaults to Meta Title if empty"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="ogDescription" className="block text-sm font-medium text-gray-700 mb-2">
+                      og:description
+                    </label>
+                    <textarea
+                      id="ogDescription"
+                      name="ogDescription"
+                      value={formData.ogDescription}
+                      onChange={handleInputChange}
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                      placeholder="Defaults to Meta Description if empty"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="ogUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                      og:url
+                    </label>
+                    <input
+                      type="url"
+                      id="ogUrl"
+                      name="ogUrl"
+                      value={formData.ogUrl}
+                      onChange={handleInputChange}
+                      suppressHydrationWarning
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                      placeholder="Defaults to Canonical URL if empty"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="twitterCard" className="block text-sm font-medium text-gray-700 mb-2">
+                      twitter:card
+                    </label>
+                    <select
+                      id="twitterCard"
+                      name="twitterCard"
+                      value={formData.twitterCard}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                    >
+                      <option value="summary_large_image">summary_large_image</option>
+                      <option value="summary">summary</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="twitterTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                      twitter:title
+                    </label>
+                    <input
+                      type="text"
+                      id="twitterTitle"
+                      name="twitterTitle"
+                      value={formData.twitterTitle}
+                      onChange={handleInputChange}
+                      suppressHydrationWarning
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                      placeholder="Defaults to Meta Title if empty"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="twitterDescription" className="block text-sm font-medium text-gray-700 mb-2">
+                      twitter:description
+                    </label>
+                    <textarea
+                      id="twitterDescription"
+                      name="twitterDescription"
+                      value={formData.twitterDescription}
+                      onChange={handleInputChange}
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
+                      placeholder="Defaults to Meta Description if empty"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Custom Code — injected only on this post's detail page */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Custom Code</h3>
+            <div>
+              <label htmlFor="customCode" className="block text-sm font-medium text-gray-700 mb-2">
+                HTML / CSS / JavaScript / JSON-LD
+              </label>
+              <textarea
+                id="customCode"
+                name="customCode"
+                value={formData.customCode}
+                onChange={handleInputChange}
+                rows={10}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
+                placeholder={'Paste HTML, <style>…</style>, <script>…</script>, or JSON-LD here.\nThis code appears only on this blog post.'}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Appears only on this blog post&apos;s page. You can paste markup with tags, or bare JSON / CSS / JS.
+              </p>
             </div>
           </div>
 

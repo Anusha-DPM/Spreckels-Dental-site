@@ -21,4 +21,12 @@ export interface BlogPost {
     breadcrumbActive?: string
     faqSchema?: string
     medicalConditionSchema?: string
+    /** Per-post HTML/CSS/JS/JSON-LD injected only on that blog detail page */
+    customCode?: string
+    ogTitle?: string
+    ogDescription?: string
+    ogUrl?: string
+    twitterCard?: string
+    twitterTitle?: string
+    twitterDescription?: string
 }
