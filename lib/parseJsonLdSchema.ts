@@ -16,37 +16,58 @@ function extractJsonFromScriptTag(value: string): string {
   return scriptMatch ? scriptMatch[1].trim() : value
 }
 
-export function parseJsonLdSchema(
-  input: string | undefined | null
-): JsonLdObject | null {
-  if (!input?.trim()) return null
+function isJsonLdObject(value: unknown): value is JsonLdObject {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value)
+}
 
-  let jsonStr = decodeHtmlEntities(extractJsonFromScriptTag(input.trim()))
+export function parseJsonLdSchemaList(
+  input: string | undefined | null
+): JsonLdObject[] {
+  if (!input?.trim()) return []
+
+  const jsonStr = decodeHtmlEntities(extractJsonFromScriptTag(input.trim()))
 
   try {
     const parsed = JSON.parse(jsonStr)
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as JsonLdObject
+    if (Array.isArray(parsed)) {
+      return parsed.filter(isJsonLdObject)
+    }
+    if (isJsonLdObject(parsed)) {
+      return [parsed]
     }
   } catch {
-    return null
+    return []
   }
 
-  return null
+  return []
 }
 
-export function collectBlogSchemas(post: {
+export function parseJsonLdSchema(
+  input: string | undefined | null
+): JsonLdObject | null {
+  return parseJsonLdSchemaList(input)[0] ?? null
+}
+
+export type BlogSchemaFields = {
   jsonLdSchema?: string
+  blogPostingSchema?: string
+  personSchema?: string
+  dentistSchema?: string
   breadcrumbActive?: string
   faqSchema?: string
   medicalConditionSchema?: string
-}): JsonLdObject[] {
+  howToSchema?: string
+}
+
+export function collectBlogSchemas(post: BlogSchemaFields): JsonLdObject[] {
   return [
     post.jsonLdSchema,
+    post.blogPostingSchema,
+    post.personSchema,
+    post.dentistSchema,
     post.breadcrumbActive,
     post.faqSchema,
     post.medicalConditionSchema,
-  ]
-    .map(parseJsonLdSchema)
-    .filter((schema): schema is JsonLdObject => schema !== null)
+    post.howToSchema,
+  ].flatMap(parseJsonLdSchemaList)
 }

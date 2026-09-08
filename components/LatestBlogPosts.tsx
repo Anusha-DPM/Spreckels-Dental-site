@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getLatestBlogPosts } from '../lib/blogDatabase'
 import { getHomepageExcerpt, normalizeBlogPostForDisplay } from '../lib/blogDisplayUtils'
+import { getBlogPath } from '../lib/sanitizeBlogHtml'
 
 // Define BlogPost type locally since it's not exported from the JS file
 interface BlogPost {
@@ -224,7 +225,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
                   {/* Title */}
                   <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
                     <Link 
-                      href={`/blog/${post.slug}`}
+                      href={getBlogPath(post.slug)}
                       className="hover:text-[#441018] transition-colors duration-200"
                     >
                       {post.title}
@@ -249,7 +250,7 @@ export default function LatestBlogPosts({ limit = 3, showViewAll = true }: Lates
 
                   {/* Read More */}
                   <Link
-                    href={`/blog/${post.slug}`}
+                    href={getBlogPath(post.slug)}
                     className="text-[#441018] font-medium hover:text-[#5a1a2a] transition-colors duration-200"
                   >
                     Read More →

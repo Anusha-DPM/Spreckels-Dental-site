@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import RichTextEditor, { type RichTextEditorHandle } from '../../../../components/RichTextEditor'
 import { getBlogPostById, updateBlogPost, generateSlug } from '../../../../lib/blogDatabase'
+import { getBlogCanonicalUrl, getBlogPath, getBlogSitemapUrl } from '../../../../lib/sanitizeBlogHtml'
+import BlogSchemaFields from '../../../../components/admin/BlogSchemaFields'
 
 // Define BlogPost type locally since it's not exported from the JS file
 interface BlogPost {
@@ -28,9 +30,14 @@ interface BlogPost {
   keyword?: string
   canonicalUrl?: string
   jsonLdSchema?: string
+  blogPostingSchema?: string
+  personSchema?: string
+  dentistSchema?: string
   breadcrumbActive?: string
   faqSchema?: string
   medicalConditionSchema?: string
+  howToSchema?: string
+  sitemapEntry?: string
   customCode?: string
   ogTitle?: string
   ogDescription?: string
@@ -58,9 +65,13 @@ export default function EditPost() {
     keyword: '',
     canonicalUrl: '',
     jsonLdSchema: '',
+    blogPostingSchema: '',
+    personSchema: '',
+    dentistSchema: '',
     breadcrumbActive: '',
     faqSchema: '',
     medicalConditionSchema: '',
+    howToSchema: '',
     customCode: '',
     ogTitle: '',
     ogDescription: '',
@@ -123,9 +134,13 @@ export default function EditPost() {
         keyword: blogPost.keyword || '',
         canonicalUrl: blogPost.canonicalUrl || '',
         jsonLdSchema: blogPost.jsonLdSchema || '',
+        blogPostingSchema: blogPost.blogPostingSchema || '',
+        personSchema: blogPost.personSchema || '',
+        dentistSchema: blogPost.dentistSchema || '',
         breadcrumbActive: blogPost.breadcrumbActive || '',
         faqSchema: blogPost.faqSchema || '',
         medicalConditionSchema: blogPost.medicalConditionSchema || '',
+        howToSchema: blogPost.howToSchema || '',
         customCode: blogPost.customCode || '',
         ogTitle: blogPost.ogTitle || '',
         ogDescription: blogPost.ogDescription || '',
@@ -348,9 +363,9 @@ export default function EditPost() {
         updateData.keyword = keyword;
       }
       
-      updateData.canonicalUrl =
-        formData.canonicalUrl?.trim() ||
-        `https://www.centralvalleydentist.com/blog/${updateData.slug}`;
+      const sitemapEntry = getBlogSitemapUrl(savedSlug)
+      updateData.sitemapEntry = sitemapEntry
+      updateData.canonicalUrl = getBlogCanonicalUrl(savedSlug, formData.canonicalUrl)
 
       const existingAuthor = originalPost?.author?.trim()
       updateData.author =
@@ -358,31 +373,20 @@ export default function EditPost() {
           ? 'Admin'
           : existingAuthor
       
-      const jsonLdSchema = formData.jsonLdSchema?.trim();
-      if (jsonLdSchema) {
-        updateData.jsonLdSchema = jsonLdSchema;
-      }
-      
-      const breadcrumbActive = formData.breadcrumbActive?.trim();
-      if (breadcrumbActive) {
-        updateData.breadcrumbActive = breadcrumbActive;
-      }
-      
-      const faqSchema = formData.faqSchema?.trim();
-      if (faqSchema) {
-        updateData.faqSchema = faqSchema;
-      }
-      
-      const medicalConditionSchema = formData.medicalConditionSchema?.trim();
-      if (medicalConditionSchema) {
-        updateData.medicalConditionSchema = medicalConditionSchema;
-      }
+      updateData.jsonLdSchema = formData.jsonLdSchema?.trim() || ''
+      updateData.blogPostingSchema = formData.blogPostingSchema?.trim() || ''
+      updateData.personSchema = formData.personSchema?.trim() || ''
+      updateData.dentistSchema = formData.dentistSchema?.trim() || ''
+      updateData.breadcrumbActive = formData.breadcrumbActive?.trim() || ''
+      updateData.faqSchema = formData.faqSchema?.trim() || ''
+      updateData.medicalConditionSchema = formData.medicalConditionSchema?.trim() || ''
+      updateData.howToSchema = formData.howToSchema?.trim() || ''
 
       // Always persist custom code + social meta so clearing fields works
       updateData.customCode = formData.customCode?.trim() || '';
       updateData.ogTitle = formData.ogTitle?.trim() || '';
       updateData.ogDescription = formData.ogDescription?.trim() || '';
-      updateData.ogUrl = formData.ogUrl?.trim() || '';
+      updateData.ogUrl = formData.ogUrl?.trim() || sitemapEntry;
       updateData.twitterCard = formData.twitterCard?.trim() || 'summary_large_image';
       updateData.twitterTitle = formData.twitterTitle?.trim() || '';
       updateData.twitterDescription = formData.twitterDescription?.trim() || '';
@@ -577,7 +581,7 @@ export default function EditPost() {
               placeholder="blog-url-slug"
             />
             <p className="text-xs text-gray-500 mt-1">
-              Used for the blog URL: /blog/{formData.slug || generateSlug(formData.title || '') || 'your-slug'}
+              Used for the blog URL: {getBlogPath(formData.slug || formData.title) || '/blog/your-slug'}
             </p>
           </div>
 
@@ -841,8 +845,29 @@ export default function EditPost() {
                   onChange={handleInputChange}
                   suppressHydrationWarning
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent"
-                  placeholder="https://example.com/canonical-url"
+                  placeholder="https://www.centralvalleydentist.com/blog/your-slug"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Leave blank to use the live sitemap URL. On-site /blog/ canonicals are synced to that URL.
+                </p>
+              </div>
+
+              <div>
+                <label htmlFor="sitemapEntry" className="block text-sm font-medium text-gray-700 mb-2">
+                  Sitemap Entry
+                </label>
+                <input
+                  type="url"
+                  id="sitemapEntry"
+                  name="sitemapEntry"
+                  value={getBlogSitemapUrl(formData.slug || formData.title)}
+                  readOnly
+                  suppressHydrationWarning
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-700 focus:outline-none"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Exact URL written to the live sitemap at /sitemap.xml. Matches the published blog URL.
+                </p>
               </div>
 
               <div className="border-t border-gray-200 pt-4 mt-2">
@@ -963,75 +988,19 @@ export default function EditPost() {
             </div>
           </div>
 
-          {/* Schema Markup */}
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Schema Markup (Script Fields)</h3>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="jsonLdSchema" className="block text-sm font-medium text-gray-700 mb-2">
-                  JSON-LD Schema
-                </label>
-                <textarea
-                  id="jsonLdSchema"
-                  name="jsonLdSchema"
-                  value={formData.jsonLdSchema}
-                  onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
-                  placeholder="Paste your JSON-LD schema script code here..."
-                />
-                <p className="text-xs text-gray-500 mt-1">Paste your JSON-LD schema script code</p>
-              </div>
-
-              <div>
-                <label htmlFor="breadcrumbActive" className="block text-sm font-medium text-gray-700 mb-2">
-                  Breadcrumb Active Schema
-                </label>
-                <textarea
-                  id="breadcrumbActive"
-                  name="breadcrumbActive"
-                  value={formData.breadcrumbActive}
-                  onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
-                  placeholder="Paste your breadcrumb schema script code here..."
-                />
-                <p className="text-xs text-gray-500 mt-1">Paste your breadcrumb schema script code</p>
-              </div>
-
-              <div>
-                <label htmlFor="faqSchema" className="block text-sm font-medium text-gray-700 mb-2">
-                  FAQ Schema
-                </label>
-                <textarea
-                  id="faqSchema"
-                  name="faqSchema"
-                  value={formData.faqSchema}
-                  onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
-                  placeholder="Paste your FAQ schema script code here..."
-                />
-                <p className="text-xs text-gray-500 mt-1">Paste your FAQ schema script code</p>
-              </div>
-
-              <div>
-                <label htmlFor="medicalConditionSchema" className="block text-sm font-medium text-gray-700 mb-2">
-                  Medical Condition Schema
-                </label>
-                <textarea
-                  id="medicalConditionSchema"
-                  name="medicalConditionSchema"
-                  value={formData.medicalConditionSchema}
-                  onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#441018] focus:border-transparent font-mono text-sm"
-                  placeholder="Paste your medical condition schema script code here..."
-                />
-                <p className="text-xs text-gray-500 mt-1">Paste your medical condition schema script code</p>
-              </div>
-            </div>
-          </div>
+          <BlogSchemaFields
+            values={{
+              jsonLdSchema: formData.jsonLdSchema,
+              blogPostingSchema: formData.blogPostingSchema,
+              personSchema: formData.personSchema,
+              dentistSchema: formData.dentistSchema,
+              breadcrumbActive: formData.breadcrumbActive,
+              faqSchema: formData.faqSchema,
+              medicalConditionSchema: formData.medicalConditionSchema,
+              howToSchema: formData.howToSchema,
+            }}
+            onChange={handleInputChange}
+          />
 
           {/* Publish Settings */}
           <div className="bg-gray-50 p-6 rounded-lg">

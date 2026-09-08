@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { getPublishedBlogPosts } from '@/lib/blogDatabase'
-import { normalizeAsciiUrl, toAsciiSlug } from '@/lib/sanitizeBlogHtml'
+import { getBlogSitemapUrl } from '@/lib/sanitizeBlogHtml'
+
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.centralvalleydentist.com'
@@ -9,11 +11,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let blogEntries: MetadataRoute.Sitemap = []
     try {
         const posts = await getPublishedBlogPosts()
-        blogEntries = posts.map((post: any) => ({
-            url: normalizeAsciiUrl(`${baseUrl}/blog/${toAsciiSlug(post.slug) || post.slug}`),
-            lastModified: new Date(post.updatedAt || post.publishDate || new Date()),
-            priority: 0.7,
-        }))
+        blogEntries = posts
+            .map((post: { slug?: string; sitemapEntry?: string; updatedAt?: string; publishDate?: string }) => {
+                const url = getBlogSitemapUrl(post.slug) || post.sitemapEntry || ''
+                if (!url) return null
+                return {
+                    url,
+                    lastModified: new Date(post.updatedAt || post.publishDate || new Date()),
+                    priority: 0.7,
+                }
+            })
+            .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
     } catch (error) {
         console.error('Error fetching blog posts for sitemap:', error)
     }

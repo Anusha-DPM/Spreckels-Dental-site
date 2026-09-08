@@ -7,6 +7,7 @@ import Layout from './Layout'
 import BlogImage from './BlogImage'
 import BlogBodyContent from './BlogBodyContent'
 import { BlogPost } from '../types/blog'
+import { getBlogPath } from '../lib/sanitizeBlogHtml'
 
 interface BlogPostClientProps {
     post: BlogPost
@@ -226,7 +227,7 @@ export default function BlogPostClient({ post, relatedPosts }: BlogPostClientPro
                                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Related Posts</h3>
                                         <div className="space-y-4">
                                             {relatedPosts.map(relatedPost => (
-                                                <Link key={relatedPost.id} href={`/blog/${relatedPost.slug}`} className="block group">
+                                                <Link key={relatedPost.id} href={getBlogPath(relatedPost.slug)} className="block group">
                                                     <div className="flex items-start space-x-3">
                                                         {(relatedPost.coverImage || relatedPost.imageUrl) && (
                                                             <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">

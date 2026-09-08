@@ -8,6 +8,7 @@ export async function POST(request) {
     const previousSlug = body?.previousSlug?.trim()
 
     revalidatePath('/blog')
+    revalidatePath('/sitemap.xml')
     if (slug) {
       revalidatePath(`/blog/${slug}`)
     }

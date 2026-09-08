@@ -2,7 +2,7 @@ import React, { cache } from 'react'
 import { Metadata } from 'next'
 import { getPublishedBlogPosts } from '../../../lib/blogDatabase'
 import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
-import { sanitizeBlogHtml, getBlogCanonicalUrl, toAsciiSlug } from '../../../lib/sanitizeBlogHtml'
+import { sanitizeBlogHtml, getBlogCanonicalUrl, getBlogUrlSlug } from '../../../lib/sanitizeBlogHtml'
 import { normalizeBlogTableHtml } from '../../../lib/normalizeBlogTableHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
 import BlogCustomCode from '../../../components/BlogCustomCode'
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
   try {
     const posts = await getPublishedBlogPosts()
     return posts.map((post: { slug: string }) => ({
-      slug: toAsciiSlug(post.slug) || post.slug,
+      slug: getBlogUrlSlug(post.slug),
     }))
   } catch {
     return []
