@@ -82,6 +82,13 @@ export const dentistSchema = {
   founder: {
     '@type': 'Person',
     name: 'Dr. Rujul G. Parikh DDS',
+    jobTitle: 'Dentist',
+    url: 'https://www.centralvalleydentist.com/dental-staff',
+    hasCredential: {
+      '@type': 'EducationalOccupationalCredential',
+      name: 'Doctor of Dental Surgery',
+      credentialCategory: 'DDS',
+    },
   },
   hasMap: 'https://maps.app.goo.gl/34gz2XcmkvE8KLPt6',
   sameAs: [

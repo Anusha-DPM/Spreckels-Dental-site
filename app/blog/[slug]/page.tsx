@@ -2,12 +2,12 @@ import React, { cache } from 'react'
 import { Metadata } from 'next'
 import { getPublishedBlogPosts } from '../../../lib/blogDatabase'
 import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
-import { sanitizeBlogHtml, getBlogCanonicalUrl, getBlogUrlSlug } from '../../../lib/sanitizeBlogHtml'
+import { sanitizeBlogHtml, getBlogCanonicalUrl, getBlogUrlSlug, extractBlogSlugFromUrl } from '../../../lib/sanitizeBlogHtml'
 import { normalizeBlogTableHtml } from '../../../lib/normalizeBlogTableHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
 import BlogCustomCode from '../../../components/BlogCustomCode'
 import JsonLd from '../../../components/JsonLd'
-import { collectBlogSchemas } from '../../../lib/parseJsonLdSchema'
+import { buildLiveBlogSchemas } from '../../../lib/buildBlogSchemas'
 import { getRelativeLanguageAlternates } from '../../../lib/siteSeo'
 import { BlogPost } from '../../../types/blog'
 
@@ -22,9 +22,16 @@ export const revalidate = 3600
 export async function generateStaticParams() {
   try {
     const posts = await getPublishedBlogPosts()
-    return posts.map((post: { slug: string }) => ({
-      slug: getBlogUrlSlug(post.slug),
-    }))
+    const slugs = new Set<string>()
+    posts.forEach((post: { slug?: string; canonicalUrl?: string; sitemapEntry?: string }) => {
+      const primary = getBlogUrlSlug(post.slug || '')
+      if (primary) slugs.add(primary)
+      const aliases = [extractBlogSlugFromUrl(post.canonicalUrl), extractBlogSlugFromUrl(post.sitemapEntry)]
+      aliases.forEach((alias) => {
+        if (alias) slugs.add(alias)
+      })
+    })
+    return [...slugs].map((slug) => ({ slug }))
   } catch {
     return []
   }
@@ -112,11 +119,15 @@ export default async function BlogPostPage({ params }: Props) {
       content: prepareBlogContent((p as BlogPost).content),
     }))
 
-  const blogSchemas = collectBlogSchemas(post)
+  const blogSchemas = buildLiveBlogSchemas(post)
 
   return (
     <>
-      {blogSchemas.length > 0 && <JsonLd data={blogSchemas} />}
+      {blogSchemas.length > 0 ? (
+        <head>
+          <JsonLd data={blogSchemas} />
+        </head>
+      ) : null}
       {post.customCode?.trim() ? <BlogCustomCode code={post.customCode} /> : null}
       <BlogPostClient post={sanitizedPost} relatedPosts={relatedPosts} />
     </>
