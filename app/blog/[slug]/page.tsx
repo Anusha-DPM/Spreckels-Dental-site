@@ -31,7 +31,7 @@ export async function generateStaticParams() {
         if (alias) slugs.add(alias)
       })
     })
-    return [...slugs].map((slug) => ({ slug }))
+    return Array.from(slugs).map((slug) => ({ slug }))
   } catch {
     return []
   }
