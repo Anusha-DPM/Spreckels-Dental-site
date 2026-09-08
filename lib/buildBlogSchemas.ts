@@ -204,12 +204,13 @@ function extractFaqsFromContent(content?: string): JsonLdObject | null {
   if (pairs.length < 2) {
     const plain = stripHtml(content)
     const faqBlock = plain.split(/FAQs?/i)[1] || ''
-    const numbered = [...faqBlock.matchAll(/(\d+\.\s*[^?]+\?)\s*([^?]{20,}?)(?=\d+\.\s*|$)/g)]
-    numbered.forEach((item) => {
-      const name = item[1].replace(/^\d+\.\s*/, '').trim()
-      const text = item[2].trim()
+    const numberedPattern = /(\d+\.\s*[^?]+\?)\s*([^?]{20,}?)(?=\d+\.\s*|$)/g
+    let numberedMatch: RegExpExecArray | null
+    while ((numberedMatch = numberedPattern.exec(faqBlock)) !== null) {
+      const name = numberedMatch[1].replace(/^\d+\.\s*/, '').trim()
+      const text = numberedMatch[2].trim()
       if (name && text) pairs.push({ name, text })
-    })
+    }
   }
 
   if (pairs.length < 2) return null
@@ -233,22 +234,31 @@ function extractHowToFromContent(post: BlogPost): JsonLdObject | null {
   const takeawayMatch = content.match(
     /<(?:h2|h3)[^>]*>[\s\S]*?Key Takeaways[\s\S]*?<\/(?:h2|h3)>([\s\S]*?)(?=<(?:h2|h3)\b|$)/i
   )
-  const listItems = takeawayMatch
-    ? [...takeawayMatch[1].matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)].map((item) =>
-        stripHtml(item[1])
-      )
-    : []
+  const listItems: string[] = []
+  if (takeawayMatch) {
+    const listPattern = /<li\b[^>]*>([\s\S]*?)<\/li>/gi
+    let listMatch: RegExpExecArray | null
+    while ((listMatch = listPattern.exec(takeawayMatch[1])) !== null) {
+      listItems.push(stripHtml(listMatch[1]))
+    }
+  }
 
-  const steps = (listItems.length >= 2
-    ? listItems
-    : [...content.matchAll(/<(?:h2|h3)[^>]*>([\s\S]*?)<\/(?:h2|h3)>/gi)]
-        .map((item) => stripHtml(item[1]))
-        .filter(
-          (heading) =>
-            heading &&
-            !/^(introduction|faqs?|conclusion|key takeaways|disclaimer)$/i.test(heading)
-        )
-  ).filter((text) => text.length > 8)
+  const headingItems: string[] = []
+  const headingPattern = /<(?:h2|h3)[^>]*>([\s\S]*?)<\/(?:h2|h3)>/gi
+  let headingMatch: RegExpExecArray | null
+  while ((headingMatch = headingPattern.exec(content)) !== null) {
+    const heading = stripHtml(headingMatch[1])
+    if (
+      heading &&
+      !/^(introduction|faqs?|conclusion|key takeaways|disclaimer)$/i.test(heading)
+    ) {
+      headingItems.push(heading)
+    }
+  }
+
+  const steps = (listItems.length >= 2 ? listItems : headingItems).filter(
+    (text) => text.length > 8
+  )
 
   if (steps.length < 2) return null
 

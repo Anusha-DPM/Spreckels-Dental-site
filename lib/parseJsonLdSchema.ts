@@ -10,17 +10,18 @@ function decodeHtmlEntities(value: string): string {
 }
 
 function extractJsonLdPayloads(value: string): string[] {
-  const scripts = [
-    ...value.matchAll(
-      /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
-    ),
-  ]
+  const scriptPattern =
+    /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
+  const scripts: string[] = []
+  let scriptMatch: RegExpExecArray | null
 
-  if (scripts.length > 0) {
-    return scripts.map((match) => match[1].trim()).filter(Boolean)
+  while ((scriptMatch = scriptPattern.exec(value)) !== null) {
+    if (scriptMatch[1]?.trim()) {
+      scripts.push(scriptMatch[1].trim())
+    }
   }
 
-  return [value]
+  return scripts.length > 0 ? scripts : [value]
 }
 
 function isJsonLdObject(value: unknown): value is JsonLdObject {
