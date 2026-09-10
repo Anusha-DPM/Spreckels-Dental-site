@@ -4,29 +4,57 @@ import { getBlogSitemapUrl } from '@/lib/sanitizeBlogHtml'
 
 export const revalidate = 3600
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://www.centralvalleydentist.com'
+const BASE_URL = 'https://www.centralvalleydentist.com'
 
-    // Fetch all published blog posts from Firebase
-    let blogEntries: MetadataRoute.Sitemap = []
+/** Restored money pages that should be recrawled and re-indexed first. */
+const MONEY_PAGE_PATHS = new Set([
+    '',
+    '/about',
+    '/services',
+    '/all-on-4-implant-dentures',
+    '/dental-implants',
+    '/dental-implants/cost-of-dental-implants-in-salida-california',
+    '/dental-implants/cost-of-dental-implants-in-lathrop-california',
+    '/dental-implants/cost-of-dental-implants-in-manteca-california',
+    '/dental-implants/cost-of-dental-implants-in-stockton-california',
+    '/dental-implants/cost-of-dental-implants-in-riverbank-california',
+    '/dental-implants/cost-of-dental-implants-in-ripon-california',
+    '/dental-implants/cost-of-dental-implants-in-escalon-california',
+    '/dental-implants/cost-of-dental-implants-in-patterson-california',
+    '/general-cosmetic-dentistry',
+])
+
+const MONEY_PAGES_LASTMOD = new Date('2026-09-10T00:00:00.000Z')
+const STATIC_PAGES_LASTMOD = new Date('2026-09-01T00:00:00.000Z')
+const BLOG_FETCH_TIMEOUT_MS = 2500
+
+async function getBlogEntries(): Promise<MetadataRoute.Sitemap> {
     try {
-        const posts = await getPublishedBlogPosts()
-        blogEntries = posts
+        const timeout = new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error('Blog sitemap fetch timed out')), BLOG_FETCH_TIMEOUT_MS)
+        })
+        const posts = await Promise.race([getPublishedBlogPosts(), timeout])
+        return posts
             .map((post: { slug?: string; sitemapEntry?: string; updatedAt?: string; publishDate?: string }) => {
                 const url = getBlogSitemapUrl(post.slug) || post.sitemapEntry || ''
                 if (!url) return null
                 return {
                     url,
-                    lastModified: new Date(post.updatedAt || post.publishDate || new Date()),
+                    lastModified: new Date(post.updatedAt || post.publishDate || MONEY_PAGES_LASTMOD),
+                    changeFrequency: 'weekly' as const,
                     priority: 0.7,
                 }
             })
             .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
     } catch (error) {
         console.error('Error fetching blog posts for sitemap:', error)
+        return []
     }
+}
 
-    // Define static routes
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const blogEntries = await getBlogEntries()
+
     const staticRoutes = [
         '',
         '/about',
@@ -71,11 +99,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/services/platelet-rich-fibrin-therapy',
     ]
 
-    const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
-        url: `${baseUrl}${route}`,
-        lastModified: new Date(),
-        priority: route === '' ? 1.0 : 0.8,
-    }))
+    const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => {
+        const isMoneyPage = MONEY_PAGE_PATHS.has(route)
+        return {
+            url: `${BASE_URL}${route}`,
+            lastModified: isMoneyPage ? MONEY_PAGES_LASTMOD : STATIC_PAGES_LASTMOD,
+            changeFrequency: isMoneyPage ? 'weekly' : 'monthly',
+            priority: route === '' ? 1.0 : isMoneyPage ? 0.9 : 0.6,
+        }
+    })
 
     return [...staticEntries, ...blogEntries]
 }
