@@ -13,6 +13,7 @@ const MONEY_PAGE_PATHS = new Set([
     '/services',
     '/all-on-4-implant-dentures',
     '/dental-implants',
+    '/dental-implants-manteca-ca',
     '/dental-implants/cost-of-dental-implants-in-salida-california',
     '/dental-implants/cost-of-dental-implants-in-lathrop-california',
     '/dental-implants/cost-of-dental-implants-in-manteca-california',
@@ -22,6 +23,11 @@ const MONEY_PAGE_PATHS = new Set([
     '/dental-implants/cost-of-dental-implants-in-escalon-california',
     '/dental-implants/cost-of-dental-implants-in-patterson-california',
     '/general-cosmetic-dentistry',
+    '/smile-gallery',
+    '/dental-staff',
+    '/video-testimonials',
+    '/services/sedation-dentistry',
+    '/services/platelet-rich-fibrin-therapy',
 ])
 
 const MONEY_PAGES_LASTMOD = new Date('2026-09-10T00:00:00.000Z')
@@ -52,9 +58,7 @@ async function getBlogEntries(): Promise<MetadataRoute.Sitemap> {
     }
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const blogEntries = await getBlogEntries()
-
+function getStaticEntries(): MetadataRoute.Sitemap {
     const staticRoutes = [
         '',
         '/about',
@@ -64,6 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/dental-staff',
         '/all-on-4-implant-dentures',
         '/dental-implants',
+        '/dental-implants-manteca-ca',
         '/dental-implants/cost-of-dental-implants-in-salida-california',
         '/dental-implants/cost-of-dental-implants-in-lathrop-california',
         '/dental-implants/cost-of-dental-implants-in-manteca-california',
@@ -99,7 +104,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/services/platelet-rich-fibrin-therapy',
     ]
 
-    const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => {
+    return staticRoutes.map((route) => {
         const isMoneyPage = MONEY_PAGE_PATHS.has(route)
         return {
             url: `${BASE_URL}${route}`,
@@ -108,6 +113,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: route === '' ? 1.0 : isMoneyPage ? 0.9 : 0.6,
         }
     })
+}
 
-    return [...staticEntries, ...blogEntries]
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const staticEntries = getStaticEntries()
+
+    try {
+        const blogEntries = await getBlogEntries()
+        return [...staticEntries, ...blogEntries]
+    } catch (error) {
+        console.error('Error generating sitemap blog entries:', error)
+        return staticEntries
+    }
 }
