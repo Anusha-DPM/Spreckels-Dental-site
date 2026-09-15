@@ -32,6 +32,7 @@ yarn-error.log*
 next-env.d.ts
 
 # Local duplicates and debug artifacts
+.git-backup/
 Spreckels-Dental-site-main/
 blog_detail_fetch.html
 blog_listing.html

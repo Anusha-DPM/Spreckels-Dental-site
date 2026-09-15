@@ -41,7 +41,7 @@ export default function TrustedBySection() {
             className="text-[16px] sm:text-lg md:text-xl leading-relaxed px-4 sm:px-6 md:px-8 max-w-4xl mx-auto"
             style={{ color: '#656565' }}
           >
-            At Central Valley Dentist, we blend advanced dental care with a gentle, personalized approach to keep your smile healthy and bright. Our friendly team is dedicated to providing comfortable, high-quality treatments you can trust.
+            At Spreckels Park Dental, Manteca patients can see a dentist in Manteca for cleanings, implants, cosmetic dentistry, and family care. We blend advanced treatment with a gentle, personalized approach so neighbors across Manteca, CA can keep their smiles healthy and bright.
           </motion.p>
         </motion.div>
       </div>

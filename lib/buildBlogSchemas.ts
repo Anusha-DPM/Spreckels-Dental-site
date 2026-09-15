@@ -30,11 +30,26 @@ function stripHtml(value: string): string {
 
 function rewriteBlogSchemaUrls(value: unknown, liveUrl: string): unknown {
   if (typeof value === 'string') {
-    const slug = extractBlogSlugFromUrl(value)
-    const liveSlug = extractBlogSlugFromUrl(liveUrl)
-    if (slug && liveSlug && slug !== liveSlug) {
+    if (/colondigestive\.com/i.test(value)) {
       return liveUrl
     }
+
+    const slug = extractBlogSlugFromUrl(value)
+    const liveSlug = extractBlogSlugFromUrl(liveUrl)
+    if (slug && liveSlug && slug === liveSlug) {
+      return liveUrl
+    }
+
+    try {
+      const parsed = new URL(value)
+      if (parsed.hostname === 'centralvalleydentist.com') {
+        const path = parsed.pathname === '/' ? '/' : parsed.pathname.replace(/\/+$/, '')
+        return `${BLOG_SITE_URL}${path === '/' ? '/' : path}`
+      }
+    } catch {
+      // Keep non-URL strings unchanged
+    }
+
     return value
   }
 

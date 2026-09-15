@@ -5,6 +5,8 @@ const nextConfig = {
   // Ensure SEO metadata (title, description, robots, canonical) is rendered in <head>
   // for crawlers and audit tools, not streamed into <body>.
   htmlLimitedBots: /.*/,
+  // Canonical rule: homepage keeps /, all other paths omit a trailing slash.
+  trailingSlash: false,
   images: {
     unoptimized: false,
     formats: ['image/avif', 'image/webp'],

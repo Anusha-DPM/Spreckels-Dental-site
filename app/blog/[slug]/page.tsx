@@ -49,12 +49,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const title = post.metaTitle || post.title
+  const titleOverrides: Record<string, string> = {
+    'what-is-a-dental-implant-made-of-a-simple-guide-to-its-components':
+      'What Is a Dental Implant Made Of? | Central Valley Dentist',
+  }
+  const title = titleOverrides[slug] || post.metaTitle || post.title
   const description = post.metaDescription || post.excerpt || ''
   const canonical = getBlogCanonicalUrl(slug, post.canonicalUrl)
   const ogTitle = post.ogTitle?.trim() || title
   const ogDescription = post.ogDescription?.trim() || description
-  const ogUrl = post.ogUrl?.trim() || canonical
+  const ogUrl = canonical
   const twitterTitle = post.twitterTitle?.trim() || title
   const twitterDescription = post.twitterDescription?.trim() || description
   const twitterCard =

@@ -21,6 +21,9 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[68px] font-normal leading-tight mb-4 sm:mb-6 font-heading pt-[50px] sm:pt-[90px]"
             >
+              <span className="block text-[18px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-[40px] font-semibold mb-2 sm:mb-3">
+                Dentist in Manteca
+              </span>
               BUILD A BRIGHTER SMILE
             </motion.h1>
 
@@ -30,7 +33,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-[16px] sm:text-lg md:text-xl lg:text-[22px] text-red-100 mb-6 sm:mb-8 md:mb-12 leading-relaxed font-sans pr-0 sm:pr-4 lg:pr-[50px]"
             >
-              Experience exceptional dental care with our expert team. We provide comprehensive dental services to help you achieve a healthy, beautiful smile that lasts a lifetime.
+              Looking for a dentist in Manteca? Spreckels Park Dental offers preventive cleanings, dental implants, cosmetic dentistry, sedation, and family care for Manteca patients—all in one trusted office. Our team helps you get a healthy, beautiful smile that lasts a lifetime.
             </motion.p>
 
             <motion.div

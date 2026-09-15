@@ -62,7 +62,7 @@ export default function AboutUsSection() {
               
               {/* Description Paragraph */}
               <p className="text-[16px] sm:text-lg leading-relaxed mb-4 sm:mb-5" style={{ color: '#656565' }}>
-                For more than 25 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. His main priorities are oral health and patient care. As a General Dentist, he has invested many hours in continuing education and constantly updated and educated in dentistry. His continual pursuit of better methods, depth of understanding, and range of experience make him skilled in numerous dental procedures including Dental Implants, Root Canals and Crowns, Dentures and many more.
+                For more than 25 years, Dr. Rujul G. Parikh DDS has been committed to creating beautiful, healthy smiles. As a dentist in Manteca, his main priorities are oral health and patient care for families across Manteca, CA. He offers preventive exams, dental implants, root canals, crowns, dentures, and cosmetic care close to home. His continual pursuit of better methods, depth of understanding, and range of experience help Manteca patients stay comfortable at every visit.
               </p>
               
               {/* Learn More Button */}

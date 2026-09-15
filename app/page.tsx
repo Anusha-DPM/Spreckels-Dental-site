@@ -14,10 +14,15 @@ import {
   LatestBlogPosts,
   CTASection
 } from '../components'
+import { getLanguageAlternates } from '../lib/siteSeo'
+import { K01_GEO_TERMS, K01_PRIMARY_TERM } from '../lib/seoKeywordMap'
 
 export const metadata: Metadata = {
-  title: 'Spreckels Park Dental | Comprehensive Dental Care',
-  description: 'Spreckels Park Dental provides comprehensive dental care including preventive, restorative, cosmetic, and patient-focused oral health services.',
+  title: 'Dentist in Manteca | Spreckels Park Dental',
+  description:
+    'Looking for a dentist in Manteca? Spreckels Park Dental provides preventive cleanings, dental implants, cosmetic dentistry, and family care for Manteca, CA patients.',
+  keywords: [...K01_GEO_TERMS, K01_PRIMARY_TERM],
+  alternates: getLanguageAlternates('/'),
 }
 
 export default function Home() {

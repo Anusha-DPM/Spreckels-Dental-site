@@ -1,10 +1,9 @@
 import { MetadataRoute } from 'next'
 import { getPublishedBlogPosts } from '@/lib/blogDatabase'
 import { getBlogSitemapUrl } from '@/lib/sanitizeBlogHtml'
+import { getPageUrl } from '@/lib/siteSeo'
 
 export const revalidate = 3600
-
-const BASE_URL = 'https://www.centralvalleydentist.com'
 
 /** Restored money pages that should be recrawled and re-indexed first. */
 const MONEY_PAGE_PATHS = new Set([
@@ -107,7 +106,7 @@ function getStaticEntries(): MetadataRoute.Sitemap {
     return staticRoutes.map((route) => {
         const isMoneyPage = MONEY_PAGE_PATHS.has(route)
         return {
-            url: `${BASE_URL}${route}`,
+            url: getPageUrl(route || '/'),
             lastModified: isMoneyPage ? MONEY_PAGES_LASTMOD : STATIC_PAGES_LASTMOD,
             changeFrequency: isMoneyPage ? 'weekly' : 'monthly',
             priority: route === '' ? 1.0 : isMoneyPage ? 0.9 : 0.6,

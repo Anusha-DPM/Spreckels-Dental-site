@@ -28,6 +28,18 @@ export default function TestimonialSection() {
       author: "Navi Tiwari",
       position: "Patient",
       quote: "Pain free treatment, I was impressed by the attention to detail and the extra steps taken to ensure my comfort during the procedure. The entire staff was friendly, professional, and made me feel at ease. Best in Area"
+    },
+    {
+      id: 5,
+      author: "Maria G.",
+      position: "Manteca Patient",
+      quote: "As a longtime Manteca resident, I am so glad I found Spreckels Park Dental. Scheduling is easy, the team is kind, and I finally have a dentist in Manteca I trust with my whole family."
+    },
+    {
+      id: 6,
+      author: "James R.",
+      position: "Manteca Patient",
+      quote: "I needed implant and cleaning work close to home. This dentist in Manteca, CA explained every option and made the whole visit comfortable. Highly recommend for anyone looking for a Manteca dentist."
     }
   ]
 

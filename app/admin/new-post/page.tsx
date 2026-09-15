@@ -897,7 +897,7 @@ export default function NewPost() {
                   placeholder="https://www.centralvalleydentist.com/blog/your-slug"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Leave blank to use the live sitemap URL. On-site /blog/ canonicals are synced to that URL.
+                  Off-site and non-www values are ignored. The live canonical is always https://www.centralvalleydentist.com/blog/your-slug.
                 </p>
               </div>
 
