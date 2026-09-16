@@ -15,12 +15,12 @@ import {
   CTASection
 } from '../components'
 import { getLanguageAlternates } from '../lib/siteSeo'
-import { K01_GEO_TERMS, K01_PRIMARY_TERM } from '../lib/seoKeywordMap'
+import { K01_GEO_TERMS, K01_PRIMARY_TERM, K01_TITLE_TAG } from '../lib/seoKeywordMap'
 
 export const metadata: Metadata = {
-  title: 'Dentist in Manteca | Spreckels Park Dental',
+  title: K01_TITLE_TAG,
   description:
-    'Looking for a dentist in Manteca? Spreckels Park Dental provides preventive cleanings, dental implants, cosmetic dentistry, and family care for Manteca, CA patients.',
+    'Looking for a Manteca dentist? Spreckels Park Dental is a trusted dentist in Manteca, CA. Our dentists in Manteca, CA provide general, cosmetic, and implant dentistry for local families.',
   keywords: [...K01_GEO_TERMS, K01_PRIMARY_TERM],
   alternates: getLanguageAlternates('/'),
 }
