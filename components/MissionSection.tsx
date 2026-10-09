@@ -15,7 +15,7 @@ export default function MissionSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center md:text-left"a
+            className="text-center md:text-left"
           >
             {/* Small Heading */}
             <div className="text-[14px] sm:text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-4">
