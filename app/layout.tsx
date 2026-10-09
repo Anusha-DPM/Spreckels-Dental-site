@@ -1,0 +1,48 @@
+import type { Metadata } from 'next'
+import JsonLd from '../components/JsonLd'
+import { dentistSchema } from '../lib/dentistSchema'
+import { SITE_LANG, SITE_URL } from '../lib/siteSeo'
+import './globals.css'
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: 'Spreckels Park Dental - Professional Dental Services',
+  description: 'Professional dental services and consultations. Experience exceptional dental care with our expert team.',
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
+  verification: {
+    google: 'Wridp05slnEXWXgSos5uepSV0x9zBFYwRFJCoo1sDtU',
+  },
+  alternates: {
+    languages: {
+      [SITE_LANG]: './',
+      en: './',
+      'x-default': './',
+    },
+  },
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang={SITE_LANG}>
+      <head>
+        <JsonLd data={dentistSchema} />
+      </head>
+      <body className="font-sans antialiased">{children}</body>
+    </html>
+  )
+}
