@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import DentalBenefitsSection from './DentalBenefitsSection'
 import TrunkOrTreatSection from './TrunkOrTreatSection'
 
-const AUTO_SLIDE_INTERVAL = 6000
+const AUTO_SLIDE_INTERVAL = 4000
 
 const slides = [
   {
