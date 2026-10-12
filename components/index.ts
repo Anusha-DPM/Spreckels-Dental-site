@@ -5,10 +5,9 @@ export { default as Footer } from './Footer'
 
 // Hero Sections
 export { default as HeroSection } from './HeroSection'
-<<<<<<< HEAD
+
 export { default as HomeHeroSlider } from './HomeHeroSlider'
-=======
->>>>>>> 19cf1e76f11eaaf1b1db514ab7f77e209a0e6899
+
 export { default as AboutHeroSection } from './AboutHeroSection'
 export { default as DentalStaffHeroSection } from './DentalStaffHeroSection'
 export { default as OfficeHeroSection } from './OfficeHeroSection'
