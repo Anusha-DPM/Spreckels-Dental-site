@@ -1,0 +1,111 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import HeroSection from './HeroSection'
+import HomeAllOnXDentalImplant from './HomeAllOnXDentalImplant'
+
+const slides = [
+  {
+    id: 'all-on-x',
+    component: HomeAllOnXDentalImplant,
+    label: 'All-on-X Dental Implants',
+  },
+  {
+    id: 'hero',
+    component: HeroSection,
+    label: 'Home',
+  },
+]
+
+export default function HomeHeroSlider() {
+  const [activeSlide, setActiveSlide] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveSlide((current) => (current + 1) % slides.length)
+    }, 6000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const nextSlide = () => {
+    setActiveSlide((current) => (current + 1) % slides.length)
+  }
+
+  const previousSlide = () => {
+    setActiveSlide(
+      (current) => (current - 1 + slides.length) % slides.length
+    )
+  }
+
+  const CurrentSlide = slides[activeSlide].component
+
+  return (
+    <div
+      className="relative w-full overflow-hidden bg-[#441018]"
+      aria-roledescription="carousel"
+      aria-label="Dental services"
+    >
+      <AnimatePresence initial={false} mode="sync">
+        <motion.div
+          key={slides[activeSlide].id}
+          className="relative w-full min-w-0"
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '-100%' }}
+          transition={{
+            duration: 0.65,
+            ease: 'easeInOut',
+          }}
+          style={{
+            gridArea: '1 / 1',
+          }}
+          aria-roledescription="slide"
+          aria-label={`${activeSlide + 1} of ${slides.length}: ${slides[activeSlide].label}`}
+        >
+          <CurrentSlide />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Slider Controls */}
+      <div className="absolute bottom-5 left-0 right-0 z-30 flex items-center justify-center gap-4 sm:bottom-7">
+        <button
+          type="button"
+          onClick={previousSlide}
+          aria-label="Previous slide"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-[#441018]/90 text-xl text-white shadow-md transition-colors hover:bg-white hover:text-[#441018] sm:h-11 sm:w-11"
+        >
+          &#8592;
+        </button>
+
+        {/* Navigation Dots */}
+        <div className="flex items-center gap-2" aria-label="Choose slide">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.id}
+              type="button"
+              onClick={() => setActiveSlide(index)}
+              aria-label={`Go to ${slide.label} slide`}
+              aria-current={activeSlide === index ? 'true' : undefined}
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                activeSlide === index
+                  ? 'w-8 bg-white'
+                  : 'w-2.5 bg-white/50 hover:bg-white/80'
+              }`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={nextSlide}
+          aria-label="Next slide"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-[#441018]/90 text-xl text-white shadow-md transition-colors hover:bg-white hover:text-[#441018] sm:h-11 sm:w-11"
+        >
+          &#8594;
+        </button>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,33 @@
+# Spreckels Park Dental
+> Family, cosmetic, restorative, and implant dental practice serving Manteca, California and nearby Central Valley communities. 
+
+Spreckels Park Dental provides preventive dentistry, cosmetic dental care, dental implants, All-on-4® implant dentures, orthodontics, sedation dentistry, and advanced restorative solutions. This file points AI systems to the official public pages for accurate practice information.
+
+## Official Practice Information
+- [Home](https://www.centralvalleydentist.com/): Main website and overview of the practice.
+- [Contact](https://www.centralvalleydentist.com/contact): Official contact page with phone number, address, office hours, map, and appointment information.
+
+- [Google Maps Location](https://maps.app.goo.gl/34gz2XcmkvE8KLPt6): Official business map listing and navigation reference.
+
+## Practice Details
+- Practice Name: Spreckels Park Dental
+- Address: 626 E Yosemite Ave, Manteca, CA 95336, United States
+- Phone: 209-825-1030
+
+## Dental Services
+- [General & Cosmetic Dentistry](https://www.centralvalleydentist.com/general-cosmetic-dentistry): Preventive, restorative, and cosmetic dental services.
+- [Sedation Dentistry](https://www.centralvalleydentist.com/services/sedation-dentistry): Sedation options for patient comfort and anxiety management.
+- [Dental Implants](https://www.centralvalleydentist.com/dental-implants): Implant dentistry and tooth replacement solutions.
+- [Dental Implants FAQs](https://www.centralvalleydentist.com/dental-implants-manteca-ca): Frequently asked questions about implant procedures and treatment expectations.
+- [All-on-4® Implant Dentures](https://www.centralvalleydentist.com/all-on-4-implant-dentures): Full-arch implant-supported denture solutions.
+- [Platelet Rich Fibrin Therapy](https://www.centralvalleydentist.com/services/platelet-rich-fibrin-therapy): Regenerative therapy supporting healing and recovery.
+- [Orthodontics](https://www.centralvalleydentist.com/services/orthodontics): Orthodontic evaluations and teeth alignment treatments.
+
+## Patient Resources
+- [Contact](https://www.centralvalleydentist.com/contact): Appointment requests, office information, and patient communication.
+
+## Technical References
+- [Robots.txt](https://www.centralvalleydentist.com/robots.txt): Crawler directives.
+- [Sitemap](https://www.centralvalleydentist.com/sitemap.xml): XML sitemap for canonical URLs.
+
+
