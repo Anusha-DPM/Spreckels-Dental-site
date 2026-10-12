@@ -1,9 +1,10 @@
-'use client'
 
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import HeroSection from './HeroSection'
-import HomeAllOnXDentalImplant from './HomeAllOnXDentalImplant'
+'use client';
+
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import HeroSection from './HeroSection';
+import HomeAllOnXDentalImplant from './HomeAllOnXDentalImplant';
 
 const slides = [
   {
@@ -16,30 +17,24 @@ const slides = [
     component: HeroSection,
     label: 'Home',
   },
-]
+];
 
 export default function HomeHeroSlider() {
-  const [activeSlide, setActiveSlide] = useState(0)
+  const [activeSlide, setActiveSlide] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveSlide((current) => (current + 1) % slides.length)
-    }, 4000)
-
-    return () => clearInterval(interval)
-  }, [])
-
+  // Manually navigate to the next slide
   const nextSlide = () => {
-    setActiveSlide((current) => (current + 1) % slides.length)
-  }
+    setActiveSlide((current) => (current + 1) % slides.length);
+  };
 
+  // Manually navigate to the previous slide
   const previousSlide = () => {
     setActiveSlide(
       (current) => (current - 1 + slides.length) % slides.length
-    )
-  }
+    );
+  };
 
-  const CurrentSlide = slides[activeSlide].component
+  const CurrentSlide = slides[activeSlide].component;
 
   return (
     <div
@@ -70,6 +65,7 @@ export default function HomeHeroSlider() {
 
       {/* Slider Controls */}
       <div className="absolute bottom-5 left-0 right-0 z-30 flex items-center justify-center gap-4 sm:bottom-7">
+        {/* Previous Button */}
         <button
           type="button"
           onClick={previousSlide}
@@ -97,6 +93,7 @@ export default function HomeHeroSlider() {
           ))}
         </div>
 
+        {/* Next Button */}
         <button
           type="button"
           onClick={nextSlide}
@@ -107,5 +104,5 @@ export default function HomeHeroSlider() {
         </button>
       </div>
     </div>
-  )
+  );
 }
