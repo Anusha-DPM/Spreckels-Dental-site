@@ -1,10 +1,7 @@
 import type { Metadata } from 'next'
 import {
   Layout,
-<<<<<<< HEAD
   HomeHeroSlider,
-=======
->>>>>>> 19cf1e76f11eaaf1b1db514ab7f77e209a0e6899
   HeroSection,
   TrustedBySection,
   HomeSectionsSlider,
@@ -35,11 +32,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <Layout>
-<<<<<<< HEAD
-      <HomeHeroSlider />
-=======
+
       <HeroSection />
->>>>>>> 19cf1e76f11eaaf1b1db514ab7f77e209a0e6899
       <HomeSectionsSlider/>
       <TrustedBySection />
       <AboutUsSection />
