@@ -12,6 +12,7 @@ const slides = [
     component: HomeAllOnXDentalImplant,
     label: 'All-on-X Dental Implants',
   },
+ 
   {
     id: 'hero',
     component: HeroSection,
