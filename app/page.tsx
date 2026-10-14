@@ -13,7 +13,7 @@ import {
   ServicesSection,
   SmileGallerySection,
   OfficeGalleryHomeSection,
-  MissionSection,
+
   FeaturedVideoTestimonialSection,
   LatestBlogPosts,
   CTASection
@@ -37,7 +37,7 @@ export default function Home() {
       <HomeSectionsSlider/>
       <TrustedBySection />
       <AboutUsSection />
-      <MissionSection />
+    
       <TestimonialSection />
       <FeaturedVideoTestimonialSection showViewAllButton />
       <ServicesSection />
