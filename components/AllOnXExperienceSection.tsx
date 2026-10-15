@@ -506,7 +506,7 @@ export default function AllOnXExperienceSection() {
             </span>
 
             <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
-              What Changes When Your Teeth Stay Put
+            Eating, Speaking, and Smiling With Teeth That Stay in Place
             </h2>
 
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />

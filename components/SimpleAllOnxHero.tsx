@@ -12,14 +12,7 @@ export default function SimpleAllOnxHero() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-white text-sm font-semibold uppercase tracking-wide mb-4"
-          >
-            All-on-X Dental Implants
-          </motion.div>
+          
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
