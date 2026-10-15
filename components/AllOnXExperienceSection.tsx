@@ -269,7 +269,7 @@ export default function AllOnXExperienceSection() {
         </div>
       </section>
 
-      {/* ALL-ON-X EXPLAINED */}
+      {/* ALL-ON-X EXPLAINED — TEXT ONLY */}
       <section className="py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -283,85 +283,38 @@ export default function AllOnXExperienceSection() {
             <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Understand Your Options
             </span>
+
             <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               All-on-X, Explained Simply
             </h2>
+
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
           </motion.div>
 
-          <div className="mt-10 grid items-stretch gap-6 lg:grid-cols-2 lg:gap-10">
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="rounded-2xl border border-[#eee5e1] bg-[#faf7f5] p-6 sm:p-9"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#111827] text-xl text-white">
-                +
-              </div>
-              <div className="space-y-4 text-base leading-relaxed text-[#656565] sm:text-lg">
-                <p>
-                  Most people expect that replacing a full arch means placing
-                  an implant for every tooth. That is not how All-on-X works.
-                  Instead, four to six implants act like strong anchor points,
-                  and a complete arch of custom teeth is attached on top of
-                  them. Think of it like a sturdy bridge supported by a few
-                  well-placed pillars instead of one for every plank.
-                </p>
-                <p>
-                  Because the implants are positioned strategically, this
-                  approach makes smart use of the bone you already have. The
-                  result is a restoration that feels steady, looks natural,
-                  and does not rely on adhesives or a removable plate.
-                </p>
-              </div>
-            </motion.div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="mx-auto mt-10 max-w-4xl space-y-5 text-base leading-relaxed text-[#656565] sm:text-lg"
+          >
+            <p>
+              Most people expect that replacing a full arch means placing an
+              implant for every tooth. That is not how All-on-X works.
+              Instead, four to six implants act like strong anchor points,
+              and a complete arch of custom teeth is attached on top of them.
+              Think of it like a sturdy bridge supported by a few well-placed
+              pillars instead of one for every plank.
+            </p>
 
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.12 }}
-              className="relative overflow-hidden rounded-2xl bg-[#111827] p-7 text-white sm:p-10"
-            >
-              <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full border border-white/10" />
-              <div className="absolute -right-5 -top-5 h-32 w-32 rounded-full border border-white/10" />
-
-              <span className="relative text-xs font-bold uppercase tracking-[0.18em] text-[#dfc49b]">
-                A closer look
-              </span>
-              <h3 className="relative mt-4 text-2xl font-normal leading-snug text-white sm:text-3xl">
-                A complete arch, supported by strategically placed implants.
-              </h3>
-
-              <div className="relative mt-8 space-y-5">
-                {[
-                  'Four to six implants may support a full arch.',
-                  'Custom teeth are secured to the implants.',
-                  'Your plan is based on your individual oral health.',
-                ].map((item, index) => (
-                  <div key={item} className="flex items-start gap-4">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-[#dfc49b]">
-                      {index + 1}
-                    </span>
-                    <p className="pt-1 text-sm leading-6 text-white/90 sm:text-base">
-                      {item}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <a
-                href="/appointment-request"
-                className="relative mt-8 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-white px-6 py-3 text-[15px] font-semibold text-[#441018] transition hover:bg-[#f0e6dc] sm:w-auto sm:text-base"
-              >
-                Explore Your Options
-              </a>
-            </motion.div>
-          </div>
+            <p>
+              Because the implants are positioned strategically, this
+              approach makes smart use of the bone you already have. The
+              result is a restoration that feels steady, looks natural, and
+              does not rely on adhesives or a removable plate.
+            </p>
+          </motion.div>
         </div>
       </section>
 
@@ -378,10 +331,13 @@ export default function AllOnXExperienceSection() {
             <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Is It Right for You?
             </span>
+
             <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               Could All-on-X Be the Right Fit for You?
             </h2>
+
             <div className="mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
+
             <p className="mt-6 text-base leading-relaxed text-[#656565] sm:text-lg">
               You may want to explore All-on-X if any of this sounds familiar:
             </p>
@@ -390,12 +346,14 @@ export default function AllOnXExperienceSection() {
               <p className="text-lg font-normal">
                 Your next step starts with a conversation.
               </p>
+
               <p className="mt-3 text-sm leading-7 text-white/80">
                 Not sure where you stand? That is completely normal. A
                 consultation gives you real answers based on your mouth, your
                 jawbone, and your goals, with no pressure to decide on the
                 spot.
               </p>
+
               <a
                 href="/appointment-request"
                 className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-white px-6 py-3 text-[15px] font-semibold text-[#441018] transition hover:bg-[#f0e6dc] sm:w-auto sm:text-base"
@@ -427,6 +385,7 @@ export default function AllOnXExperienceSection() {
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5ece6] text-sm font-bold text-[#441018]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
+
                 <p className="text-sm leading-7 text-[#565050] sm:text-base">
                   {item}
                 </p>
@@ -456,15 +415,18 @@ export default function AllOnXExperienceSection() {
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover object-top"
                 />
+
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#441018]/95 to-transparent p-6 pt-20 sm:p-8 sm:pt-24">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#dfc49b]">
                     Your Dental Care Team
                   </p>
+
                   <h3 className="mt-2 text-2xl font-normal text-white sm:text-3xl">
                     Dr. Rujul G. Parikh DDS
                   </h3>
+
                   <p className="mt-2 text-sm text-white/90">
-                    General & Implant Dentist
+                    General &amp; Implant Dentist
                   </p>
                 </div>
               </motion.div>
@@ -478,11 +440,13 @@ export default function AllOnXExperienceSection() {
                 className="p-6 sm:p-9 lg:p-12"
               >
                 <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
-                  Experience & Personalized Care
+                  Experience &amp; Personalized Care
                 </span>
+
                 <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
                   The Dentist Who Will Guide You Through It
                 </h2>
+
                 <div className="mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
 
                 <p className="mt-6 text-base leading-relaxed text-[#656565] sm:text-lg">
@@ -503,8 +467,11 @@ export default function AllOnXExperienceSection() {
                       Years of experience
                     </p>
                   </div>
+
                   <div className="rounded-xl bg-[#faf7f5] p-4">
-                    <p className="text-2xl font-bold text-[#441018]">All-on-X</p>
+                    <p className="text-2xl font-bold text-[#441018]">
+                      All-on-X
+                    </p>
                     <p className="mt-1 text-xs leading-5 text-[#656565] sm:text-sm">
                       Implant treatment options
                     </p>
@@ -537,9 +504,11 @@ export default function AllOnXExperienceSection() {
             <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Designed Around Your Life
             </span>
+
             <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               What Changes When Your Teeth Stay Put
             </h2>
+
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
           </motion.div>
 
@@ -560,13 +529,16 @@ export default function AllOnXExperienceSection() {
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f5ece6] text-xl text-[#441018] transition group-hover:bg-[#441018] group-hover:text-white">
                     {benefit.icon}
                   </span>
+
                   <span className="text-sm font-bold tracking-widest text-[#c5a16a]">
                     {benefit.number}
                   </span>
                 </div>
+
                 <h3 className="mt-6 text-xl font-normal leading-snug text-[#441018]">
                   {benefit.title}
                 </h3>
+
                 <p className="mt-3 text-sm leading-7 text-[#656565] sm:text-base">
                   {benefit.description}
                 </p>
@@ -584,13 +556,16 @@ export default function AllOnXExperienceSection() {
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#dfc49b]">
                 Ready to learn more?
               </p>
+
               <h3 className="mt-4 text-2xl font-normal leading-snug">
                 Let’s talk about your smile.
               </h3>
+
               <p className="mt-3 text-sm leading-7 text-white/80">
                 Get answers about your treatment options and the next steps
                 for your individual needs.
               </p>
+
               <a
                 href="/appointment-request"
                 className="mt-6 inline-flex min-h-[48px] items-center justify-center rounded-lg bg-white px-5 py-3 text-[15px] font-semibold text-[#441018] transition hover:bg-[#f0e6dc] sm:text-base"
@@ -616,10 +591,13 @@ export default function AllOnXExperienceSection() {
             <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Your Treatment Journey
             </span>
+
             <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               From Your First Visit to Your New Smile
             </h2>
+
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
+
             <p className="mt-5 text-base leading-relaxed text-[#656565] sm:text-lg">
               Every step is planned around your needs, comfort, and oral health.
             </p>
@@ -627,6 +605,7 @@ export default function AllOnXExperienceSection() {
 
           <div className="relative mx-auto mt-12 max-w-4xl">
             <div className="absolute bottom-8 left-[23px] top-8 hidden w-px bg-[#e5d4c5] sm:block" />
+
             <div className="space-y-5 sm:space-y-6">
               {treatmentSteps.map((step, index) => (
                 <motion.div
@@ -641,10 +620,12 @@ export default function AllOnXExperienceSection() {
                   <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#441018] text-sm font-bold text-white sm:h-14 sm:w-14">
                     {step.number}
                   </div>
+
                   <div className="min-w-0 flex-1">
                     <h3 className="text-lg font-normal leading-snug text-[#441018] sm:text-xl">
                       {step.title}
                     </h3>
+
                     <p className="mt-2 text-sm leading-7 text-[#656565] sm:text-base">
                       {step.description}
                     </p>
@@ -669,10 +650,13 @@ export default function AllOnXExperienceSection() {
             <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Your Questions Answered
             </span>
+
             <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               Frequently Asked Questions
             </h2>
+
             <div className="mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
+
             <p className="mt-6 text-base leading-relaxed text-[#656565] sm:text-lg">
               Learn more about All-on-X, what to expect, and how to take your
               next step with confidence.
@@ -680,9 +664,11 @@ export default function AllOnXExperienceSection() {
 
             <div className="mt-7 rounded-2xl bg-[#441018] p-6 text-white">
               <h3 className="text-lg font-normal">Still have questions?</h3>
+
               <p className="mt-2 text-sm leading-6 text-white/80">
                 Our team can help you understand your treatment options.
               </p>
+
               <a
                 href="tel:+12098251030"
                 className="mt-5 inline-flex min-h-[46px] w-full items-center justify-center rounded-lg border border-white/60 px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-white hover:text-[#441018] sm:text-base"
@@ -721,6 +707,7 @@ export default function AllOnXExperienceSection() {
                     <span className="text-sm font-semibold leading-6 text-[#441018] sm:text-base">
                       {faq.question}
                     </span>
+
                     <span
                       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg transition-transform duration-300 ${
                         isOpen
@@ -736,6 +723,7 @@ export default function AllOnXExperienceSection() {
                   {isOpen && (
                     <div className="px-5 pb-5 sm:px-6 sm:pb-6">
                       <div className="mb-4 h-px bg-[#eee5e1]" />
+
                       <p className="text-sm leading-7 text-[#656565] sm:text-base">
                         {faq.answer}
                       </p>
@@ -762,10 +750,13 @@ export default function AllOnXExperienceSection() {
             <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Spreckels Park Dental
             </span>
+
             <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               Experience That Shows in Every Smile
             </h2>
+
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
+
             <p className="mt-5 text-base leading-relaxed text-[#656565] sm:text-lg">
               Choosing a dentist for a major treatment is a big decision. At
               Spreckels Park Dental, you will find a team that listens,
@@ -788,7 +779,9 @@ export default function AllOnXExperienceSection() {
                 <p className="text-2xl font-bold tracking-tight text-[#111827] sm:text-4xl">
                   {stat.number}
                 </p>
+
                 <div className="mx-auto my-4 h-1 w-8 rounded-full bg-[#c5a16a]" />
+
                 <p className="text-xs leading-5 text-[#656565] sm:text-sm">
                   {stat.label}
                 </p>
@@ -801,6 +794,7 @@ export default function AllOnXExperienceSection() {
       {/* FINAL CTA */}
       <section className="relative overflow-hidden bg-[#441018] py-16 sm:py-20 lg:py-24">
         <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full border border-white/10 sm:h-80 sm:w-80" />
+
         <div className="pointer-events-none absolute -bottom-32 -right-20 h-72 w-72 rounded-full border border-white/10 sm:h-96 sm:w-96" />
 
         <motion.div
@@ -818,6 +812,7 @@ export default function AllOnXExperienceSection() {
           <h2 className="mt-6 text-3xl font-normal leading-tight text-white sm:text-4xl lg:text-5xl">
             Your New Smile Starts With One Conversation
           </h2>
+
           <div className="mx-auto mt-6 h-1 w-16 rounded-full bg-[#c5a16a]" />
 
           <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-white/85 sm:text-lg">
@@ -835,6 +830,7 @@ export default function AllOnXExperienceSection() {
             >
               Contact Us
             </a>
+
             <a
               href="tel:+12098251030"
               className="inline-flex min-h-[54px] items-center justify-center rounded-lg border border-white px-8 py-4 text-[15px] font-semibold uppercase tracking-wide text-white transition duration-300 hover:bg-white hover:text-[#441018] sm:text-base"
