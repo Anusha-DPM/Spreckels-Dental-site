@@ -5,8 +5,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 
-const burgundy = '#441018'
-const gold = '#c5a16a'
+const burgundy = '#111827'
+const gold = '#4f46e5'
 
 const benefits = [
   {
@@ -188,12 +188,12 @@ export default function AllOnXExperienceSection() {
             transition={{ duration: 0.65 }}
             className="text-center lg:text-left"
           >
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#e4d6d1] bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#441018]">
-              <span className="h-2 w-2 rounded-full bg-[#c5a16a]" />
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#e4d6d1] bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#4f46e5]">
+              <span className="h-2 w-2 rounded-full bg-[#4f46e5]" />
               All-on-X Dental Implants
             </span>
 
-            <h1 className="mb-6 text-3xl font-normal leading-tight tracking-tight text-[#441018] sm:text-4xl lg:text-[46px]">
+            <h1 className="mb-6 text-3xl font-normal leading-tight tracking-tight text-[#111827] sm:text-4xl lg:text-[46px]">
               Eat What You Love, Talk Freely, and Smile Without Holding Back
             </h1>
 
@@ -214,14 +214,14 @@ export default function AllOnXExperienceSection() {
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
               <a
                 href="/appointment-request"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-lg bg-[#441018] px-7 py-4 text-[15px] font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#60212b] focus:outline-none focus:ring-2 focus:ring-[#c5a16a] focus:ring-offset-2 sm:text-base"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-lg bg-[#111827] px-7 py-4 text-[15px] font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#60212b] focus:outline-none focus:ring-2 focus:ring-[#c5a16a] focus:ring-offset-2 sm:text-base"
               >
                 Book Appointment
               </a>
 
               <a
                 href="tel:+12098251030"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-lg border border-[#441018] bg-transparent px-7 py-4 text-[15px] font-semibold text-[#441018] transition-all duration-300 hover:bg-[#441018] hover:text-white sm:text-base"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-lg border border-[#111827] bg-transparent px-7 py-4 text-[15px] font-semibold text-[#111827] transition-all duration-300 hover:bg-[#111827] hover:text-white sm:text-base"
               >
                 Call (209) 825-1030
               </a>
@@ -258,7 +258,7 @@ export default function AllOnXExperienceSection() {
             </div>
 
             <div className="absolute -bottom-5 left-4 right-4 rounded-xl border border-[#eee5e1] bg-white p-4 shadow-lg sm:bottom-6 sm:left-auto sm:right-[-18px] sm:max-w-[250px] sm:p-5">
-              <p className="text-sm font-semibold text-[#441018]">
+              <p className="text-sm font-semibold text-[#111827]">
                 Personalized treatment planning
               </p>
               <p className="mt-1 text-xs leading-5 text-[#656565]">
@@ -280,10 +280,10 @@ export default function AllOnXExperienceSection() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <span className="text-sm font-semibold uppercase tracking-wide text-[#9a784c]">
+            <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Understand Your Options
             </span>
-            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#441018] sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               All-on-X, Explained Simply
             </h2>
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
@@ -298,7 +298,7 @@ export default function AllOnXExperienceSection() {
               transition={{ duration: 0.6 }}
               className="rounded-2xl border border-[#eee5e1] bg-[#faf7f5] p-6 sm:p-9"
             >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#441018] text-xl text-white">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#111827] text-xl text-white">
                 +
               </div>
               <div className="space-y-4 text-base leading-relaxed text-[#656565] sm:text-lg">
@@ -325,7 +325,7 @@ export default function AllOnXExperienceSection() {
               whileInView="visible"
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.12 }}
-              className="relative overflow-hidden rounded-2xl bg-[#441018] p-7 text-white sm:p-10"
+              className="relative overflow-hidden rounded-2xl bg-[#111827] p-7 text-white sm:p-10"
             >
               <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full border border-white/10" />
               <div className="absolute -right-5 -top-5 h-32 w-32 rounded-full border border-white/10" />
@@ -375,10 +375,10 @@ export default function AllOnXExperienceSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-sm font-semibold uppercase tracking-wide text-[#9a784c]">
+            <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Is It Right for You?
             </span>
-            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#441018] sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               Could All-on-X Be the Right Fit for You?
             </h2>
             <div className="mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
@@ -477,10 +477,10 @@ export default function AllOnXExperienceSection() {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="p-6 sm:p-9 lg:p-12"
               >
-                <span className="text-sm font-semibold uppercase tracking-wide text-[#9a784c]">
+                <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
                   Experience & Personalized Care
                 </span>
-                <h2 className="mt-4 text-3xl font-normal leading-tight text-[#441018] sm:text-4xl">
+                <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
                   The Dentist Who Will Guide You Through It
                 </h2>
                 <div className="mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
@@ -534,10 +534,10 @@ export default function AllOnXExperienceSection() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <span className="text-sm font-semibold uppercase tracking-wide text-[#9a784c]">
+            <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Designed Around Your Life
             </span>
-            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#441018] sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               What Changes When Your Teeth Stay Put
             </h2>
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
@@ -613,10 +613,10 @@ export default function AllOnXExperienceSection() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <span className="text-sm font-semibold uppercase tracking-wide text-[#9a784c]">
+            <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Your Treatment Journey
             </span>
-            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#441018] sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               From Your First Visit to Your New Smile
             </h2>
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
@@ -666,10 +666,10 @@ export default function AllOnXExperienceSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-sm font-semibold uppercase tracking-wide text-[#9a784c]">
+            <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Your Questions Answered
             </span>
-            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#441018] sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               Frequently Asked Questions
             </h2>
             <div className="mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
@@ -759,10 +759,10 @@ export default function AllOnXExperienceSection() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <span className="text-sm font-semibold uppercase tracking-wide text-[#9a784c]">
+            <span className="text-sm font-semibold uppercase tracking-wide text-[#4f46e5]">
               Spreckels Park Dental
             </span>
-            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#441018] sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-normal leading-tight text-[#111827] sm:text-4xl">
               Experience That Shows in Every Smile
             </h2>
             <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-[#c5a16a]" />
@@ -785,7 +785,7 @@ export default function AllOnXExperienceSection() {
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 className="rounded-2xl border border-[#eee5e1] bg-[#faf7f5] px-3 py-7 text-center transition hover:border-[#c5a16a] hover:shadow-md sm:px-5 sm:py-9"
               >
-                <p className="text-2xl font-bold tracking-tight text-[#441018] sm:text-4xl">
+                <p className="text-2xl font-bold tracking-tight text-[#111827] sm:text-4xl">
                   {stat.number}
                 </p>
                 <div className="mx-auto my-4 h-1 w-8 rounded-full bg-[#c5a16a]" />
@@ -831,7 +831,7 @@ export default function AllOnXExperienceSection() {
           <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
             <a
               href="/appointment-request"
-              className="inline-flex min-h-[54px] items-center justify-center rounded-lg bg-white px-8 py-4 text-[15px] font-semibold uppercase tracking-wide text-[#441018] transition duration-300 hover:bg-[#f0e6dc] sm:text-base"
+              className="inline-flex min-h-[54px] items-center justify-center rounded-lg bg-white px-8 py-4 text-[15px] font-semibold uppercase tracking-wide text-[#111827] transition duration-300 hover:bg-[#f0e6dc] sm:text-base"
             >
               Contact Us
             </a>
