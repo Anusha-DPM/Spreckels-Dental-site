@@ -8,6 +8,7 @@ const servicesLinks = [
   { name: 'Sedation Dentistry', href: '/services/sedation-dentistry' },
   { name: 'Dental Implants', href: '/dental-implants' },
   { name: 'All-on-4® Implant Dentures', href: '/all-on-4-implant-dentures' },
+  { name: 'All-on-X Dental Implants', href: '/all-on-x-dental-implants' },
   { name: 'Platelet Rich Fibrin Therapy', href: '/services/platelet-rich-fibrin-therapy' },
   { name: 'Orthodontics', href: '/services/orthodontics' },
 ]
