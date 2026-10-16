@@ -65,30 +65,7 @@ export default function HomeHeroSlider() {
       {/* Slider Controls */}
       <div className="absolute bottom-5 left-0 right-0 z-30 flex items-center justify-center gap-4 sm:bottom-7">
 
-        {/* Previous Button */}
-        <button
-          type="button"
-          onClick={previousSlide}
-          aria-label="Previous slide"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/70 bg-[#441018]/90 text-white shadow-md transition-colors hover:bg-white hover:text-[#441018] sm:h-11 sm:w-11"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="block shrink-0"
-            aria-hidden="true"
-          >
-            <path d="M19 12H5" />
-            <path d="m12 19-7-7 7-7" />
-          </svg>
-        </button>
+       
 
         {/* Navigation Dots */}
         <div
@@ -111,30 +88,7 @@ export default function HomeHeroSlider() {
           ))}
         </div>
 
-        {/* Next Button */}
-        <button
-          type="button"
-          onClick={nextSlide}
-          aria-label="Next slide"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/70 bg-[#441018]/90 text-white shadow-md transition-colors hover:bg-white hover:text-[#441018] sm:h-11 sm:w-11"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="block shrink-0"
-            aria-hidden="true"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </button>
+      
 
       </div>
     </div>
