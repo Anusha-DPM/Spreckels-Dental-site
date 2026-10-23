@@ -127,9 +127,20 @@ export default function TrunkOrTreatSection() {
             >
               Plan ahead. Use your benefits before they reset.
             </p>
+              {/* Learn More Button */}
+         <div className="flex justify-center md:justify-start">
+              <motion.a 
+                href="/contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-[#441018] text-white border border-[#441018] px-8 py-3 rounded-lg hover:bg-white hover:text-[#441018] transition-colors duration-200 font-semibold font-heading cursor-pointer inline-block text-[15px] sm:text-base"
+              >
+              Schedule Now
+              </motion.a>
+            </div>
           </motion.div>
 
-        
+       
 
         </div>
       </div>
