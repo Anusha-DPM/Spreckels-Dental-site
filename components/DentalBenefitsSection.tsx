@@ -21,6 +21,28 @@ export default function TrunkOrTreatSection() {
       <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 items-center gap-8 sm:gap-12 md:grid-cols-2 md:gap-16">
 
+  {/* Right Column - Portrait Dental Benefits Flyer */}
+  <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="flex w-full justify-center"
+          >
+            <div className="relative w-full max-w-[440px] rounded-2xl border border-[#eadbd5] bg-white p-2 shadow-xl shadow-[#441018]/10">
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl">
+                <Image
+                  src="/year-end-dental-benefits.png"
+                  alt="Spreckels Park Dental 2026 year-end dental benefits flyer"
+                  fill
+                  className="object-contain object-center"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </div>
+            </div>
+          </motion.div>
+
           {/* Left Column - Supporting Homepage Copy */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -107,27 +129,7 @@ export default function TrunkOrTreatSection() {
             </p>
           </motion.div>
 
-          {/* Right Column - Portrait Dental Benefits Flyer */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex w-full justify-center"
-          >
-            <div className="relative w-full max-w-[440px] rounded-2xl border border-[#eadbd5] bg-white p-2 shadow-xl shadow-[#441018]/10">
-              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl">
-                <Image
-                  src="/year-end-dental-benefits.png"
-                  alt="Spreckels Park Dental 2026 year-end dental benefits flyer"
-                  fill
-                  className="object-contain object-center"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-              </div>
-            </div>
-          </motion.div>
+        
 
         </div>
       </div>

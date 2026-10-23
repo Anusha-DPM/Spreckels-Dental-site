@@ -34,7 +34,7 @@ export default function Home() {
     <Layout>
 
       <HomeHeroSlider />
-      <HomeSectionsSlider/>
+      <DentalBenefitsSection />
       <TrustedBySection />
       <AboutUsSection />
     
