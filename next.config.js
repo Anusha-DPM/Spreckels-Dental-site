@@ -1,4 +1,5 @@
 const { securityHeaders } = require('./lib/securityHeaders')
+const noindexBlogPaths = require('./lib/noindexBlogPaths.json')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -174,6 +175,10 @@ const nextConfig = {
         source: '/:path*',
         headers: securityHeaders,
       },
+      ...noindexBlogPaths.map((path) => ({
+        source: path,
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      })),
     ]
   },
 }

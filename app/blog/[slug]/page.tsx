@@ -1,7 +1,9 @@
 import React, { cache } from 'react'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getPublishedBlogPosts } from '../../../lib/blogDatabase'
 import { getCachedBlogPostBySlug } from '../../../lib/blogPostCache'
+import { isNoindexBlogSlug } from '../../../lib/noindexBlogPaths'
 import { sanitizeBlogHtml, getBlogCanonicalUrl, getBlogUrlSlug, extractBlogSlugFromUrl } from '../../../lib/sanitizeBlogHtml'
 import { normalizeBlogTableHtml } from '../../../lib/normalizeBlogTableHtml'
 import BlogPostClient from '../../../components/BlogPostClient'
@@ -25,10 +27,10 @@ export async function generateStaticParams() {
     const slugs = new Set<string>()
     posts.forEach((post: { slug?: string; canonicalUrl?: string; sitemapEntry?: string }) => {
       const primary = getBlogUrlSlug(post.slug || '')
-      if (primary) slugs.add(primary)
+      if (primary && !isNoindexBlogSlug(primary)) slugs.add(primary)
       const aliases = [extractBlogSlugFromUrl(post.canonicalUrl), extractBlogSlugFromUrl(post.sitemapEntry)]
       aliases.forEach((alias) => {
-        if (alias) slugs.add(alias)
+        if (alias && !isNoindexBlogSlug(alias)) slugs.add(alias)
       })
     })
     return Array.from(slugs).map((slug) => ({ slug }))
@@ -37,15 +39,26 @@ export async function generateStaticParams() {
   }
 }
 
+const NOINDEX_ROBOTS = { index: false, follow: false } as const
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
+
+  if (isNoindexBlogSlug(slug)) {
+    return {
+      title: 'Page Not Found | Spreckels Park Dental',
+      description: 'The requested blog post could not be found.',
+      robots: NOINDEX_ROBOTS,
+    }
+  }
+
   const post = await getCachedBlogPostBySlug(slug) as BlogPost | null
 
   if (!post) {
     return {
       title: 'Post Not Found | Spreckels Park Dental',
       description: 'The requested blog post could not be found.',
-      robots: { index: false, follow: false },
+      robots: NOINDEX_ROBOTS,
     }
   }
 
@@ -93,6 +106,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
+
+  if (isNoindexBlogSlug(slug)) {
+    notFound()
+  }
+
   const post = await getCachedBlogPostBySlug(slug) as BlogPost | null
 
   if (!post) {

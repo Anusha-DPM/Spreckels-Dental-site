@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getPublishedBlogPosts } from '@/lib/blogDatabase'
 import { getBlogSitemapUrl } from '@/lib/sanitizeBlogHtml'
+import { isNoindexBlogPath } from '@/lib/noindexBlogPaths'
 import { getPageUrl } from '@/lib/siteSeo'
 
 export const revalidate = 3600
@@ -42,7 +43,7 @@ async function getBlogEntries(): Promise<MetadataRoute.Sitemap> {
         return posts
             .map((post: { slug?: string; sitemapEntry?: string; updatedAt?: string; publishDate?: string }) => {
                 const url = getBlogSitemapUrl(post.slug) || post.sitemapEntry || ''
-                if (!url) return null
+                if (!url || isNoindexBlogPath(url)) return null
                 return {
                     url,
                     lastModified: new Date(post.updatedAt || post.publishDate || MONEY_PAGES_LASTMOD),

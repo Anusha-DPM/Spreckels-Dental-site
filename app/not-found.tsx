@@ -1,22 +1,19 @@
-'use client'
-
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import NotFoundRedirect from '../components/NotFoundRedirect'
+
+export const metadata: Metadata = {
+  title: 'Page Not Found | Spreckels Park Dental',
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default function NotFound() {
-  const router = useRouter()
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push('/')
-    }, 2000) // Redirect after 2 seconds
-
-    return () => clearTimeout(timer)
-  }, [router])
-
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <NotFoundRedirect />
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">
           Page Not Found
@@ -33,4 +30,4 @@ export default function NotFound() {
       </div>
     </div>
   )
-} 
+}
